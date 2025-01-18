@@ -4,7 +4,7 @@ import HomePage from "../page/(main)/home";
 import Page404 from "../page/404";
 import AboutPage from "../page/about";
 import Cart from "../page/cart";
-import Shop from "../page/Shop";
+import Shop from "../page/shop";
 import TeamPage from "../page/team";
 
 export const routerClient = [
