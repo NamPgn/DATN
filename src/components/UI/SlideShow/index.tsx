@@ -16,28 +16,21 @@ const SlideShow = () => {
       <div>
         <img
           className="w-100"
-          src="https://images2.thanhnien.vn/zoom/656_410/528068263637045248/2024/12/10/1000024907-17338163754242082979995-0-0-1123-1797-crop-173381639862577774972.jpg"
+          src="https://file.hstatic.net/200000472237/file/chup-anh-quan-ao-dep-bang-dien-thoai_ed543464b2c248588df949f9618361f8_grande.jpg"
           alt=""
         />
       </div>
       <div>
         <img
           className="w-100"
-          src="https://images2.thanhnien.vn/zoom/656_410/528068263637045248/2025/1/3/trang-15-17355468067791340735833-47-0-1247-1920-crop-17358644184854323842.jpg"
+          src="https://file.hstatic.net/200000472237/file/chup-anh-quan-ao-dep-bang-dien-thoai_ed543464b2c248588df949f9618361f8_grande.jpg"
           alt=""
         />
       </div>
       <div>
         <img
           className="w-100"
-          src="https://images2.thanhnien.vn/zoom/656_410/528068263637045248/2025/1/8/phao-hoa-nhin-tu-khach-san-novotel-17363062250122059181239-0-0-1600-2560-crop-17363067458141183265062.jpeg"
-          alt=""
-        />
-      </div>
-      <div>
-        <img
-          className="w-100"
-          src="https://images2.thanhnien.vn/zoom/656_410/528068263637045248/2025/1/6/ma-thien-lanh-anh-14-1736154018429118894947-0-0-1600-2560-crop-17361563485551522081241.jpg"
+          src="https://file.hstatic.net/200000472237/file/chup-anh-quan-ao-dep-bang-dien-thoai_ed543464b2c248588df949f9618361f8_grande.jpg"
           alt=""
         />
       </div>
