@@ -1,6 +1,6 @@
 import React from 'react'
 
-const CategorysAdmin = () => {
+const UserAdmin = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const CategorysAdmin = () => {
   )
 }
 
-export default CategorysAdmin
+export default UserAdmin
