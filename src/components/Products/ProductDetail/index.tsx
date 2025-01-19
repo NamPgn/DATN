@@ -1,4 +1,21 @@
+import { useState } from "react";
+
 const ProductDetail = () => {
+	const [selectedSize, setSelectedSize] = useState<string | null>(null);
+
+  // Danh sách kích thước và trạng thái khả dụng
+  const sizes = [
+    { size: "S", disabled: true },
+    { size: "M", disabled: false },
+    { size: "L", disabled: false },
+    { size: "XL", disabled: true },
+  ];
+
+  const handleSizeClick = (size: string, disabled: boolean) => {
+    if (!disabled) {
+      setSelectedSize(size);
+    }
+  };
   return (
     <section className="shopDetailsPageSection">
       <div className="container">
@@ -183,68 +200,27 @@ const ProductDetail = () => {
                 minim veniam, quis nostrud exercitation ullamc oaliquip ex ea
                 commodo consequa uis aute irure dolor
               </div>
-              <div className="pcVariations">
-                <div className="row">
-                  <div className="col-sm-6">
-                    <div className="singleVariation">
-                      <label>Color</label>
-                      <select name="color" style={{ display: "none" }}>
-                        <option value="">Select a Color</option>
-                        <option value="blue">Blue</option>
-                        <option value="yellow">Yellow</option>
-                        <option value="red">Red</option>
-                      </select>
-                      <div className="nice-select" tabIndex={0}>
-                        <span className="current">Select a Color</span>
-                        <ul className="list">
-                          <li data-value="" className="option selected">
-                            Select a Color
-                          </li>
-                          <li data-value="blue" className="option">
-                            Blue
-                          </li>
-                          <li data-value="yellow" className="option">
-                            Yellow
-                          </li>
-                          <li data-value="red" className="option">
-                            Red
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-sm-6">
-                    <div className="singleVariation">
-                      <label>Size</label>
-                      <select name="color" style={{ display: "none" }}>
-                        <option value="">Select a Size</option>
-                        <option value="S">Small</option>
-                        <option value="M">Medium</option>
-                        <option value="L">Large</option>
-                        <option value="XL">Extra Large</option>
-                      </select>
-                      <div className="nice-select" tabIndex={0}>
-                        <span className="current">Select a Size</span>
-                        <ul className="list">
-                          <li data-value="" className="option selected">
-                            Select a Size
-                          </li>
-                          <li data-value="S" className="option">
-                            Small
-                          </li>
-                          <li data-value="M" className="option">
-                            Medium
-                          </li>
-                          <li data-value="L" className="option">
-                            Large
-                          </li>
-                          <li data-value="XL" className="option">
-                            Extra Large
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
+              <div className="size-selector">
+                <p className="text-lg font-semibold mb-2">
+                  Kích thước: {selectedSize || "Chưa chọn"}
+                </p>
+                <div className="flex gap-3">
+                  {sizes.map(({ size, disabled }) => (
+                    <button
+                      key={size}
+                      onClick={() => handleSizeClick(size, disabled)}
+                      disabled={disabled}
+                      className={`w-12 h-12 border rounded-md flex items-center justify-center text-lg font-medium ${
+                        disabled
+                          ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                          : selectedSize === size
+                          ? "border-black bg-white shadow-md"
+                          : "border-gray-400 bg-white"
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  ))}
                 </div>
               </div>
               <div className="pcBtns">

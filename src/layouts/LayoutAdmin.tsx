@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { Layout, Menu } from "antd";
 import { TableRouterAdminPage } from "../constant";
@@ -10,7 +10,7 @@ const LayoutAdmin = () => {
     return {
       key: `${key + 1}`,
       icon: items.icon,
-      label: <Link to={items.path}>{items.name}</Link>,
+      label: <Link to={items.path || ""}>{items.name}</Link>,
       children: items?.children?.map((_, j) => {
         const subKey = j + 1;
         return {
