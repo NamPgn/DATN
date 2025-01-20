@@ -2,16 +2,16 @@ import Slider from "react-slick";
 
 const SlideShow = () => {
   const settings = {
-    dots: true, // Hiển thị các chấm điều hướng
+    dots: true, 
     infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
-    arrows: true, // Hiển thị nút next và prev
-    nextArrow: <SampleNextArrow />, // Tùy chỉnh nút next
-    prevArrow: <SamplePrevArrow />, // Tùy chỉnh nút prev
+    arrows: true, 
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />, 
   };
 
   return (

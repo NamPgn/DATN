@@ -61,20 +61,25 @@ const ProductContent = ({ products }: any) => {
                           </div>
                           <div className="pi01Variations">
                             <div className="pi01VColor">
-                              {product.colors.map((color: any, idx: any) => (
-                                <div
-                                  key={idx}
-                                  className={`pi01VCItem ${color}`}
-                                >
-                                  <input
-                                    type="radio"
-                                    name="color"
-                                    defaultValue={color}
-                                    id={`color_${color}`}
-                                  />
-                                  <label htmlFor={`color_${color}`} />
-                                </div>
-                              ))}
+                              {product.colors.map((color: any, idx: any) => {
+                                return (
+                                  <div
+                                    key={idx}
+                                    className={`pi01VCItem ${color}`}
+                                  >
+                                    <input
+                                      type="radio"
+                                      name="color"
+                                      defaultValue={color}
+                                      id={`color_${color}`}
+                                    />
+                                    <label
+                                      htmlFor={`color_${color}`}
+                                      style={{ background: color }}
+                                    />
+                                  </div>
+                                );
+                              })}
                             </div>
                             <div className="pi01VSize">
                               {product.sizes.map((size: any, idx: number) => (

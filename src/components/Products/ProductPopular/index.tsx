@@ -1,32 +1,34 @@
 import { Link } from "react-router-dom";
+import ProductContent from "../ProductContent";
 
 const ProductPopular = () => {
   const tabs = ["Men", "Women", "Kids", "Accessories"];
   const products = [
     {
-      id: 1,
-      tab: "Men",
-      img1: "/assets/images/products/5.jpg",
-      img2: "/assets/images/products/5.1.jpg",
-      title: "Stylish white leather bag",
-      price: { current: "$29", original: "$56" },
-      reviews: "10 Reviews",
-      labels: [{ type: "discount", value: "- $29" }, { type: "sale", value: "Sale" }],
-      colors: ["Blue", "Yellow", "Red"],
+      image1: "/assets/images/products/1.jpg",
+      image2: "/assets/images/products/1.1.jpg",
+      title: "Men’s blue cotton t-shirt",
+      price: 49,
+      oldPrice: 60,
+      discount: 49,
+      reviews: 10,
+      colors: ["blue", "yellow", "red"],
       sizes: ["S", "M", "XL"],
+      detailsLink: "shop_details1.html",
     },
     {
-      id: 2,
-      tab: "Women",
-      img1: "/assets/images/products/9.jpg",
-      img2: "/assets/images/products/9.1.jpg",
-      title: "Mini sleeve gray t-shirt",
-      price: { current: "$39", original: "$60" },
-      reviews: null,
-      labels: [{ type: "hot", value: "Hot" }],
-      colors: ["Blue", "Yellow", "Red"],
-      sizes: ["S", "M", "XL"],
+      image1: "/assets/images/products/2.jpg",
+      image2: "/assets/images/products/2.1.jpg",
+      title: "Women’s cotton dress",
+      price: 39,
+      oldPrice: 50,
+      discount: 39,
+      reviews: 5,
+      colors: ["green", "black", "white"],
+      sizes: ["S", "M", "L"],
+      detailsLink: "shop_details2.html",
     },
+    // Add more products as needed
   ];
 
   return (
@@ -61,130 +63,7 @@ const ProductPopular = () => {
                 ))}
               </ul>
               {/* Tab Content */}
-              <div className="tab-content" id="productTabContent">
-                {tabs.map((tab, tabIndex) => (
-                  <div
-                    key={tabIndex}
-                    className={`tab-pane fade ${tabIndex === 0 ? "show active" : ""}`}
-                    id={`${tab.toLowerCase()}-tab-pane`}
-                    role="tabpanel"
-                    aria-labelledby={`${tab.toLowerCase()}-tab`}
-                    tabIndex={0}
-                  >
-                    <div className="row">
-                      {products
-                        .filter((product) => product.tab === tab)
-                        .map((product) => (
-                          <div key={product.id} className="col-sm-6 col-lg-4 col-xl-3">
-                            <div
-                              className={`productItem01 ${
-                                !product.reviews ? "pi01NoRating" : ""
-                              }`}
-                            >
-                              <div className="pi01Thumb">
-                                <img src={product.img1} alt={product.title} />
-                                <img src={product.img2} alt={product.title} />
-                                <div className="pi01Actions">
-                                  <a href="javascript:void(0);" className="pi01Cart">
-                                    <i className="fa-solid fa-shopping-cart" />
-                                  </a>
-                                  <a
-                                    href="javascript:void(0);"
-                                    className="pi01QuickView"
-                                  >
-                                    <i className="fa-solid fa-arrows-up-down-left-right" />
-                                  </a>
-                                  <a
-                                    href="javascript:void(0);"
-                                    className="pi01Wishlist"
-                                  >
-                                    <i className="fa-solid fa-heart" />
-                                  </a>
-                                </div>
-                                <div className="productLabels clearfix">
-                                  {product.labels.map((label, labelIndex) => (
-                                    <span
-                                      key={labelIndex}
-                                      className={
-                                        label.type === "discount"
-                                          ? "plDis"
-                                          : label.type === "sale"
-                                          ? "plSale"
-                                          : "plHot float-end"
-                                      }
-                                    >
-                                      {label.value}
-                                    </span>
-                                  ))}
-                                </div>
-                              </div>
-                              <div className="pi01Details">
-                                {product.reviews && (
-                                  <div className="productRatings">
-                                    <div className="productRatingWrap">
-                                      <div className="star-rating">
-                                        <span />
-                                      </div>
-                                    </div>
-                                    <div className="ratingCounts">
-                                      {product.reviews}
-                                    </div>
-                                  </div>
-                                )}
-                                <h3>
-                                  <Link to="/product/detail">{product.title}</Link>
-                                </h3>
-                                <div className="pi01Price">
-                                  <ins>{product.price.current}</ins>
-                                  <del>{product.price.original}</del>
-                                </div>
-                                <div className="pi01Variations">
-                                  <div className="pi01VColor">
-                                    {product.colors.map((color, colorIndex) => (
-                                      <div
-                                        key={colorIndex}
-                                        className={`pi01VCItem ${
-                                          color.toLowerCase() === "yellow"
-                                            ? "yellows"
-                                            : color.toLowerCase() === "red"
-                                            ? "reds"
-                                            : ""
-                                        }`}
-                                      >
-                                        <input
-                                          type="radio"
-                                          name={`color_${product.id}`}
-                                          id={`color_${product.id}_${colorIndex}`}
-                                          defaultValue={color}
-                                        />
-                                        <label htmlFor={`color_${product.id}_${colorIndex}`} />
-                                      </div>
-                                    ))}
-                                  </div>
-                                  <div className="pi01VSize">
-                                    {product.sizes.map((size, sizeIndex) => (
-                                      <div key={sizeIndex} className="pi01VSItem">
-                                        <input
-                                          type="radio"
-                                          name={`size_${product.id}`}
-                                          id={`size_${product.id}_${sizeIndex}`}
-                                          defaultValue={size}
-                                        />
-                                        <label htmlFor={`size_${product.id}_${sizeIndex}`}>
-                                          {size}
-                                        </label>
-                                      </div>
-                                    ))}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <ProductContent products={products}/>
             </div>
           </div>
         </div>
