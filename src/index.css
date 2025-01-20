@@ -5,3 +5,20 @@
 .slick-slider {
   overflow: hidden;
 }
+
+.slick-dots {
+  position: absolute;
+  left: 50%; /* Căn giữa */
+  transform: translateX(-50%);
+  z-index: 2; /* Hiển thị trên slide */
+  bottom: 15px !important;
+}
+
+.slick-dots li button:before {
+  font-size: 12px;
+  color: white; /* Đổi màu dots */
+}
+
+.slick-dots li.slick-active button:before {
+  color: #ffcc00; /* Màu dots đang hoạt động */
+}

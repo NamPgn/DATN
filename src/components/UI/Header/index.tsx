@@ -1,268 +1,271 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import SearchUi from "../Search";
 
 const Header = () => {
+  // Dữ liệu động cho menu
+
+  const [openSearch, setOpenSearch] = useState(false);
+  useEffect(() => {
+    (async () => {
+      const res = await axios.get(
+        "https://goshawk-guided-humpback.ngrok-free.app/api/categories"
+      );
+      console.log(res.data);
+    })();
+  }, []);
+  const menuItems = [
+    { name: "Home", path: "/" },
+    { name: "About", path: "/about" },
+    {
+      name: "Shop",
+      path: "/shop",
+      class: "menu-item-has-children",
+      children: [
+        {
+          name: "Name 1",
+          slug: "name-1",
+        },
+        {
+          name: "Name 2",
+          slug: "name-1",
+        },
+        {
+          name: "Name 1",
+          slug: "name-1",
+        },
+        {
+          name: "Name 1",
+          slug: "name-1",
+        },
+        {
+          name: "Name 1",
+          slug: "name-1",
+        },
+      ],
+    },
+    { name: "Contacts", path: "/contact" },
+  ];
+
+  // Dữ liệu động cho icon mạng xã hội
+  const socialIcons = [
+    {
+      name: "Facebook",
+      className: "fa-brands fa-facebook-f",
+      link: "#",
+      color: "#3b5998",
+    },
+    {
+      name: "Twitter",
+      className: "fa-brands fa-twitter",
+      link: "#",
+      color: "#00acee",
+    },
+    {
+      name: "LinkedIn",
+      className: "fa-brands fa-linkedin-in",
+      link: "#",
+      color: "#0077b5",
+    },
+    {
+      name: "Instagram",
+      className: "fa-brands fa-instagram",
+      link: "#",
+      color: "#e4405f",
+    },
+  ];
+
+  const cartProducts = [
+    {
+      id: 1,
+      name: "Ulina luxurious bag for men women",
+      price: 19.0,
+      image: "/assets/images/cart/1.jpg",
+      detailsLink: "/shop_details1",
+    },
+    {
+      id: 2,
+      name: "Nasio stainless steel watch",
+      price: 41.0,
+      image: "/assets/images/cart/2.jpg",
+      detailsLink: "/shop_details1",
+    },
+  ];
+
+  const handleClickOpenPopupSearch = () => {
+    setOpenSearch((val) => !val);
+  };
   return (
-    <header className="header01 isSticky">
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-lg-12">
-            <div className="headerInner01">
-              <div className="logo">
-                <Link to="/">
-                  <img src="/assets/images/logo.png" alt="Ulina" />
-                </Link>
-              </div>
-              <div className="mainMenu">
-                <ul>
-                  <li className="">
-                    <Link to="/">Home</Link>
-                  </li>
-                  <li>
-                    <Link to="/about">About</Link>
-                  </li>
-                  <li className="">
-                    <Link to="/shop">Shop</Link>
-                  </li>
-                  {/* <li className="menu-item-has-children">
-                    <a href="javascript:void(0);">Blog</a>
-                    <ul>
-                      <li className="menu-item-has-children">
-                        <a href="javascript:void(0);">Blog Standard</a>
-                        <ul>
-                          <li>
-                            <a href="blog_standard_lsb.html">Left Sidebar</a>
-                          </li>
-                          <li>
-                            <a href="blog_standard_nsb.html">No Sidebar</a>
-                          </li>
-                          <li>
-                            <a href="blog_standard_rsb.html">Right Sidebar</a>
-                          </li>
-                        </ul>
+    <>
+      <header className="header01 isSticky">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-lg-12">
+              <div className="headerInner01">
+                {/* Logo */}
+                <div className="logo">
+                  <Link to="/">
+                    <img src="/assets/images/logo.png" alt="Ulina" />
+                  </Link>
+                </div>
+
+                {/* Main Menu */}
+                <div className="mainMenu">
+                  <ul>
+                    {menuItems.map((item, index) => (
+                      <li key={index} className={item.class}>
+                        <Link to={item.path}>{item.name}</Link>
+                        {item.class ? (
+                          <>
+                            <div className="megaMenu" key={item.name}>
+                              <div className="row">
+                                <div className="col-lg-6">
+                                  <h3>List Categories</h3>
+                                  <ul>
+                                    {item.children.map((content) => {
+                                      return (
+                                        <li>
+                                          <Link to={content.slug}>
+                                            {content.name}
+                                          </Link>
+                                        </li>
+                                      );
+                                    })}
+                                  </ul>
+                                </div>
+
+                                <div className="col-lg-6 hideOnMobile">
+                                  <div className="lookBook01 lb01M2">
+                                    <div className="lbContent">
+                                      <h3>Be Stylish</h3>
+                                      <h2>Girl’s Latest Fashion</h2>
+                                      <a
+                                        href="shop_left_sidebar.html"
+                                        className="ulinaLink"
+                                      >
+                                        <i className="fa-solid fa-angle-right" />
+                                        Shop Now
+                                      </a>
+                                    </div>
+                                    <img
+                                      src="/assets/images/home1/3.png"
+                                      alt="Mans Latest Collection"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          ""
+                        )}
                       </li>
-                      <li className="menu-item-has-children">
-                        <a href="javascript:void(0);">Blog Grid</a>
-                        <ul>
-                          <li>
-                            <a href="blog_grid_lsb.html">Left Sidebar</a>
-                          </li>
-                          <li>
-                            <a href="blog_grid_nsb.html">No Sidebar</a>
-                          </li>
-                          <li>
-                            <a href="blog_grid_rsb.html">Right Sidebar</a>
-                          </li>
-                        </ul>
-                      </li>
-                      <li className="menu-item-has-children">
-                        <a href="javascript:void(0);">Blog Details</a>
-                        <ul>
-                          <li>
-                            <a href="blog_details_lsb.html">Left Sidebar</a>
-                          </li>
-                          <li>
-                            <a href="blog_details_nsb.html">No Sidebar</a>
-                          </li>
-                          <li>
-                            <a href="blog_details_rsb.html">Right Sidebar</a>
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li> */}
-                  <li>
-                    <Link to="/contact">Contacts</Link>
-                  </li>
-                </ul>
-              </div>
-              <div className="accessNav">
-                <a href="javascript:void(0);" className="menuToggler">
-                  <i className="fa-solid fa-bars" /> <span>Menu</span>
-                </a>
-                <div className="anSocial">
-                  <div className="ansWrap">
-                    <a className="fac" href="javascript:void(0);">
-                      <i className="fa-brands fa-facebook-f" />
-                    </a>
-                    <a className="twi" href="javascript:void(0);">
-                      <i className="fa-brands fa-twitter" />
-                    </a>
-                    <a className="lin" href="javascript:void(0);">
-                      <i className="fa-brands fa-linkedin-in" />
-                    </a>
-                    <a className="ins" href="javascript:void(0);">
-                      <i className="fa-brands fa-instagram" />
-                    </a>
-                  </div>
-                  <a className="tog" href="javascript:void(0);">
-                    <i className="fa-solid fa-share-alt" />
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Access Navigation */}
+                <div className="accessNav">
+                  {/* Menu Toggler */}
+                  <a href="#" className="menuToggler">
+                    <i className="fa-solid fa-bars" /> <span>Menu</span>
                   </a>
-                </div>
-                <div className="anSelects">
-                  <div className="anSelect">
-                    <select name="languages" style={{ display: "none" }}>
-                      <option value="ENG">EN</option>
-                      <option value="ARA">AR</option>
-                      <option value="GER">GR</option>
-                      <option value="SPA">SP</option>
-                    </select>
-                    <div className="nice-select" tabIndex={0}>
-                      <span className="current">EN</span>
-                      <ul className="list">
-                        <li data-value="ENG" className="option selected">
-                          EN
-                        </li>
-                        <li data-value="ARA" className="option">
-                          AR
-                        </li>
-                        <li data-value="GER" className="option">
-                          GR
-                        </li>
-                        <li data-value="SPA" className="option">
-                          SP
-                        </li>
-                      </ul>
+
+                  {/* Social Icons */}
+                  <div className="anSocial">
+                    <div className="ansWrap">
+                      {socialIcons.map((icon, index) => (
+                        <a
+                          key={index}
+                          className={icon.name.toLowerCase()}
+                          href={icon.link}
+                          style={{ color: icon.color }}
+                        >
+                          <i className={icon.className} />
+                        </a>
+                      ))}
                     </div>
+                    <a className="tog" href="#">
+                      <i className="fa-solid fa-share-alt" />
+                    </a>
                   </div>
-                  <div className="anSelect">
-                    <select name="currency" style={{ display: "none" }}>
-                      <option value="USD">USD</option>
-                      <option value="GBP">GBP</option>
-                      <option value="EUR">EUR</option>
-                      <option value="OMR">OMR</option>
-                    </select>
-                    <div className="nice-select" tabIndex={0}>
-                      <span className="current">USD</span>
-                      <ul className="list">
-                        <li data-value="USD" className="option selected">
-                          USD
-                        </li>
-                        <li data-value="GBP" className="option">
-                          GBP
-                        </li>
-                        <li data-value="EUR" className="option">
-                          EUR
-                        </li>
-                        <li data-value="OMR" className="option">
-                          OMR
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-                <div className="anItems">
-                  <div className="anSearch">
-                    <a href="javascript:void(0);">
+
+                  {/* Action Items */}
+                  <div className="anItems">
+                    <div
+                      className="anSearch"
+                      style={{ cursor: "pointer" }}
+                      onClick={handleClickOpenPopupSearch}
+                    >
                       <i className="fa-solid fa-search" />
-                    </a>
-                  </div>
-                  <div className="anUser">
-                    <a href="javascript:void(0);">
+                    </div>
+                    <div className="anUser">
                       <i className="fa-solid fa-user" />
-                    </a>
-                  </div>
-                  <div className="anCart">
-                    <a href="javascript:void(0);">
-                      <i className="fa-solid fa-shopping-cart" />
-                      <span>3</span>
-                    </a>
-                    <div className="cartWidgetArea">
-                      <div className="cartWidgetProduct">
-                        <img
-                          src="/assets/images/cart/1.jpg"
-                          alt="Marine Design"
-                        />
-                        <a href="shop_details1.html">
-                          Ulina luxurious bag for men women
-                        </a>
-                        <div className="cartProductPrice clearfix">
+                    </div>
+                    <div className="anCart">
+                      <Link to="">
+                        <i className="fa-solid fa-shopping-cart"></i>
+                        <span>{cartProducts.length}</span>
+                      </Link>
+                      <div className="cartWidgetArea">
+                        {cartProducts.map((product) => (
+                          <div className="cartWidgetProduct" key={product.id}>
+                            <img src={product.image} alt={product.name} />
+                            <Link to={product.detailsLink}>{product.name}</Link>
+                            <div className="cartProductPrice clearfix">
+                              <span className="price">
+                                <span>
+                                  <span>$</span>
+                                  {product.price.toFixed(2)}
+                                </span>
+                              </span>
+                            </div>
+                            <a href="#" className="cartRemoveProducts">
+                              <i className="fa-solid fa-xmark" />
+                            </a>
+                          </div>
+                        ))}
+                        <div className="totalPrice">
+                          Subtotal:{" "}
                           <span className="price">
                             <span>
-                              <span>$</span>19.00
+                              <span>$</span>
+                              {cartProducts
+                                .reduce(
+                                  (sum, product) => sum + product.price,
+                                  0
+                                )
+                                .toFixed(2)}
                             </span>
                           </span>
                         </div>
-                        <a
-                          href="javascript:void(0);"
-                          className="cartRemoveProducts"
-                        >
-                          <i className="fa-solid fa-xmark" />
-                        </a>
-                      </div>
-                      <div className="cartWidgetProduct">
-                        <img
-                          src="/assets/images/cart/2.jpg"
-                          alt="Draped Neck"
-                        />
-                        <a href="shop_details1.html">
-                          Nasio stainless steel watch
-                        </a>
-                        <div className="cartProductPrice clearfix">
-                          <span className="price">
-                            <span>
-                              <span>$</span>41.00
-                            </span>
-                          </span>
+                        <div className="cartWidgetBTN clearfix">
+                          <Link className="cart" to="/cart">
+                            View Cart
+                          </Link>
+                          <Link className="checkout" to="/checkout">
+                            Checkout
+                          </Link>
                         </div>
-                        <a
-                          href="javascript:void(0);"
-                          className="cartRemoveProducts"
-                        >
-                          <i className="fa-solid fa-xmark" />
-                        </a>
-                      </div>
-                      <div className="cartWidgetProduct">
-                        <img
-                          src="/assets/images/cart/3.jpg"
-                          alt="Long Pleated"
-                        />
-                        <a href="shop_details1.html">
-                          Winner men’s comfortable t-shirt
-                        </a>
-                        <div className="cartProductPrice clearfix">
-                          <span className="price">
-                            <span>
-                              <span>$</span>52.00
-                            </span>
-                          </span>
-                        </div>
-                        <a
-                          href="javascript:void(0);"
-                          className="cartRemoveProducts"
-                        >
-                          <i className="fa-solid fa-xmark" />
-                        </a>
-                      </div>
-                      <div className="totalPrice">
-                        Subtotal:{" "}
-                        <span className="price">
-                          <span>
-                            <span>$</span>112.00
-                          </span>
-                        </span>
-                      </div>
-                      <div className="cartWidgetBTN clearfix">
-                        <Link className="cart" to="/cart">
-                          View Cart
-                        </Link>
-                        <Link className="checkout" to="/cart">
-                          Checkout
-                        </Link>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="anSupport">
-                  <i className="fa-solid fa-headset" />
-                  <h3>Helpline</h3>
-                  <h3>+123 - 456 - 7890</h3>
+
+                  {/* Support Info */}
+                  <div className="anSupport">
+                    <i className="fa-solid fa-headset" />
+                    <h3>Helpline</h3>
+                    <h3>+123 - 456 - 7890</h3>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </header>
+      </header>
+      <SearchUi onOpen={openSearch} onClose={setOpenSearch} />
+    </>
   );
 };
 
