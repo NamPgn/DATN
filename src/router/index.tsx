@@ -7,6 +7,7 @@ import AboutPage from "../page/about";
 import Admin from "../page/admin";
 import ProductsAdmin from "../page/admin/products";
 import Cart from "../page/cart";
+import Checkout from "../page/checkout";
 import ContactPage from "../page/contact";
 import Shop from "../page/shop";
 import TeamPage from "../page/team";
@@ -40,6 +41,10 @@ export const routerClient = [
       {
         path: "/contact",
         element: <ContactPage />,
+      },
+      {
+        path: "/checkout",
+        element: <Checkout />,
       },
       {
         path: "/product/detail/:id",

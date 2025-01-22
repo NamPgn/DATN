@@ -38,6 +38,10 @@ export const URLSECTION = [
     PATH: "/contact",
     SECTTIONTITLE: "Contact",
   },
+  {
+    PATH: "/checkout",
+    SECTTIONTITLE: "Checkout",
+  },
 ];
 
 export const TableRouterAdminPage = [
