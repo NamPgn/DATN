@@ -3,16 +3,16 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 const SlideShow = () => {
   const settings = {
-    dots: true, 
+    dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
-    arrows: true, 
+    arrows: true,
     nextArrow: <SampleNextArrow />,
-    prevArrow: <SamplePrevArrow />, 
+    prevArrow: <SamplePrevArrow />,
   };
 
   return (
@@ -45,7 +45,7 @@ const SlideShow = () => {
 };
 
 // Tùy chỉnh nút next
-const SampleNextArrow = (props:any) => {
+const SampleNextArrow = (props: any) => {
   const { className, onClick } = props;
   return (
     <button
@@ -59,7 +59,7 @@ const SampleNextArrow = (props:any) => {
 };
 
 // Tùy chỉnh nút prev
-const SamplePrevArrow = (props:any) => {
+const SamplePrevArrow = (props: any) => {
   const { className, onClick } = props;
   return (
     <button

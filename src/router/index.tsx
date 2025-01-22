@@ -7,6 +7,7 @@ import AboutPage from "../page/about";
 import Admin from "../page/admin";
 import ProductsAdmin from "../page/admin/products";
 import Cart from "../page/cart";
+import ContactPage from "../page/contact";
 import Shop from "../page/shop";
 import TeamPage from "../page/team";
 import PrivateRouter from "./security";
@@ -37,6 +38,10 @@ export const routerClient = [
         element: <Cart />,
       },
       {
+        path: "/contact",
+        element: <ContactPage />,
+      },
+      {
         path: "/product/detail/:id",
         element: <ProductDetail />,
       },
@@ -46,7 +51,7 @@ export const routerClient = [
     path: "admin",
     element: (
       // <PrivateRouter>
-        <LayoutAdmin />
+      <LayoutAdmin />
       // </PrivateRouter>
     ),
     children: [

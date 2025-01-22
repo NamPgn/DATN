@@ -1,4 +1,13 @@
-import {ArrowUpOutlined, BorderLeftOutlined, ControlOutlined, DashboardOutlined, LaptopOutlined, NotificationOutlined, SlidersOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  ArrowUpOutlined,
+  BorderLeftOutlined,
+  ControlOutlined,
+  DashboardOutlined,
+  LaptopOutlined,
+  NotificationOutlined,
+  SlidersOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 
 export const URLSECTION = [
   {
@@ -15,7 +24,7 @@ export const URLSECTION = [
   },
   {
     PATH: "/shop",
-    SECTTIONTITLE: "SHOP",
+    SECTTIONTITLE: "Shop",
   },
   {
     PATH: "/cart",
@@ -25,9 +34,11 @@ export const URLSECTION = [
     PATH: "/product/detail",
     SECTTIONTITLE: "Product Detail",
   },
+  {
+    PATH: "/contact",
+    SECTTIONTITLE: "Contact",
+  },
 ];
-
-
 
 export const TableRouterAdminPage = [
   {
@@ -67,5 +78,4 @@ export const TableRouterAdminPage = [
       },
     ],
   },
-
 ];
