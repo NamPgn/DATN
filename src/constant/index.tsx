@@ -5,9 +5,18 @@ import {
   DashboardOutlined,
   LaptopOutlined,
   NotificationOutlined,
+<<<<<<< HEAD
   SlidersOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+=======
+  PicLeftOutlined,
+  RetweetOutlined,
+  SlidersOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import { Link } from "react-router-dom";
+>>>>>>> feature/nam
 
 export const URLSECTION = [
   {
@@ -46,26 +55,26 @@ export const URLSECTION = [
 
 export const TableRouterAdminPage = [
   {
-    path: "/admin",
+    path: "/dashboard",
     name: "Admin",
     icon: <DashboardOutlined />,
   },
   {
-    path: "/admin/products",
+    path: "/dashboard/products",
     name: "Products",
     icon: <NotificationOutlined />,
   },
   {
     name: "User",
-    icon: <SlidersOutlined />,
+    icon: <PicLeftOutlined />,
     children: [
       {
-        path: "/admin/users",
+        path: "/dashboard/users",
         name: "Users",
         icon: <UserOutlined />,
       },
       {
-        path: "/admin/adminUer",
+        path: "/dashboard/adminUer",
         name: "Admin",
         icon: <LaptopOutlined />,
       },
@@ -74,12 +83,90 @@ export const TableRouterAdminPage = [
   {
     name: "Category",
     icon: <SlidersOutlined />,
+    path: "/dashboard/category",
     children: [
       {
-        path: "/admin/category",
-        name: "Category",
+        path: "/dashboard/child",
+        name: "Child",
+        icon: <RetweetOutlined />,
+      },
+      {
+        path: "/dashboard/category/deleted",
         icon: <ControlOutlined />,
+        name: "Deleted",
       },
     ],
   },
 ];
+<<<<<<< HEAD
+=======
+
+export const BreadcrumbRouterAdminPage = [
+  {
+    title: <Link to="/dashboard">Home</Link>,
+    icon: <DashboardOutlined />,
+    href: "/dashboard",
+    name: "Admin",
+  },
+  {
+    title: <Link to="/dashboard/products">Products</Link>,
+    icon: <NotificationOutlined />,
+    href: "/dashboard/products",
+    name: "Products",
+  },
+  {
+    title: <Link to="/dashboard/products">Category</Link>,
+    icon: <SlidersOutlined />,
+    href: "/dashboard/category",
+    name: "Category",
+  },
+  {
+    href: "category/deleted",
+    title: <Link to="category/deleted">Category</Link>,
+    icon: <ControlOutlined />,
+    name: "Deleted",
+  },
+];
+export const columnsCategory = [
+  {
+    title: "Stt",
+    dataIndex: "stt",
+    key: "stt",
+    width: 100,
+    showSorterTooltip: { target: "full-header" },
+    sorter: (a: any, b: any) => a.key - b.key,
+    sortDirections: ["descend"],
+  },
+  {
+    title: "Name",
+    dataIndex: "name",
+    key: "name",
+    width: 100,
+    onFilter: (value: any, record: any) =>
+      record.plainName.toLowerCase().includes(value.toLowerCase()),
+
+    filters: [
+      {
+        text: "Quần",
+        value: "quần",
+      },
+      {
+        text: "Áo",
+        value: "áo",
+      },
+    ],
+  },
+  {
+    title: "Slug",
+    dataIndex: "slug",
+    key: "slug",
+    width: 120,
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    key: "action",
+    width: 100,
+  },
+];
+>>>>>>> feature/nam

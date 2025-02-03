@@ -7,12 +7,11 @@ const Header = () => {
   // Dữ liệu động cho menu
 
   const [openSearch, setOpenSearch] = useState(false);
+  const [data, setData] = useState([]);
   useEffect(() => {
     (async () => {
-      const res = await axios.get(
-        "https://goshawk-guided-humpback.ngrok-free.app/api/categories"
-      );
-      console.log(res.data);
+      const res: any = await axios.get("http://127.0.0.1:8000/api/categories");
+      setData(res.data);
     })();
   }, []);
   const menuItems = [
@@ -22,33 +21,10 @@ const Header = () => {
       name: "Shop",
       path: "/shop",
       class: "menu-item-has-children",
-      children: [
-        {
-          name: "Name 1",
-          slug: "name-1",
-        },
-        {
-          name: "Name 2",
-          slug: "name-1",
-        },
-        {
-          name: "Name 1",
-          slug: "name-1",
-        },
-        {
-          name: "Name 1",
-          slug: "name-1",
-        },
-        {
-          name: "Name 1",
-          slug: "name-1",
-        },
-      ],
     },
     { name: "Contacts", path: "/contact" },
   ];
 
-  // Dữ liệu động cho icon mạng xã hội
   const socialIcons = [
     {
       name: "Facebook",
@@ -123,7 +99,7 @@ const Header = () => {
                                 <div className="col-lg-6">
                                   <h3>List Categories</h3>
                                   <ul>
-                                    {item.children.map((content) => {
+                                    {data?.map((content:any) => {
                                       return (
                                         <li>
                                           <Link to={content.slug}>

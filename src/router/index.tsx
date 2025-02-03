@@ -5,6 +5,10 @@ import HomePage from "../page/(main)/home";
 import Page404 from "../page/404";
 import AboutPage from "../page/about";
 import Admin from "../page/admin";
+import CategoryAdmin from "../page/admin/categorys";
+import AddCategory from "../page/admin/categorys/add";
+import CategoryDeleted from "../page/admin/categorys/deleted";
+import EditCategory from "../page/admin/categorys/edit";
 import ProductsAdmin from "../page/admin/products";
 import Cart from "../page/cart";
 import Checkout from "../page/checkout";
@@ -53,7 +57,7 @@ export const routerClient = [
     ],
   },
   {
-    path: "admin",
+    path: "dashboard",
     element: (
       // <PrivateRouter>
       <LayoutAdmin />
@@ -67,6 +71,22 @@ export const routerClient = [
       {
         path: "products",
         element: <ProductsAdmin />,
+      },
+      {
+        path: "category",
+        element: <CategoryAdmin />,
+      },
+      {
+        path: "category/add",
+        element: <AddCategory />,
+      },
+      {
+        path: "category/edit/:id",
+        element: <EditCategory />,
+      },
+      {
+        path: "category/deleted",
+        element: <CategoryDeleted />,
       },
     ],
   },
