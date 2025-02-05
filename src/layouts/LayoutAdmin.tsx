@@ -1,7 +1,14 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { Layout, Menu } from "antd";
+import { Breadcrumb, Layout, Menu } from "antd";
 import { TableRouterAdminPage } from "../constant";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { MyButton } from "../components/UI/Core/Button";
+import MVCol from "../components/UI/Core/MV/Grid/Col";
+import MVRow from "../components/UI/Core/MV/Grid";
+import { Header } from "antd/es/layout/layout";
+import AuthHeader from "../components/UI/Header/auth";
+import PageTitle from "../components/UI/Core/PageTitle";
 const { Content, Sider, Footer } = Layout;
 
 const LayoutAdmin = () => {
@@ -33,24 +40,36 @@ const LayoutAdmin = () => {
         trigger={null}
         collapsible
         collapsed={collapsed}
-        className="custom-sider overflow-y-auto"
+        collapsedWidth={80}
+        className="custom-sider overflow-y-hidden bg-white shadow-lg"
         style={{ height: "100%", position: "fixed" }}
       >
-        <div className="p-4 bg-[#fff]">
-          <div className="h-8 w-full bg-[#ddd] rounded"></div>
+        <div className="logo_ p-3 text-center">
+          <Link to="/" data-discover="true">
+            <img
+              src="/assets/images/logo.png"
+              alt="Ulina"
+              className="max-w-full h-auto"
+            />
+          </Link>
         </div>
         <Menu
-          style={{ height: "calc(100% - 56px)", marginTop: "8px" }}
+          style={{
+            height: "calc(100% - 56px)",
+            marginTop: "8px",
+            color: "#999",
+          }}
           theme="light"
           mode="inline"
           defaultSelectedKeys={["1"]}
           items={items2}
         />
       </Sider>
+
       <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
-        {/* <Header
+        <Header
           style={{
-            backgroundColor: "rgba(0, 0, 0, 0.1)",
+            backgroundColor: "#b1c8ca",
             padding: 0,
           }}
         >
@@ -69,7 +88,9 @@ const LayoutAdmin = () => {
               />
             </MVCol>
             <MVCol>
-              <Link to={"/"}>Home Page</Link>
+              <Link className="text-white" to={"/"}>
+                Home Page
+              </Link>
             </MVCol>
             <MVCol
               style={{
@@ -77,10 +98,11 @@ const LayoutAdmin = () => {
               }}
               span={1}
             >
-              <AuthHeader isLoggedInState={isLoggedInState} style={undefined} />
+              <AuthHeader />
             </MVCol>
           </MVRow>
-        </Header> */}
+        </Header>
+
         <Content
           style={{
             padding: "24px",
@@ -88,14 +110,10 @@ const LayoutAdmin = () => {
             overflow: "auto",
           }}
         >
-          {/* <Collapse>
-            <Panel key={"1"} className="mb-2" header="Tiêu đề Collapse">
-              {text}
-            </Panel>
-          </Collapse> */}
+          <PageTitle/>
           <Outlet />
         </Content>
-        <Footer>© 2023 copyright | PH ANG</Footer>
+        <Footer>© 2025 copyright</Footer>
       </Layout>
     </Layout>
   );

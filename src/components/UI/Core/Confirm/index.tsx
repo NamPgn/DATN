@@ -1,10 +1,10 @@
 import { Popconfirm } from 'antd'
 import React, { memo } from 'react'
-import { MVError } from '../../Message';
+import { toast } from 'react-toastify';
 
 const MVConfirm = memo(({ title, cancelText, okText, onConfirm, children, ...rest }: any) => {
   const cancel = () => {
-    MVError('Hủy');
+    toast.error('Hủy');
   }
   return (
     <Popconfirm

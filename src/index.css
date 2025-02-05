@@ -22,3 +22,16 @@
 .slick-dots li.slick-active button:before {
   color: #ffcc00; /* Màu dots đang hoạt động */
 }
+
+.logo_ {
+  padding: 16px;
+  text-align: center;
+}
+.logo_ img {
+  max-width: 100%;
+  height: auto;
+}
+
+a{
+  color: #000;
+}
