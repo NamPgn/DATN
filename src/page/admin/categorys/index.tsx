@@ -81,7 +81,7 @@ const CategoryAdmin = () => {
               <MyButton type="text" shape="circle" className="ml-2">
                 <DeleteOutlined />
               </MyButton>
-              <Link to={`/dashboard/category/edit/${record.key}`}>
+              <Link to={`/dashboard/category/edit/${category.id}`}>
                 <MyButton type="primary">Edit</MyButton>
               </Link>
             </MVConfirm>
