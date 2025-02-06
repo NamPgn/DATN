@@ -120,3 +120,29 @@ export const columnsATTR = [
     width: 100,
   },
 ];
+
+
+export const columnsImageList = [
+  {
+    title: "Stt",
+    dataIndex: "stt",
+    key: "stt",
+    width: 100,
+    showSorterTooltip: { target: "full-header" },
+    sorter: (a: any, b: any) => a.key - b.key,
+    sortDirections: ["descend"],
+  },
+  {
+    title: "Image",
+    dataIndex: "image",
+    key: "image",
+    width: 100,
+    
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    key: "action",
+    width: 100,
+  },
+];

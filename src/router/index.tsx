@@ -1,6 +1,7 @@
 import {
   ControlOutlined,
   DashboardOutlined,
+  FileImageOutlined,
   LaptopOutlined,
   NotificationOutlined,
   PicLeftOutlined,
@@ -30,6 +31,11 @@ import TeamPage from "../page/team";
 import PrivateRouter from "./security";
 import AddAttributeValue from "../page/admin/products/attributeValue/add";
 import EditAttributeVal from "../page/admin/products/attributeValue/edit";
+import ProductAdd from "../page/admin/products/add";
+import ProductEdit from "../page/admin/products/edit";
+import ImageList from "../page/admin/products/image/imageList";
+import AddImageProducts from "../page/admin/products/image/add";
+import EditImageProduct from "../page/admin/products/image/edit";
 
 export const routerClient = [
   {
@@ -79,6 +85,15 @@ export const routerClient = [
         element: <ProductsAdmin />,
       },
       {
+        path: "product/add",
+        element: <ProductAdd />,
+      },
+      {
+        path: "product/edit/:id",
+        element: <ProductEdit />,
+      },
+
+      {
         path: "category",
         element: <CategoryAdmin />,
       },
@@ -119,7 +134,18 @@ export const routerClient = [
         path: "attributeVal/edit/:id",
         element: <EditAttributeVal />,
       },
-      // {
+      {
+        path: "product/image",
+        element: <ImageList />,
+      },
+      {
+        path: "image/add",
+        element: <AddImageProducts />,
+      },
+      {
+        path: "image/edit",
+        element: <EditImageProduct />,
+      },      // {
       //   path: "attributeValValue/:id",
       //   element: <AttributeValValue />,
       // },
@@ -138,7 +164,7 @@ export const TableRouterAdminPage = [
     icon: <DashboardOutlined />,
   },
   {
-    path: "/products",
+    path: "/dashboard/products",
     name: "Products",
     icon: <NotificationOutlined />,
     children: [
@@ -146,6 +172,11 @@ export const TableRouterAdminPage = [
         path: "/dashboard/attribute",
         name: "Attribute",
         icon: <UserOutlined />,
+      },
+      {
+        path: "/dashboard/product/image",
+        name: "Image List",
+        icon: <FileImageOutlined />,
       },
     ],
   },
