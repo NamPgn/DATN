@@ -39,51 +39,7 @@ export const URLSECTION = [
   },
 ];
 
-export const TableRouterAdminPage = [
-  {
-    path: "/dashboard",
-    name: "Admin",
-    icon: <DashboardOutlined />,
-  },
-  {
-    path: "/dashboard/products",
-    name: "Products",
-    icon: <NotificationOutlined />,
-  },
-  {
-    name: "User",
-    icon: <PicLeftOutlined />,
-    children: [
-      {
-        path: "/dashboard/users",
-        name: "Users",
-        icon: <UserOutlined />,
-      },
-      {
-        path: "/dashboard/adminUer",
-        name: "Admin",
-        icon: <LaptopOutlined />,
-      },
-    ],
-  },
-  {
-    name: "Category",
-    icon: <SlidersOutlined />,
-    path: "/dashboard/category",
-    children: [
-      {
-        path: "/dashboard/child",
-        name: "Child",
-        icon: <RetweetOutlined />,
-      },
-      {
-        path: "/dashboard/category/deleted",
-        icon: <ControlOutlined />,
-        name: "Deleted",
-      },
-    ],
-  },
-];
+
 
 export const BreadcrumbRouterAdminPage = [
   {
@@ -126,25 +82,36 @@ export const columnsCategory = [
     dataIndex: "name",
     key: "name",
     width: 100,
-    onFilter: (value: any, record: any) =>
-      record.plainName.toLowerCase().includes(value.toLowerCase()),
-
-    filters: [
-      {
-        text: "Quần",
-        value: "quần",
-      },
-      {
-        text: "Áo",
-        value: "áo",
-      },
-    ],
   },
   {
     title: "Slug",
     dataIndex: "slug",
     key: "slug",
     width: 120,
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    key: "action",
+    width: 100,
+  },
+];
+
+export const columnsATTR = [
+  {
+    title: "Stt",
+    dataIndex: "stt",
+    key: "stt",
+    width: 100,
+    showSorterTooltip: { target: "full-header" },
+    sorter: (a: any, b: any) => a.key - b.key,
+    sortDirections: ["descend"],
+  },
+  {
+    title: "Name",
+    dataIndex: "name",
+    key: "name",
+    width: 100,
   },
   {
     title: "Action",

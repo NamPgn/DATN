@@ -7,7 +7,7 @@ const Header = () => {
   // Dữ liệu động cho menu
 
   const [openSearch, setOpenSearch] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData]:any = useState([]);
   useEffect(() => {
     (async () => {
       const res: any = await axios.get("http://127.0.0.1:8000/api/categories");
@@ -99,7 +99,7 @@ const Header = () => {
                                 <div className="col-lg-6">
                                   <h3>List Categories</h3>
                                   <ul>
-                                    {data?.map((content:any) => {
+                                    {data?.data?.map((content:any) => {
                                       return (
                                         <li>
                                           <Link to={content.slug}>

@@ -1,0 +1,116 @@
+import React, { useState } from "react";
+import { Tag } from "antd";
+import { Link } from "react-router-dom";
+import { MyButton } from "../../../../components/UI/Core/Button";
+import MVTable from "../../../../components/UI/Core/MV/Table";
+import { columnsATTR } from "../../../../constant";
+import { useMutation, useQuery } from "react-query";
+import MVConfirm from "../../../../components/UI/Core/Confirm";
+import { toast } from "react-toastify";
+import { delAttributesVal, getAttributesVals } from "../../../../sevices/attributeValue";
+
+const AttributeValue = () => {
+  const [page, setPage] = useState(1);
+
+  const [valueId, setValue] = useState();
+  const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
+  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+  const { data: attributeVal,refetch }: any = useQuery({
+    queryKey: ["attributeVal", page],
+    queryFn: async () => await getAttributesVals(page),
+  });
+  const { mutate } = useMutation({
+    mutationFn: async (id: string) => {
+      return await delAttributesVal(id);
+    },
+    onSuccess: () => {
+      toast.success("Xóa thành công");
+      refetch();
+    },
+    onError: () => {
+      toast.success("Xóa không thành công");
+    },
+  });
+  const rowSelection = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+  const onChange = (newValue: any) => {
+    setValue(newValue);
+  };
+
+  const handlePageChangePage = (page: number) => {
+    setPage(page);
+  };
+
+  const handleDeleteSelectedData = async () => {
+    console.log(selectedRowKeys);
+    // const response: any = await deleteMultipleProduct(selectedRowKeys);
+    // if (response.data.success == true) {
+    //   setInit(!init);
+    //   toast.success("Delete products successfully");
+    // } else {
+    //   toast.error("Error deleting products");
+    // }
+  };
+
+  const data =
+    attributeVal &&
+    attributeVal?.data?.values?.map((item: any, index: number) => {
+      return {
+        key: item.id,
+        child: item.children,
+        stt: item.id,
+        name: <Link to={"/q/" + item.id}>{item.name}</Link>,
+        slug: item.slug,
+        createAt: item.createdAt,
+        isActive:
+          item.isActive == 0 ? (
+            <Tag color="warning">isPending</Tag>
+          ) : (
+            <Tag color="success">Done</Tag>
+          ),
+        action: (
+          <div className="d-flex gap-1">
+            <Link to={`/dashboard/attributeVal/edit/${item.id}`}>
+              <MyButton type="primary">Edit</MyButton>
+            </Link>
+            <MVConfirm title="Có xóa không" onConfirm={() => mutate(item.id)}>
+              <MyButton danger className="ml-2">
+                Delete
+              </MyButton>
+            </MVConfirm>
+          </div>
+        ),
+      };
+    });
+  return (
+    <React.Fragment>
+      <Link to={`/dashboard/attributeVal/add`}>
+        <MyButton type="primary" className="mb-3">
+          Add
+        </MyButton>
+      </Link>
+      <MVTable
+        columns={columnsATTR}
+        rowSelection={rowSelection}
+        dataSource={data}
+        scroll={{ x: 1000, y: 1000 }}
+        pagination={{
+          defaultPageSize: 30,
+          showSizeChanger: true,
+          pageSizeOptions: ["30", "50", "70"],
+          current: page,
+          onChange: handlePageChangePage,
+          total: attributeVal?.data?.total,
+        }}
+      ></MVTable>
+    </React.Fragment>
+  );
+};
+
+export default AttributeValue;
+
+
