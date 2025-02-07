@@ -13,9 +13,9 @@ import ProductsAdmin from "../page/admin/products";
 import Cart from "../page/cart";
 import Checkout from "../page/checkout";
 import ContactPage from "../page/contact";
-import Shop from "../page/shop";
+import Shop from "../page/Shop";
 import TeamPage from "../page/team";
-import PrivateRouter from "./security";
+// import PrivateRouter from "./security";
 
 export const routerClient = [
   {
