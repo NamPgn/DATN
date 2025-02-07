@@ -21,11 +21,8 @@
     "react-slick": "^0.30.3",
     "react-toastify": "^11.0.3",
     "slick-carousel": "^1.8.1",
-<<<<<<< HEAD
+    "styled-components": "^6.1.14",
     "vite-project": "file:"
-=======
-    "styled-components": "^6.1.14"
->>>>>>> feature/nam
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

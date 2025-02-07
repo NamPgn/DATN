@@ -1,22 +1,14 @@
 import {
-  ArrowUpOutlined,
-  BorderLeftOutlined,
   ControlOutlined,
   DashboardOutlined,
   LaptopOutlined,
   NotificationOutlined,
-<<<<<<< HEAD
-  SlidersOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-=======
   PicLeftOutlined,
   RetweetOutlined,
   SlidersOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
->>>>>>> feature/nam
 
 export const URLSECTION = [
   {
@@ -98,8 +90,6 @@ export const TableRouterAdminPage = [
     ],
   },
 ];
-<<<<<<< HEAD
-=======
 
 export const BreadcrumbRouterAdminPage = [
   {
@@ -134,6 +124,7 @@ export const columnsCategory = [
     key: "stt",
     width: 100,
     showSorterTooltip: { target: "full-header" },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sorter: (a: any, b: any) => a.key - b.key,
     sortDirections: ["descend"],
   },
@@ -142,6 +133,7 @@ export const columnsCategory = [
     dataIndex: "name",
     key: "name",
     width: 100,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onFilter: (value: any, record: any) =>
       record.plainName.toLowerCase().includes(value.toLowerCase()),
 
@@ -169,4 +161,3 @@ export const columnsCategory = [
     width: 100,
   },
 ];
->>>>>>> feature/nam
