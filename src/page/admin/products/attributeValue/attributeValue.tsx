@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import { Tag } from "antd";
 import { Link } from "react-router-dom";
+import { MyButton } from "../../../../components/UI/Core/Button";
+import MVTable from "../../../../components/UI/Core/MV/Table";
+import { columnsATTR } from "../../../../constant";
 import { useMutation, useQuery } from "react-query";
+import MVConfirm from "../../../../components/UI/Core/Confirm";
 import { toast } from "react-toastify";
-import { delAttributesVal, getAttributesVals } from "../../../sevices/attributeValue";
-import { MyButton } from "../../../components/UI/Core/Button";
-import MVConfirm from "../../../components/UI/Core/Confirm";
-import MVTable from "../../../components/UI/Core/MV/Table";
-import { columnsATTR } from "../../../constant";
+import { delAttributesVal, getAttributesVals } from "../../../../sevices/attributeValue";
 
-const ProductsAdmin = () => {
+const AttributeValue = () => {
   const [page, setPage] = useState(1);
 
   const [valueId, setValue] = useState();
@@ -88,7 +88,7 @@ const ProductsAdmin = () => {
     });
   return (
     <React.Fragment>
-      <Link to={`/dashboard/product/add`}>
+      <Link to={`/dashboard/attributeVal/add`}>
         <MyButton type="primary" className="mb-3">
           Add
         </MyButton>
@@ -111,6 +111,6 @@ const ProductsAdmin = () => {
   );
 };
 
-export default ProductsAdmin;
+export default AttributeValue;
 
 

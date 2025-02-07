@@ -1,3 +1,15 @@
+import {
+  CommentOutlined,
+  ControlOutlined,
+  DashboardOutlined,
+  FileImageOutlined,
+  LaptopOutlined,
+  NotificationOutlined,
+  PicLeftOutlined,
+  RetweetOutlined,
+  SlidersOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import ProductDetail from "../components/Products/ProductDetail";
 import LayoutAdmin from "../layouts/LayoutAdmin";
 import LayoutClient from "../layouts/LayoutClient";
@@ -10,10 +22,22 @@ import AddCategory from "../page/admin/categorys/add";
 import CategoryDeleted from "../page/admin/categorys/deleted";
 import EditCategory from "../page/admin/categorys/edit";
 import ProductsAdmin from "../page/admin/products";
+import AddAttribute from "../page/admin/products/attribute/add";
+import Attribute from "../page/admin/products/attribute/attribute";
+import EditAttribute from "../page/admin/products/attribute/edit";
+import AttributeValue from "../page/admin/products/attributeValue/attributeValue";
 import Cart from "../page/cart";
 import Shop from "../page/shop";
 import TeamPage from "../page/team";
 import PrivateRouter from "./security";
+import AddAttributeValue from "../page/admin/products/attributeValue/add";
+import EditAttributeVal from "../page/admin/products/attributeValue/edit";
+import ProductAdd from "../page/admin/products/add";
+import ProductEdit from "../page/admin/products/edit";
+import ImageList from "../page/admin/products/image/imageList";
+import AddImageProducts from "../page/admin/products/image/add";
+import EditImageProduct from "../page/admin/products/image/edit";
+import CommentAdmin from "../page/admin/comments";
 
 export const routerClient = [
   {
@@ -63,6 +87,15 @@ export const routerClient = [
         element: <ProductsAdmin />,
       },
       {
+        path: "product/add",
+        element: <ProductAdd />,
+      },
+      {
+        path: "product/edit/:id",
+        element: <ProductEdit />,
+      },
+
+      {
         path: "category",
         element: <CategoryAdmin />,
       },
@@ -78,10 +111,116 @@ export const routerClient = [
         path: "category/deleted",
         element: <CategoryDeleted />,
       },
+      {
+        path: "attribute",
+        element: <Attribute />,
+      },
+      {
+        path: "attribute/add",
+        element: <AddAttribute />,
+      },
+      {
+        path: "attribute/edit/:id",
+        element: <EditAttribute />,
+      },
+      {
+        path: "attributeValue/:id",
+        element: <AttributeValue />,
+      },
+
+      {
+        path: "attributeVal/add",
+        element: <AddAttributeValue />,
+      },
+      {
+        path: "attributeVal/edit/:id",
+        element: <EditAttributeVal />,
+      },
+      {
+        path: "product/image",
+        element: <ImageList />,
+      },
+      {
+        path: "image/add",
+        element: <AddImageProducts />,
+      },
+      {
+        path: "image/edit",
+        element: <EditImageProduct />,
+      }, 
+      {
+        path: "comments",
+        element: <CommentAdmin />,
+      }, 
     ],
   },
   {
     path: "*",
     element: <Page404 />,
+  },
+];
+
+export const TableRouterAdminPage = [
+  {
+    path: "/dashboard",
+    name: "Admin",
+    icon: <DashboardOutlined />,
+  },
+  {
+    path: "/dashboard/products",
+    name: "Products",
+    icon: <NotificationOutlined />,
+    children: [
+      {
+        path: "/dashboard/attribute",
+        name: "Attribute",
+        icon: <UserOutlined />,
+      },
+      {
+        path: "/dashboard/product/image",
+        name: "Image List",
+        icon: <FileImageOutlined />,
+      },
+    ],
+  },
+  {
+    name: "User",
+    icon: <PicLeftOutlined />,
+    children: [
+      {
+        path: "/dashboard/users",
+        name: "Users",
+        icon: <UserOutlined />,
+      },
+      {
+        path: "/dashboard/adminUer",
+        name: "Admin",
+        icon: <LaptopOutlined />,
+      },
+    ],
+  },
+  {
+    name: "Category",
+    icon: <SlidersOutlined />,
+    path: "/dashboard/category",
+    children: [
+      {
+        path: "/dashboard/category/deleted",
+        icon: <ControlOutlined />,
+        name: "Deleted",
+      },
+    ],
+  },
+  {
+    name: "Comment",
+    icon: <CommentOutlined />,
+    path: "/dashboard/comments",
+    children: [
+      {
+        path: "/dashboard/category/deleted",
+        icon: <ControlOutlined />,
+        name: "Deleted",
+      },
+    ],
   },
 ];

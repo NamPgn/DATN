@@ -1,15 +1,19 @@
 import React, { useState } from "react";
-import { Tag } from "antd";
+import { Image, Tag } from "antd";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
-import { delAttributesVal, getAttributesVals } from "../../../sevices/attributeValue";
-import { MyButton } from "../../../components/UI/Core/Button";
-import MVConfirm from "../../../components/UI/Core/Confirm";
-import MVTable from "../../../components/UI/Core/MV/Table";
-import { columnsATTR } from "../../../constant";
+import { MyButton } from "../../../../components/UI/Core/Button";
+import MVConfirm from "../../../../components/UI/Core/Confirm";
+import MVTable from "../../../../components/UI/Core/MV/Table";
+import { columnsATTR, columnsImageList } from "../../../../constant";
+import {
+  delAttributesVal,
+  getAttributesVals,
+} from "../../../../sevices/attributeValue";
+import { getImageLists } from "../../../../sevices/imageList";
 
-const ProductsAdmin = () => {
+const ImageList = () => {
   const [page, setPage] = useState(1);
 
   const [valueId, setValue] = useState();
@@ -17,9 +21,9 @@ const ProductsAdmin = () => {
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
-  const { data: attributeVal,refetch }: any = useQuery({
-    queryKey: ["attributeVal", page],
-    queryFn: async () => await getAttributesVals(page),
+  const { data: imageList, refetch }: any = useQuery({
+    queryKey: ["imageList", page],
+    queryFn: async () => (await getImageLists(page)).data?.data
   });
   const { mutate } = useMutation({
     mutationFn: async (id: string) => {
@@ -46,37 +50,19 @@ const ProductsAdmin = () => {
   };
 
   const handleDeleteSelectedData = async () => {
-    console.log(selectedRowKeys);
-    // const response: any = await deleteMultipleProduct(selectedRowKeys);
-    // if (response.data.success == true) {
-    //   setInit(!init);
-    //   toast.success("Delete products successfully");
-    // } else {
-    //   toast.error("Error deleting products");
-    // }
-  };
 
+  };
+console.log(imageList)
   const data =
-    attributeVal &&
-    attributeVal?.data?.values?.map((item: any, index: number) => {
+    imageList &&
+    imageList?.map((item: any, index: number) => {
       return {
         key: item.id,
         child: item.children,
         stt: item.id,
-        name: <Link to={"/q/" + item.id}>{item.name}</Link>,
-        slug: item.slug,
-        createAt: item.createdAt,
-        isActive:
-          item.isActive == 0 ? (
-            <Tag color="warning">isPending</Tag>
-          ) : (
-            <Tag color="success">Done</Tag>
-          ),
+        image: <Image src={item.url} />,
         action: (
           <div className="d-flex gap-1">
-            <Link to={`/dashboard/attributeVal/edit/${item.id}`}>
-              <MyButton type="primary">Edit</MyButton>
-            </Link>
             <MVConfirm title="Có xóa không" onConfirm={() => mutate(item.id)}>
               <MyButton danger className="ml-2">
                 Delete
@@ -88,13 +74,13 @@ const ProductsAdmin = () => {
     });
   return (
     <React.Fragment>
-      <Link to={`/dashboard/product/add`}>
+      <Link to={`/dashboard/image/add`}>
         <MyButton type="primary" className="mb-3">
           Add
         </MyButton>
       </Link>
       <MVTable
-        columns={columnsATTR}
+        columns={columnsImageList}
         rowSelection={rowSelection}
         dataSource={data}
         scroll={{ x: 1000, y: 1000 }}
@@ -104,13 +90,11 @@ const ProductsAdmin = () => {
           pageSizeOptions: ["30", "50", "70"],
           current: page,
           onChange: handlePageChangePage,
-          total: attributeVal?.data?.total,
+          total: imageList?.data?.total,
         }}
       ></MVTable>
     </React.Fragment>
   );
 };
 
-export default ProductsAdmin;
-
-
+export default ImageList;

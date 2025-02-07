@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { Breadcrumb, Layout, Menu } from "antd";
-import { TableRouterAdminPage } from "../constant";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { MyButton } from "../components/UI/Core/Button";
 import MVCol from "../components/UI/Core/MV/Grid/Col";
@@ -9,6 +8,7 @@ import MVRow from "../components/UI/Core/MV/Grid";
 import { Header } from "antd/es/layout/layout";
 import AuthHeader from "../components/UI/Header/auth";
 import PageTitle from "../components/UI/Core/PageTitle";
+import { TableRouterAdminPage } from "../router";
 const { Content, Sider, Footer } = Layout;
 
 const LayoutAdmin = () => {

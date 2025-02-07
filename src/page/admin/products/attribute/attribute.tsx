@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { Tag } from "antd";
 import { Link } from "react-router-dom";
+import { MyButton } from "../../../../components/UI/Core/Button";
+import MVTable from "../../../../components/UI/Core/MV/Table";
+import { columnsATTR, columnsCategory } from "../../../../constant";
 import { useMutation, useQuery } from "react-query";
+import { delCategorys } from "../../../../sevices/category";
+import MVConfirm from "../../../../components/UI/Core/Confirm";
 import { toast } from "react-toastify";
-import { delAttributesVal, getAttributesVals } from "../../../sevices/attributeValue";
-import { MyButton } from "../../../components/UI/Core/Button";
-import MVConfirm from "../../../components/UI/Core/Confirm";
-import MVTable from "../../../components/UI/Core/MV/Table";
-import { columnsATTR } from "../../../constant";
+import { delAttributes, getAttributes } from "../../../../sevices/attribute";
 
-const ProductsAdmin = () => {
+const Attribute = () => {
   const [page, setPage] = useState(1);
 
   const [valueId, setValue] = useState();
@@ -17,13 +18,13 @@ const ProductsAdmin = () => {
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
-  const { data: attributeVal,refetch }: any = useQuery({
-    queryKey: ["attributeVal", page],
-    queryFn: async () => await getAttributesVals(page),
+  const { data: attribute, refetch }: any = useQuery({
+    queryKey: ["attribute", page],
+    queryFn: async () => await getAttributes(page),
   });
   const { mutate } = useMutation({
     mutationFn: async (id: string) => {
-      return await delAttributesVal(id);
+      return await delAttributes(id);
     },
     onSuccess: () => {
       toast.success("Xóa thành công");
@@ -57,8 +58,8 @@ const ProductsAdmin = () => {
   };
 
   const data =
-    attributeVal &&
-    attributeVal?.data?.values?.map((item: any, index: number) => {
+    attribute &&
+    attribute?.data?.data?.map((item: any, index: number) => {
       return {
         key: item.id,
         child: item.children,
@@ -74,7 +75,7 @@ const ProductsAdmin = () => {
           ),
         action: (
           <div className="d-flex gap-1">
-            <Link to={`/dashboard/attributeVal/edit/${item.id}`}>
+            <Link to={`/dashboard/attribute/edit/${item.id}`}>
               <MyButton type="primary">Edit</MyButton>
             </Link>
             <MVConfirm title="Có xóa không" onConfirm={() => mutate(item.id)}>
@@ -82,13 +83,16 @@ const ProductsAdmin = () => {
                 Delete
               </MyButton>
             </MVConfirm>
+            <Link to={`/dashboard/attributeValue/${item.id}`}>
+              <MyButton>Attribute Value</MyButton>
+            </Link>
           </div>
         ),
       };
     });
   return (
     <React.Fragment>
-      <Link to={`/dashboard/product/add`}>
+      <Link to={`/dashboard/attribute/add`}>
         <MyButton type="primary" className="mb-3">
           Add
         </MyButton>
@@ -104,13 +108,11 @@ const ProductsAdmin = () => {
           pageSizeOptions: ["30", "50", "70"],
           current: page,
           onChange: handlePageChangePage,
-          total: attributeVal?.data?.total,
+          total: attribute?.data?.total,
         }}
       ></MVTable>
     </React.Fragment>
   );
 };
 
-export default ProductsAdmin;
-
-
+export default Attribute;
