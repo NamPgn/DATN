@@ -2,53 +2,59 @@ import { SyncOutlined, UploadOutlined } from "@ant-design/icons";
 import { Button, Form, Image, List, message, Modal, Tabs, Upload } from "antd";
 import React, { useState } from "react";
 import { useMutation, useQuery } from "react-query";
-import { addAttributesVal } from "../../../../sevices/attributeValue";
 import { addImageList, getImageLists } from "../../../../sevices/imageList";
 
 const UploadImage = ({
   visible,
-  onClose,
   setSelectImage,
   selectImage,
+  setSelectOneImage,
+  selectOneImage,
   onCancel,
 }: any) => {
   const [form] = Form.useForm();
-  const [page, setPage]: any = useState(1);
   const [fileList, setFileList] = useState([]);
-
+  const [page, setPage] = useState(1);
   const { data: images, refetch }: any = useQuery({
-    queryKey: ["imageList", page],
+    queryKey: ["imageList"],
     queryFn: async () => (await getImageLists(page)).data?.data,
   });
+
   const handleFileChange = ({ fileList }: any) => {
     setFileList(fileList);
   };
+
   const { isLoading, mutate } = useMutation({
     mutationFn: async (values: any) => {
       return await addImageList(values);
     },
     onSuccess: () => {
-      message.success("AttributeValue created successfully!");
+      message.success("Ảnh đã được tải lên thành công!");
+      refetch();
     },
     onError: () => {
-      message.error("AttributeValue created failure!");
+      message.error("Lỗi khi tải ảnh lên!");
     },
   });
 
-  const handleSelectImage = (imageId: string) => {
-    setSelectImage(
-      (prevSelected: any) =>
-        prevSelected.includes(imageId)
-          ? prevSelected.filter((id: any) => id !== imageId) // Bỏ chọn
-          : [...prevSelected, imageId] // Thêm vào danh sách
+  const handleSelectImage = (image: any) => {
+    setSelectImage((prevSelected: any) =>
+      prevSelected.some((img: any) => img.id === image.id)
+        ? prevSelected.filter((img: any) => img.id !== image.id)
+        : [...prevSelected, image]
     );
   };
-  const handleSubmit = (values: any) => {
+
+  const handleSelectMainImage = (image: any) => {
+    setSelectOneImage(image);
+  };
+
+  const handleSubmit = () => {
     if (fileList.length === 0) {
-      message.error("Please upload at least one file!");
+      message.error("Vui lòng chọn ít nhất một ảnh để tải lên!");
       return;
     }
-    const formData: any = new FormData();
+    const formData = new FormData();
     fileList.forEach((file: any) => {
       formData.append("images[]", file.originFileObj);
     });
@@ -59,10 +65,9 @@ const UploadImage = ({
     <Modal
       title="Quản lý hình ảnh"
       open={visible}
-      onClose={onClose}
       onCancel={onCancel}
       footer={null}
-      width={1500}
+      width={800}
     >
       <Tabs>
         <Tabs.TabPane tab="Upload Image" key="1">
@@ -82,33 +87,38 @@ const UploadImage = ({
             <Form.Item>
               <Button
                 type="primary"
-                loading={isLoading ?? <SyncOutlined spin />}
+                loading={isLoading}
                 htmlType="submit"
                 block
               >
-                Create AttributeValue
+                Upload Images
               </Button>
             </Form.Item>
           </Form>
         </Tabs.TabPane>
+
         <Tabs.TabPane tab="Image List" key="2">
           <List
-            grid={{ gutter: 1, column: 10 }}
+            grid={{ gutter: 10, column: 5 }}
             dataSource={images}
             renderItem={(item: any) => {
-              const isSelected = selectImage.includes(item.id);
+              const isSelected = selectImage.some(
+                (img: any) => img.id === item.id
+              );
+              const isMainImage = selectOneImage?.id === item.id;
               return (
                 <List.Item>
                   <div
                     className={`relative cursor-pointer border-2 ${
-                      isSelected ? "border-blue-500" : "border-transparent"
+                      isSelected ? "border-green-500" : "border-transparent"
                     }`}
-                    onClick={() => handleSelectImage(item.id)}
+                    onClick={() => handleSelectImage(item)}
                   >
                     <Image
                       src={item.url}
                       style={{
-                        border: `${isSelected ? "2px solid blue" : ""}`,
+                        border: isSelected ? "2px solid green" : "",
+                        opacity: isMainImage ? 0.6 : 1,
                       }}
                       className="object-fit-cover"
                       alt="uploaded"
@@ -117,6 +127,14 @@ const UploadImage = ({
                       preview={false}
                     />
                   </div>
+                  <Button
+                    size="small"
+                    type={isMainImage ? "primary" : "default"}
+                    style={{ marginTop: 5 }}
+                    onClick={() => handleSelectMainImage(item)}
+                  >
+                    {isMainImage ? "Ảnh Chính" : "Chọn Ảnh Chính"}
+                  </Button>
                 </List.Item>
               );
             }}

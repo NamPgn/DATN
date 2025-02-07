@@ -1,4 +1,5 @@
 import {
+  CommentOutlined,
   ControlOutlined,
   DashboardOutlined,
   FileImageOutlined,
@@ -36,6 +37,7 @@ import ProductEdit from "../page/admin/products/edit";
 import ImageList from "../page/admin/products/image/imageList";
 import AddImageProducts from "../page/admin/products/image/add";
 import EditImageProduct from "../page/admin/products/image/edit";
+import CommentAdmin from "../page/admin/comments";
 
 export const routerClient = [
   {
@@ -145,10 +147,11 @@ export const routerClient = [
       {
         path: "image/edit",
         element: <EditImageProduct />,
-      },      // {
-      //   path: "attributeValValue/:id",
-      //   element: <AttributeValValue />,
-      // },
+      }, 
+      {
+        path: "comments",
+        element: <CommentAdmin />,
+      }, 
     ],
   },
   {
@@ -202,10 +205,17 @@ export const TableRouterAdminPage = [
     path: "/dashboard/category",
     children: [
       {
-        path: "/dashboard/child",
-        name: "Child",
-        icon: <RetweetOutlined />,
+        path: "/dashboard/category/deleted",
+        icon: <ControlOutlined />,
+        name: "Deleted",
       },
+    ],
+  },
+  {
+    name: "Comment",
+    icon: <CommentOutlined />,
+    path: "/dashboard/comments",
+    children: [
       {
         path: "/dashboard/category/deleted",
         icon: <ControlOutlined />,

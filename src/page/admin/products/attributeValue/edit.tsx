@@ -70,7 +70,6 @@ const EditAttributeVal = () => {
           type="primary"
           loading={isLoading ?? <SyncOutlined spin />}
           htmlType="submit"
-          block
         >
           Update AttributeVal
         </Button>

@@ -53,7 +53,6 @@ const AddImageProducts = () => {
           type="primary"
           loading={isLoading ?? <SyncOutlined spin />}
           htmlType="submit"
-          block
         >
           Create AttributeValue
         </Button>

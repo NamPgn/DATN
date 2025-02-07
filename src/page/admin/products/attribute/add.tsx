@@ -40,7 +40,6 @@ const AddAttribute = () => {
           type="primary"
           loading={isLoading ?? <SyncOutlined spin />}
           htmlType="submit"
-          block
         >
           Create Attribute
         </Button>

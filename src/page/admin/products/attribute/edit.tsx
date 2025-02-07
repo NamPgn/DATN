@@ -71,7 +71,6 @@ const EditAttribute = () => {
           type="primary"
           loading={isLoading ?? <SyncOutlined spin />}
           htmlType="submit"
-          block
         >
           Update Attribute
         </Button>
