@@ -38,6 +38,7 @@ import ImageList from "../page/admin/products/image/imageList";
 import AddImageProducts from "../page/admin/products/image/add";
 import EditImageProduct from "../page/admin/products/image/edit";
 import CommentAdmin from "../page/admin/comments";
+import LazyComponent from "../components/Lazy/LazyComponent";
 
 export const routerClient = [
   {
@@ -84,14 +85,18 @@ export const routerClient = [
       },
       {
         path: "products",
-        element: <ProductsAdmin />,
+        element: (
+          <LazyComponent>
+            <ProductsAdmin />
+          </LazyComponent>
+        ),
       },
       {
         path: "product/add",
         element: <ProductAdd />,
       },
       {
-        path: "product/edit/:id",
+        path: "products/edit/:id",
         element: <ProductEdit />,
       },
 
@@ -147,11 +152,11 @@ export const routerClient = [
       {
         path: "image/edit",
         element: <EditImageProduct />,
-      }, 
+      },
       {
         path: "comments",
         element: <CommentAdmin />,
-      }, 
+      },
     ],
   },
   {

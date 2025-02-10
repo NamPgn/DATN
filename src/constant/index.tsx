@@ -95,6 +95,54 @@ export const columnsCategory = [
   },
 ];
 
+export const columnsProducts = [
+  {
+    title: "Name",
+    dataIndex: "name",
+    key: "name",
+    width: 300,
+  },
+  {
+    title: "Main Image",
+    dataIndex: "main_image",
+    key: "main_image",
+    width: 100,
+  },
+  {
+    title: "Slug",
+    dataIndex: "slug",
+    key: "slug",
+    width: 300,
+  },
+  {
+    title: "Url",
+    dataIndex: "url",
+    key: "url",
+    width: 250,
+  },
+  {
+    title: "Categories",
+    children: [
+      {
+        title: "Categories Name",
+        dataIndex: "categoryName",
+        key: "categoryName",
+      },
+      {
+        title: "Pivot",
+        dataIndex: "pivot",
+        key: "pivot",
+      },
+    ],
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    key: "action",
+    fixed: 'right',
+  },
+];
+
 export const columnsATTR = [
   {
     title: "Stt",

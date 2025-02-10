@@ -4,6 +4,10 @@ export const getCategorys = async (page: number) => {
   return intances.get("/categories?page=" + page);
 };
 
+export const getCategorysAll = async () => {
+  return intances.get("/categories/list");
+};
+
 export const getCategorysFather = async () => {
   return intances.get("/categories/get-all-categories");
 };
