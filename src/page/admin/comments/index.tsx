@@ -113,6 +113,9 @@ const CommentAdmin = () => {
             <Link to={`/dashboard/commentsValue/${item.id}`}>
               <MyButton>Comments Value</MyButton>
             </Link>
+            <Link to={`/dashboard/comments/${item.id}`}>
+              <MyButton type="dashed">Detail</MyButton>
+            </Link>
           </div>
         ),
       };

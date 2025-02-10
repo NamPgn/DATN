@@ -164,6 +164,10 @@ export const routerClient = [
         path: "comments",
         element: <CommentAdmin />,
       },
+      {
+        path: "comments/:id",
+        element: <CommentDetail />,
+      },
     ],
   },
   {

@@ -4,8 +4,8 @@ export const getComments = async (page: number) => {
   return intances.get("/comments?page=" + page);
 };
 
-export const getComment = async (id: any) => {
-  return intances.get("/comments/" + id);
+export const getComment = async (id: string) => {
+  return intances.get(`/comments/${id}}`);
 };
 
 export const delComments = async (id: string) => {
@@ -17,7 +17,7 @@ export const delComments = async (id: string) => {
 
 export const delMultipleComments = async (ids: string[]) => {
   return intances.delete("/comments/delete", {
-    data: { id: ids }, // Gửi danh sách ID thay vì chỉ một ID
+    data: { id: ids },
     headers: { "Content-Type": "application/json" },
   });
 };
