@@ -60,7 +60,7 @@ const EditCategory = () => {
       <Form.Item label="Slug Name" name="slug">
         <Input placeholder="Enter slug name" />
       </Form.Item>
-      <Form.Item label="Parent Id" name="parent_id">
+      <Form.Item label="Category Id" name="parent_id">
         <Select
           style={{ width: "200px" }}
           placeholder="Vui lòng chọn"

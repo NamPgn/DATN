@@ -1,12 +1,8 @@
 import {
   ControlOutlined,
   DashboardOutlined,
-  LaptopOutlined,
   NotificationOutlined,
-  PicLeftOutlined,
-  RetweetOutlined,
   SlidersOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
@@ -42,52 +38,6 @@ export const URLSECTION = [
   {
     PATH: "/checkout",
     SECTTIONTITLE: "Checkout",
-  },
-];
-
-export const TableRouterAdminPage = [
-  {
-    path: "/dashboard",
-    name: "Admin",
-    icon: <DashboardOutlined />,
-  },
-  {
-    path: "/dashboard/products",
-    name: "Products",
-    icon: <NotificationOutlined />,
-  },
-  {
-    name: "User",
-    icon: <PicLeftOutlined />,
-    children: [
-      {
-        path: "/dashboard/users",
-        name: "Users",
-        icon: <UserOutlined />,
-      },
-      {
-        path: "/dashboard/adminUer",
-        name: "Admin",
-        icon: <LaptopOutlined />,
-      },
-    ],
-  },
-  {
-    name: "Category",
-    icon: <SlidersOutlined />,
-    path: "/dashboard/category",
-    children: [
-      {
-        path: "/dashboard/child",
-        name: "Child",
-        icon: <RetweetOutlined />,
-      },
-      {
-        path: "/dashboard/category/deleted",
-        icon: <ControlOutlined />,
-        name: "Deleted",
-      },
-    ],
   },
 ];
 
@@ -153,6 +103,105 @@ export const columnsCategory = [
     dataIndex: "slug",
     key: "slug",
     width: 120,
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    key: "action",
+    width: 100,
+  },
+];
+
+export const columnsATTR = [
+  {
+    title: "Stt",
+    dataIndex: "stt",
+    key: "stt",
+    width: 100,
+    showSorterTooltip: { target: "full-header" },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    sorter: (a: any, b: any) => a.key - b.key,
+    sortDirections: ["descend"],
+  },
+  {
+    title: "Name",
+    dataIndex: "name",
+    key: "name",
+    width: 100,
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    key: "action",
+    width: 100,
+  },
+];
+
+export const columnsComments = [
+  {
+    title: "Stt",
+    dataIndex: "stt",
+    key: "stt",
+    width: 40,
+    showSorterTooltip: { target: "full-header" },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    sorter: (a: any, b: any) => a.key - b.key,
+    sortDirections: ["descend"],
+  },
+  {
+    title: "Content",
+    dataIndex: "content",
+    key: "content",
+    width: 100,
+  },
+  {
+    title: "User id",
+    dataIndex: "user_id",
+    key: "user_id",
+    width: 100,
+  },
+  {
+    title: "Product id",
+    dataIndex: "product_id",
+    key: "product_id",
+    width: 100,
+  },
+  {
+    title: "Active",
+    dataIndex: "is_active",
+    key: "is_active",
+    width: 100,
+  },
+  {
+    title: "Rating",
+    dataIndex: "rating",
+    key: "rating",
+    width: 100,
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    key: "action",
+    width: 100,
+  },
+];
+
+export const columnsImageList = [
+  {
+    title: "Stt",
+    dataIndex: "stt",
+    key: "stt",
+    width: 100,
+    showSorterTooltip: { target: "full-header" },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    sorter: (a: any, b: any) => a.key - b.key,
+    sortDirections: ["descend"],
+  },
+  {
+    title: "Image",
+    dataIndex: "image",
+    key: "image",
+    width: 100,
   },
   {
     title: "Action",

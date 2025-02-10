@@ -17,19 +17,22 @@ const AddCategory = () => {
       message.error("Category created failure!");
     },
   });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: categoryFather }: any = useQuery({
     queryKey: ["categoriesFather"],
     queryFn: async () => (await getCategorysFather()).data,
   });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (values: any) => {
     mutate(values);
   };
-  const optionsSelectCategory = categoryFather?.map((item: any) => ({
-    label: item.name,
-    value: item.id,
-  }));
-  
-  optionsSelectCategory?.unshift({ label: "Trống", value: null });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // const optionsSelectCategory = categoryFather?.map((item: any) => ({
+  //   label: item.name,
+  //   value: item.id,
+  // }));
+
+  // optionsSelectCategory?.unshift({ label: "Trống", value: null });
 
   return (
     <Form form={form} layout="vertical" onFinish={handleSubmit}>
@@ -43,11 +46,11 @@ const AddCategory = () => {
       >
         <Input placeholder="Enter category name" />
       </Form.Item>
-      <Form.Item label="Parent Id" name="parent_id">
+      <Form.Item label="Category Id" name="parent_id">
         <Select
           style={{ width: "200px" }}
           placeholder="Vui lòng chọn"
-          options={optionsSelectCategory || []}
+          // options={optionsSelectCategory || []}
         />
       </Form.Item>
 
