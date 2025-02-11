@@ -15,6 +15,10 @@ const ProductEdit = () => {
   const [selectOneImage, setSelectOneImage]: any = useState(null);
   const [variants, setVariants] = useState<any[]>([]);
   const [visible, setVisible] = useState(false);
+  const [typeProduct, setTypeProduct] = useState("");
+  const [dataEdit, setDataEdit]: any = useState(null);
+  const [initialData, setInitialData] = useState<any>(null);
+  const [resettingForm, setResettingForm] = useState(false);
   const { data: product, isLoading: loadingProduct } = useQuery(
     ["product", id],
     async () => (await getProduct(id)).data,
@@ -22,7 +26,9 @@ const ProductEdit = () => {
       enabled: !!id,
       onSuccess: (data) => {
         form.setFieldsValue({ ...data });
-        setSelectOneImage(data.main_image);
+        setSelectOneImage({
+          id: data.main_image,
+        });
         setSelectImage(
           data?.product_images.map((item: any) => {
             return {
@@ -32,6 +38,8 @@ const ProductEdit = () => {
           })
         );
         setVariants(data?.variants);
+        setTypeProduct(data.type);
+        setDataEdit(data);
       },
       staleTime: Infinity,
       cacheTime: Infinity,
@@ -40,6 +48,27 @@ const ProductEdit = () => {
       refetchOnMount: false,
     }
   );
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (typeProduct == dataEdit?.type) {
+        form.resetFields();
+        form.setFieldsValue({
+          ...initialData,
+        });
+      } else {
+        form.resetFields(["variants"]);
+        setVariants([]);
+        console.log("Cleared variants:", variants);
+        form.setFieldsValue({
+          regular_price: dataEdit?.regular_price || 0,
+          sale_price: dataEdit?.sale_price || 0,
+          stock_quantity: dataEdit?.stock_quantity || 0,
+          sku: dataEdit?.sku || "",
+        });
+      }
+    }, 100);
+  }, [typeProduct]);
 
   const { isLoading, mutate } = useMutation({
     mutationFn: async (values: any) => await updateProduct(id, values),
@@ -72,14 +101,30 @@ const ProductEdit = () => {
     value: item.id,
   }));
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (val: any) => {
     const data = {
-      mainImage: selectOneImage?.id,
-      images: selectImage,
-      ...values,
-      variants,
+      main_image: selectOneImage?.id,
+      images: selectImage.map((item: any) => item.id),
+      ...val,
+      variants:
+        typeProduct === "0"
+          ? val.variants.map((item: any) => ({
+              ...item,
+            }))
+          : [
+              {
+                regular_price: val.variants?.[0]?.regular_price || 0,
+                sale_price: val.variants?.[0]?.sale_price || 0,
+                sku: val.variants?.[0]?.sku || "",
+                stock_quantity: val.variants?.[0]?.stock_quantity,
+                values: [],
+              },
+            ],
     };
     mutate(data);
+  };
+  const handleChangeType = (values: string) => {
+    setTypeProduct(values);
   };
 
   return (
@@ -115,6 +160,10 @@ const ProductEdit = () => {
           <Input placeholder="Tên" />
         </Form.Item>
 
+        <Form.Item name="slug" label="Slug">
+          <Input.TextArea placeholder="Slug" />
+        </Form.Item>
+
         <Form.Item name="description" label="Mô tả">
           <Input.TextArea placeholder="Mô tả" />
         </Form.Item>
@@ -130,36 +179,116 @@ const ProductEdit = () => {
             options={optionsSelectCategory}
           />
         </Form.Item>
+        <Form.Item label="Type" name="type">
+          <Select onChange={handleChangeType}>
+            <Select.Option value={"0"}>Sản phẩm có biến thể</Select.Option>
+            <Select.Option value={"1"}>Sản phẩm đơn giản</Select.Option>
+          </Select>
+        </Form.Item>
+        {typeProduct === "0" ? (
+          <>
+            <Form.List name="variants">
+              {(fields, { remove, add }) => (
+                <>
+                  {fields.map(({ key, name, ...restField }, index) => (
+                    <Space
+                      key={key}
+                      style={{
+                        display: "flex",
+                        alignItems: "baseline",
+                        marginBottom: 8,
+                      }}
+                    >
+                      <Form.Item {...restField} name={[name, "regular_price"]}>
+                        <InputNumber min={0} placeholder="Giá gốc" />
+                      </Form.Item>
 
-        <Form.List name="variants">
-          {(fields, { remove }) => (
-            <>
-              {fields.map(({ key, name, ...restField }) => (
-                <Space
-                  key={key}
-                  style={{
-                    display: "flex",
-                    alignItems: "baseline",
-                    marginBottom: 8,
-                  }}
-                >
-                  <Form.Item {...restField} name={[name, "regular_price"]}>
-                    <InputNumber min={0} placeholder="Giá gốc" />
-                  </Form.Item>
-                  <Form.Item {...restField} name={[name, "sale_price"]}>
-                    <InputNumber min={0} placeholder="Giá KM" />
-                  </Form.Item>
-                  <Form.Item {...restField} name={[name, "stock_quantity"]}>
-                    <InputNumber min={0} placeholder="Số lượng" />
-                  </Form.Item>
-                  <Form.Item {...restField} name={[name, "sku"]}>
-                    <Input />
-                  </Form.Item>
-                </Space>
-              ))}
-            </>
-          )}
-        </Form.List>
+                      <Form.Item {...restField} name={[name, "stock_quantity"]}>
+                        <InputNumber min={0} placeholder="Số lượng" />
+                      </Form.Item>
+
+                      <Form.Item {...restField} name={[name, "sku"]}>
+                        <Input
+                          defaultValue={variants ? variants[index]?.sku : ""}
+                        />
+                      </Form.Item>
+                      <Form.Item>
+                        <Button onClick={add}>Thêm</Button>
+                      </Form.Item>
+                      <Button
+                        icon={<MinusCircleOutlined />}
+                        onClick={() => remove(name)}
+                      />
+                    </Space>
+                  ))}
+                </>
+              )}
+            </Form.List>
+          </>
+        ) : (
+          <>
+            <Form.List name="variants">
+              {(fields, { add, remove }) => {
+                if (fields.length === 0) {
+                  add();
+                }
+                return (
+                  <>
+                    {fields.map(({ key, name, ...restField }) => (
+                      <Space
+                        key={key}
+                        style={{
+                          display: "flex",
+                          alignItems: "baseline",
+                          marginBottom: 8,
+                        }}
+                      >
+                        <Form.Item
+                          {...restField}
+                          name={[name, "regular_price"]}
+                        >
+                          <InputNumber
+                            min={0}
+                            placeholder="Giá gốc"
+                            style={{ width: "100%" }}
+                          />
+                        </Form.Item>
+
+                        <Form.Item {...restField} name={[name, "sale_price"]}>
+                          <InputNumber
+                            min={0}
+                            placeholder="Giá khuyến mãi"
+                            style={{ width: "100%" }}
+                          />
+                        </Form.Item>
+
+                        <Form.Item
+                          {...restField}
+                          name={[name, "stock_quantity"]}
+                        >
+                          <InputNumber
+                            min={0}
+                            placeholder="Số Lượng"
+                            style={{ width: "100%" }}
+                          />
+                        </Form.Item>
+
+                        <Form.Item {...restField} name={[name, "sku"]}>
+                          <Input placeholder="Nhập mã SKU" />
+                        </Form.Item>
+
+                        <Button
+                          icon={<MinusCircleOutlined />}
+                          onClick={() => remove(name)}
+                        />
+                      </Space>
+                    ))}
+                  </>
+                );
+              }}
+            </Form.List>
+          </>
+        )}
 
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={isLoading}>
