@@ -37,6 +37,9 @@ const CommentDetail = () => {
         <strong>Đánh giá:</strong> {comment.rating} ⭐
       </p>
       <p>
+        <strong>Phản hồi bình luận:</strong> {comment.reply}
+      </p>
+      <p>
         <strong>Trạng thái:</strong>
         {comment.isActive === 0 ? (
           <Tag color="warning">Hidden</Tag>

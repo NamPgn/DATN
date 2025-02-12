@@ -22,12 +22,20 @@ export const delMultipleComments = async (ids: string[]) => {
   });
 };
 
-export const replyComment = async (id: string) => {
-  return intances.patch("/comments/reply/" + id);
-};
-
 export const hiddenComment = async () => {
   return intances.get("/comments/hidden");
+};
+
+export const searchComment = async () => {
+  return intances.get("/comments/search");
+};
+
+export const statusComment = async (id: string, isActive: boolean) => {
+  return intances.patch("/comments/status", { id, isActive });
+};
+
+export const replyComment = async (id: string, reply: string) => {
+  return intances.patch("/comments/reply", { id, reply });
 };
 
 // export const addComment = async (data: any) => {
