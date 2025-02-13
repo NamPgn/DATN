@@ -6,7 +6,6 @@ import {
   LaptopOutlined,
   NotificationOutlined,
   PicLeftOutlined,
-  RetweetOutlined,
   SlidersOutlined,
   UserOutlined,
 } from "@ant-design/icons";
@@ -27,18 +26,20 @@ import Attribute from "../page/admin/products/attribute/attribute";
 import EditAttribute from "../page/admin/products/attribute/edit";
 import AttributeValue from "../page/admin/products/attributeValue/attributeValue";
 import Cart from "../page/cart";
-import Shop from "../page/shop";
+import Checkout from "../page/checkout";
+import ContactPage from "../page/contact";
 import TeamPage from "../page/team";
-import PrivateRouter from "./security";
 import AddAttributeValue from "../page/admin/products/attributeValue/add";
 import EditAttributeVal from "../page/admin/products/attributeValue/edit";
-import ProductAdd from "../page/admin/products/add";
-import ProductEdit from "../page/admin/products/edit";
 import ImageList from "../page/admin/products/image/imageList";
 import AddImageProducts from "../page/admin/products/image/add";
 import EditImageProduct from "../page/admin/products/image/edit";
 import CommentAdmin from "../page/admin/comments";
+import ProductAdd from "../page/admin/products/add";
+import ProductEdit from "../page/admin/products/edit";
+import CommentDetail from "../page/admin/comments/detail";
 import LazyComponent from "../components/Lazy/LazyComponent";
+import Shop from "../page/shop";
 
 export const routerClient = [
   {
@@ -66,6 +67,14 @@ export const routerClient = [
         element: <Cart />,
       },
       {
+        path: "/contact",
+        element: <ContactPage />,
+      },
+      {
+        path: "/checkout",
+        element: <Checkout />,
+      },
+      {
         path: "/product/detail/:id",
         element: <ProductDetail />,
       },
@@ -83,6 +92,7 @@ export const routerClient = [
         path: "",
         element: <Admin />,
       },
+      //Product
       {
         path: "products",
         element: (
@@ -99,7 +109,7 @@ export const routerClient = [
         path: "products/edit/:id",
         element: <ProductEdit />,
       },
-
+      //Category
       {
         path: "category",
         element: <CategoryAdmin />,
@@ -116,6 +126,7 @@ export const routerClient = [
         path: "category/deleted",
         element: <CategoryDeleted />,
       },
+      //Attribute
       {
         path: "attribute",
         element: <Attribute />,
@@ -153,9 +164,14 @@ export const routerClient = [
         path: "image/edit",
         element: <EditImageProduct />,
       },
+      //Comment
       {
         path: "comments",
         element: <CommentAdmin />,
+      },
+      {
+        path: "comments/:id",
+        element: <CommentDetail />,
       },
     ],
   },

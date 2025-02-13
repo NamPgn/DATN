@@ -1,14 +1,8 @@
 import {
-  ArrowUpOutlined,
-  BorderLeftOutlined,
   ControlOutlined,
   DashboardOutlined,
-  LaptopOutlined,
   NotificationOutlined,
-  PicLeftOutlined,
-  RetweetOutlined,
   SlidersOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
@@ -27,7 +21,7 @@ export const URLSECTION = [
   },
   {
     PATH: "/shop",
-    SECTTIONTITLE: "SHOP",
+    SECTTIONTITLE: "Shop",
   },
   {
     PATH: "/cart",
@@ -36,6 +30,14 @@ export const URLSECTION = [
   {
     PATH: "/product/detail",
     SECTTIONTITLE: "Product Detail",
+  },
+  {
+    PATH: "/contact",
+    SECTTIONTITLE: "Contact",
+  },
+  {
+    PATH: "/checkout",
+    SECTTIONTITLE: "Checkout",
   },
 ];
 
@@ -72,6 +74,7 @@ export const columnsCategory = [
     key: "stt",
     width: 100,
     showSorterTooltip: { target: "full-header" },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sorter: (a: any, b: any) => a.key - b.key,
     sortDirections: ["descend"],
   },
@@ -80,6 +83,20 @@ export const columnsCategory = [
     dataIndex: "name",
     key: "name",
     width: 100,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onFilter: (value: any, record: any) =>
+      record.plainName.toLowerCase().includes(value.toLowerCase()),
+
+    filters: [
+      {
+        text: "Quần",
+        value: "quần",
+      },
+      {
+        text: "Áo",
+        value: "áo",
+      },
+    ],
   },
   {
     title: "Slug",
@@ -150,6 +167,7 @@ export const columnsATTR = [
     key: "stt",
     width: 100,
     showSorterTooltip: { target: "full-header" },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sorter: (a: any, b: any) => a.key - b.key,
     sortDirections: ["descend"],
   },
@@ -174,6 +192,7 @@ export const columnsComments = [
     key: "stt",
     width: 40,
     showSorterTooltip: { target: "full-header" },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sorter: (a: any, b: any) => a.key - b.key,
     sortDirections: ["descend"],
   },
@@ -222,6 +241,7 @@ export const columnsImageList = [
     key: "stt",
     width: 100,
     showSorterTooltip: { target: "full-header" },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     sorter: (a: any, b: any) => a.key - b.key,
     sortDirections: ["descend"],
   },
