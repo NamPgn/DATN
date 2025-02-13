@@ -186,6 +186,7 @@ export const TableRouterAdminPage = [
         name: "Image List",
         icon: <FileImageOutlined />,
       },
+   
     ],
   },
   {

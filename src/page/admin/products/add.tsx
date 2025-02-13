@@ -6,6 +6,8 @@ import { getCategorysAll } from "../../../sevices/category";
 import { addProduct } from "../../../sevices/products";
 import UploadImage from "./component/uploadImage";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import ReactQuill from "react-quill";
+import { Editor } from "@tinymce/tinymce-react";
 
 const ProductAdd = () => {
   const [form] = Form.useForm();
@@ -14,6 +16,7 @@ const ProductAdd = () => {
   const [variants, setVariants] = useState<any[]>([]);
   const [visible, setVisible] = useState(false);
   const [typeProduct, setTypeProduct] = useState("1");
+  const [editorContent, setEditorContent] = useState("");
   const { isLoading, mutate } = useMutation({
     mutationFn: async (values: any) => {
       return await addProduct(values);
@@ -76,11 +79,11 @@ const ProductAdd = () => {
   };
 
   const handleSubmit = (val: any) => {
-    console.log(variants);
     const data = {
       main_image: selectOneImage?.id,
       images: selectImage.map((item: any) => item.id),
       ...val,
+      description: val.description.level.content,
       variants:
         typeProduct == "0"
           ? val.variants.map((item: any, index: number) => ({
@@ -105,17 +108,16 @@ const ProductAdd = () => {
   const handleChangeType = (values: any) => {
     setTypeProduct(values);
   };
-  console.log(variants);
   return (
     <>
-      <div
+      {/* <div
         className="d-flex flex-column align-items-center justify-content-center border border-secondary border-dashed rounded p-3"
         style={{ width: "120px", height: "120px", cursor: "pointer" }}
         onClick={() => setVisible(true)}
       >
         <PlusOutlined className="text-4xl text-gray-500 hover:text-blue-500" />
         <span className="text-muted">Upload</span>
-      </div>
+      </div> */}
       <UploadImage
         visible={visible}
         onClose={() => setVisible(false)}
@@ -140,24 +142,37 @@ const ProductAdd = () => {
         </Form.Item>
 
         <Form.Item name="description" label="Mô tả">
-          <Input.TextArea placeholder="Mô tả" />
+          <Editor
+            apiKey="n9i6knon4ekgc3nai8h03m23r1gkk89vpd9a0d24ulhvl6p7"
+            value={editorContent}
+            onEditorChange={setEditorContent}
+            init={{
+              height: 300,
+              menubar: false,
+              plugins: ["link", "image", "lists"],
+              toolbar:
+                "undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image",
+            }}
+          />
+
+          {/* <Input.TextArea placeholder="Mô tả" /> */}
         </Form.Item>
 
         <Form.Item name="short_description" label="Mô tả ngắn">
-          <Input placeholder="Mô tả ngắn" />
+          <Input  className="w-50" placeholder="Mô tả ngắn" />
         </Form.Item>
 
         <Form.Item label="Category Id" name="categories">
           <Select
+            className="w-50"
             mode="multiple"
-            style={{ width: "100%" }}
             placeholder="Vui lòng chọn"
             options={optionsSelectCategory}
           />
         </Form.Item>
 
         <Form.Item label="Type" name="type">
-          <Select onChange={handleChangeType}>
+          <Select  className="w-50" onChange={handleChangeType}>
             <Select.Option value={"0"}>Sản phẩm có biến thể</Select.Option>
             <Select.Option value={"1"}>Sản phẩm đơn giản</Select.Option>
           </Select>

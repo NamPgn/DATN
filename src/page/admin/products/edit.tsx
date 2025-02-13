@@ -129,14 +129,14 @@ const ProductEdit = () => {
 
   return (
     <>
-      <div
+      {/* <div
         className="d-flex flex-column align-items-center justify-content-center border border-secondary border-dashed rounded p-3"
         style={{ width: "120px", height: "120px", cursor: "pointer" }}
         onClick={() => setVisible(true)}
       >
         <PlusOutlined className="text-4xl text-gray-500 hover:text-blue-500" />
         <span className="text-muted">Upload</span>
-      </div>
+      </div> */}
       <UploadImage
         visible={visible}
         onClose={() => setVisible(false)}

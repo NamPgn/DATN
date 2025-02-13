@@ -3,7 +3,6 @@ import { Button, Form, Image, List, message, Modal, Tabs, Upload } from "antd";
 import React, { memo, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { addImageList, getImageLists } from "../../../../sevices/imageList";
-
 const UploadImage = memo(
   ({
     visible,
@@ -68,89 +67,75 @@ const UploadImage = memo(
       });
       mutate(formData);
     };
-
     return (
-      <Modal
-        title="Quản lý hình ảnh"
-        open={visible}
-        onCancel={onCancel}
-        footer={null}
-        width={800}
-      >
-        <Tabs>
-          <Tabs.TabPane tab="Upload Image" key="1">
-            <Form form={form} layout="vertical" onFinish={handleSubmit}>
-              <Form.Item label="Upload Files">
-                <Upload
-                  name="images"
-                  multiple
-                  listType="picture"
-                  beforeUpload={() => false}
-                  fileList={fileList}
-                  onChange={handleFileChange}
-                >
-                  <Button icon={<UploadOutlined />}>Select Files</Button>
-                </Upload>
-              </Form.Item>
-              <Form.Item>
-                <Button
-                  type="primary"
-                  loading={isLoading}
-                  htmlType="submit"
-                  block
-                >
-                  Upload Images
-                </Button>
-              </Form.Item>
-            </Form>
-          </Tabs.TabPane>
-
-          <Tabs.TabPane tab="Image List" key="2">
-            <List
-              grid={{ gutter: 10, column: 5 }}
-              dataSource={images}
-              renderItem={(item: any) => {
-                const isSelected = selectImage.some(
-                  (img: any) => img.id === item.id
-                );
-
-                const isMainImage = selectOneImage?.id == item.id;
-                return (
-                  <List.Item>
-                    <div
-                      className={`relative cursor-pointer border-2 ${
-                        isSelected ? "border-green-500" : "border-transparent"
-                      }`}
-                      onClick={() => handleSelectImage(item)}
-                    >
-                      <Image
-                        src={item.url}
-                        style={{
-                          border: isSelected ? "2px solid green" : "",
-                          opacity: isMainImage ? 0.6 : 1,
-                        }}
-                        className="object-fit-cover"
-                        alt="uploaded"
-                        width={100}
-                        height={100}
-                        preview={false}
+      <Tabs>
+        <Tabs.TabPane tab="Chọn ảnh từ thư viện" key="2">
+          <List
+            className="w-50"
+            grid={{ column: 3 }}
+            dataSource={images}
+            renderItem={(item: any) => {
+              const isSelected = selectImage.some(
+                (img: any) => img.id === item.id
+              );
+              const isMainImage = selectOneImage?.id === item.id;
+              return (
+                <List.Item>
+                  <div
+                    className={`position-relative cursor-pointer ${
+                      isSelected ? "border-success" : "border-secondary"
+                    } p-2`}
+                    onClick={() => handleSelectImage(item)}
+                  >
+                    <img
+                      src={item.url}
+                      className="img-fluid"
+                      style={{
+                        border: isSelected ? "2px solid green" : "",
+                        opacity: isMainImage ? 0.6 : 1,
+                      }}
+                      alt="uploaded"
+                    />
+                    {/* Ô Checkbox chọn ảnh chính */}
+                    <div className="position-absolute top-0 p-1 m-1">
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        checked={isMainImage}
+                        onChange={() => handleSelectMainImage(item)}
                       />
                     </div>
-                    <Button
-                      size="small"
-                      type={isMainImage ? "primary" : "default"}
-                      style={{ marginTop: 5 }}
-                      onClick={() => handleSelectMainImage(item)}
-                    >
-                      {isMainImage ? "Ảnh Chính" : "Chọn Ảnh Chính"}
-                    </Button>
-                  </List.Item>
-                );
-              }}
-            />
-          </Tabs.TabPane>
-        </Tabs>
-      </Modal>
+                  </div>
+                </List.Item>
+              );
+            }}
+          />
+        </Tabs.TabPane>
+
+        <Tabs.TabPane tab="Tải ảnh lên" key="1">
+          <Form form={form} layout="vertical" onFinish={handleSubmit}>
+            <Form.Item label="Upload Files">
+              <Upload
+                name="images"
+                multiple
+                listType="picture"
+                beforeUpload={() => false}
+                fileList={fileList}
+                onChange={handleFileChange}
+              >
+                <Button>
+                  <UploadOutlined /> Select Files
+                </Button>
+              </Upload>
+            </Form.Item>
+            <Form.Item>
+              <Button style={{ background:"#0d6efd" }} htmlType="submit" disabled={isLoading}>
+                Upload Images
+              </Button>
+            </Form.Item>
+          </Form>
+        </Tabs.TabPane>
+      </Tabs>
     );
   }
 );
