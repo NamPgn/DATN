@@ -26,8 +26,8 @@ export const hiddenComment = async () => {
   return intances.get("/comments/hidden");
 };
 
-export const searchComment = async () => {
-  return intances.get("/comments/search");
+export const searchComment = async (keyword?: string, rating?: number) => {
+  return intances.get("/comments/search", { params: { keyword, rating } });
 };
 
 export const statusComment = async (id: string, isActive: boolean) => {

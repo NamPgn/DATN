@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { Input, Modal, Tag } from "antd";
+import { Input, Modal, Select, Tag } from "antd";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
@@ -8,13 +9,14 @@ import {
   delMultipleComments,
   getComments,
   replyComment,
+  searchComment,
   statusComment,
 } from "../../../sevices/comment";
 import { MyButton } from "../../../components/UI/Core/Button";
 import MVConfirm from "../../../components/UI/Core/Confirm";
 import MVTable from "../../../components/UI/Core/MV/Table";
 import { columnsATTR, columnsComments } from "../../../constant";
-
+const { Option } = Select;
 const CommentAdmin = () => {
   const [page, setPage] = useState(1);
   const [hiddenComments, setHiddenComments] = useState<Record<string, boolean>>(
@@ -24,15 +26,23 @@ const CommentAdmin = () => {
   const [replyModalVisible, setReplyModalVisible] = useState(false);
   const [replyText, setReplyText] = useState("");
   const [replyCommentId, setReplyCommentId] = useState<string | null>(null);
-  // const [valueId, setValue] = useState();
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchRating, setSearchRating] = useState<number | undefined>(
+    undefined
+  );
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
   const { data: comments, refetch }: any = useQuery({
-    queryKey: ["comments", page],
-    queryFn: async () => await getComments(page),
+    queryKey: ["comments", page, searchKeyword, searchRating],
+    queryFn: async () => {
+      if (searchKeyword || searchRating !== undefined) {
+        return await searchComment(searchKeyword, searchRating);
+      }
+      return await getComments(page);
+    },
   });
   const { mutate } = useMutation({
     mutationFn: async (id: string) => {
@@ -121,10 +131,12 @@ const CommentAdmin = () => {
       return;
     }
 
-    const allHidden = selectedRowKeys.every((id) => hiddenComments[id]);
+    const allHidden = selectedRowKeys.every(
+      (id: string | number) => hiddenComments[id]
+    );
     setHiddenComments((prev) => {
       const updatedHidden = { ...prev };
-      selectedRowKeys.forEach((id) => {
+      selectedRowKeys.forEach((id: string | number) => {
         updatedHidden[id] = !allHidden;
         updateStatus({ id: String(id), isActive: allHidden });
       });
@@ -168,8 +180,14 @@ const CommentAdmin = () => {
     }
   };
 
+  const handleSearch = () => {
+    setPage(1);
+    refetch();
+  };
+
   const data =
     comments &&
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     comments?.data?.data?.data?.map((item: any, index: number) => {
       const isHidden =
         item.isActive === 0 || item.isActive === "0" || item.isActive === false;
@@ -199,9 +217,9 @@ const CommentAdmin = () => {
           ),
         action: (
           <div className="d-flex gap-1">
-            <Link to={`/dashboard/comments/edit/${item.id}`}>
+            {/* <Link to={`/dashboard/comments/edit/${item.id}`}>
               <MyButton type="primary">Edit</MyButton>
-            </Link>
+            </Link> */}
             <MVConfirm title="Có xóa không" onConfirm={() => mutate(item.id)}>
               <MyButton danger className="ml-2">
                 Delete
@@ -235,6 +253,30 @@ const CommentAdmin = () => {
     });
   return (
     <React.Fragment>
+      <div className="flex gap-2 mb-4">
+        <Input
+          placeholder="Nhập từ khóa tìm kiếm..."
+          value={searchKeyword}
+          onChange={(e) => setSearchKeyword(e.target.value)}
+          style={{ width: "200px" }}
+        />
+        <Select
+          placeholder="Chọn rating"
+          value={searchRating}
+          onChange={(value) => setSearchRating(value)}
+          style={{ width: "120px" }}
+          allowClear
+        >
+          <Option value={1}>1 sao</Option>
+          <Option value={2}>2 sao</Option>
+          <Option value={3}>3 sao</Option>
+          <Option value={4}>4 sao</Option>
+          <Option value={5}>5 sao</Option>
+        </Select>
+        <MyButton type="primary" onClick={handleSearch}>
+          Tìm kiếm
+        </MyButton>
+      </div>
       <div className="mb-3">
         <MyButton
           danger
