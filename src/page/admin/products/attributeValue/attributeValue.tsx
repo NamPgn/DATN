@@ -1,25 +1,28 @@
 import React, { useState } from "react";
 import { Tag } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { MyButton } from "../../../../components/UI/Core/Button";
 import MVTable from "../../../../components/UI/Core/MV/Table";
 import { columnsATTR } from "../../../../constant";
 import { useMutation, useQuery } from "react-query";
 import MVConfirm from "../../../../components/UI/Core/Confirm";
 import { toast } from "react-toastify";
-import { delAttributesVal, getAttributesVals } from "../../../../sevices/attributeValue";
+import {
+  delAttributesVal,
+  getAttributesVals,
+} from "../../../../sevices/attributeValue";
 
 const AttributeValue = () => {
   const [page, setPage] = useState(1);
-
+  const { id }:any = useParams();
   const [valueId, setValue] = useState();
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
-  const { data: attributeVal,refetch }: any = useQuery({
-    queryKey: ["attributeVal", page],
-    queryFn: async () => await getAttributesVals(page),
+  const { data: attributeVal, refetch }: any = useQuery({
+    queryKey: ["attributeVal", id],
+    queryFn: async () => await getAttributesVals(id),
   });
   const { mutate } = useMutation({
     mutationFn: async (id: string) => {
@@ -112,5 +115,3 @@ const AttributeValue = () => {
 };
 
 export default AttributeValue;
-
-
