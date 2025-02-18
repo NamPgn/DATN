@@ -1,13 +1,9 @@
-import { Form, message } from "antd";
+import { message } from "antd";
 import { useState } from "react";
-import { useMutation, useQuery } from "react-query";
-import { getAttributesAll } from "../../../sevices/attribute";
-import { getCategorysAll } from "../../../sevices/category";
+import { useMutation } from "react-query";
 import { addProduct } from "../../../sevices/products";
 import UploadImage from "./component/uploadImage";
 import ProductForm from "./component/form";
-import { PlusOutlined } from "@ant-design/icons";
-
 const ProductAdd = () => {
   const [selectImage, setSelectImage] = useState([]);
   const [selectOneImage, setSelectOneImage]: any = useState(null);

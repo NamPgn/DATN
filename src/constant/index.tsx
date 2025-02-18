@@ -4,6 +4,7 @@ import {
   NotificationOutlined,
   SlidersOutlined,
 } from "@ant-design/icons";
+import { Button, Space } from "antd";
 import { Link } from "react-router-dom";
 
 export const URLSECTION = [
@@ -138,25 +139,73 @@ export const columnsProducts = [
     width: 250,
   },
   {
-    title: "Categories",
-    children: [
-      {
-        title: "Categories Name",
-        dataIndex: "categoryName",
-        key: "categoryName",
-      },
-      {
-        title: "Pivot",
-        dataIndex: "pivot",
-        key: "pivot",
-      },
-    ],
+    title: "Categories Name",
+    dataIndex: "categoryName",
+    key: "categoryName",
   },
   {
     title: "Action",
     dataIndex: "action",
     key: "action",
-    fixed: 'right',
+    fixed: "right",
+  },
+];
+
+export const columnsProductVariant = [
+  // {
+  //   title: "Ảnh",
+  //   dataIndex: "image",
+  //   key: "image",
+  //   render: (text:any) => <Image width={50} src={text} />,
+  // },
+  {
+    title: "Tên Sản Phẩm",
+    dataIndex: "pr_name",
+    key: "pr_name",
+  },
+  {
+    title: "Value",
+    children: [
+      {
+        title: "Kích Cỡ",
+        dataIndex: "size",
+        key: "size",
+      },
+      {
+        title: "Màu",
+        dataIndex: "color",
+        key: "color",
+      },
+    ],
+  },
+  {
+    title: "Giá",
+    dataIndex: "regular_price",
+    key: "regular_price",
+  },
+  {
+    title: "Giá sale",
+    dataIndex: "sale_price",
+    key: "sale_price",
+  },
+  {
+    title: "Sku",
+    dataIndex: "sku",
+    key: "sku",
+  },
+  {
+    title: "Số lượng",
+    dataIndex: "stock_quantity",
+    key: "stock_quantity",
+  },
+  {
+    title: "Sửa",
+    key: "action",
+    render: () => (
+      <Space size="middle">
+        <Button type="primary">Sửa</Button>
+      </Space>
+    ),
   },
 ];
 

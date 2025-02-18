@@ -30,16 +30,25 @@ const ProductForm = ({
       form.resetFields();
     }
   }, [id]);
+  // useEffect(() => {
+  //   if (dataEdit) {
+  //     if (typeProduct !== dataEdit.type) {
+  //       form.resetFields(["variants"]);
+  //       setVariants([]);
+  //     } else {
+  //       form.setFieldsValue({ ...dataEdit });
+  //     }
+  //   }
+  // }, [typeProduct]);
+
   useEffect(() => {
     if (dataEdit) {
-      if (typeProduct !== dataEdit.type) {
-        form.resetFields(["variants"]);
-        setVariants([]);
-      } else {
-        form.setFieldsValue({ ...dataEdit });
-      }
+      form.setFieldsValue({
+        ...dataEdit,
+        type: dataEdit?.type || "1",
+      });
     }
-  }, [typeProduct]);
+  }, [dataEdit]);
   const { data: category }: any = useQuery({
     queryKey: ["categories"],
     queryFn: async () => (await getCategorysAll()).data,
@@ -96,15 +105,26 @@ const ProductForm = ({
   };
 
   const handleSubmit = (val: any) => {
-    console.log(val);
+    const attributesValues: any = {};
+    attrAll.forEach((attribute: any) => {
+      const selectedValue = val[attribute.name];
+      if (selectedValue) {
+        const selectedNames = attribute.data
+          .filter((attrValue: any) => selectedValue.includes(attrValue.id))
+          .map((attrValue: any) => attrValue.id);
+        attributesValues[attribute.name] = selectedNames;
+      }
+    });
     const data = {
+      attributes: attributesValues,
       main_image: selectOneImage?.id,
       images: selectImage.map((item: any) => item.id),
       short_description: val.short_description,
-      description:
-        val.description !== dataEdit.description
+      description: isEditing
+        ? val.description !== dataEdit.description
           ? val.description?.level?.content
-          : val.description,
+          : val.description
+        : val.description?.level?.content,
       type: val.type,
       name: val.name,
       slug: val?.slug,

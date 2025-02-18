@@ -19,3 +19,19 @@ export const delProduct = async (id: string) => {
 export const addProduct = async (data: any) => {
   return intances.post("/products", data);
 };
+
+export const variantsProduct = async (id: any) => {
+  return intances.get(`/products/${id}/variants`);
+};
+
+export const getVariantsProduct = async (id: any) => {
+  return intances.get(`/products/${id}/attributes`);
+};
+
+export const getVariantsProductList = async (id: any) => {
+  return intances.get(`/products/${id}/variants/list`);
+};
+
+export const addVariantsProduct = async (id: any, data: any) => {
+  return intances.get(`/products/${id}/variants`, data);
+};

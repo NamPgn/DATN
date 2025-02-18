@@ -1,12 +1,9 @@
-import { Button, Form, Input, InputNumber, message, Select, Space } from "antd";
-import React, { useEffect, useState } from "react";
+import { Form, message } from "antd";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
-import { getAttributesAll } from "../../../sevices/attribute";
-import { getCategorysAll } from "../../../sevices/category";
 import { getProduct, updateProduct } from "../../../sevices/products";
 import UploadImage from "./component/uploadImage";
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import ProductForm from "./component/form";
 
 const ProductEdit = () => {
@@ -14,11 +11,9 @@ const ProductEdit = () => {
   const [form] = Form.useForm();
   const [selectImage, setSelectImage] = useState([]);
   const [selectOneImage, setSelectOneImage]: any = useState(null);
-  const [variants, setVariants] = useState<any[]>([]);
   const [visible, setVisible] = useState(false);
   const [typeProduct, setTypeProduct] = useState("");
   const [dataEdit, setDataEdit]: any = useState(null);
-  const [initialData, setInitialData] = useState<any>(null);
   const { data: product } = useQuery(
     ["product", id],
     async () => (await getProduct(id)).data,
@@ -37,32 +32,12 @@ const ProductEdit = () => {
             };
           })
         );
-        setVariants(data?.variants);
         setTypeProduct(data.type);
         setDataEdit(data);
       },
     }
   );
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (typeProduct == dataEdit?.type) {
-        form.resetFields();
-        form.setFieldsValue({
-          ...initialData,
-        });
-      } else {
-        form.resetFields(["variants"]);
-        setVariants([]);
-        form.setFieldsValue({
-          regular_price: dataEdit?.regular_price || 0,
-          sale_price: dataEdit?.sale_price || 0,
-          stock_quantity: dataEdit?.stock_quantity || 0,
-          sku: dataEdit?.sku || "",
-        });
-      }
-    }, 100);
-  }, [typeProduct]);
 
   const { mutate: mutateEdit } = useMutation({
     mutationFn: async (values: any) => await updateProduct(id, values),
@@ -80,15 +55,27 @@ const ProductEdit = () => {
         <PlusOutlined className="text-4xl text-gray-500 hover:text-blue-500" />
         <span className="text-muted">Upload</span>
       </div> */}
-      <UploadImage
-        visible={visible}
-        onClose={() => setVisible(false)}
-        setSelectImage={setSelectImage}
-        selectImage={selectImage}
-        setSelectOneImage={setSelectOneImage}
-        selectOneImage={selectOneImage}
-        onCancel={() => setVisible(false)}
-      />
+      <div className="d-flex">
+        <UploadImage
+          visible={visible}
+          onClose={() => setVisible(false)}
+          setSelectImage={setSelectImage}
+          selectImage={selectImage}
+          setSelectOneImage={setSelectOneImage}
+          selectOneImage={selectOneImage}
+          onCancel={() => setVisible(false)}
+        />
+        <div className="d-flex gap-3">
+          <Link to={"/dashboard/add/product/variant"}>
+          
+              Thêm biến thể mới
+          </Link>
+          <Link to={"/dashboard/add/product/variant/management"}>
+              Quản lí thuộc tính
+          </Link>
+        </div>
+      </div>
+
       <ProductForm
         dataEdit={product}
         selectOneImage={selectOneImage}

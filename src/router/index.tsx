@@ -40,6 +40,8 @@ import ProductEdit from "../page/admin/products/edit";
 import CommentDetail from "../page/admin/comments/detail";
 import LazyComponent from "../components/Lazy/LazyComponent";
 import Shop from "../page/shop";
+import AddProductVariantEdit from "../page/admin/products/component/addProductVariantEdit";
+import ProductVariant from "../page/admin/products/variant";
 
 export const routerClient = [
   {
@@ -173,6 +175,14 @@ export const routerClient = [
         path: "comments/:id",
         element: <CommentDetail />,
       },
+      {
+        path: "product/:id/variants",
+        element: <ProductVariant />,
+      },
+      {
+        path: "add/product/variant/:id",
+        element: <AddProductVariantEdit />,
+      },
     ],
   },
   {
@@ -202,7 +212,7 @@ export const TableRouterAdminPage = [
         name: "Image List",
         icon: <FileImageOutlined />,
       },
-   
+  
     ],
   },
   {
