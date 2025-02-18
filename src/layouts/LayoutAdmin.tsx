@@ -110,7 +110,7 @@ const LayoutAdmin = () => {
             overflow: "auto",
           }}
         >
-          <PageTitle/>
+          <PageTitle />
           <Outlet />
         </Content>
         <Footer>© 2025 copyright</Footer>

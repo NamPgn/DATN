@@ -186,6 +186,90 @@ export const columnsComments = [
   },
 ];
 
+export const columnsVouchers = [
+  {
+    title: "Stt",
+    dataIndex: "stt",
+    key: "stt",
+    width: 40,
+    showSorterTooltip: { target: "full-header" },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    sorter: (a: any, b: any) => a.key - b.key,
+    sortDirections: ["descend"],
+  },
+  {
+    title: "Code",
+    dataIndex: "code",
+    key: "code",
+    width: 100,
+  },
+  {
+    title: "Name",
+    dataIndex: "name",
+    key: "name",
+    width: 100,
+  },
+  {
+    title: "Description",
+    dataIndex: "description",
+    key: "description",
+    width: 100,
+  },
+  {
+    title: "Discount Percent",
+    dataIndex: "discount_percent",
+    key: "discount_percent",
+    width: 100,
+  },
+  {
+    title: "Amount",
+    dataIndex: "amount",
+    key: "amount",
+    width: 100,
+  },
+  {
+    title: "Min Price",
+    dataIndex: "min_product_price",
+    key: "min_product_price",
+    width: 100,
+  },
+  {
+    title: "Max Discount",
+    dataIndex: "max_discount_amount",
+    key: "max_discount_amount",
+    width: 100,
+  },
+  {
+    title: "Usage Limit",
+    dataIndex: "usage_limit",
+    key: "usage_limit",
+    width: 100,
+  },
+  {
+    title: "Start Date",
+    dataIndex: "start_date",
+    key: "start_date",
+    width: 100,
+  },
+  {
+    title: "Expiry Date",
+    dataIndex: "expiry_date",
+    key: "expiry_date",
+    width: 100,
+  },
+  {
+    title: "Times Used",
+    dataIndex: "times_used",
+    key: "times_used",
+    width: 100,
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    key: "action",
+    width: 100,
+  },
+];
 export const columnsImageList = [
   {
     title: "Stt",

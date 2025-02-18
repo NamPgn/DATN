@@ -5,7 +5,7 @@ export const getComments = async (page: number) => {
 };
 
 export const getComment = async (id: string) => {
-  return intances.get(`/comments/${id}}`);
+  return intances.get(`/comments/${id}`);
 };
 
 export const delComments = async (id: string) => {
@@ -37,11 +37,3 @@ export const statusComment = async (id: string, isActive: boolean) => {
 export const replyComment = async (id: string, reply: string) => {
   return intances.patch("/comments/reply", { id, reply });
 };
-
-// export const addComment = async (data: any) => {
-//   return intances.post("/comments", data);
-// };
-
-// export const updateComment = async (id: any, data: any) => {
-//   return intances.put("/comments/" + id, data);
-// };

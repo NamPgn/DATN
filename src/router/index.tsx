@@ -3,6 +3,7 @@ import {
   ControlOutlined,
   DashboardOutlined,
   FileImageOutlined,
+  GiftOutlined,
   LaptopOutlined,
   NotificationOutlined,
   PicLeftOutlined,
@@ -39,6 +40,8 @@ import CommentAdmin from "../page/admin/comments";
 import ProductAdd from "../page/admin/products/add";
 import ProductEdit from "../page/admin/products/edit";
 import CommentDetail from "../page/admin/comments/detail";
+import VoucherAdmin from "../page/admin/vouchers";
+import VoucherDetail from "../page/admin/vouchers/detail";
 
 export const routerClient = [
   {
@@ -168,6 +171,15 @@ export const routerClient = [
         path: "comments/:id",
         element: <CommentDetail />,
       },
+      //Voucher
+      {
+        path: "vouchers",
+        element: <VoucherAdmin />,
+      },
+      {
+        path: "vouchers/:code",
+        element: <VoucherDetail />,
+      },
     ],
   },
   {
@@ -231,6 +243,18 @@ export const TableRouterAdminPage = [
     name: "Comment",
     icon: <CommentOutlined />,
     path: "/dashboard/comments",
+    children: [
+      {
+        path: "/dashboard/category/deleted",
+        icon: <ControlOutlined />,
+        name: "Deleted",
+      },
+    ],
+  },
+  {
+    name: "Voucher",
+    icon: <GiftOutlined />,
+    path: "/dashboard/vouchers",
     children: [
       {
         path: "/dashboard/category/deleted",

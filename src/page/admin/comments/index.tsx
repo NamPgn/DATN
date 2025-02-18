@@ -15,7 +15,7 @@ import {
 import { MyButton } from "../../../components/UI/Core/Button";
 import MVConfirm from "../../../components/UI/Core/Confirm";
 import MVTable from "../../../components/UI/Core/MV/Table";
-import { columnsATTR, columnsComments } from "../../../constant";
+import { columnsComments } from "../../../constant";
 const { Option } = Select;
 const CommentAdmin = () => {
   const [page, setPage] = useState(1);
@@ -62,24 +62,10 @@ const CommentAdmin = () => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  // const onChange = (newValue: any) => {
-  //   setValue(newValue);
-  // };
 
   const handlePageChangePage = (page: number) => {
     setPage(page);
   };
-
-  // const handleDeleteSelectedData = async () => {
-  //   console.log(selectedRowKeys);
-  //   const response: any = await delComments(selectedRowKeys);
-  //   if (response.data.success == true) {
-  //     setInit(!init);
-  //     toast.success("Delete products successfully");
-  //   } else {
-  //     toast.error("Error deleting products");
-  //   }
-  // };
   const { mutate: deleteMultiple } = useMutation({
     mutationFn: async (ids: string[]) => {
       return await delMultipleComments(ids);
@@ -187,8 +173,7 @@ const CommentAdmin = () => {
 
   const data =
     comments &&
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    comments?.data?.data?.data?.map((item: any, index: number) => {
+    comments?.data?.data?.data?.map((item: any) => {
       const isHidden =
         item.isActive === 0 || item.isActive === "0" || item.isActive === false;
       const isManuallyHidden = hiddenComments[item.id] ?? isHidden;
