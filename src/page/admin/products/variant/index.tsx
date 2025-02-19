@@ -71,7 +71,7 @@ const ProductVariant = () => {
             Thêm biến thể mới
           </Button>
         </Link>
-        <AttributeForm productsVariants={productsVariants?.variants}/>
+        <AttributeForm idProduct={id} />
       </div>
       <Table columns={columnsProductVariant} dataSource={data} />
     </div>

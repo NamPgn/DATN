@@ -1,25 +1,72 @@
 import React, { useEffect, useState } from "react";
-import { Button, Form, Modal, Select } from "antd";
-import { useQuery } from "react-query";
-import { getAttributesAll } from "../../../../sevices/attribute";
-
-const AttributeForm = ({ data }: { data: any }) => {
+import { Button, Form, message, Modal, Select } from "antd";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import {
+  addAttributeVariant,
+  deleteAttributeVariant,
+  getAttributes,
+  getAttributesAll,
+  getAttributesProduct,
+} from "../../../../sevices/attribute";
+const productData = {
+  product_id: "1",
+  attributes: [
+    {
+      id: 1,
+      name: "Màu sắc",
+      attribute_values: [{ id: 1, name: "Màu đỏ" }],
+    },
+    {
+      id: 2,
+      name: "Kích thước",
+      attribute_values: [
+        { id: 7, name: "36" },
+        { id: 8, name: "37" },
+      ],
+    },
+  ],
+};
+const AttributeForm = ({ idProduct }: any) => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
   const [selectedAttributes, setSelectedAttributes] = useState<number[]>([]);
-
+  const queryClient = useQueryClient();
   const { data: attrAll } = useQuery({
     queryKey: ["attrAll"],
     queryFn: async () => (await getAttributesAll()).data,
   });
-
+  const { data: attribute, refetch }: any = useQuery({
+    queryKey: ["attributeVariant", idProduct],
+    queryFn: async () => (await getAttributesProduct(idProduct)).data,
+  });
+  const { mutate } = useMutation({
+    mutationFn: async (id) => {
+      return await deleteAttributeVariant(id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries("attrAll");
+    },
+  });
+  const { mutate: MUTATE_PRODUCTVARIANT } = useMutation({
+    mutationFn: async (data) => {
+      return await addAttributeVariant(data);
+    },
+    onSuccess: () => {
+      message.success("Variant created successfully!");
+      refetch();
+      queryClient.invalidateQueries("attrAll");
+    },
+    onError: ({ response }: any) => {
+      message.error(response?.data?.message);
+    },
+  });
   useEffect(() => {
-    if (attrAll && data) {
-      const selected = data.attributes.map((attr: any) => attr.id);
+    if (attrAll) {
+      const selected = attribute?.attributes?.map((attr: any) => attr.id);
       setSelectedAttributes(selected);
 
       const initialValues: any = {};
-      data.attributes.forEach((attr: any) => {
+      attribute?.attributes?.forEach((attr: any) => {
         initialValues[`selected_${attr.name}`] = attr.attribute_values.map(
           (val: any) => val.id
         );
@@ -30,20 +77,25 @@ const AttributeForm = ({ data }: { data: any }) => {
         ...initialValues,
       });
     }
-  }, [attrAll, data, form]);
+  }, [form]);
 
   const handleAttributeChange = (selectedValues: any) => {
     setSelectedAttributes(selectedValues);
   };
 
   const handleSubmit = (val: any) => {
-    const data = {
+    const data: any = {
+      id: idProduct,
       atribute: val,
       parentVariants: val.parentVariants,
     };
-    console.log(data);
+    MUTATE_PRODUCTVARIANT(data);
   };
 
+  const handleDelete = (removedValue: any, attributeName: string) => {
+    console.log(`Xóa giá trị ${removedValue} khỏi ${attributeName}`);
+    mutate(removedValue);
+  };
   if (!attrAll) return <div>Loading...</div>;
 
   return (
@@ -68,7 +120,6 @@ const AttributeForm = ({ data }: { data: any }) => {
         <Form form={form} onFinish={handleSubmit}>
           <h3 className="mt-3">Thuộc tính</h3>
 
-          {/* Chọn thuộc tính cha */}
           <Form.Item label="Chọn các thuộc tính" name="parentVariants">
             <Select
               mode="multiple"
@@ -77,7 +128,16 @@ const AttributeForm = ({ data }: { data: any }) => {
                 label: item.name,
                 value: item.id,
               }))}
-              onChange={handleAttributeChange}
+              value={selectedAttributes}
+              onChange={(newValues) => {
+                const removedValues = selectedAttributes.filter(
+                  (val) => !newValues.includes(val)
+                );
+                removedValues.forEach((removedValue) =>
+                  handleDelete(removedValue, "parentVariants")
+                );
+                setSelectedAttributes(newValues);
+              }}
             />
           </Form.Item>
 
@@ -108,25 +168,4 @@ const AttributeForm = ({ data }: { data: any }) => {
   );
 };
 
-const productData = {
-  product_id: "1",
-  attributes: [
-    {
-      id: 1,
-      name: "Màu sắc",
-      attribute_values: [{ id: 1, name: "Màu đỏ" }],
-    },
-    {
-      id: 2,
-      name: "Kích thước",
-      attribute_values: [
-        { id: 7, name: "36" },
-        { id: 8, name: "37" },
-      ],
-    },
-  ],
-};
-
-export default function App() {
-  return <AttributeForm data={productData} />;
-}
+export default AttributeForm;
