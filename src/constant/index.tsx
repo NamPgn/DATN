@@ -201,11 +201,7 @@ export const columnsProductVariant = [
   {
     title: "Sửa",
     key: "action",
-    render: () => (
-      <Space size="middle">
-        <Button type="primary">Sửa</Button>
-      </Space>
-    ),
+    dataIndex: "action",
   },
 ];
 

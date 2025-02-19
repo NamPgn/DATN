@@ -87,9 +87,13 @@ const ProductsAdmin = () => {
                 Delete
               </MyButton>
             </MVConfirm>
-            <Link to={`/dashboard/product/${item.id}/variants`}>
-              <MyButton type="primary">QL biến thể</MyButton>
-            </Link>
+            {item.type == "0" ? (
+              <Link to={`/dashboard/product/${item.id}/variants/`}>
+                <MyButton type="primary">QL biến thể</MyButton>
+              </Link>
+            ) : (
+              ""
+            )}
           </div>
         ),
       };

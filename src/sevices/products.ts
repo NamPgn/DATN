@@ -33,5 +33,24 @@ export const getVariantsProductList = async (id: any) => {
 };
 
 export const addVariantsProduct = async (id: any, data: any) => {
-  return intances.get(`/products/${id}/variants`, data);
+  return intances.post(`/products/${id}/variants`, data);
+};
+
+export const getVariantsProductEdit = async (
+  idProduct: any,
+  idVariant: any
+) => {
+  return intances.get(`/products/${idProduct}/variants/${idVariant}`);
+};
+
+export const editVariantsProduct = async (
+  idProduct: any,
+  idVariant: any,
+  data: any
+) => {
+  return intances.put(`/products/${idProduct}/variants/${idVariant}`, data);
+};
+
+export const deleteVariantsProduct = async (data: any) => {
+  return intances.delete(`/variants/${data}`);
 };

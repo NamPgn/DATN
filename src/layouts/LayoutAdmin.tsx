@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { Breadcrumb, Layout, Menu } from "antd";
+import { Breadcrumb, Input, Layout, Menu } from "antd";
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { MyButton } from "../components/UI/Core/Button";
 import MVCol from "../components/UI/Core/MV/Grid/Col";
@@ -28,6 +28,9 @@ const LayoutAdmin = () => {
       }),
     };
   });
+  const handleSearch = (e: any) => {
+    console.log(e);
+  };
   // const { isLoggedInState } = useContext(MyContext) ?? {};
   const [collapsed, setCollapsed] = useState(false);
   return (
@@ -67,12 +70,7 @@ const LayoutAdmin = () => {
       </Sider>
 
       <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
-        <Header
-          style={{
-            backgroundColor: "#b1c8ca",
-            padding: 0,
-          }}
-        >
+        <Header style={{ backgroundColor: "#b1c8ca", padding: "0 20px" }}>
           <MVRow align={"middle"} justify={"space-between"}>
             <MVCol>
               <MyButton
@@ -84,20 +82,22 @@ const LayoutAdmin = () => {
                   width: 64,
                   height: 64,
                 }}
-                children={undefined}
               />
             </MVCol>
             <MVCol>
-              <Link className="text-white" to={"/"}>
-                Home Page
-              </Link>
+              <Input
+                placeholder="Search..."
+                style={{
+                  width: "300px",
+                  borderRadius: "4px",
+                  backgroundColor: "#fff",
+                  border: "1px solid #d9d9d9",
+                  padding: "4px 12px",
+                }}
+                onChange={(e) => handleSearch(e.target.value)}
+              />
             </MVCol>
-            <MVCol
-              style={{
-                textAlign: "center",
-              }}
-              span={1}
-            >
+            <MVCol>
               <AuthHeader />
             </MVCol>
           </MVRow>
@@ -110,7 +110,7 @@ const LayoutAdmin = () => {
             overflow: "auto",
           }}
         >
-          <PageTitle/>
+          <PageTitle />
           <Outlet />
         </Content>
         <Footer>© 2025 copyright</Footer>

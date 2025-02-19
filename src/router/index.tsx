@@ -42,6 +42,8 @@ import LazyComponent from "../components/Lazy/LazyComponent";
 import Shop from "../page/shop";
 import AddProductVariantEdit from "../page/admin/products/component/addProductVariantEdit";
 import ProductVariant from "../page/admin/products/variant";
+import EditProductVariant from "../page/admin/products/component/editProductVariantEdit";
+import VariantManage from "../page/admin/products/component/variantManage";
 
 export const routerClient = [
   {
@@ -178,10 +180,20 @@ export const routerClient = [
       {
         path: "product/:id/variants",
         element: <ProductVariant />,
+        exact: true,
       },
       {
         path: "add/product/variant/:id",
         element: <AddProductVariantEdit />,
+      },
+      {
+        path: "product/:idProduct/variants/:idVariant/edit",
+        element: <EditProductVariant />,
+        exact: true,
+      },
+      {
+        path: "add/product/variant/management/:id/attribute",
+        element: <VariantManage />,
       },
     ],
   },
@@ -212,7 +224,6 @@ export const TableRouterAdminPage = [
         name: "Image List",
         icon: <FileImageOutlined />,
       },
-  
     ],
   },
   {

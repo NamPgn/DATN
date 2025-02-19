@@ -1,39 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Select, Input, List, Card, Form, Button, message } from "antd";
 import { useParams } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import {
   addVariantsProduct,
+  editVariantsProduct,
   getVariantsProduct,
+  getVariantsProductEdit,
   getVariantsProductList,
 } from "../../../../sevices/products";
 
 const { Option } = Select;
 
-const AddProductVariantEdit = () => {
+const EditProductVariant = () => {
   const [page, setPage] = useState(1);
   const [form] = Form.useForm();
-  const { id } = useParams();
-  const { data: productsVariants, refetch }: any = useQuery({
-    queryKey: ["productsVariant", id],
+  const { idVariant, idProduct } = useParams();
+  const { data: productsVariants }: any = useQuery({
+    queryKey: ["productsVariant", idProduct],
     queryFn: async () => {
-      const response = await getVariantsProduct(id);
+      const response = await getVariantsProduct(idProduct);
       return response.data;
     },
   });
-
+  const { data: productsVariantsEdit, refetch }: any = useQuery({
+    queryKey: ["productsVariantEdit", idProduct, idVariant],
+    queryFn: async () => {
+      const response = await getVariantsProductEdit(idProduct, idVariant);
+      return response.data;
+    },
+  });
   const { data: productsVariantsList, refetch: refetchVariant }: any = useQuery(
     {
-      queryKey: ["productsVariantList", id],
+      queryKey: ["productsVariantList", idProduct],
       queryFn: async () => {
-        const response = await getVariantsProductList(id);
+        const response = await getVariantsProductList(idProduct);
         return response?.data;
       },
     }
   );
   const { mutate } = useMutation({
     mutationFn: async (values: any) => {
-      return await addVariantsProduct(id, values);
+      return await editVariantsProduct(idProduct, idVariant, values);
     },
     onSuccess: () => {
       message.success("Variant created successfully!");
@@ -45,17 +53,33 @@ const AddProductVariantEdit = () => {
     },
   });
 
+  useEffect(() => {
+    if (productsVariantsEdit) {
+      const initialValues = productsVariantsEdit.values.reduce(
+        (acc: any, value: any) => {
+          acc[`attribute_${value.attribute_id}`] = value.attribute_value_id;
+          return acc;
+        },
+        {}
+      );
+      form.setFieldsValue({
+        ...productsVariantsEdit,
+        ...initialValues,
+      });
+    }
+  }, [productsVariantsEdit, form]);
+
   const handleSubmit = (val: any) => {
     const data = {
       ...val,
       values: productsVariants?.attributes?.reduce(
         (acc: any, attribute: any) => {
-          const selectedValue = val[attribute.name];
+          const selectedValue = val[`attribute_${attribute.id}`];
           if (selectedValue) {
-            const attrValue = attribute.attribute_values.find(
-              (val: any) => val.id === selectedValue
-            );
-            acc.push(attrValue ? attrValue.id : null);
+            acc.push({
+              id: attribute.id,
+              attribute_value_id: selectedValue,
+            });
           }
           return acc;
         },
@@ -64,6 +88,7 @@ const AddProductVariantEdit = () => {
     };
     mutate(data);
   };
+
   return (
     <div style={{ display: "flex", justifyContent: "space-between" }}>
       <List
@@ -88,28 +113,25 @@ const AddProductVariantEdit = () => {
             <div style={{ flex: 1 }}>
               {productsVariants?.attributes?.map((items: any) => {
                 return (
-                  <>
-                    <Form.Item
-                      label={items.name}
-                      labelCol={{ span: 24 }}
-                      name={items.name}
-                    >
-                      <Select
-                        placeholder={items.name}
-                        style={{
-                          width: "60%",
-                          display: "block",
-                          marginBottom: "10px",
-                        }}
-                        options={items?.attribute_values?.map((item: any) => {
-                          return {
-                            value: item.id,
-                            label: item.name,
-                          };
-                        })}
-                      ></Select>
-                    </Form.Item>
-                  </>
+                  <Form.Item
+                    key={items.id}
+                    label={items.name}
+                    labelCol={{ span: 24 }}
+                    name={`attribute_${items.id}`}
+                  >
+                    <Select
+                      placeholder={items.name}
+                      style={{
+                        width: "60%",
+                        display: "block",
+                        marginBottom: "10px",
+                      }}
+                      options={items?.attribute_values?.map((item: any) => ({
+                        value: item.id,
+                        label: item.name,
+                      }))}
+                    />
+                  </Form.Item>
                 );
               })}
             </div>
@@ -117,7 +139,7 @@ const AddProductVariantEdit = () => {
               title="Ảnh"
               bordered={false}
               style={{ width: 300, height: 300 }}
-            ></Card>
+            />
           </div>
           <Form.Item
             label="Nhập giá"
@@ -160,4 +182,4 @@ const AddProductVariantEdit = () => {
   );
 };
 
-export default AddProductVariantEdit;
+export default EditProductVariant;

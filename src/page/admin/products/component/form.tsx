@@ -138,7 +138,7 @@ const ProductForm = ({
             }))
           : [
               {
-                variant_id: val.variants?.find((items: any) => items.id).id,
+                variant_id: val.variants?.find((items: any) => items.id)?.id,
                 regular_price: val.variants?.[0]?.regular_price || 0,
                 sale_price: val.variants?.[0]?.sale_price || 0,
                 sku: val.variants?.[0]?.sku || "",
