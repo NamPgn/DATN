@@ -42,6 +42,7 @@ import ProductEdit from "../page/admin/products/edit";
 import CommentDetail from "../page/admin/comments/detail";
 import VoucherAdmin from "../page/admin/vouchers";
 import VoucherDetail from "../page/admin/vouchers/detail";
+import AddVoucher from "../page/admin/vouchers/add";
 
 export const routerClient = [
   {
@@ -180,6 +181,14 @@ export const routerClient = [
         path: "vouchers/:code",
         element: <VoucherDetail />,
       },
+      {
+        path: "vouchers/create",
+        element: <AddVoucher />,
+      },
+      // {
+      //   path: "vouchers/update/:id",
+      //   element: <EditVoucher />,
+      // },
     ],
   },
   {

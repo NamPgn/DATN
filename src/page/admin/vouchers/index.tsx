@@ -2,24 +2,36 @@
 import React, { useState } from "react";
 import MVTable from "../../../components/UI/Core/MV/Table";
 import { columnsVouchers } from "../../../constant";
-import { getVouchers } from "../../../sevices/voucher";
+import { delVouchers, getVouchers } from "../../../sevices/voucher";
 import { useQuery } from "react-query";
 import { MyButton } from "../../../components/UI/Core/Button";
 import { Link } from "react-router-dom";
+import { Button, message, Modal, Popconfirm } from "antd";
+import AddVoucher from "./add";
 
 const VoucherAdmin = () => {
   const [page, setPage] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
-  const { data: vouchers }: any = useQuery({
+  const { data: vouchers, refetch }: any = useQuery({
     queryKey: ["vouchers", page],
     queryFn: async () => {
       return await getVouchers(page);
     },
   });
+
+  const showAddVoucherModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const rowSelection = {
     selectedRowKeys,
@@ -28,6 +40,16 @@ const VoucherAdmin = () => {
 
   const handlePageChangePage = (page: number) => {
     setPage(page);
+  };
+
+  const handleDelVoucher = async (code: string) => {
+    try {
+      await delVouchers(code);
+      message.success("Xóa voucher thành công");
+      refetch();
+    } catch (error) {
+      console.log("Xóa không thành công", error);
+    }
   };
 
   const data =
@@ -48,12 +70,26 @@ const VoucherAdmin = () => {
         expiry_date: item.expiry_date,
         usage_limit: item.usage_limit,
         action: (
-          <div className="d-flex gap-1">
+          <div className="d-flex gap-2">
             <Link
               to={`/dashboard/vouchers/${item.code}`}
               className="text-blue-500"
             >
               <MyButton type="dashed">Detail</MyButton>
+            </Link>
+            <Popconfirm
+              title="Bạn có chắc chắn muốn xóa ?"
+              onConfirm={() => handleDelVoucher(item.code)}
+              okText="Yes"
+              cancelText="No"
+            >
+              <MyButton type="primary" danger>
+                Delete
+              </MyButton>
+            </Popconfirm>
+
+            <Link to={`/dashboard/vouchers/update/${item.id}`}>
+              <MyButton type="primary">Edit</MyButton>
             </Link>
           </div>
         ),
@@ -62,11 +98,15 @@ const VoucherAdmin = () => {
 
   return (
     <React.Fragment>
+      <Button type="primary" onClick={showAddVoucherModal} className="mb-3">
+        Add Voucher
+      </Button>
+
       <MVTable
         columns={columnsVouchers}
         rowSelection={rowSelection}
         dataSource={data}
-        scroll={{ x: 1000, y: 1000 }}
+        scroll={{ x: 1000, y: 1050 }}
         pagination={{
           defaultPageSize: 10,
           showSizeChanger: true,
@@ -76,6 +116,15 @@ const VoucherAdmin = () => {
           total: vouchers?.data?.total,
         }}
       ></MVTable>
+
+      <Modal
+        title="Add New Voucher"
+        open={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <AddVoucher refetch={refetch} />{" "}
+      </Modal>
     </React.Fragment>
   );
 };

@@ -267,7 +267,7 @@ export const columnsVouchers = [
     title: "Action",
     dataIndex: "action",
     key: "action",
-    width: 100,
+    width: 150,
   },
 ];
 export const columnsImageList = [
