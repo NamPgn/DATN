@@ -85,15 +85,17 @@ const LayoutAdmin = () => {
             padding: "0 16px",
           }}
         >
-          <div>
-            <span>Pages / dashboard</span>
+          <div className="w-50">
+            <span>
+              Pages / <PageTitle />
+            </span>
           </div>
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0 20px" }}>
             <Input.Search placeholder="Type here..." />
             <MVCol>
               <AuthHeader />
             </MVCol>
-            <SettingOutlined style={{ fontSize: "20px", marginRight: 16 }} />
+            <SettingOutlined style={{ fontSize: "20px" }} />
             <Badge count={4}>
               <BellOutlined style={{ fontSize: "20px" }} />
             </Badge>
@@ -106,7 +108,6 @@ const LayoutAdmin = () => {
             overflow: "auto",
           }}
         >
-          <PageTitle />
           <Outlet />
         </Content>
         <Footer>© 2025 copyright</Footer>

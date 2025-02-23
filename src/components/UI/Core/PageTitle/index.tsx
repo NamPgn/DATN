@@ -23,20 +23,12 @@ const PageTitle: React.FC = () => {
     }
     return null;
   };
-  const currentRoute = findCurrentRoute(TableRouterAdminPage, location.pathname);
-  const title = currentRoute?.name || "Trang Quản Trị";
-  return (
-    <div style={{ marginBottom: "24px" }}>
-      <Title level={2} style={{ marginBottom: "8px", color: "#1f2937" }}>
-        {title}
-      </Title>
-      <Divider
-        style={{
-          marginTop: "16px",
-        }}
-      />
-    </div>
+  const currentRoute = findCurrentRoute(
+    TableRouterAdminPage,
+    location.pathname
   );
+  const title = currentRoute?.name || "Trang Quản Trị";
+  return title;
 };
 
 export default PageTitle;

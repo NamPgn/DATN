@@ -3,6 +3,7 @@ import {
   ControlOutlined,
   DashboardOutlined,
   FileImageOutlined,
+  GiftOutlined,
   LaptopOutlined,
   NotificationOutlined,
   PicLeftOutlined,
@@ -46,6 +47,10 @@ import EditProductVariant from "../page/admin/products/component/editProductVari
 import VariantManage from "../page/admin/products/component/variantManage";
 import Login from "../page/auth/login";
 import LayoutAuth from "../layouts/AuthLayout";
+import VoucherAdmin from "../page/admin/vouchers";
+import VoucherDetail from "../page/admin/vouchers/detail";
+import AddVoucher from "../page/admin/vouchers/add";
+import EditVoucher from "../page/admin/vouchers/edit";
 
 export const routerClient = [
   {
@@ -207,6 +212,22 @@ export const routerClient = [
         path: "add/product/variant/management/:id/attribute",
         element: <VariantManage />,
       },
+      {
+        path: "vouchers",
+        element: <VoucherAdmin />,
+      },
+      {
+        path: "vouchers/:id",
+        element: <VoucherDetail />,
+      },
+      {
+        path: "vouchers/create",
+        element: <AddVoucher />,
+      },
+      {
+        path: "vouchers/:id",
+        element: <EditVoucher />,
+      },
     ],
   },
   {
@@ -270,6 +291,18 @@ export const TableRouterAdminPage = [
     name: "Comment",
     icon: <CommentOutlined />,
     path: "/dashboard/comments",
+    children: [
+      {
+        path: "/dashboard/category/deleted",
+        icon: <ControlOutlined />,
+        name: "Deleted",
+      },
+    ],
+  },
+  {
+    name: "Voucher",
+    icon: <GiftOutlined />,
+    path: "/dashboard/vouchers",
     children: [
       {
         path: "/dashboard/category/deleted",
