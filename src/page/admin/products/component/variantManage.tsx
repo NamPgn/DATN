@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Form, message, Modal, Select } from "antd";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
   addAttributeVariant,
   deleteAttributeVariant,
-  getAttributes,
   getAttributesAll,
   getAttributesProduct,
 } from "../../../../sevices/attribute";
