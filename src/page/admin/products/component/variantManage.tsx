@@ -81,7 +81,7 @@ const AttributeForm = ({ idProduct }: any) => {
         ...initialValues,
       });
     }
-  }, [form]);
+  }, [form, attribute]);
 
   const handleAttributeChange = (selectedValues: any) => {
     setSelectedAttributes(selectedValues);
@@ -144,7 +144,7 @@ const AttributeForm = ({ idProduct }: any) => {
             />
           </Form.Item>
 
-          {selectedAttributes.map((attributeId) => {
+          {selectedAttributes?.map((attributeId) => {
             const option = attrAll?.find((opt: any) => opt.id === attributeId);
             if (!option) return null;
 
