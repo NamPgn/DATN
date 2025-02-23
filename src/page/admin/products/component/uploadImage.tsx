@@ -1,20 +1,15 @@
-import { SyncOutlined, UploadOutlined } from "@ant-design/icons";
-import { Button, Form, Image, List, message, Modal, Tabs, Upload } from "antd";
-import React, { memo, useState } from "react";
+import { UploadOutlined } from "@ant-design/icons";
+import { Button, Form, List, message, Pagination, Tabs, Upload } from "antd";
+import { memo, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { addImageList, getImageLists } from "../../../../sevices/imageList";
 const UploadImage = memo(
-  ({
-    visible,
-    setSelectImage,
-    selectImage,
-    setSelectOneImage,
-    selectOneImage,
-    onCancel,
-  }: any) => {
+  ({ setSelectImage, selectImage, setSelectOneImage, selectOneImage }: any) => {
     const [form] = Form.useForm();
     const [fileList, setFileList] = useState([]);
     const [page, setPage] = useState(1);
+    const [current, setCurrent] = useState(1);
+    const pageSize = 10;
     const { data: images, refetch }: any = useQuery(
       ["imageList", page],
       async () => (await getImageLists(page)).data,
@@ -26,7 +21,7 @@ const UploadImage = memo(
         refetchOnMount: false,
       }
     );
-
+    console.log(images);
     const handleFileChange = ({ fileList }: any) => {
       setFileList(fileList);
     };
@@ -67,13 +62,21 @@ const UploadImage = memo(
       });
       mutate(formData);
     };
+
+    const handlePageChange = (page: any) => {
+      setCurrent(page);
+    };
+    const paginatedData = images?.slice(
+      (current - 1) * pageSize,
+      current * pageSize
+    );
     return (
       <Tabs>
         <Tabs.TabPane tab="Chọn ảnh từ thư viện" key="2">
           <List
-            className="w-50"
+            className="w-100"
             grid={{ column: 3 }}
-            dataSource={images}
+            dataSource={paginatedData}
             renderItem={(item: any) => {
               const isSelected = selectImage.some(
                 (img: any) => img.id === item.id
@@ -98,17 +101,25 @@ const UploadImage = memo(
                     />
                     {/* Ô Checkbox chọn ảnh chính */}
                     <div className="position-absolute top-0 p-1 m-1">
-                      <input
-                        type="checkbox"
-                        className="form-check-input"
-                        checked={isMainImage}
-                        onChange={() => handleSelectMainImage(item)}
-                      />
+                      <label className="switch">
+                        <input
+                          type="checkbox"
+                          checked={isMainImage}
+                          onChange={() => handleSelectMainImage(item)}
+                        />
+                        <span className="slider round"></span>
+                      </label>
                     </div>
                   </div>
                 </List.Item>
               );
             }}
+          />
+          <Pagination
+            current={current}
+            pageSize={pageSize}
+            total={images?.length}
+            onChange={handlePageChange}
           />
         </Tabs.TabPane>
 
@@ -129,7 +140,11 @@ const UploadImage = memo(
               </Upload>
             </Form.Item>
             <Form.Item>
-              <Button style={{ background:"#0d6efd" }} htmlType="submit" disabled={isLoading}>
+              <Button
+                style={{ background: "#0d6efd" }}
+                htmlType="submit"
+                disabled={isLoading}
+              >
                 Upload Images
               </Button>
             </Form.Item>

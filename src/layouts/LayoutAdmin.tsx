@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { Breadcrumb, Input, Layout, Menu } from "antd";
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { Avatar, Badge, Breadcrumb, Input, Layout, Menu } from "antd";
+import {
+  BellOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  SettingOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { MyButton } from "../components/UI/Core/Button";
 import MVCol from "../components/UI/Core/MV/Grid/Col";
 import MVRow from "../components/UI/Core/MV/Grid";
@@ -70,39 +76,29 @@ const LayoutAdmin = () => {
       </Sider>
 
       <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
-        <Header style={{ backgroundColor: "#b1c8ca", padding: "0 20px" }}>
-          <MVRow align={"middle"} justify={"space-between"}>
-            <MVCol>
-              <MyButton
-                type="text"
-                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                onClick={() => setCollapsed(!collapsed)}
-                style={{
-                  fontSize: "16px",
-                  width: 64,
-                  height: 64,
-                }}
-              />
-            </MVCol>
-            <MVCol>
-              <Input
-                placeholder="Search..."
-                style={{
-                  width: "300px",
-                  borderRadius: "4px",
-                  backgroundColor: "#fff",
-                  border: "1px solid #d9d9d9",
-                  padding: "4px 12px",
-                }}
-                onChange={(e) => handleSearch(e.target.value)}
-              />
-            </MVCol>
+        <Header
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            background: "#fff",
+            padding: "0 16px",
+          }}
+        >
+          <div>
+            <span>Pages / dashboard</span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Input.Search placeholder="Type here..." />
             <MVCol>
               <AuthHeader />
             </MVCol>
-          </MVRow>
+            <SettingOutlined style={{ fontSize: "20px", marginRight: 16 }} />
+            <Badge count={4}>
+              <BellOutlined style={{ fontSize: "20px" }} />
+            </Badge>
+          </div>
         </Header>
-
         <Content
           style={{
             padding: "24px",

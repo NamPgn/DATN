@@ -44,6 +44,8 @@ import AddProductVariantEdit from "../page/admin/products/component/addProductVa
 import ProductVariant from "../page/admin/products/variant";
 import EditProductVariant from "../page/admin/products/component/editProductVariantEdit";
 import VariantManage from "../page/admin/products/component/variantManage";
+import Login from "../page/auth/login";
+import LayoutAuth from "../layouts/AuthLayout";
 
 export const routerClient = [
   {
@@ -81,6 +83,16 @@ export const routerClient = [
       {
         path: "/product/detail/:id",
         element: <ProductDetail />,
+      },
+    ],
+  },
+  {
+    path: "/auth",
+    element: <LayoutAuth />,
+    children: [
+      {
+        path: "login",
+        element: <Login />,
       },
     ],
   },

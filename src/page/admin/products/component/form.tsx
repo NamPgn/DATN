@@ -212,7 +212,7 @@ const ProductForm = ({
           />
         </Form.Item>
 
-        <Form.Item label="Type" name="type">
+        <Form.Item label="Type" name="type" initialValue="1">
           <Select
             className="w-50"
             onChange={(value) => {

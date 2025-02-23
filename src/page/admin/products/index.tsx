@@ -89,7 +89,9 @@ const ProductsAdmin = () => {
             </MVConfirm>
             {item.type == "0" ? (
               <Link to={`/dashboard/product/${item.id}/variants/`}>
-                <MyButton type="primary">QL biến thể</MyButton>
+                <MyButton color="default" variant="dashed" type="primary">
+                  QL Biến Thể
+                </MyButton>
               </Link>
             ) : (
               ""

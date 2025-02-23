@@ -44,7 +44,11 @@ const AttributeForm = ({ idProduct }: any) => {
       return await deleteAttributeVariant(id);
     },
     onSuccess: () => {
+      message.success("Variant delete successfully!");
       queryClient.invalidateQueries("attrAll");
+    },
+    onError: ({ response }: any) => {
+      message.error(response?.data?.message);
     },
   });
   const { mutate: MUTATE_PRODUCTVARIANT } = useMutation({
@@ -92,8 +96,7 @@ const AttributeForm = ({ idProduct }: any) => {
     MUTATE_PRODUCTVARIANT(data);
   };
 
-  const handleDelete = (removedValue: any, attributeName: string) => {
-    console.log(`Xóa giá trị ${removedValue} khỏi ${attributeName}`);
+  const handleDelete = (removedValue: any) => {
     mutate(removedValue);
   };
   if (!attrAll) return <div>Loading...</div>;
@@ -134,7 +137,7 @@ const AttributeForm = ({ idProduct }: any) => {
                   (val) => !newValues.includes(val)
                 );
                 removedValues.forEach((removedValue) =>
-                  handleDelete(removedValue, "parentVariants")
+                  handleDelete(removedValue)
                 );
                 setSelectedAttributes(newValues);
               }}
