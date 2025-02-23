@@ -4,12 +4,24 @@ export const getVouchers = async (page: number) => {
   return intances.get("/vouchers?page=" + page);
 };
 
-export const getVoucher = async (code: string | undefined) => {
-  return intances.get(`/vouchers/${code}`);
+export const getVoucher = async (id: string | undefined) => {
+  return intances.get(`/vouchers/${id}`);
 };
 
-export const delVouchers = async (code: string) => {
-  return intances.delete(`/vouchers/delete/${code}`);
+export const delVouchers = async (id: string) => {
+  return intances.delete("/vouchers/", {
+    data: { ids: [id] },
+    headers: { "Content-Type": "application/json" },
+  });
+};
+
+export const delMultipleVouchers = async (ids: string[]) => {
+  return intances.delete("/vouchers/", {
+    data: { ids },
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 };
 
 export const createVoucher = async (data: string) => {
@@ -17,5 +29,5 @@ export const createVoucher = async (data: string) => {
 };
 
 export const updateVoucher = async (data: string, id: string | undefined) => {
-  return intances.put(`/vouchers/update/${id}`, data);
+  return intances.post(`/vouchers/update/${id}`, data);
 };

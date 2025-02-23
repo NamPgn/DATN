@@ -2,12 +2,17 @@
 import React, { useState } from "react";
 import MVTable from "../../../components/UI/Core/MV/Table";
 import { columnsVouchers } from "../../../constant";
-import { delVouchers, getVouchers } from "../../../sevices/voucher";
-import { useQuery } from "react-query";
+import {
+  delMultipleVouchers,
+  delVouchers,
+  getVouchers,
+} from "../../../sevices/voucher";
+import { useMutation, useQuery } from "react-query";
 import { MyButton } from "../../../components/UI/Core/Button";
 import { Link } from "react-router-dom";
-import { Button, message, Modal, Popconfirm } from "antd";
+import { Button, Modal, Popconfirm } from "antd";
 import AddVoucher from "./add";
+import { toast } from "react-toastify";
 
 const VoucherAdmin = () => {
   const [page, setPage] = useState(1);
@@ -22,6 +27,35 @@ const VoucherAdmin = () => {
     queryKey: ["vouchers", page],
     queryFn: async () => {
       return await getVouchers(page);
+    },
+  });
+
+  const { mutate: deleteVouchers } = useMutation({
+    mutationFn: async (id: string) => {
+      return await delVouchers(id);
+    },
+    onSuccess: () => {
+      toast.success("Xóa voucher thành công");
+      refetch();
+    },
+    onError: (error) => {
+      console.error("Lỗi khi xóa", error);
+      toast.error("Xóa không thành công");
+    },
+  });
+
+  const { mutate: deleteMultipleVouchers } = useMutation({
+    mutationFn: async (ids: string[]) => {
+      return await delMultipleVouchers(ids);
+    },
+    onSuccess: () => {
+      toast.success("Xóa nhiều voucher thành công");
+      setSelectedRowKeys([]);
+      refetch();
+    },
+    onError: (error) => {
+      console.error("Lỗi khi xóa nhiều voucher:", error);
+      toast.error("Xóa không thành công");
     },
   });
 
@@ -42,13 +76,25 @@ const VoucherAdmin = () => {
     setPage(page);
   };
 
-  const handleDelVoucher = async (code: string) => {
-    try {
-      await delVouchers(code);
-      message.success("Xóa voucher thành công");
-      refetch();
-    } catch (error) {
-      console.log("Xóa không thành công", error);
+  // const handleDelVoucher = async (id: string) => {
+  //   try {
+  //     await delVouchers(id);
+  //     message.success("Xóa voucher thành công");
+  //     refetch();
+  //   } catch (error) {
+  //     console.log("Xóa không thành công", error);
+  //   }
+  // };
+
+  const handleDeleteSelectedData = () => {
+    if (selectedRowKeys.length === 0) {
+      toast.warning("VUi lòng chọn ít nhất một voucher để xóa");
+      return;
+    }
+    if (Array.isArray(selectedRowKeys)) {
+      deleteMultipleVouchers(selectedRowKeys);
+    } else {
+      toast.error("Dữ liệu không hợp lệ");
     }
   };
 
@@ -72,14 +118,14 @@ const VoucherAdmin = () => {
         action: (
           <div className="d-flex gap-2">
             <Link
-              to={`/dashboard/vouchers/${item.code}`}
+              to={`/dashboard/vouchers/${item.id}`}
               className="text-blue-500"
             >
               <MyButton type="dashed">Detail</MyButton>
             </Link>
             <Popconfirm
               title="Bạn có chắc chắn muốn xóa ?"
-              onConfirm={() => handleDelVoucher(item.code)}
+              onConfirm={() => deleteVouchers(item.id)}
               okText="Yes"
               cancelText="No"
             >
@@ -98,10 +144,15 @@ const VoucherAdmin = () => {
 
   return (
     <React.Fragment>
-      <Button type="primary" onClick={showAddVoucherModal} className="mb-3">
-        Add Voucher
-      </Button>
+      <div className="flex">
+        <Button type="primary" onClick={showAddVoucherModal} className="mb-3">
+          Add Voucher
+        </Button>
+      </div>
 
+      <MyButton danger className="mb-3 ml-2" onClick={handleDeleteSelectedData}>
+        Delete Selected
+      </MyButton>
       <MVTable
         columns={columnsVouchers}
         rowSelection={rowSelection}
