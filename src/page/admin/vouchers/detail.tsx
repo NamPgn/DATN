@@ -4,11 +4,9 @@ import { Card, Spin } from "antd";
 import { getVoucher } from "../../../sevices/voucher";
 
 const VoucherDetail = () => {
-  const { code } = useParams();
+  const { id } = useParams();
 
-  const { data, isLoading } = useQuery(["voucher", code], () =>
-    getVoucher(code!)
-  );
+  const { data, isLoading } = useQuery(["voucher", id], () => getVoucher(id!));
 
   if (isLoading) {
     return <Spin />;
@@ -17,7 +15,7 @@ const VoucherDetail = () => {
   const voucher = data?.data;
 
   return (
-    <Card title={`Voucher: ${voucher?.code}`} bordered={false}>
+    <Card title={`Voucher: ${voucher?.id}`} bordered={false}>
       <p>
         <strong>Name:</strong> {voucher?.name}
       </p>

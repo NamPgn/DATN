@@ -276,12 +276,6 @@ const CommentAdmin = () => {
             : "Ẩn các comment đã chọn"}
         </MyButton>
       </div>
-
-      {/* <Link to={`/dashboard/comments/add`}>
-        <MyButton type="primary" className="mb-3">
-          Add
-        </MyButton>
-      </Link> */}
       <MVTable
         columns={columnsComments}
         rowSelection={rowSelection}

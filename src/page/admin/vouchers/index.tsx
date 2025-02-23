@@ -13,11 +13,15 @@ import { Link } from "react-router-dom";
 import { Button, Modal, Popconfirm } from "antd";
 import AddVoucher from "./add";
 import { toast } from "react-toastify";
+import EditVoucher from "./edit";
 
 const VoucherAdmin = () => {
   const [page, setPage] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [editingVoucher, setEditingVoucher] = useState<any>(null);
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -63,6 +67,16 @@ const VoucherAdmin = () => {
     setIsModalVisible(true);
   };
 
+  const showEditVoucherModal = (voucher: any) => {
+    setEditingVoucher(voucher);
+    setIsEditModalVisible(true);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditModalVisible(false);
+    setEditingVoucher(null);
+  };
+
   const handleCancel = () => {
     setIsModalVisible(false);
   };
@@ -75,16 +89,6 @@ const VoucherAdmin = () => {
   const handlePageChangePage = (page: number) => {
     setPage(page);
   };
-
-  // const handleDelVoucher = async (id: string) => {
-  //   try {
-  //     await delVouchers(id);
-  //     message.success("Xóa voucher thành công");
-  //     refetch();
-  //   } catch (error) {
-  //     console.log("Xóa không thành công", error);
-  //   }
-  // };
 
   const handleDeleteSelectedData = () => {
     if (selectedRowKeys.length === 0) {
@@ -134,9 +138,9 @@ const VoucherAdmin = () => {
               </MyButton>
             </Popconfirm>
 
-            <Link to={`/dashboard/vouchers/update/${item.id}`}>
-              <MyButton type="primary">Edit</MyButton>
-            </Link>
+            <MyButton type="primary" onClick={() => showEditVoucherModal(item)}>
+              Edit
+            </MyButton>
           </div>
         ),
       };
@@ -175,6 +179,21 @@ const VoucherAdmin = () => {
         footer={null}
       >
         <AddVoucher refetch={refetch} />{" "}
+      </Modal>
+
+      <Modal
+        title="Edit Voucher"
+        open={isEditModalVisible}
+        onCancel={handleCancelEdit}
+        footer={null}
+      >
+        {editingVoucher && (
+          <EditVoucher
+            voucher={editingVoucher}
+            refetch={refetch}
+            onClose={handleCancelEdit}
+          />
+        )}
       </Modal>
     </React.Fragment>
   );
