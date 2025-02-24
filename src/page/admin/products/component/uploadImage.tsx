@@ -21,7 +21,6 @@ const UploadImage = memo(
         refetchOnMount: false,
       }
     );
-    console.log(images);
     const handleFileChange = ({ fileList }: any) => {
       setFileList(fileList);
     };

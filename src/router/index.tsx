@@ -108,7 +108,6 @@ export const routerClient = [
         path: "",
         element: <Admin />,
       },
-      //Product
       {
         path: "products",
         element: (
@@ -125,7 +124,6 @@ export const routerClient = [
         path: "products/edit/:id",
         element: <ProductEdit />,
       },
-      //Category
       {
         path: "category",
         element: <CategoryAdmin />,
@@ -142,7 +140,6 @@ export const routerClient = [
         path: "category/deleted",
         element: <CategoryDeleted />,
       },
-      //Attribute
       {
         path: "attribute",
         element: <Attribute />,
@@ -180,7 +177,6 @@ export const routerClient = [
         path: "image/edit",
         element: <EditImageProduct />,
       },
-      //Comment
       {
         path: "comments",
         element: <CommentAdmin />,

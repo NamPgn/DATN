@@ -4,28 +4,10 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
   addAttributeVariant,
   deleteAttributeVariant,
-  getAttributes,
   getAttributesAll,
   getAttributesProduct,
 } from "../../../../sevices/attribute";
-const productData = {
-  product_id: "1",
-  attributes: [
-    {
-      id: 1,
-      name: "Màu sắc",
-      attribute_values: [{ id: 1, name: "Màu đỏ" }],
-    },
-    {
-      id: 2,
-      name: "Kích thước",
-      attribute_values: [
-        { id: 7, name: "36" },
-        { id: 8, name: "37" },
-      ],
-    },
-  ],
-};
+
 const AttributeForm = ({ idProduct }: any) => {
   const [visible, setVisible] = useState(false);
   const [form] = Form.useForm();
@@ -81,7 +63,7 @@ const AttributeForm = ({ idProduct }: any) => {
         ...initialValues,
       });
     }
-  }, [form]);
+  }, [form, attribute]);
 
   const handleAttributeChange = (selectedValues: any) => {
     setSelectedAttributes(selectedValues);
@@ -144,7 +126,7 @@ const AttributeForm = ({ idProduct }: any) => {
             />
           </Form.Item>
 
-          {selectedAttributes.map((attributeId) => {
+          {selectedAttributes?.map((attributeId) => {
             const option = attrAll?.find((opt: any) => opt.id === attributeId);
             if (!option) return null;
 

@@ -148,6 +148,7 @@ export const columnsProducts = [
     dataIndex: "action",
     key: "action",
     fixed: "right",
+    width: 350,
   },
 ];
 
