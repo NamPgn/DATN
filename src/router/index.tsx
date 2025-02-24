@@ -1,4 +1,5 @@
 import {
+  BorderBottomOutlined,
   CommentOutlined,
   ControlOutlined,
   DashboardOutlined,
@@ -46,6 +47,9 @@ import EditProductVariant from "../page/admin/products/component/editProductVari
 import VariantManage from "../page/admin/products/component/variantManage";
 import Login from "../page/auth/login";
 import LayoutAuth from "../layouts/AuthLayout";
+import OrdersAdmin from "../page/admin/orders";
+import OrdersDetail from "../page/admin/orders/components/detail";
+import EditOrder from "../page/admin/orders/components/edit";
 
 export const routerClient = [
   {
@@ -203,6 +207,18 @@ export const routerClient = [
         path: "add/product/variant/management/:id/attribute",
         element: <VariantManage />,
       },
+      {
+        path: "orders",
+        element: <OrdersAdmin />,
+      },
+      {
+        path: "orders/:id",
+        element: <OrdersDetail />,
+      },
+      {
+        path: "orders/edit/:id",
+        element: <EditOrder />,
+      },
     ],
   },
   {
@@ -271,6 +287,18 @@ export const TableRouterAdminPage = [
         path: "/dashboard/category/deleted",
         icon: <ControlOutlined />,
         name: "Deleted",
+      },
+    ],
+  },
+  {
+    name: "Orders",
+    icon: <BorderBottomOutlined />,
+    path: "/dashboard/orders",
+    children: [
+      {
+        path: "/dashboard/category/deleted",
+        icon: <ControlOutlined />,
+        name: "Send Orders",
       },
     ],
   },
