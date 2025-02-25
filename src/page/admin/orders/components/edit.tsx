@@ -124,9 +124,9 @@ const EditOrder = () => {
         </Form.Item>
 
         <Form.Item label="Payment Status" name="stt_payment">
-          <Select defaultValue={order?.stt_payment}>
-            <Select.Option value={1}>1</Select.Option>
-            <Select.Option value={2}>2</Select.Option>
+          <Select defaultValue={order?.stt_payment }>
+            <Select.Option value={1}>Chưa Thanh Toán</Select.Option>
+            <Select.Option value={2}>Đã Thanh Toán</Select.Option>
           </Select>
         </Form.Item>
 
