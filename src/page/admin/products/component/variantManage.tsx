@@ -3,7 +3,6 @@ import { Button, Form, message, Modal, Select } from "antd";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
   addAttributeVariant,
-  deleteAttributeVariant,
   getAttributesAll,
   getAttributesProduct,
 } from "../../../../sevices/attribute";
@@ -20,18 +19,6 @@ const AttributeForm = ({ idProduct }: any) => {
   const { data: attribute, refetch }: any = useQuery({
     queryKey: ["attributeVariant", idProduct],
     queryFn: async () => (await getAttributesProduct(idProduct)).data,
-  });
-  const { mutate } = useMutation({
-    mutationFn: async (id) => {
-      return await deleteAttributeVariant(id);
-    },
-    onSuccess: () => {
-      message.success("Variant delete successfully!");
-      queryClient.invalidateQueries("attrAll");
-    },
-    onError: ({ response }: any) => {
-      message.error(response?.data?.message);
-    },
   });
   const { mutate: MUTATE_PRODUCTVARIANT } = useMutation({
     mutationFn: async (data) => {
@@ -72,15 +59,12 @@ const AttributeForm = ({ idProduct }: any) => {
   const handleSubmit = (val: any) => {
     const data: any = {
       id: idProduct,
-      atribute: val,
+      attribute: val,
       parentVariants: val.parentVariants,
     };
     MUTATE_PRODUCTVARIANT(data);
   };
 
-  const handleDelete = (removedValue: any) => {
-    mutate(removedValue);
-  };
   if (!attrAll) return <div>Loading...</div>;
 
   return (
@@ -115,12 +99,6 @@ const AttributeForm = ({ idProduct }: any) => {
               }))}
               value={selectedAttributes}
               onChange={(newValues) => {
-                const removedValues = selectedAttributes.filter(
-                  (val) => !newValues.includes(val)
-                );
-                removedValues.forEach((removedValue) =>
-                  handleDelete(removedValue)
-                );
                 setSelectedAttributes(newValues);
               }}
             />

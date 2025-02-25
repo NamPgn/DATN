@@ -5,6 +5,7 @@ import {
   SlidersOutlined,
 } from "@ant-design/icons";
 import { Button, Space } from "antd";
+import { render } from "react-dom";
 import { Link } from "react-router-dom";
 
 export const URLSECTION = [
@@ -166,18 +167,9 @@ export const columnsProductVariant = [
   },
   {
     title: "Value",
-    children: [
-      {
-        title: "Kích Cỡ",
-        dataIndex: "size",
-        key: "size",
-      },
-      {
-        title: "Màu",
-        dataIndex: "color",
-        key: "color",
-      },
-    ],
+    dataIndex:'values',
+    key:'values',
+    render: (text: any) => text.join(" - "),
   },
   {
     title: "Giá",

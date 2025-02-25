@@ -36,11 +36,10 @@ const ProductVariant = () => {
   });
 
   const data = productsVariants?.variants?.map((items: any) => {
-    const [color, size] = items.values;
+    
     return {
       ...items,
-      size: size,
-      color: color,
+    values:items.values,
       pr_name: productsVariants?.name,
       action: (
         <div className="d-flex gap-1">
