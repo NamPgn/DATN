@@ -243,11 +243,6 @@ export const TableRouterAdminPage = [
         name: "Attribute",
         icon: <UserOutlined />,
       },
-      {
-        path: "/dashboard/product/image",
-        name: "Image List",
-        icon: <FileImageOutlined />,
-      },
     ],
   },
   {
@@ -301,5 +296,10 @@ export const TableRouterAdminPage = [
         name: "Send Orders",
       },
     ],
+  },
+  {
+    path: "/dashboard/product/image",
+    name: "Image List",
+    icon: <FileImageOutlined />,
   },
 ];
