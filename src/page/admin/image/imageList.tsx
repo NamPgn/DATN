@@ -3,27 +3,23 @@ import { Image, Tag } from "antd";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
-import { MyButton } from "../../../../components/UI/Core/Button";
-import MVConfirm from "../../../../components/UI/Core/Confirm";
-import MVTable from "../../../../components/UI/Core/MV/Table";
-import { columnsATTR, columnsImageList } from "../../../../constant";
-import {
-  delAttributesVal,
-  getAttributesVals,
-} from "../../../../sevices/attributeValue";
-import { getImageLists } from "../../../../sevices/imageList";
+import { delAttributesVal } from "../../../sevices/attributeValue";
+import { getImageLists } from "../../../sevices/imageList";
+import MVConfirm from "../../../components/UI/Core/Confirm";
+import { MyButton } from "../../../components/UI/Core/Button";
+import MVTable from "../../../components/UI/Core/MV/Table";
+import { columnsImageList } from "../../../constant";
 
 const ImageList = () => {
   const [page, setPage] = useState(1);
 
-  const [valueId, setValue] = useState();
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
   const { data: imageList, refetch }: any = useQuery({
     queryKey: ["imageList", page],
-    queryFn: async () => (await getImageLists(page)).data?.data
+    queryFn: async () => (await getImageLists(page)).data
   });
   const { mutate } = useMutation({
     mutationFn: async (id: string) => {
@@ -41,18 +37,11 @@ const ImageList = () => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  const onChange = (newValue: any) => {
-    setValue(newValue);
-  };
 
   const handlePageChangePage = (page: number) => {
     setPage(page);
   };
 
-  const handleDeleteSelectedData = async () => {
-
-  };
-console.log(imageList)
   const data =
     imageList &&
     imageList?.map((item: any, index: number) => {

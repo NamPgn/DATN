@@ -72,7 +72,7 @@ const AttributeForm = ({ idProduct }: any) => {
   const handleSubmit = (val: any) => {
     const data: any = {
       id: idProduct,
-      atribute: val,
+      attribute: val,
       parentVariants: val.parentVariants,
     };
     MUTATE_PRODUCTVARIANT(data);

@@ -32,5 +32,5 @@ export const getAttributesProduct = async (id: any) => {
 };
 
 export const addAttributeVariant = async (data: any) => {
-  return intances.put(`products/${data?.id}/attributes`, data.data);
+  return intances.put(`products/${data?.id}/attributes`, data);
 };

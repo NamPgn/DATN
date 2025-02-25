@@ -32,9 +32,6 @@ import ContactPage from "../page/contact";
 import TeamPage from "../page/team";
 import AddAttributeValue from "../page/admin/products/attributeValue/add";
 import EditAttributeVal from "../page/admin/products/attributeValue/edit";
-import ImageList from "../page/admin/products/image/imageList";
-import AddImageProducts from "../page/admin/products/image/add";
-import EditImageProduct from "../page/admin/products/image/edit";
 import CommentAdmin from "../page/admin/comments";
 import ProductAdd from "../page/admin/products/add";
 import ProductEdit from "../page/admin/products/edit";
@@ -50,6 +47,9 @@ import LayoutAuth from "../layouts/AuthLayout";
 import OrdersAdmin from "../page/admin/orders";
 import OrdersDetail from "../page/admin/orders/components/detail";
 import EditOrder from "../page/admin/orders/components/edit";
+import ImageList from "../page/admin/image/imageList";
+import AddImageProducts from "../page/admin/image/add";
+import EditImageProduct from "../page/admin/image/edit";
 
 export const routerClient = [
   {
