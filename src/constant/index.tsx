@@ -4,7 +4,6 @@ import {
   NotificationOutlined,
   SlidersOutlined,
 } from "@ant-design/icons";
-import { Button, Space } from "antd";
 import { Link } from "react-router-dom";
 
 export const URLSECTION = [
@@ -148,6 +147,7 @@ export const columnsProducts = [
     dataIndex: "action",
     key: "action",
     fixed: "right",
+    width: 350,
   },
 ];
 
@@ -165,18 +165,9 @@ export const columnsProductVariant = [
   },
   {
     title: "Value",
-    children: [
-      {
-        title: "Kích Cỡ",
-        dataIndex: "size",
-        key: "size",
-      },
-      {
-        title: "Màu",
-        dataIndex: "color",
-        key: "color",
-      },
-    ],
+    dataIndex:'values',
+    key:'values',
+    render: (text: any) => text.join(" - "),
   },
   {
     title: "Giá",

@@ -23,14 +23,14 @@ export const updateAttribute = async (id: any, data: any) => {
   return intances.put("/attributes/" + id, data);
 };
 
-export const deleteAttributeVariant = async (id: any) => {
-  return intances.delete("/attributes/delete-attributes/" + id);
-};
+// export const deleteAttributeVariant = async (id: any) => {
+//   return intances.delete("/attributes/delete-attributes/" + id);
+// };
 
 export const getAttributesProduct = async (id: any) => {
   return intances.get(`/products/${id}/attributes`);
 };
 
 export const addAttributeVariant = async (data: any) => {
-  return intances.put(`products/${data?.id}/attributes`, data.data);
+  return intances.put(`products/${data?.id}/attributes`, data);
 };
