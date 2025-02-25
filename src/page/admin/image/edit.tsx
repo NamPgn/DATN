@@ -2,22 +2,13 @@ import {
     Form,
     Input,
     Button,
-    Upload,
-    Switch,
     message,
-    Select,
-    CheckboxProps,
-    Checkbox,
   } from "antd";
-  import { SyncOutlined, UploadOutlined } from "@ant-design/icons";
-  import { useEffect, useState } from "react";
+  import { SyncOutlined } from "@ant-design/icons";
   import { useParams } from "react-router-dom";
   import { useMutation, useQuery } from "react-query";
-  import { updateAttribute } from "../../../../sevices/attribute";
-  import {
-    getAttributesVal,
-    updateAttributesVal,
-  } from "../../../../sevices/attributeValue";
+import { getAttributesVal, updateAttributesVal } from "../../../sevices/attributeValue";
+
   
   const EditImageProduct = () => {
     const [form] = Form.useForm();

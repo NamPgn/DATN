@@ -348,3 +348,64 @@ export const columnsImageList = [
     width: 100,
   },
 ];
+
+
+
+export const columnsOrders = [
+  {
+    title: "Code",
+    dataIndex: "code",
+    key: "code",
+    width: 300,
+  },
+  {
+    title: "Name",
+    dataIndex: "o_name",
+    key: "o_name",
+    width: 150,
+  },
+  {
+    title: "Phone",
+    dataIndex: "o_phone",
+    key: "o_phone",
+    width: 200,
+  },
+  {
+    title: "Final Amount",
+    dataIndex: "final_amount",
+    key: "final_amount",
+    width: 250,
+  },
+  {
+    title: "Payment Method",
+    dataIndex: "payment_method",
+    key: "payment_method",
+  },
+  {
+    title: "Payment Status",
+    dataIndex: "stt_payment",
+    key: "stt_payment",
+  },
+  {
+    title: " Status Track",
+    dataIndex: "stt_track",
+    key: "stt_track",
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    key: "action",
+    fixed: "right",
+    width: 250,
+  },
+];
+
+export const STATUSOPTIONS = [
+  { id: "1", name: "Chờ xử lý", next: ["2", "7"] },
+  { id: "2", name: "Đã xử lý", next: ["3", "7"] },
+  { id: "3", name: "Đang giao hàng", next: ["5", "6", "7"] },
+  { id: "4", name: "Đã hoàn thành", next: [] },
+  { id: "5", name: "Giao hàng thất bại", next: ["3", "7"] },
+  { id: "6", name: "Đã giao hàng", next: ["4"] },
+  { id: "7", name: "Hủy", next: [] },
+];
