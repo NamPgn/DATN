@@ -1,7 +1,10 @@
 import {
+  BorderBottomOutlined,
   CommentOutlined,
   ControlOutlined,
   DashboardOutlined,
+  FileImageOutlined,
+  GiftOutlined,
   LaptopOutlined,
   NotificationOutlined,
   PicLeftOutlined,
@@ -45,7 +48,13 @@ import LayoutAuth from "../layouts/AuthLayout";
 import ImageList from "../page/admin/image/imageList";
 import AddImageProducts from "../page/admin/image/add";
 import EditImageProduct from "../page/admin/image/edit";
-
+import OrdersAdmin from "../page/admin/orders";
+import OrdersDetail from "../page/admin/orders/components/detail";
+import EditOrder from "../page/admin/orders/components/edit";
+import VoucherAdmin from "../page/admin/vouchers";
+import VoucherDetail from "../page/admin/vouchers/detail";
+import AddVoucher from "../page/admin/vouchers/add";
+import EditVoucher from "../page/admin/vouchers/edit";
 export const routerClient = [
   {
     path: "/",
@@ -202,6 +211,34 @@ export const routerClient = [
         path: "add/product/variant/management/:id/attribute",
         element: <VariantManage />,
       },
+      {
+        path: "orders",
+        element: <OrdersAdmin />,
+      },
+      {
+        path: "orders/:id",
+        element: <OrdersDetail />,
+      },
+      {
+        path: "orders/edit/:id",
+        element: <EditOrder />,
+      },
+      {
+        path: "vouchers/:id",
+        element: <VoucherDetail />,
+      },
+      {
+        path: "vouchers/create",
+        element: <AddVoucher />,
+      },
+      {
+        path: "vouchers/:id",
+        element: <EditVoucher />,
+      },
+      {
+        path: "vouchers",
+        element: <VoucherAdmin />,
+      },
     ],
   },
   {
@@ -267,5 +304,34 @@ export const TableRouterAdminPage = [
         name: "Deleted",
       },
     ],
+  },
+  {
+    name: "Voucher",
+    icon: <GiftOutlined />,
+    path: "/dashboard/vouchers",
+    children: [
+      {
+        path: "/dashboard/category/deleted",
+        icon: <ControlOutlined />,
+        name: "Deleted",
+      },
+    ],
+  },
+  {
+    name: "Orders",
+    icon: <BorderBottomOutlined />,
+    path: "/dashboard/orders",
+    children: [
+      {
+        path: "/dashboard/category/deleted",
+        icon: <ControlOutlined />,
+        name: "Send Orders",
+      },
+    ],
+  },
+  {
+    path: "/dashboard/product/image",
+    name: "Image List",
+    icon: <FileImageOutlined />,
   },
 ];

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
 import { delAttributesVal } from "../../../sevices/attributeValue";
-import { getImageLists } from "../../../sevices/imageList";
+import { delImageList, getImageLists } from "../../../sevices/imageList";
 import MVConfirm from "../../../components/UI/Core/Confirm";
 import { MyButton } from "../../../components/UI/Core/Button";
 import MVTable from "../../../components/UI/Core/MV/Table";
@@ -19,11 +19,11 @@ const ImageList = () => {
   };
   const { data: imageList, refetch }: any = useQuery({
     queryKey: ["imageList", page],
-    queryFn: async () => (await getImageLists(page)).data
+    queryFn: async () => (await getImageLists(page)).data,
   });
   const { mutate } = useMutation({
     mutationFn: async (id: string) => {
-      return await delAttributesVal(id);
+      return await delImageList(id);
     },
     onSuccess: () => {
       toast.success("Xóa thành công");
