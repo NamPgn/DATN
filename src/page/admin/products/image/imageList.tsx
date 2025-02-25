@@ -3,12 +3,11 @@ import { Image, Tag } from "antd";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
-import { delAttributesVal } from "../../../sevices/attributeValue";
-import { delImageList, getImageLists } from "../../../sevices/imageList";
-import MVConfirm from "../../../components/UI/Core/Confirm";
-import { MyButton } from "../../../components/UI/Core/Button";
-import MVTable from "../../../components/UI/Core/MV/Table";
-import { columnsImageList } from "../../../constant";
+import { delImageList, getImageLists } from "../../../../sevices/imageList";
+import MVConfirm from "../../../../components/UI/Core/Confirm";
+import { MyButton } from "../../../../components/UI/Core/Button";
+import MVTable from "../../../../components/UI/Core/MV/Table";
+import { columnsImageList } from "../../../../constant";
 
 const ImageList = () => {
   const [page, setPage] = useState(1);
@@ -30,7 +29,7 @@ const ImageList = () => {
       refetch();
     },
     onError: () => {
-      toast.success("Xóa không thành công");
+      toast.error("Xóa không thành công");
     },
   });
   const rowSelection = {

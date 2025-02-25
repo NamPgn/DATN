@@ -12,6 +12,7 @@ const ProductEdit = () => {
   const [selectImage, setSelectImage] = useState([]);
   const [selectOneImage, setSelectOneImage]: any = useState(null);
   const [visible, setVisible] = useState(false);
+  
   const [typeProduct, setTypeProduct] = useState("");
   const [dataEdit, setDataEdit]: any = useState(null);
   const { data: product, refetch } = useQuery(

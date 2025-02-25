@@ -13,9 +13,7 @@ import MVCol from "../../Core/MV/Grid/Col";
 import MVText from "../../Core/MV/Text";
 import MVTitle from "../../Core/MV/Title";
 import { MVAvatar } from "../../Core/Avatar";
-const AuthHeader = ({ isLoggedInState, style }:any) => {
-    const auths:any={};
-
+const AuthHeader = ({ auths }: any) => {
   const handleCheckCart = () => {
     // if (!auths) {
     //   MVError("Bạn cần đăng nhập!");
@@ -23,21 +21,12 @@ const AuthHeader = ({ isLoggedInState, style }:any) => {
     //   navigate("/cart/user");
     // }
   };
+
   return (
     <React.Fragment>
-      {auths && isLoggedInState ? (
-        <ConfigProvider
-          theme={{
-            token: {
-              colorBgBase: "#323232",
-              colorTextBase: "#fff",
-            },
-          }}
-        >
+      {auths ? (
           <Popover
-       style={{ 
-        background:"red"
-        }}
+            placement="bottom"
             content={
               <>
                 <Link to={"/profile"}>
@@ -68,7 +57,6 @@ const AuthHeader = ({ isLoggedInState, style }:any) => {
                     <MVText
                       style={{
                         cursor: "pointer",
-                        
                       }}
                       onClick={handleCheckCart}
                       className="auth"
@@ -124,7 +112,6 @@ const AuthHeader = ({ isLoggedInState, style }:any) => {
                 {auths?.user?.username}
               </MVTitle>
             }
-            placement="bottomLeft"
             trigger="click"
           >
             <MVAvatar
@@ -133,17 +120,10 @@ const AuthHeader = ({ isLoggedInState, style }:any) => {
               size={"sm"}
             />
           </Popover>
-        </ConfigProvider>
       ) : (
-        <ConfigProvider
-          theme={{
-            token: {
-              colorBgBase: "#323232",
-              colorTextBase: "#fff",
-            },
-          }}
-        >
           <Popover
+       
+          placement="bottom"
             content={
               <Link to={"/signin"}>
                 <MVRow align={"middle"} gutter={[12, 12]}>
@@ -168,18 +148,15 @@ const AuthHeader = ({ isLoggedInState, style }:any) => {
                 {"Hi"}
               </MVTitle>
             }
-            placement="bottomLeft"
             trigger="click"
           >
             <MVAvatar
               title={auths?.user?.name}
               src={undefined}
-              style={style}
               size={40}
               icon={<UserOutlined />}
             />
           </Popover>
-        </ConfigProvider>
       )}
     </React.Fragment>
   );

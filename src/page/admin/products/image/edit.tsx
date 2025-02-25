@@ -7,7 +7,7 @@ import {
   import { SyncOutlined } from "@ant-design/icons";
   import { useParams } from "react-router-dom";
   import { useMutation, useQuery } from "react-query";
-import { getAttributesVal, updateAttributesVal } from "../../../sevices/attributeValue";
+import { getAttributesVal, updateAttributesVal } from "../../../../sevices/attributeValue";
 
   
   const EditImageProduct = () => {

@@ -2,7 +2,9 @@ import { Outlet } from "react-router-dom";
 const LayoutAuth = () => {
   return (
     <>
-      <Outlet />
+      <div style={{ zIndex: "-1" }}>
+        <Outlet />
+      </div>
     </>
   );
 };

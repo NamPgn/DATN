@@ -35,7 +35,7 @@ const EditOrder = () => {
       toast.success("Sửa thành công");
     },
     onError: () => {
-      toast.success("Sửa thành công");
+      toast.error("Sửa không thành công");
     },
   });
   const onFinish = (values: any) => {

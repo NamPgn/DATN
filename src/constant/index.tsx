@@ -165,8 +165,8 @@ export const columnsProductVariant = [
   },
   {
     title: "Value",
-    dataIndex:'values',
-    key:'values',
+    dataIndex: "values",
+    key: "values",
     render: (text: any) => text.join(" - "),
   },
   {
@@ -349,8 +349,6 @@ export const columnsImageList = [
   },
 ];
 
-
-
 export const columnsOrders = [
   {
     title: "Code",
@@ -408,4 +406,42 @@ export const STATUSOPTIONS = [
   { id: "5", name: "Giao hàng thất bại", next: ["3", "7"] },
   { id: "6", name: "Đã giao hàng", next: ["4"] },
   { id: "7", name: "Hủy", next: [] },
+];
+
+export const COLUMN_TABLE_USERS = [
+  {
+    title: "Name",
+    dataIndex: "name",
+    key: "name",
+  },
+  {
+    title: "User Name",
+    dataIndex: "username",
+    key: "username",
+  },
+  {
+    title: "Email",
+    dataIndex: "email",
+    key: "email",
+  },
+  {
+    title: "Customer",
+    dataIndex: "customer",
+    key: "customer",
+  },
+  {
+    title: "Role",
+    dataIndex: "role",
+    key: "role",
+  },
+  {
+    title: "Active",
+    dataIndex: "is_active",
+    key: "is_active",
+  },
+  {
+    title: "Action",
+    key: "action",
+    dataIndex: "action",
+  },
 ];

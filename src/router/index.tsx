@@ -45,9 +45,6 @@ import EditProductVariant from "../page/admin/products/component/editProductVari
 import VariantManage from "../page/admin/products/component/variantManage";
 import Login from "../page/auth/login";
 import LayoutAuth from "../layouts/AuthLayout";
-import ImageList from "../page/admin/image/imageList";
-import AddImageProducts from "../page/admin/image/add";
-import EditImageProduct from "../page/admin/image/edit";
 import OrdersAdmin from "../page/admin/orders";
 import OrdersDetail from "../page/admin/orders/components/detail";
 import EditOrder from "../page/admin/orders/components/edit";
@@ -55,6 +52,13 @@ import VoucherAdmin from "../page/admin/vouchers";
 import VoucherDetail from "../page/admin/vouchers/detail";
 import AddVoucher from "../page/admin/vouchers/add";
 import EditVoucher from "../page/admin/vouchers/edit";
+import Register from "../page/auth/register";
+import EmloyeeTable from "../page/admin/user";
+import Verify from "../page/auth/verify";
+import AddImageProducts from "../page/admin/products/image/add";
+import ImageList from "../page/admin/products/image/imageList";
+import EditImageProduct from "../page/admin/products/image/edit";
+import EditUser from "../page/admin/user/components/edit";
 export const routerClient = [
   {
     path: "/",
@@ -101,6 +105,14 @@ export const routerClient = [
       {
         path: "login",
         element: <Login />,
+      },
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
+        path: "verify",
+        element: <Verify />,
       },
     ],
   },
@@ -239,6 +251,18 @@ export const routerClient = [
         path: "vouchers",
         element: <VoucherAdmin />,
       },
+      {
+        path: "users",
+        element: <EmloyeeTable />,
+      },
+      {
+        path: "add/users",
+        element: <EmloyeeTable />,
+      },
+      {
+        path: "users/edit/:id",
+        element: <EditUser />,
+      },
     ],
   },
   {
@@ -267,6 +291,7 @@ export const TableRouterAdminPage = [
   },
   {
     name: "User",
+    path: "/dashboard/users",
     icon: <PicLeftOutlined />,
     children: [
       {
