@@ -1,5 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, DatePicker, Form, Input, InputNumber, message } from "antd";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  Select,
+} from "antd";
 import { createVoucher } from "../../../sevices/voucher";
 import moment from "moment";
 
@@ -105,6 +113,15 @@ const AddVoucher = ({ refetch }: any) => {
           rules={[{ required: true, message: "Số lần được sử dụng mã" }]}
         >
           <InputNumber />
+        </Form.Item>
+
+        <Form.Item label="Type" name="type" >
+          <Select className="w-50" placeholder="Giảm giá theo ?">
+            <Select.Option value={0}>
+              Vorcher giảm giá theo số tiền
+            </Select.Option>
+            <Select.Option value={1}>Giảm giá theo phần trăm</Select.Option>
+          </Select>
         </Form.Item>
 
         <Form.Item

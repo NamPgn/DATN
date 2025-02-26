@@ -29,7 +29,6 @@ import AttributeValue from "../page/admin/products/attributeValue/attributeValue
 import Cart from "../page/cart";
 import Checkout from "../page/checkout";
 import ContactPage from "../page/contact";
-import Shop from "../page/Shop";
 import TeamPage from "../page/team";
 import AddAttributeValue from "../page/admin/products/attributeValue/add";
 import EditAttributeVal from "../page/admin/products/attributeValue/edit";
@@ -40,6 +39,14 @@ import CommentAdmin from "../page/admin/comments";
 import ProductAdd from "../page/admin/products/add";
 import ProductEdit from "../page/admin/products/edit";
 import CommentDetail from "../page/admin/comments/detail";
+import LazyComponent from "../components/Lazy/LazyComponent";
+import Shop from "../page/shop";
+import AddProductVariantEdit from "../page/admin/products/component/addProductVariantEdit";
+import ProductVariant from "../page/admin/products/variant";
+import EditProductVariant from "../page/admin/products/component/editProductVariantEdit";
+import VariantManage from "../page/admin/products/component/variantManage";
+import Login from "../page/auth/login";
+import LayoutAuth from "../layouts/AuthLayout";
 import VoucherAdmin from "../page/admin/vouchers";
 import VoucherDetail from "../page/admin/vouchers/detail";
 import AddVoucher from "../page/admin/vouchers/add";
@@ -85,6 +92,16 @@ export const routerClient = [
     ],
   },
   {
+    path: "/auth",
+    element: <LayoutAuth />,
+    children: [
+      {
+        path: "login",
+        element: <Login />,
+      },
+    ],
+  },
+  {
     path: "dashboard",
     element: (
       // <PrivateRouter>
@@ -99,14 +116,18 @@ export const routerClient = [
       //Product
       {
         path: "products",
-        element: <ProductsAdmin />,
+        element: (
+          <LazyComponent>
+            <ProductsAdmin />
+          </LazyComponent>
+        ),
       },
       {
         path: "product/add",
         element: <ProductAdd />,
       },
       {
-        path: "product/edit/:id",
+        path: "products/edit/:id",
         element: <ProductEdit />,
       },
       //Category
@@ -173,7 +194,24 @@ export const routerClient = [
         path: "comments/:id",
         element: <CommentDetail />,
       },
-      //Voucher
+      {
+        path: "product/:id/variants",
+        element: <ProductVariant />,
+        exact: true,
+      },
+      {
+        path: "add/product/variant/:id",
+        element: <AddProductVariantEdit />,
+      },
+      {
+        path: "product/:idProduct/variants/:idVariant/edit",
+        element: <EditProductVariant />,
+        exact: true,
+      },
+      {
+        path: "add/product/variant/management/:id/attribute",
+        element: <VariantManage />,
+      },
       {
         path: "vouchers",
         element: <VoucherAdmin />,

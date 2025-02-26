@@ -32,6 +32,11 @@
   height: auto;
 }
 
-a{
+a {
   color: #000;
+}
+
+
+.ant-avatar{
+  background: #999;
 }

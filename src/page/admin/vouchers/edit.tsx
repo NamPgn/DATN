@@ -22,11 +22,11 @@ const EditVoucher = ({ voucher, refetch, onClose }: any) => {
       start_date: dayjs(voucher.start_date),
       expiry_date: dayjs(voucher.expiry_date),
       usage_limit: voucher.usage_limit,
+      type: voucher.type,
     });
   }, [voucher]);
 
   const handleSubmit = async (values: any) => {
-    console.log(values);
     if (values.amount === null || values.amount === undefined) {
       delete values.amount;
     }
@@ -82,6 +82,15 @@ const EditVoucher = ({ voucher, refetch, onClose }: any) => {
       <Form.Item name="expiry_date" label="Ngày hết hạn">
         <DatePicker />
       </Form.Item>
+
+      <Form.Item
+        name="type"
+        label="Type"
+        rules={[{ required: true, message: "Số lần được sử dụng mã" }]}
+      >
+        <InputNumber />
+      </Form.Item>
+
       <Form.Item name="usage_limit" label="Giới hạn sử dụng">
         <InputNumber min={1} />
       </Form.Item>

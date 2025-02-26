@@ -14,6 +14,7 @@ import { Button, Modal, Popconfirm } from "antd";
 import AddVoucher from "./add";
 import { toast } from "react-toastify";
 import EditVoucher from "./edit";
+import MVConfirm from "../../../components/UI/Core/Confirm";
 
 const VoucherAdmin = () => {
   const [page, setPage] = useState(1);
@@ -111,13 +112,12 @@ const VoucherAdmin = () => {
         code: item.code,
         name: item.name,
         description: item.description,
-        // discount_percent: item.discount_percent,
-        // max_discount_amount: item.max_discount_amount,
-        // min_product_price: item.min_product_price,
-        // amount: item.amount,
+        discount_percent: item.discount_percent,
+        max_discount_amount: item.max_discount_amount,
+        min_product_price: item.min_product_price,
+        amount: item.amount,
         start_date: item.start_date,
         times_used: item.times_used,
-        type: item.type,
         expiry_date: item.expiry_date,
         usage_limit: item.usage_limit,
         action: (
@@ -154,10 +154,15 @@ const VoucherAdmin = () => {
           Add Voucher
         </Button>
       </div>
+      <MVConfirm
+        title="Có xóa không"
+        onConfirm={() => handleDeleteSelectedData()}
+      >
+        <MyButton danger className="mb-3 ml-2">
+          Delete Selected
+        </MyButton>
+      </MVConfirm>
 
-      <MyButton danger className="mb-3 ml-2" onClick={handleDeleteSelectedData}>
-        Delete Selected
-      </MyButton>
       <MVTable
         columns={columnsVouchers}
         rowSelection={rowSelection}

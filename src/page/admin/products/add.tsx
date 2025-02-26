@@ -1,93 +1,59 @@
-import { Form, Input, Button, message, Select } from "antd";
-import { useMutation } from "react-query";
-import { PlusOutlined, SyncOutlined } from "@ant-design/icons";
-
+import { Button, message, Modal } from "antd";
 import { useState } from "react";
-import UploadImage from "./component/uploadImage";
+import { useMutation } from "react-query";
 import { addProduct } from "../../../sevices/products";
-
+import UploadImage from "./component/uploadImage";
+import ProductForm from "./component/form";
+import { UploadOutlined } from "@ant-design/icons";
 const ProductAdd = () => {
-  const [form] = Form.useForm();
   const [selectImage, setSelectImage] = useState([]);
   const [selectOneImage, setSelectOneImage]: any = useState(null);
-  const [visible, setVisible] = useState(false);
-  const handleSubmit = (values: any) => {
-    const data = {
-      ...values,
-      mainImage: selectOneImage?.id,
-      imageListArr: selectImage.map((item: any) => item.id),
-    };
-    console.log("Dữ liệu gửi lên:", data);
-  };
-  const { isLoading, mutate } = useMutation({
-    mutationFn: async (values) => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const { isLoading, mutate: mutateCreate } = useMutation({
+    mutationFn: async (values: any) => {
       return await addProduct(values);
     },
-    onSuccess: () => {
-      message.success("Products created successfully!");
-    },
-    onError: () => {
-      message.error("Products created failure!");
-    },
+    onSuccess: () => message.success("Sản phẩm đã được tạo thành công!"),
+    onError: () => message.error("Tạo sản phẩm thất bại!"),
   });
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
   return (
     <>
-      <div
-        className="d-flex flex-column align-items-center justify-content-center border border-secondary border-dashed rounded p-3"
-        style={{ width: "120px", height: "120px", cursor: "pointer" }}
-        onClick={() => setVisible(true)}
-      >
-        <PlusOutlined className="text-4xl text-gray-500 hover:text-blue-500" />
+      <Button type="dashed" variant="solid" className="mb-3" icon={<UploadOutlined />} onClick={showModal}>
+        Upload Image
+      </Button>
 
-        <span className="text-muted">Upload</span>
-      </div>
-      <UploadImage
-        visible={visible}
-        onClose={() => setVisible(false)}
-        setSelectImage={setSelectImage}
-        selectImage={selectImage}
-        setSelectOneImage={setSelectOneImage}
+      <Modal
+        width={800}
+        title="Upload Image"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <UploadImage
+          setSelectImage={setSelectImage}
+          selectImage={selectImage}
+          setSelectOneImage={setSelectOneImage}
+          selectOneImage={selectOneImage}
+        />
+      </Modal>
+      <ProductForm
         selectOneImage={selectOneImage}
-        onCancel={() => setVisible(false)}
+        selectImage={selectImage}
+        mutateCreate={mutateCreate}
+        isLoading={isLoading}
       />
-      <Form form={form} layout="vertical" onFinish={handleSubmit}>
-        <Form.Item
-          label="Products Name"
-          name="name"
-          rules={[
-            {
-              required: true,
-              message: "Please enter the Products name!",
-            },
-            {
-              max: 100,
-              message: "Products name cannot exceed 50 characters!",
-            },
-          ]}
-        >
-          <Input placeholder="Enter Products name" />
-        </Form.Item>
-        <Form.Item label="Products Name" name="name">
-          <Input placeholder="Enter Products name" />
-        </Form.Item>
-        <Form.Item label="Attribute Id" name="attribute_id">
-          <Select
-            style={{ width: "200px" }}
-            placeholder="Vui lòng chọn"
-            options={[]}
-          />
-        </Form.Item>
-        <Form.Item>
-          <Button
-            type="primary"
-            loading={isLoading ?? <SyncOutlined spin />}
-            htmlType="submit"
-            
-          >
-            Create Products
-          </Button>
-        </Form.Item>
-      </Form>
     </>
   );
 };

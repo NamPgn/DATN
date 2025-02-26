@@ -1,5 +1,5 @@
 interface ImportMetaEnv {
-  VITE_DATABASE: string;
+  xVITE_DATABASE: string;
 }
 
 interface ImportMeta {

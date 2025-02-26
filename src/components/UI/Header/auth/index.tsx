@@ -35,6 +35,9 @@ const AuthHeader = ({ isLoggedInState, style }:any) => {
           }}
         >
           <Popover
+       style={{ 
+        background:"red"
+        }}
             content={
               <>
                 <Link to={"/profile"}>
@@ -65,6 +68,7 @@ const AuthHeader = ({ isLoggedInState, style }:any) => {
                     <MVText
                       style={{
                         cursor: "pointer",
+                        
                       }}
                       onClick={handleCheckCart}
                       className="auth"
@@ -102,7 +106,6 @@ const AuthHeader = ({ isLoggedInState, style }:any) => {
                       style={{
                         cursor: "pointer",
                       }}
-                    //   onClick={() => handleLogout(dispatch, navigate)}
                     >
                       Logout
                     </MVText>

@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { Breadcrumb, Layout, Menu } from "antd";
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { Avatar, Badge, Breadcrumb, Input, Layout, Menu } from "antd";
+import {
+  BellOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  SettingOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { MyButton } from "../components/UI/Core/Button";
 import MVCol from "../components/UI/Core/MV/Grid/Col";
 import MVRow from "../components/UI/Core/MV/Grid";
@@ -28,6 +34,9 @@ const LayoutAdmin = () => {
       }),
     };
   });
+  const handleSearch = (e: any) => {
+    console.log(e);
+  };
   // const { isLoggedInState } = useContext(MyContext) ?? {};
   const [collapsed, setCollapsed] = useState(false);
   return (
@@ -69,40 +78,29 @@ const LayoutAdmin = () => {
       <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
         <Header
           style={{
-            backgroundColor: "#b1c8ca",
-            padding: 0,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            background: "#fff",
+            padding: "0 16px",
           }}
         >
-          <MVRow align={"middle"} justify={"space-between"}>
+          <div className="w-50">
+            <span>
+              Pages / <PageTitle />
+            </span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: "0 20px" }}>
+            <Input.Search placeholder="Type here..." />
             <MVCol>
-              <MyButton
-                type="text"
-                icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                onClick={() => setCollapsed(!collapsed)}
-                style={{
-                  fontSize: "16px",
-                  width: 64,
-                  height: 64,
-                }}
-                children={undefined}
-              />
-            </MVCol>
-            <MVCol>
-              <Link className="text-white" to={"/"}>
-                Home Page
-              </Link>
-            </MVCol>
-            <MVCol
-              style={{
-                textAlign: "center",
-              }}
-              span={1}
-            >
               <AuthHeader />
             </MVCol>
-          </MVRow>
+            <SettingOutlined style={{ fontSize: "20px" }} />
+            <Badge count={4}>
+              <BellOutlined style={{ fontSize: "20px" }} />
+            </Badge>
+          </div>
         </Header>
-
         <Content
           style={{
             padding: "24px",
@@ -110,7 +108,6 @@ const LayoutAdmin = () => {
             overflow: "auto",
           }}
         >
-          <PageTitle />
           <Outlet />
         </Content>
         <Footer>© 2025 copyright</Footer>

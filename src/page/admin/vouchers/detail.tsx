@@ -17,8 +17,12 @@ const VoucherDetail = () => {
   return (
     <Card title={`Voucher: ${voucher?.id}`} bordered={false}>
       <p>
+        <strong>Code:</strong> {voucher?.code}
+      </p>
+      <p>
         <strong>Name:</strong> {voucher?.name}
       </p>
+
       <p>
         <strong>Description:</strong> {voucher?.description}
       </p>

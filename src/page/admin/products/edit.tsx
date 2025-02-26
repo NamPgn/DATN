@@ -1,70 +1,88 @@
-import { Form, Input, Button, message, Select } from "antd";
+import { Form, message } from "antd";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
-import { SyncOutlined } from "@ant-design/icons";
-
-import { useState } from "react";
-import { getAttributes } from "../../../sevices/attribute";
-import { addAttributesVal } from "../../../sevices/attributeValue";
+import { getProduct, updateProduct } from "../../../sevices/products";
+import UploadImage from "./component/uploadImage";
+import { Link, useParams } from "react-router-dom";
+import ProductForm from "./component/form";
 
 const ProductEdit = () => {
+  const { id } = useParams();
   const [form] = Form.useForm();
-  const [page, setPage] = useState(1);
-  const { data: attributeVal, refetch }: any = useQuery({
-    queryKey: ["attributeVal", page],
-    queryFn: async () => (await getAttributes(page)).data?.data,
-  });
-  const { isLoading, mutate } = useMutation({
-    mutationFn: async (values) => {
-      return await addAttributesVal(values);
-    },
-    onSuccess: () => {
-      message.success("AttributeValue created successfully!");
-    },
-    onError: () => {
-      message.error("AttributeValue created failure!");
-    },
+  const [selectImage, setSelectImage] = useState([]);
+  const [selectOneImage, setSelectOneImage]: any = useState(null);
+  const [visible, setVisible] = useState(false);
+  const [typeProduct, setTypeProduct] = useState("");
+  const [dataEdit, setDataEdit]: any = useState(null);
+  const { data: product } = useQuery(
+    ["product", id],
+    async () => (await getProduct(id)).data,
+    {
+      enabled: !!id,
+      onSuccess: (data) => {
+        form.setFieldsValue({ ...data });
+        setSelectOneImage({
+          id: data.main_image,
+        });
+        setSelectImage(
+          data?.product_images.map((item: any) => {
+            return {
+              id: item.public_id,
+              url: item.url,
+            };
+          })
+        );
+        setTypeProduct(data.type);
+        setDataEdit(data);
+      },
+    }
+  );
+
+
+  const { mutate: mutateEdit } = useMutation({
+    mutationFn: async (values: any) => await updateProduct(id, values),
+    onSuccess: () => message.success("Sản phẩm đã được cập nhật thành công!"),
+    onError: () => message.error("Cập nhật sản phẩm thất bại!"),
   });
 
-  const handleSubmit = async (values: any) => {
-    mutate(values);
-  };
-  const optionsSelectAttributesVal = attributeVal?.map((item: any) => ({
-    label: item.name,
-    value: item.id,
-  }));
   return (
-    <Form form={form} layout="vertical" onFinish={handleSubmit}>
-      <Form.Item
-        label="AttributeValue Name"
-        name="name"
-        rules={[
-          { required: true, message: "Please enter the AttributeValue name!" },
-          {
-            max: 100,
-            message: "AttributeValue name cannot exceed 50 characters!",
-          },
-        ]}
+    <>
+      {/* <div
+        className="d-flex flex-column align-items-center justify-content-center border border-secondary border-dashed rounded p-3"
+        style={{ width: "120px", height: "120px", cursor: "pointer" }}
+        onClick={() => setVisible(true)}
       >
-        <Input placeholder="Enter AttributeValue name" />
-      </Form.Item>
-      <Form.Item label="Attribute Id" name="attribute_id">
-        <Select
-          style={{ width: "200px" }}
-          placeholder="Vui lòng chọn"
-          options={optionsSelectAttributesVal || []}
+        <PlusOutlined className="text-4xl text-gray-500 hover:text-blue-500" />
+        <span className="text-muted">Upload</span>
+      </div> */}
+      <div className="d-flex">
+        <UploadImage
+          visible={visible}
+          onClose={() => setVisible(false)}
+          setSelectImage={setSelectImage}
+          selectImage={selectImage}
+          setSelectOneImage={setSelectOneImage}
+          selectOneImage={selectOneImage}
+          onCancel={() => setVisible(false)}
         />
-      </Form.Item>
-      <Form.Item>
-        <Button
-          type="primary"
-          loading={isLoading ?? <SyncOutlined spin />}
-          htmlType="submit"
-          block
-        >
-          Create AttributeValue
-        </Button>
-      </Form.Item>
-    </Form>
+        <div className="d-flex gap-3">
+          <Link to={"/dashboard/add/product/variant"}>
+          
+              Thêm biến thể mới
+          </Link>
+          <Link to={"/dashboard/add/product/variant/management"}>
+              Quản lí thuộc tính
+          </Link>
+        </div>
+      </div>
+
+      <ProductForm
+        dataEdit={product}
+        selectOneImage={selectOneImage}
+        selectImage={selectImage}
+        mutateUpdate={mutateEdit}
+      />
+    </>
   );
 };
 

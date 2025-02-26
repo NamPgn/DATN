@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { Tag } from "antd";
+import { Image, Tag } from "antd";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
-import { delAttributesVal, getAttributesVals } from "../../../sevices/attributeValue";
 import { MyButton } from "../../../components/UI/Core/Button";
 import MVConfirm from "../../../components/UI/Core/Confirm";
 import MVTable from "../../../components/UI/Core/MV/Table";
-import { columnsATTR } from "../../../constant";
+import { columnsATTR, columnsProducts } from "../../../constant";
+import { delProduct, getProducts } from "../../../sevices/products";
 
 const ProductsAdmin = () => {
   const [page, setPage] = useState(1);
@@ -17,13 +17,13 @@ const ProductsAdmin = () => {
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
-  const { data: attributeVal,refetch }: any = useQuery({
-    queryKey: ["attributeVal", page],
-    queryFn: async () => await getAttributesVals(page),
+  const { data: products, refetch }: any = useQuery({
+    queryKey: ["products", page],
+    queryFn: async () => await getProducts(page),
   });
   const { mutate } = useMutation({
     mutationFn: async (id: string) => {
-      return await delAttributesVal(id);
+      return await delProduct(id);
     },
     onSuccess: () => {
       toast.success("Xóa thành công");
@@ -57,24 +57,29 @@ const ProductsAdmin = () => {
   };
 
   const data =
-    attributeVal &&
-    attributeVal?.data?.values?.map((item: any, index: number) => {
+    products &&
+    products?.data?.data?.map((item: any, index: number) => {
       return {
         key: item.id,
-        child: item.children,
-        stt: item.id,
         name: <Link to={"/q/" + item.id}>{item.name}</Link>,
         slug: item.slug,
-        createAt: item.createdAt,
-        isActive:
-          item.isActive == 0 ? (
-            <Tag color="warning">isPending</Tag>
-          ) : (
-            <Tag color="success">Done</Tag>
-          ),
+        main_image: item.main_image,
+        url: (
+          <Image
+            src={
+              item.url
+                ? item.url
+                : "https://res.cloudinary.com/dkrn3fe2o/image/upload/w_250,h_250,c_thumb/v1738910579/atpfd8g1vmfprw7nxdxu.jpg"
+            }
+          />
+        ),
+        categoryName: item?.categories?.map(
+          (item: any) => " " + item.name + " | "
+        ),
+        pivot: item.pivot,
         action: (
           <div className="d-flex gap-1">
-            <Link to={`/dashboard/attributeVal/edit/${item.id}`}>
+            <Link to={`/dashboard/products/edit/${item.id}`}>
               <MyButton type="primary">Edit</MyButton>
             </Link>
             <MVConfirm title="Có xóa không" onConfirm={() => mutate(item.id)}>
@@ -82,6 +87,15 @@ const ProductsAdmin = () => {
                 Delete
               </MyButton>
             </MVConfirm>
+            {item.type == "0" ? (
+              <Link to={`/dashboard/product/${item.id}/variants/`}>
+                <MyButton color="default" variant="dashed" type="primary">
+                  QL Biến Thể
+                </MyButton>
+              </Link>
+            ) : (
+              ""
+            )}
           </div>
         ),
       };
@@ -94,17 +108,18 @@ const ProductsAdmin = () => {
         </MyButton>
       </Link>
       <MVTable
-        columns={columnsATTR}
+        columns={columnsProducts}
         rowSelection={rowSelection}
         dataSource={data}
         scroll={{ x: 1000, y: 1000 }}
+        size="middle"
         pagination={{
           defaultPageSize: 30,
           showSizeChanger: true,
           pageSizeOptions: ["30", "50", "70"],
           current: page,
           onChange: handlePageChangePage,
-          total: attributeVal?.data?.total,
+          total: products?.data?.total,
         }}
       ></MVTable>
     </React.Fragment>
@@ -112,5 +127,3 @@ const ProductsAdmin = () => {
 };
 
 export default ProductsAdmin;
-
-

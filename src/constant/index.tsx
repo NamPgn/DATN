@@ -112,6 +112,98 @@ export const columnsCategory = [
   },
 ];
 
+export const columnsProducts = [
+  {
+    title: "Name",
+    dataIndex: "name",
+    key: "name",
+    width: 300,
+  },
+  {
+    title: "Main Image",
+    dataIndex: "main_image",
+    key: "main_image",
+    width: 100,
+  },
+  {
+    title: "Slug",
+    dataIndex: "slug",
+    key: "slug",
+    width: 300,
+  },
+  {
+    title: "Url",
+    dataIndex: "url",
+    key: "url",
+    width: 250,
+  },
+  {
+    title: "Categories Name",
+    dataIndex: "categoryName",
+    key: "categoryName",
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
+    key: "action",
+    fixed: "right",
+  },
+];
+
+export const columnsProductVariant = [
+  // {
+  //   title: "Ảnh",
+  //   dataIndex: "image",
+  //   key: "image",
+  //   render: (text:any) => <Image width={50} src={text} />,
+  // },
+  {
+    title: "Tên Sản Phẩm",
+    dataIndex: "pr_name",
+    key: "pr_name",
+  },
+  {
+    title: "Value",
+    children: [
+      {
+        title: "Kích Cỡ",
+        dataIndex: "size",
+        key: "size",
+      },
+      {
+        title: "Màu",
+        dataIndex: "color",
+        key: "color",
+      },
+    ],
+  },
+  {
+    title: "Giá",
+    dataIndex: "regular_price",
+    key: "regular_price",
+  },
+  {
+    title: "Giá sale",
+    dataIndex: "sale_price",
+    key: "sale_price",
+  },
+  {
+    title: "Sku",
+    dataIndex: "sku",
+    key: "sku",
+  },
+  {
+    title: "Số lượng",
+    dataIndex: "stock_quantity",
+    key: "stock_quantity",
+  },
+  {
+    title: "Sửa",
+    key: "action",
+    dataIndex: "action",
+  },
+];
+
 export const columnsATTR = [
   {
     title: "Stt",
@@ -182,7 +274,7 @@ export const columnsComments = [
     title: "Action",
     dataIndex: "action",
     key: "action",
-    width: 100,
+    width: 150,
   },
 ];
 
@@ -215,30 +307,6 @@ export const columnsVouchers = [
     key: "description",
     width: 100,
   },
-  // {
-  //   title: "Discount Percent",
-  //   dataIndex: "discount_percent",
-  //   key: "discount_percent",
-  //   width: 100,
-  // },
-  // {
-  //   title: "Amount",
-  //   dataIndex: "amount",
-  //   key: "amount",
-  //   width: 100,
-  // },
-  // {
-  //   title: "Min Price",
-  //   dataIndex: "min_product_price",
-  //   key: "min_product_price",
-  //   width: 100,
-  // },
-  // {
-  //   title: "Max Discount",
-  //   dataIndex: "max_discount_amount",
-  //   key: "max_discount_amount",
-  //   width: 100,
-  // },
   {
     title: "Type",
     dataIndex: "type",
@@ -261,12 +329,6 @@ export const columnsVouchers = [
     title: "Expiry Date",
     dataIndex: "expiry_date",
     key: "expiry_date",
-    width: 100,
-  },
-  {
-    title: "Times Used",
-    dataIndex: "times_used",
-    key: "times_used",
     width: 100,
   },
   {
