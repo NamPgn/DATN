@@ -71,8 +71,7 @@ const AddProductVariantEdit = () => {
         bordered
         dataSource={productsVariantsList}
         renderItem={(item: any) => {
-          const [color, size] = item.values;
-          return <List.Item>{color + " " + size}</List.Item>;
+          return <List.Item>{item.values.join(" - ")}</List.Item>;
         }}
         style={{ width: "20%" }}
       />

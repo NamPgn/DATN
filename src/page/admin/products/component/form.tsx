@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MinusCircleOutlined } from "@ant-design/icons";
 import { Button, Form, Input, InputNumber, Select, Space } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
@@ -12,10 +12,10 @@ const ProductForm = ({
   selectImage,
   mutateUpdate,
   mutateCreate,
-  isLoading,
   dataEdit,
 }: any) => {
   const [form] = Form.useForm();
+  const simpleProductRef = useRef<any>({});
   const [variants, setVariants] = useState<any[]>([]);
   const [typeProduct, setTypeProduct] = useState("1");
   const [selectedAttributes, setSelectedAttributes] = useState<any[]>([]);
@@ -45,10 +45,37 @@ const ProductForm = ({
     if (dataEdit) {
       form.setFieldsValue({
         ...dataEdit,
-        type: dataEdit?.type || "1",
+        type: dataEdit.type || "1",
+        parentVariants:
+          dataEdit.type === "0" ? dataEdit.parentVariants || [] : [],
+        variants:
+          dataEdit.type === "0"
+            ? dataEdit.variants || []
+            : [
+                {
+                  regular_price: dataEdit.variants?.[0]?.regular_price || 0,
+                  sale_price: dataEdit.variants?.[0]?.sale_price || 0,
+                  stock_quantity: dataEdit.variants?.[0]?.stock_quantity || 0,
+                  sku: dataEdit.variants?.[0]?.sku || "",
+                  variant_id: dataEdit.variants?.find((items: any) => items?.id)
+                    ?.id,
+                },
+              ],
       });
+
+      setTypeProduct(dataEdit.type || "1");
+
+      // Nếu là sản phẩm có biến thể, đảm bảo ô chọn thuộc tính xuất hiện
+      if (dataEdit.type === "0") {
+        setSelectedAttributes(dataEdit.parentVariants || []);
+      } else {
+        setSelectedAttributes([]);
+      }
+
+      setVariants(dataEdit.type === "0" ? dataEdit.variants || [] : []);
     }
   }, [dataEdit]);
+
   const { data: category }: any = useQuery({
     queryKey: ["categories"],
     queryFn: async () => (await getCategorysAll()).data,
@@ -133,12 +160,14 @@ const ProductForm = ({
         typeProduct == "0"
           ? val.variants.map((item: any, index: number) => ({
               ...item,
-
+              variant_id: val.variants?.find((items: any) => items?.id)?.id,
               values: variants[index]?.nam || [],
             }))
           : [
               {
-                variant_id: val.variants?.find((items: any) => items.id)?.id,
+                variant_id: val.variants?.find(
+                  (items: any) => items?.variant_id
+                )?.variant_id,
                 regular_price: val.variants?.[0]?.regular_price || 0,
                 sale_price: val.variants?.[0]?.sale_price || 0,
                 sku: val.variants?.[0]?.sku || "",
@@ -154,8 +183,49 @@ const ProductForm = ({
     }
   };
 
-  const handleChangeType = (values: any) => {
-    setTypeProduct(values);
+  const handleChangeType = (value: string) => {
+    if (value === "0") {
+      // Lưu lại dữ liệu sản phẩm đơn giản trước khi chuyển đổi
+      simpleProductRef.current = form.getFieldsValue();
+
+      // Reset form nhưng chỉ xóa dữ liệu biến thể
+      form.resetFields(["variants", "attributes"]);
+      setVariants([]);
+      setSelectedAttributes([]);
+
+      // Nếu đang sửa sản phẩm biến thể, đặt lại dữ liệu từ database
+      if (isEditing && dataEdit?.type === "0") {
+        setSelectedAttributes(dataEdit.parentVariants || []);
+        setVariants(dataEdit.variants || []);
+        form.setFieldsValue({
+          parentVariants: dataEdit.parentVariants || [],
+          variants: dataEdit.variants || [],
+        });
+      }
+    } else {
+      // Khi quay về sản phẩm đơn giản, chỉ hiển thị 1 biến thể duy nhất
+      setVariants([]);
+      setSelectedAttributes([]);
+      form.resetFields();
+
+      form.setFieldsValue({
+        ...(isEditing ? dataEdit : simpleProductRef.current), // Nếu sửa, lấy từ dataEdit
+        type: "1",
+        variants: [
+          {
+            regular_price:
+              simpleProductRef.current?.variants?.[0]?.regular_price || 0,
+            sale_price:
+              simpleProductRef.current?.variants?.[0]?.sale_price || 0,
+            stock_quantity:
+              simpleProductRef.current?.variants?.[0]?.stock_quantity || 0,
+            sku: simpleProductRef.current?.variants?.[0]?.sku || "",
+          },
+        ], // Đảm bảo chỉ có 1 biến thể khi là sản phẩm đơn giản
+      });
+    }
+
+    setTypeProduct(value);
   };
 
   return (
@@ -212,32 +282,34 @@ const ProductForm = ({
           />
         </Form.Item>
 
-        <Form.Item label="Type" name="type" initialValue="1">
+        <Form.Item label="Loại sản phẩm" name="type" initialValue="1">
           <Select
             className="w-50"
-            onChange={(value) => {
-              handleChangeType(value);
-              setTypeProduct(value);
-            }}
+            onChange={handleChangeType}
+            value={typeProduct}
           >
-            <Select.Option value={"0"}>Sản phẩm có biến thể</Select.Option>
-            <Select.Option value={"1"}>Sản phẩm đơn giản</Select.Option>
+            <Select.Option value="0">Sản phẩm có biến thể</Select.Option>
+            <Select.Option value="1">Sản phẩm đơn giản</Select.Option>
           </Select>
         </Form.Item>
 
         {typeProduct === "0" && (
           <>
-            <Form.Item label="Chọn các thuộc tính" name="parentVariants">
-              <Select
-                mode="multiple"
-                placeholder="Chọn thuộc tính"
-                options={attrAll?.map((item: any) => ({
-                  label: item.name,
-                  value: item.id,
-                }))}
-                onChange={handleAttributeChange}
-              />
-            </Form.Item>
+            {typeProduct === "0" &&
+            isEditing &&
+            dataEdit?.type === "0" ? null : (
+              <Form.Item label="Chọn các thuộc tính" name="parentVariants">
+                <Select
+                  mode="multiple"
+                  placeholder="Chọn thuộc tính"
+                  options={attrAll?.map((item: any) => ({
+                    label: item.name,
+                    value: item.id,
+                  }))}
+                  onChange={handleAttributeChange}
+                />
+              </Form.Item>
+            )}
 
             {selectedAttributes.map((attributeId) => {
               const option: any = attrAll?.find(
@@ -275,17 +347,12 @@ const ProductForm = ({
                           marginBottom: 8,
                         }}
                       >
-                        <span>
-                          {selectedAttributes.map((attr) => {
-                            const option = attrAll?.find(
-                              (o: any) => o.id === attr
-                            );
-                            const label =
-                              option?.data.find(
-                                (d: any) => d.id == variants[index][option.name]
-                              )?.label || "";
-                            return label ? `${label} - ` : "";
-                          })}
+                        <span
+                          style={{ fontWeight: "bold", marginRight: "10px" }}
+                        >
+                          {variants[index]?.values
+                            ?.map((v: any) => v.name)
+                            .join(", ")}
                         </span>
 
                         <Form.Item

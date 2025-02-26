@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import { Tag } from "antd";
 import { Link } from "react-router-dom";
-import { MyButton } from "../../../components/UI/Core/Button";
+import { ButtonAdd, MyButton } from "../../../components/UI/Core/Button";
 import MVTable from "../../../components/UI/Core/MV/Table";
 import { columnsCategory } from "../../../constant";
 import { useMutation, useQuery } from "react-query";
-import {
-  delCategorys,
-  getCategorys,
-} from "../../../sevices/category";
+import { delCategorys, getCategorys } from "../../../sevices/category";
 import MVConfirm from "../../../components/UI/Core/Confirm";
 import { toast } from "react-toastify";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 
 const CategoryAdmin = () => {
   const [page, setPage] = useState(1);
@@ -121,7 +118,7 @@ const CategoryAdmin = () => {
             <Tag color="success">Done</Tag>
           ),
         action: (
-          <div className="flex gap-1">
+          <div className="d-flex gap-1">
             <Link to={`/dashboard/category/edit/${item.id}`}>
               <MyButton type="primary">Edit</MyButton>
             </Link>
@@ -136,11 +133,7 @@ const CategoryAdmin = () => {
     });
   return (
     <React.Fragment>
-      <Link to={`/dashboard/category/add`}>
-        <MyButton type="primary" className="mb-3">
-          Add
-        </MyButton>
-      </Link>
+      <ButtonAdd path={`/dashboard/category/add`} />
       <MVTable
         columns={columnsCategory}
         rowSelection={rowSelection}

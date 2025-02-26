@@ -1,7 +1,6 @@
-import { Form, Input, Button, message, Select, Upload } from "antd";
-import { useMutation, useQuery } from "react-query";
+import { Form, Button, message, Upload } from "antd";
+import { useMutation } from "react-query";
 import { SyncOutlined, UploadOutlined } from "@ant-design/icons";
-import { addAttributesVal } from "../../../../sevices/attributeValue";
 import { useState } from "react";
 import { addImageList } from "../../../../sevices/imageList";
 

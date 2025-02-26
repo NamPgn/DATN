@@ -4,6 +4,7 @@ import App from "./App.tsx";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ConfigProvider } from "antd";
+import { UserContextProvider } from "./context/usersContext/index.tsx";
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
@@ -42,9 +43,11 @@ createRoot(document.getElementById("root")!).render(
     }}
   >
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <UserContextProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </UserContextProvider>
     </QueryClientProvider>
   </ConfigProvider>
 );

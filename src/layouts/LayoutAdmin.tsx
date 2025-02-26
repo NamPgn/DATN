@@ -1,43 +1,56 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { Avatar, Badge, Breadcrumb, Input, Layout, Menu } from "antd";
+import { Badge, Button, Input, Layout, Menu } from "antd";
 import {
   BellOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   SettingOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
-import { MyButton } from "../components/UI/Core/Button";
 import MVCol from "../components/UI/Core/MV/Grid/Col";
-import MVRow from "../components/UI/Core/MV/Grid";
 import { Header } from "antd/es/layout/layout";
 import AuthHeader from "../components/UI/Header/auth";
 import PageTitle from "../components/UI/Core/PageTitle";
 import { TableRouterAdminPage } from "../router";
+import { isAuthentication } from "../common/auth/getToken";
 const { Content, Sider, Footer } = Layout;
 
 const LayoutAdmin = () => {
-  const items2 = TableRouterAdminPage.map((items, index) => {
-    const key = String(index + 1);
-    return {
-      key: `${key + 1}`,
-      icon: items.icon,
-      label: <Link to={items.path || ""}>{items.name}</Link>,
-      children: items?.children?.map((_, j) => {
-        const subKey = j + 1;
-        return {
-          key: `subitem-${key}-${subKey}`,
-          icon: _.icon,
-          label: <Link to={_.path}>{_.name}</Link>,
-        };
-      }),
-    };
-  });
+  const isAuth = isAuthentication();
+  const items2: any = [
+    {
+      key: "group-application",
+      type: "group",
+      label: "Application",
+      children: TableRouterAdminPage.filter((item: any) => !item.children).map(
+        (items, index) => ({
+          key: `app-${index}`,
+          icon: items.icon,
+          label: <Link to={items.path || ""}>{items.name}</Link>,
+        })
+      ),
+    },
+    {
+      key: "group-apps",
+      type: "group",
+      label: "Apps",
+      children: TableRouterAdminPage.filter((item: any) => item.children).map(
+        (items: any, index) => ({
+          key: `apps-${index}`,
+          icon: items.icon,
+          label: <Link to={items.path || ""}>{items.name}</Link>,
+          children: items.children.map((subItem: any, j: any) => ({
+            key: `sub-${index}-${j}`,
+            icon: subItem.icon,
+            label: <Link to={subItem.path}>{subItem.name}</Link>,
+          })),
+        })
+      ),
+    },
+  ];
   const handleSearch = (e: any) => {
     console.log(e);
   };
-  // const { isLoggedInState } = useContext(MyContext) ?? {};
   const [collapsed, setCollapsed] = useState(false);
   return (
     <Layout
@@ -50,6 +63,7 @@ const LayoutAdmin = () => {
         collapsible
         collapsed={collapsed}
         collapsedWidth={80}
+        width={230}
         className="custom-sider overflow-y-hidden bg-white shadow-lg"
         style={{ height: "100%", position: "fixed" }}
       >
@@ -58,7 +72,7 @@ const LayoutAdmin = () => {
             <img
               src="/assets/images/logo.png"
               alt="Ulina"
-              className="max-w-full h-auto"
+              className="w-50 h-auto"
             />
           </Link>
         </div>
@@ -75,17 +89,27 @@ const LayoutAdmin = () => {
         />
       </Sider>
 
-      <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
+      <Layout style={{ marginLeft: collapsed ? 80 : 230 }}>
         <Header
           style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
             background: "#fff",
-            padding: "0 16px",
+            padding: "0 16px 0 1px",
           }}
         >
           <div className="w-50">
+            <Button
+              type="text"
+              icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+              onClick={() => setCollapsed(!collapsed)}
+              style={{
+                fontSize: "16px",
+                width: 64,
+                height: 64,
+              }}
+            />
             <span>
               Pages / <PageTitle />
             </span>

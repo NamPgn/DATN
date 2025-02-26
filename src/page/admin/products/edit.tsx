@@ -1,5 +1,5 @@
 import { Form, message } from "antd";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { getProduct, updateProduct } from "../../../sevices/products";
 import UploadImage from "./component/uploadImage";
@@ -12,9 +12,10 @@ const ProductEdit = () => {
   const [selectImage, setSelectImage] = useState([]);
   const [selectOneImage, setSelectOneImage]: any = useState(null);
   const [visible, setVisible] = useState(false);
+  
   const [typeProduct, setTypeProduct] = useState("");
   const [dataEdit, setDataEdit]: any = useState(null);
-  const { data: product } = useQuery(
+  const { data: product, refetch } = useQuery(
     ["product", id],
     async () => (await getProduct(id)).data,
     {
@@ -38,10 +39,12 @@ const ProductEdit = () => {
     }
   );
 
-
   const { mutate: mutateEdit } = useMutation({
     mutationFn: async (values: any) => await updateProduct(id, values),
-    onSuccess: () => message.success("Sản phẩm đã được cập nhật thành công!"),
+    onSuccess: () =>{
+      message.success("Sản phẩm đã được cập nhật thành công!")
+      refetch();
+    },
     onError: () => message.error("Cập nhật sản phẩm thất bại!"),
   });
 
@@ -66,13 +69,10 @@ const ProductEdit = () => {
           onCancel={() => setVisible(false)}
         />
         <div className="d-flex gap-3">
-          <Link to={"/dashboard/add/product/variant"}>
-          
-              Thêm biến thể mới
+          <Link to={"/dashboard/add/product/variant/" + id}>
+            Thêm biến thể mới
           </Link>
-          <Link to={"/dashboard/add/product/variant/management"}>
-              Quản lí thuộc tính
-          </Link>
+          <Link to={`/dashboard/product/${id}/variants/`}>QL Biến Thể</Link>
         </div>
       </div>
 

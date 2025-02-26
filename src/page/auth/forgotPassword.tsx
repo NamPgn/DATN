@@ -1,19 +1,16 @@
-import { Button, Checkbox, Form, Grid, Input, theme, Typography } from "antd";
-import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Form, Grid, Input, theme, Typography } from "antd";
+import { MailOutlined, UserOutlined } from "@ant-design/icons";
 import { useMutation } from "react-query";
-import { login } from "../../../sevices/users";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { UsersContext } from "../../../context/usersContext";
+import { sendEmailForgotPass } from "../../sevices/users";
 
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
 const { Text, Title, Link } = Typography;
 
-export default function Login() {
+export default function ForgotPassword() {
   const { token } = useToken();
-  const { setIslogin }: any = useContext(UsersContext) || {};
   const screens = useBreakpoint();
   const navigate = useNavigate();
   const styles: any = {
@@ -64,17 +61,14 @@ export default function Login() {
       float: "right",
     },
   };
-
   const { mutate } = useMutation({
     mutationFn: async (data: string) => {
-      return await login(data);
+      return await sendEmailForgotPass(data);
     },
     onSuccess: ({ data }) => {
-      toast.success(data?.message);
-      localStorage.setItem("token", JSON.stringify(data));
-      navigate("/");
-      setIslogin(true);
-      localStorage.setItem("isLogin", "1");
+      toast.success(data?.message, {
+        position: "top-center",
+      });
     },
     onError: ({ response }) => {
       toast.error(response?.data?.message);
@@ -84,6 +78,7 @@ export default function Login() {
   const onFinish = (val: any) => {
     mutate(val);
   };
+
   return (
     <section style={styles.section}>
       <div style={styles.formContainer}>
@@ -92,12 +87,12 @@ export default function Login() {
             <div style={styles.iconText}>
               <img style={styles.logo} src="/assets/images/logo.png" alt="" />
               <Title level={2} style={{ margin: 0 }}>
-                Sign in
+                Forgot Password
               </Title>
             </div>
             <Text style={styles.text}>
               Welcome back to AntBlocks UI! Please enter your details below to
-              sign in.
+              Forgot Password.
             </Text>
           </div>
           <Form
@@ -107,46 +102,25 @@ export default function Login() {
             requiredMark="optional"
           >
             <Form.Item
-              name="username"
+              name="email"
               rules={[
                 {
+                  type: "email",
                   required: true,
-                  message: "Please input your username!",
+                  message: "Xin vui lòng nhập Email!",
                 },
               ]}
             >
-              <Input prefix={<UserOutlined />} placeholder="Username" />
+              <Input prefix={<MailOutlined />} placeholder="Email" />
             </Form.Item>
-            <Form.Item
-              name="password"
-              rules={[
-                { required: true, message: "Please input your Password!" },
-                {
-                  min: 8,
-                  message: "Password tối thiểu 8 ký tự",
-                },
-              ]}
-            >
-              <Input.Password
-                prefix={<LockOutlined />}
-                placeholder="Password"
-              />
-            </Form.Item>
-            <Form.Item>
-              <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox>Remember me</Checkbox>
-              </Form.Item>
-              <Link style={styles.forgotPassword} href="/auth/forgot-password">
-                Forgot password?
-              </Link>
-            </Form.Item>
+
             <Form.Item>
               <Button block type="primary" htmlType="submit">
-                Log in
+                Send Email
               </Button>
               <div style={styles.footer}>
-                <Text style={styles.text}>Don't have an account?</Text>{" "}
-                <Link href="/auth/register">Sign up now</Link>
+                <Text style={styles.text}>Do have an account?</Text>{" "}
+                <Link href="/auth/login">Login now</Link>
               </div>
             </Form.Item>
           </Form>

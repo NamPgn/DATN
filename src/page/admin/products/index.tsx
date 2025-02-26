@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { Image, Tag } from "antd";
+import { Image } from "antd";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
-import { MyButton } from "../../../components/UI/Core/Button";
+import { ButtonAdd, MyButton } from "../../../components/UI/Core/Button";
 import MVConfirm from "../../../components/UI/Core/Confirm";
 import MVTable from "../../../components/UI/Core/MV/Table";
-import { columnsATTR, columnsProducts } from "../../../constant";
+import { columnsProducts } from "../../../constant";
 import { delProduct, getProducts } from "../../../sevices/products";
+import { PlusOutlined } from "@ant-design/icons";
 
 const ProductsAdmin = () => {
   const [page, setPage] = useState(1);
@@ -30,7 +31,7 @@ const ProductsAdmin = () => {
       refetch();
     },
     onError: () => {
-      toast.success("Xóa không thành công");
+      toast.error("Xóa không thành công");
     },
   });
   const rowSelection = {
@@ -102,11 +103,7 @@ const ProductsAdmin = () => {
     });
   return (
     <React.Fragment>
-      <Link to={`/dashboard/product/add`}>
-        <MyButton type="primary" className="mb-3">
-          Add
-        </MyButton>
-      </Link>
+      <ButtonAdd path={`/dashboard/product/add`} />
       <MVTable
         columns={columnsProducts}
         rowSelection={rowSelection}

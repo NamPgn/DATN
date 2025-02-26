@@ -1,21 +1,19 @@
-import { Button, Checkbox, Form, Grid, Input, theme, Typography } from "antd";
-import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Form, Grid, Input, theme, Typography } from "antd";
+import { LockOutlined } from "@ant-design/icons";
 import { useMutation } from "react-query";
-import { login } from "../../../sevices/users";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { UsersContext } from "../../../context/usersContext";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { sendEmailForgotPass, sendResetPS } from "../../sevices/users";
 
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
 const { Text, Title, Link } = Typography;
 
-export default function Login() {
+export default function ResetPassword() {
   const { token } = useToken();
-  const { setIslogin }: any = useContext(UsersContext) || {};
   const screens = useBreakpoint();
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const tokenReset = searchParams.get("token");
   const styles: any = {
     logo: {
       width: "100px",
@@ -64,17 +62,16 @@ export default function Login() {
       float: "right",
     },
   };
-
+  const nav = useNavigate();
   const { mutate } = useMutation({
     mutationFn: async (data: string) => {
-      return await login(data);
+      return await sendResetPS(data);
     },
     onSuccess: ({ data }) => {
-      toast.success(data?.message);
-      localStorage.setItem("token", JSON.stringify(data));
-      navigate("/");
-      setIslogin(true);
-      localStorage.setItem("isLogin", "1");
+      toast.success(data?.message, {
+        position: "top-center",
+      });
+      nav("/auth/login");
     },
     onError: ({ response }) => {
       toast.error(response?.data?.message);
@@ -82,8 +79,13 @@ export default function Login() {
   });
 
   const onFinish = (val: any) => {
-    mutate(val);
+    const data = {
+      token: tokenReset,
+      ...val,
+    };
+    mutate(data);
   };
+
   return (
     <section style={styles.section}>
       <div style={styles.formContainer}>
@@ -92,12 +94,12 @@ export default function Login() {
             <div style={styles.iconText}>
               <img style={styles.logo} src="/assets/images/logo.png" alt="" />
               <Title level={2} style={{ margin: 0 }}>
-                Sign in
+                Reset Password
               </Title>
             </div>
             <Text style={styles.text}>
               Welcome back to AntBlocks UI! Please enter your details below to
-              sign in.
+              Reset Password.
             </Text>
           </div>
           <Form
@@ -107,20 +109,12 @@ export default function Login() {
             requiredMark="optional"
           >
             <Form.Item
-              name="username"
+              name="password"
               rules={[
                 {
                   required: true,
-                  message: "Please input your username!",
+                  message: "Xin vui lòng nhập Password!",
                 },
-              ]}
-            >
-              <Input prefix={<UserOutlined />} placeholder="Username" />
-            </Form.Item>
-            <Form.Item
-              name="password"
-              rules={[
-                { required: true, message: "Please input your Password!" },
                 {
                   min: 8,
                   message: "Password tối thiểu 8 ký tự",
@@ -132,21 +126,44 @@ export default function Login() {
                 placeholder="Password"
               />
             </Form.Item>
-            <Form.Item>
-              <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox>Remember me</Checkbox>
-              </Form.Item>
-              <Link style={styles.forgotPassword} href="/auth/forgot-password">
-                Forgot password?
-              </Link>
+            <Form.Item
+              name="password_confirmation"
+              hasFeedback
+              dependencies={["password"]}
+              rules={[
+                {
+                  required: true,
+
+                  message: "Xin vui lòng nhập Password!",
+                },
+                {
+                  min: 8,
+                  message: "Password tối thiểu 8 ký tự",
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
+                    } else {
+                      return Promise.reject(new Error("Mật Khẩu Không Khớp!"));
+                    }
+                  },
+                }),
+              ]}
+            >
+              <Input.Password
+                prefix={<LockOutlined />}
+                placeholder="Password"
+              />
             </Form.Item>
+
             <Form.Item>
               <Button block type="primary" htmlType="submit">
-                Log in
+                Send Email
               </Button>
               <div style={styles.footer}>
-                <Text style={styles.text}>Don't have an account?</Text>{" "}
-                <Link href="/auth/register">Sign up now</Link>
+                <Text style={styles.text}>Do have an account?</Text>{" "}
+                <Link href="/auth/login">Login now</Link>
               </div>
             </Form.Item>
           </Form>

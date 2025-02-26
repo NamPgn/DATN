@@ -1,58 +1,45 @@
 import React, { useState } from "react";
-import { Image, Tag } from "antd";
-import { Link } from "react-router-dom";
+import { Image } from "antd";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
-import { MyButton } from "../../../../components/UI/Core/Button";
+import { delImageList, getImageLists } from "../../../../sevices/imageList";
 import MVConfirm from "../../../../components/UI/Core/Confirm";
+import { ButtonAdd, MyButton } from "../../../../components/UI/Core/Button";
 import MVTable from "../../../../components/UI/Core/MV/Table";
-import { columnsATTR, columnsImageList } from "../../../../constant";
-import {
-  delAttributesVal,
-  getAttributesVals,
-} from "../../../../sevices/attributeValue";
-import { getImageLists } from "../../../../sevices/imageList";
+import { columnsImageList } from "../../../../constant";
 
 const ImageList = () => {
   const [page, setPage] = useState(1);
 
-  const [valueId, setValue] = useState();
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
   const { data: imageList, refetch }: any = useQuery({
     queryKey: ["imageList", page],
-    queryFn: async () => (await getImageLists(page)).data?.data
+    queryFn: async () => (await getImageLists(page)).data,
   });
   const { mutate } = useMutation({
     mutationFn: async (id: string) => {
-      return await delAttributesVal(id);
+      return await delImageList(id);
     },
     onSuccess: () => {
       toast.success("Xóa thành công");
       refetch();
     },
     onError: () => {
-      toast.success("Xóa không thành công");
+      toast.error("Xóa không thành công");
     },
   });
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  const onChange = (newValue: any) => {
-    setValue(newValue);
-  };
 
   const handlePageChangePage = (page: number) => {
     setPage(page);
   };
 
-  const handleDeleteSelectedData = async () => {
-
-  };
-console.log(imageList)
   const data =
     imageList &&
     imageList?.map((item: any, index: number) => {
@@ -74,11 +61,7 @@ console.log(imageList)
     });
   return (
     <React.Fragment>
-      <Link to={`/dashboard/image/add`}>
-        <MyButton type="primary" className="mb-3">
-          Add
-        </MyButton>
-      </Link>
+      <ButtonAdd path={`/dashboard/image/add`} />
       <MVTable
         columns={columnsImageList}
         rowSelection={rowSelection}

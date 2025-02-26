@@ -31,7 +31,7 @@ const Attribute = () => {
       refetch();
     },
     onError: () => {
-      toast.success("Xóa không thành công");
+      toast.error("Xóa không thành công");
     },
   });
   const rowSelection = {

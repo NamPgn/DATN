@@ -1,4 +1,5 @@
 import {
+  BorderBottomOutlined,
   CommentOutlined,
   ControlOutlined,
   DashboardOutlined,
@@ -32,9 +33,6 @@ import ContactPage from "../page/contact";
 import TeamPage from "../page/team";
 import AddAttributeValue from "../page/admin/products/attributeValue/add";
 import EditAttributeVal from "../page/admin/products/attributeValue/edit";
-import ImageList from "../page/admin/products/image/imageList";
-import AddImageProducts from "../page/admin/products/image/add";
-import EditImageProduct from "../page/admin/products/image/edit";
 import CommentAdmin from "../page/admin/comments";
 import ProductAdd from "../page/admin/products/add";
 import ProductEdit from "../page/admin/products/edit";
@@ -47,11 +45,24 @@ import EditProductVariant from "../page/admin/products/component/editProductVari
 import VariantManage from "../page/admin/products/component/variantManage";
 import Login from "../page/auth/login";
 import LayoutAuth from "../layouts/AuthLayout";
+import OrdersAdmin from "../page/admin/orders";
+import OrdersDetail from "../page/admin/orders/components/detail";
+import EditOrder from "../page/admin/orders/components/edit";
 import VoucherAdmin from "../page/admin/vouchers";
 import VoucherDetail from "../page/admin/vouchers/detail";
 import AddVoucher from "../page/admin/vouchers/add";
 import EditVoucher from "../page/admin/vouchers/edit";
-
+import Register from "../page/auth/register";
+import EmloyeeTable from "../page/admin/user";
+import Verify from "../page/auth/verify";
+import AddImageProducts from "../page/admin/products/image/add";
+import ImageList from "../page/admin/products/image/imageList";
+import EditImageProduct from "../page/admin/products/image/edit";
+import EditUser from "../page/admin/user/components/edit";
+import AddUser from "../page/admin/user/components/add";
+import PrivateRouter from "./security";
+import ForgotPassword from "../page/auth/forgotPassword";
+import ResetPassword from "../page/auth/resetPassword";
 export const routerClient = [
   {
     path: "/",
@@ -99,21 +110,36 @@ export const routerClient = [
         path: "login",
         element: <Login />,
       },
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
+        path: "verify",
+        element: <Verify />,
+      },
+      {
+        path: "forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "reset-password",
+        element: <ResetPassword />,
+      },
     ],
   },
   {
     path: "dashboard",
     element: (
-      // <PrivateRouter>
-      <LayoutAdmin />
-      // </PrivateRouter>
+      <PrivateRouter>
+        <LayoutAdmin />
+      </PrivateRouter>
     ),
     children: [
       {
         path: "",
         element: <Admin />,
       },
-      //Product
       {
         path: "products",
         element: (
@@ -130,7 +156,6 @@ export const routerClient = [
         path: "products/edit/:id",
         element: <ProductEdit />,
       },
-      //Category
       {
         path: "category",
         element: <CategoryAdmin />,
@@ -147,7 +172,6 @@ export const routerClient = [
         path: "category/deleted",
         element: <CategoryDeleted />,
       },
-      //Attribute
       {
         path: "attribute",
         element: <Attribute />,
@@ -185,7 +209,6 @@ export const routerClient = [
         path: "image/edit",
         element: <EditImageProduct />,
       },
-      //Comment
       {
         path: "comments",
         element: <CommentAdmin />,
@@ -213,8 +236,16 @@ export const routerClient = [
         element: <VariantManage />,
       },
       {
-        path: "vouchers",
-        element: <VoucherAdmin />,
+        path: "orders",
+        element: <OrdersAdmin />,
+      },
+      {
+        path: "orders/:id",
+        element: <OrdersDetail />,
+      },
+      {
+        path: "orders/edit/:id",
+        element: <EditOrder />,
       },
       {
         path: "vouchers/:id",
@@ -227,6 +258,22 @@ export const routerClient = [
       {
         path: "vouchers/:id",
         element: <EditVoucher />,
+      },
+      {
+        path: "vouchers",
+        element: <VoucherAdmin />,
+      },
+      {
+        path: "users",
+        element: <EmloyeeTable />,
+      },
+      {
+        path: "users/add",
+        element: <AddUser />,
+      },
+      {
+        path: "users/edit/:id",
+        element: <EditUser />,
       },
     ],
   },
@@ -252,15 +299,11 @@ export const TableRouterAdminPage = [
         name: "Attribute",
         icon: <UserOutlined />,
       },
-      {
-        path: "/dashboard/product/image",
-        name: "Image List",
-        icon: <FileImageOutlined />,
-      },
     ],
   },
   {
     name: "User",
+    path: "/dashboard/users",
     icon: <PicLeftOutlined />,
     children: [
       {
@@ -310,5 +353,22 @@ export const TableRouterAdminPage = [
         name: "Deleted",
       },
     ],
+  },
+  {
+    name: "Orders",
+    icon: <BorderBottomOutlined />,
+    path: "/dashboard/orders",
+    children: [
+      {
+        path: "/dashboard/category/deleted",
+        icon: <ControlOutlined />,
+        name: "Send Orders",
+      },
+    ],
+  },
+  {
+    path: "/dashboard/product/image",
+    name: "Image List",
+    icon: <FileImageOutlined />,
   },
 ];

@@ -37,7 +37,7 @@ const CategoryDeleted = () => {
       refetch();
     },
     onError: () => {
-      toast.success("Xóa không thành công");
+      toast.error("Xóa không thành công");
     },
   });
 
@@ -50,7 +50,7 @@ const CategoryDeleted = () => {
       refetch();
     },
     onError: () => {
-      toast.success("Khôi phục thành công");
+      toast.error("Khôi phục thành công");
     },
   });
   const rowSelection = {
@@ -80,7 +80,7 @@ const CategoryDeleted = () => {
     if (res.status == 200) {
       toast.success("Xóa thành công");
     } else {
-      toast.success("Xóa không thành công:" + res.data.message);
+      toast.error("Xóa không thành công:" + res.data.message);
     }
     refetch();
   };

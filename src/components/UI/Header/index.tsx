@@ -1,19 +1,22 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SearchUi from "../Search";
+import AuthHeader from "./auth";
+import { UsersContext } from "../../../context/usersContext";
 
 const Header = () => {
   // Dữ liệu động cho menu
 
   const [openSearch, setOpenSearch] = useState(false);
-  const [data, setData]:any = useState([]);
+  const [data, setData]: any = useState([]);
   useEffect(() => {
     (async () => {
       const res: any = await axios.get("http://127.0.0.1:8000/api/categories");
       setData(res.data);
     })();
   }, []);
+  const { isLogin }: any = useContext(UsersContext) || {};
   const menuItems = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
@@ -74,7 +77,7 @@ const Header = () => {
   };
   return (
     <>
-      <header className="header01 isSticky">
+      <header className="header01 isSticky ">
         <div className="container-fluid">
           <div className="row">
             <div className="col-lg-12">
@@ -99,7 +102,7 @@ const Header = () => {
                                 <div className="col-lg-6">
                                   <h3>List Categories</h3>
                                   <ul>
-                                    {data?.data?.map((content:any) => {
+                                    {data?.data?.map((content: any) => {
                                       return (
                                         <li>
                                           <Link to={content.slug}>
@@ -142,7 +145,7 @@ const Header = () => {
                 </div>
 
                 {/* Access Navigation */}
-                <div className="accessNav">
+                <div className="accessNav" style={{ alignItems: "center" }}>
                   {/* Menu Toggler */}
                   <a href="#" className="menuToggler">
                     <i className="fa-solid fa-bars" /> <span>Menu</span>
@@ -168,7 +171,7 @@ const Header = () => {
                   </div>
 
                   {/* Action Items */}
-                  <div className="anItems">
+                  <div className="anItems" style={{ alignItems: "center" }}>
                     <div
                       className="anSearch"
                       style={{ cursor: "pointer" }}
@@ -177,7 +180,15 @@ const Header = () => {
                       <i className="fa-solid fa-search" />
                     </div>
                     <div className="anUser">
-                      <i className="fa-solid fa-user" />
+                      <div className="anUser">
+                        {isLogin ? (
+                          <AuthHeader />
+                        ) : (
+                          <Link to={"/auth/login"}>
+                            <i className="fa-solid fa-user" />
+                          </Link>
+                        )}
+                      </div>
                     </div>
                     <div className="anCart">
                       <Link to="">

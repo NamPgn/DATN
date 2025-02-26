@@ -36,7 +36,14 @@ a {
   color: #000;
 }
 
-
-.ant-avatar{
+.ant-avatar {
   background: #999;
+}
+
+:where(.css-dev-only-do-not-override-mzhxf2).ant-divider-horizontal {
+  margin: 5px 0px !important;
+}
+
+:where(.css-dev-only-do-not-override-mzhxf2).ant-popover .ant-popover-inner{
+  background-color: #fff !important;
 }
