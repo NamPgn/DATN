@@ -59,6 +59,10 @@ import AddImageProducts from "../page/admin/products/image/add";
 import ImageList from "../page/admin/products/image/imageList";
 import EditImageProduct from "../page/admin/products/image/edit";
 import EditUser from "../page/admin/user/components/edit";
+import AddUser from "../page/admin/user/components/add";
+import PrivateRouter from "./security";
+import ForgotPassword from "../page/auth/forgotPassword";
+import ResetPassword from "../page/auth/resetPassword";
 export const routerClient = [
   {
     path: "/",
@@ -114,14 +118,22 @@ export const routerClient = [
         path: "verify",
         element: <Verify />,
       },
+      {
+        path: "forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "reset-password",
+        element: <ResetPassword />,
+      },
     ],
   },
   {
     path: "dashboard",
     element: (
-      // <PrivateRouter>
-      <LayoutAdmin />
-      // </PrivateRouter>
+      <PrivateRouter>
+        <LayoutAdmin />
+      </PrivateRouter>
     ),
     children: [
       {
@@ -256,8 +268,8 @@ export const routerClient = [
         element: <EmloyeeTable />,
       },
       {
-        path: "add/users",
-        element: <EmloyeeTable />,
+        path: "users/add",
+        element: <AddUser />,
       },
       {
         path: "users/edit/:id",

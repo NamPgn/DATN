@@ -1,27 +1,51 @@
-import { Dropdown, Menu, Avatar, Space, Tag, Button, Divider } from "antd";
+import {
+  Dropdown,
+  Menu,
+  Avatar,
+  Space,
+  Tag,
+  Button,
+  Divider,
+  Modal,
+} from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
   LockOutlined,
   MoreOutlined,
   PlusOutlined,
+  SendOutlined,
   UnlockOutlined,
 } from "@ant-design/icons";
 import MVTable from "../../../components/UI/Core/MV/Table";
 import { useState } from "react";
 import { useMutation, useQuery } from "react-query";
-import { deleteUser, getUser, getUsers } from "../../../sevices/users";
+import {
+  blockUser,
+  deleteUser,
+  getUsers,
+  sendEmailForgotPass,
+  unLockUser,
+} from "../../../sevices/users";
 import { COLUMN_TABLE_USERS } from "../../../constant";
 import { toast } from "react-toastify";
-import MVConfirm from "../../../components/UI/Core/Confirm";
 import { Link } from "react-router-dom";
+import BlockAccountModal from "./components/modalConfirmBlockUser";
 
 const EmloyeeTable = () => {
-  const [page, setPage]: any = useState(1);
-  const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
+  const [page, setPage] = useState(1);
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [isModalOpenBlock, setIsModalOpenBlock] = useState(false);
+  const [selectedUserEmail, setSelectedUserEmail] = useState<string | null>(
+    null
+  );
+
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
+
   const { mutate } = useMutation({
     mutationFn: async (id: string) => {
       return await deleteUser(id);
@@ -34,7 +58,80 @@ const EmloyeeTable = () => {
       toast.error("Xóa không thành công");
     },
   });
-  const { data: user, refetch }: any = useQuery({
+
+  const { mutate: MUTATEUSERBLOCK } = useMutation({
+    mutationFn: async (data: string) => {
+      return await blockUser(data);
+    },
+    onSuccess: () => {
+      toast.success("Khóa tài khoản thành công");
+      refetch();
+      setIsModalOpenBlock(false);
+    },
+    onError: () => {
+      toast.error("Khóa tài khoản không thành công");
+    },
+  });
+
+  const { mutate: MUTATEUNLOCKUSER } = useMutation({
+    mutationFn: async (data: string) => {
+      return await unLockUser(data);
+    },
+    onSuccess: () => {
+      toast.success("Mở khóa tài khoản thành công");
+      refetch();
+      setIsModalOpenBlock(false);
+    },
+    onError: () => {
+      toast.error("Mở khóa tài khoản không thành công");
+    },
+  });
+
+  const { mutate: MUTATESENDEMAILCHANGEPASS } = useMutation({
+    mutationFn: async (data: string) => {
+      return await sendEmailForgotPass(data);
+    },
+    onSuccess: () => {
+      toast.success("Gửi email thay đổi mật khẩu tài khoản thành công");
+      refetch();
+      setIsModalOpenBlock(false);
+    },
+    onError: () => {
+      toast.error("Gửi email thay đổi mật khẩu tài khoản không thành công");
+    },
+  });
+
+  const handleOpenModalBlock = () => {
+    setIsModalOpenBlock(true);
+  };
+
+  const handleCloseModalBlock = () => {
+    setIsModalOpenBlock(false);
+  };
+
+  const handleSubmit = (selectedReasons: any) => {
+    const data: any = {
+      id: selectedUserId,
+      reson: selectedReasons[0],
+    };
+    MUTATEUSERBLOCK(data);
+  };
+
+  const handleUnlockUser = () => {
+    const data: any = {
+      id: selectedUserId,
+    };
+    MUTATEUNLOCKUSER(data);
+  };
+
+  const handleSendMailResetPassword = () => {
+    const data: any = {
+      email: selectedUserEmail,
+    };
+    MUTATESENDEMAILCHANGEPASS(data);
+  };
+
+  const { data: user, refetch } = useQuery({
     queryKey: ["users", page],
     queryFn: async () => {
       return (await getUsers(page))?.data?.data?.map((item: any) => {
@@ -43,62 +140,110 @@ const EmloyeeTable = () => {
           name: item.name,
           username: item.username,
           email: item.email,
-          role: item.role,
-          customer: (
-            <>
-              <Space>
-                <Avatar src={item?.avatar} size="small">
-                  {item?.avatar ? null : item?.name.charAt(0)}
-                </Avatar>
-                <div>
-                  <div>{item?.name}</div>
-                  <div style={{ color: "gray", fontSize: "12px" }}>
-                    {item?.email}
-                  </div>
-                </div>
-              </Space>
-            </>
-          ),
-          is_active:
-            item.is_active == true ? (
-              <Tag color="green">active</Tag>
+          role:
+            item.role == "admin" ? (
+              <Tag color="gold">{item.role}</Tag>
             ) : (
-              <Tag color="gray">passive</Tag>
+              <Tag color="geekblue">{item.role}</Tag>
             ),
+          customer: (
+            <Space>
+              <Avatar src={item?.urlImg} size="small">
+                {item?.avatar ? null : item?.name.charAt(0)}
+              </Avatar>
+              <div>
+                <div>{item?.name}</div>
+                <div style={{ color: "gray", fontSize: "12px" }}>
+                  {item?.email}
+                </div>
+              </div>
+            </Space>
+          ),
+          is_active: item.is_active ? (
+            <Tag color="green">Active</Tag>
+          ) : (
+            <Tag color="red">Inactive</Tag>
+          ),
           action: (
             <Dropdown
               overlay={
-                <Menu>
-                  <Menu.Item key="lock" icon={<LockOutlined />}>
-                    Block
-                  </Menu.Item>
-                  <Menu.Item key="unlock" icon={<UnlockOutlined />}>
-                    Unlock
-                  </Menu.Item>
-                  <Menu.Item key="edit" icon={<EditOutlined />}>
-                    <Link to={"/dashboard/users/edit/" + item.id}>Edit</Link>
-                  </Menu.Item>
-                  <Divider />
-                  <Menu.Item key="delete" icon={<DeleteOutlined />} danger>
-                    <MVConfirm
-                      title="Có xóa không"
-                      onConfirm={() => mutate(item.id)}
-                    >
-                      Delete
-                    </MVConfirm>
-                  </Menu.Item>
-                </Menu>
+                <>
+                  {item.role == "member" ? (
+                    <Menu>
+                      <>
+                        {item.is_active ? (
+                          <Menu.Item
+                            key="lock"
+                            icon={<LockOutlined />}
+                            onClick={(e: any) => {
+                              setSelectedUserId(item.id);
+                              setIsModalOpenBlock(true);
+                            }}
+                          >
+                            <div>Block</div>
+                          </Menu.Item>
+                        ) : (
+                          ""
+                        )}
+
+                        <Menu.Item
+                          key="unlock"
+                          onClick={(e: any) => {
+                            setSelectedUserId(item.id);
+                            handleUnlockUser();
+                          }}
+                          icon={<UnlockOutlined />}
+                        >
+                          Unlock
+                        </Menu.Item>
+                      </>
+
+                      <Menu.Item key="edit" icon={<EditOutlined />}>
+                        <Link to={"/dashboard/users/edit/" + item.id}>
+                          Edit
+                        </Link>
+                      </Menu.Item>
+                      <Divider />
+
+                      <Menu.Item
+                        key="resetpass"
+                        onClick={(e: any) => {
+                          setSelectedUserEmail(item.email);
+                          handleSendMailResetPassword();
+                        }}
+                        icon={<SendOutlined />}
+                      >
+                        Reset Password
+                      </Menu.Item>
+                      <Menu.Item key="delete" icon={<DeleteOutlined />} danger>
+                        <div
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedUserId(item.id);
+                            setIsModalOpen(true);
+                          }}
+                        >
+                          Delete
+                        </div>
+                      </Menu.Item>
+                    </Menu>
+                  ) : (
+                    ""
+                  )}
+                </>
               }
               trigger={["click"]}
             >
-              <Button
-                variant="dashed"
-                type="text"
-                style={{
-                  transform: "rotate(90deg)",
-                }}
-                icon={<MoreOutlined />}
-              />
+              {item.role == "member" ? (
+                <Button
+                  variant="dashed"
+                  type="text"
+                  style={{ transform: "rotate(90deg)" }}
+                  icon={<MoreOutlined />}
+                />
+              ) : (
+                ""
+              )}
             </Dropdown>
           ),
         };
@@ -115,8 +260,20 @@ const EmloyeeTable = () => {
     setPage(val);
   };
 
+  const handleConfirmDelete = () => {
+    if (selectedUserId) {
+      mutate(selectedUserId);
+    }
+    setIsModalOpen(false);
+  };
+
   return (
     <>
+      <BlockAccountModal
+        visible={isModalOpenBlock}
+        onCancel={handleCloseModalBlock}
+        onSubmit={handleSubmit}
+      />
       <Link to={"/dashboard/users/add"}>
         <Button
           color="default"
@@ -141,7 +298,18 @@ const EmloyeeTable = () => {
           onChange: handleChangePage,
           total: 30,
         }}
-      ></MVTable>
+      />
+
+      <Modal
+        title="Xác nhận xóa"
+        open={isModalOpen}
+        onOk={handleConfirmDelete}
+        onCancel={() => setIsModalOpen(false)}
+        okText="Xóa"
+        cancelText="Hủy"
+      >
+        <p>Bạn có chắc chắn muốn xóa người dùng này?</p>
+      </Modal>
     </>
   );
 };

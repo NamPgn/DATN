@@ -1,15 +1,15 @@
-import { Button, Checkbox, Form, Grid, Input, theme, Typography } from "antd";
-import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Form, Grid, Input, theme, Typography } from "antd";
+import { MailOutlined, UserOutlined } from "@ant-design/icons";
 import { useMutation } from "react-query";
-import { register } from "../../../sevices/users";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { sendEmailForgotPass } from "../../sevices/users";
 
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
 const { Text, Title, Link } = Typography;
 
-export default function Register() {
+export default function ForgotPassword() {
   const { token } = useToken();
   const screens = useBreakpoint();
   const navigate = useNavigate();
@@ -63,13 +63,12 @@ export default function Register() {
   };
   const { mutate } = useMutation({
     mutationFn: async (data: string) => {
-      return await register(data);
+      return await sendEmailForgotPass(data);
     },
     onSuccess: ({ data }) => {
       toast.success(data?.message, {
         position: "top-center",
       });
-      navigate("/");
     },
     onError: ({ response }) => {
       toast.error(response?.data?.message);
@@ -88,12 +87,12 @@ export default function Register() {
             <div style={styles.iconText}>
               <img style={styles.logo} src="/assets/images/logo.png" alt="" />
               <Title level={2} style={{ margin: 0 }}>
-                Sign in
+                Forgot Password
               </Title>
             </div>
             <Text style={styles.text}>
               Welcome back to AntBlocks UI! Please enter your details below to
-              sign in.
+              Forgot Password.
             </Text>
           </div>
           <Form
@@ -102,20 +101,6 @@ export default function Register() {
             layout="vertical"
             requiredMark="optional"
           >
-            <Form.Item
-              name="name"
-              rules={[{ required: true, message: "Xin vui lòng nhập Name!" }]}
-            >
-              <Input prefix={<UserOutlined />} placeholder="Name" />
-            </Form.Item>
-            <Form.Item
-              name="username"
-              rules={[
-                { required: true, message: "Xin vui lòng nhập Username!" },
-              ]}
-            >
-              <Input prefix={<UserOutlined />} placeholder="Username" />
-            </Form.Item>
             <Form.Item
               name="email"
               rules={[
@@ -128,63 +113,10 @@ export default function Register() {
             >
               <Input prefix={<MailOutlined />} placeholder="Email" />
             </Form.Item>
-            <Form.Item
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: "Xin vui lòng nhập Password!",
-                },
-                {
-                  min: 8,
-                  message: "Password tối thiểu 8 ký tự",
-                },
-              ]}
-            >
-              <Input.Password
-                prefix={<LockOutlined />}
-                placeholder="Password"
-              />
-            </Form.Item>
-            <Form.Item
-              name="password_confirmation"
-              hasFeedback
-              dependencies={["password"]}
-              rules={[
-                {
-                  required: true,
 
-                  message: "Xin vui lòng nhập Password!",
-                },
-                {
-                  min: 8,
-                  message: "Password tối thiểu 8 ký tự",
-                },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue("password") === value) {
-                      return Promise.resolve();
-                    } else {
-                      return Promise.reject(new Error("Mật Khẩu Không Khớp!"));
-                    }
-                  },
-                }),
-              ]}
-            >
-              <Input.Password
-                prefix={<LockOutlined />}
-                placeholder="Password"
-              />
-            </Form.Item>
-
-            <Form.Item>
-              <Link style={styles.forgotPassword} href="/auth/forgot-password">
-                Forgot password?
-              </Link>
-            </Form.Item>
             <Form.Item>
               <Button block type="primary" htmlType="submit">
-                Register
+                Send Email
               </Button>
               <div style={styles.footer}>
                 <Text style={styles.text}>Do have an account?</Text>{" "}

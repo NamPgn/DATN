@@ -1,18 +1,19 @@
-import { Button, Checkbox, Form, Grid, Input, theme, Typography } from "antd";
-import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Form, Grid, Input, theme, Typography } from "antd";
+import { LockOutlined } from "@ant-design/icons";
 import { useMutation } from "react-query";
-import { register } from "../../../sevices/users";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { sendEmailForgotPass, sendResetPS } from "../../sevices/users";
 
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
 const { Text, Title, Link } = Typography;
 
-export default function Register() {
+export default function ResetPassword() {
   const { token } = useToken();
   const screens = useBreakpoint();
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const tokenReset = searchParams.get("token");
   const styles: any = {
     logo: {
       width: "100px",
@@ -61,15 +62,16 @@ export default function Register() {
       float: "right",
     },
   };
+  const nav = useNavigate();
   const { mutate } = useMutation({
     mutationFn: async (data: string) => {
-      return await register(data);
+      return await sendResetPS(data);
     },
     onSuccess: ({ data }) => {
       toast.success(data?.message, {
         position: "top-center",
       });
-      navigate("/");
+      nav("/auth/login");
     },
     onError: ({ response }) => {
       toast.error(response?.data?.message);
@@ -77,7 +79,11 @@ export default function Register() {
   });
 
   const onFinish = (val: any) => {
-    mutate(val);
+    const data = {
+      token: tokenReset,
+      ...val,
+    };
+    mutate(data);
   };
 
   return (
@@ -88,12 +94,12 @@ export default function Register() {
             <div style={styles.iconText}>
               <img style={styles.logo} src="/assets/images/logo.png" alt="" />
               <Title level={2} style={{ margin: 0 }}>
-                Sign in
+                Reset Password
               </Title>
             </div>
             <Text style={styles.text}>
               Welcome back to AntBlocks UI! Please enter your details below to
-              sign in.
+              Reset Password.
             </Text>
           </div>
           <Form
@@ -102,32 +108,6 @@ export default function Register() {
             layout="vertical"
             requiredMark="optional"
           >
-            <Form.Item
-              name="name"
-              rules={[{ required: true, message: "Xin vui lòng nhập Name!" }]}
-            >
-              <Input prefix={<UserOutlined />} placeholder="Name" />
-            </Form.Item>
-            <Form.Item
-              name="username"
-              rules={[
-                { required: true, message: "Xin vui lòng nhập Username!" },
-              ]}
-            >
-              <Input prefix={<UserOutlined />} placeholder="Username" />
-            </Form.Item>
-            <Form.Item
-              name="email"
-              rules={[
-                {
-                  type: "email",
-                  required: true,
-                  message: "Xin vui lòng nhập Email!",
-                },
-              ]}
-            >
-              <Input prefix={<MailOutlined />} placeholder="Email" />
-            </Form.Item>
             <Form.Item
               name="password"
               rules={[
@@ -178,13 +158,8 @@ export default function Register() {
             </Form.Item>
 
             <Form.Item>
-              <Link style={styles.forgotPassword} href="/auth/forgot-password">
-                Forgot password?
-              </Link>
-            </Form.Item>
-            <Form.Item>
               <Button block type="primary" htmlType="submit">
-                Register
+                Send Email
               </Button>
               <div style={styles.footer}>
                 <Text style={styles.text}>Do have an account?</Text>{" "}

@@ -1,23 +1,22 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { Avatar, Badge, Breadcrumb, Button, Input, Layout, Menu } from "antd";
+import { Badge, Button, Input, Layout, Menu } from "antd";
 import {
   BellOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   SettingOutlined,
-  UserOutlined,
 } from "@ant-design/icons";
-import { MyButton } from "../components/UI/Core/Button";
 import MVCol from "../components/UI/Core/MV/Grid/Col";
-import MVRow from "../components/UI/Core/MV/Grid";
 import { Header } from "antd/es/layout/layout";
 import AuthHeader from "../components/UI/Header/auth";
 import PageTitle from "../components/UI/Core/PageTitle";
 import { TableRouterAdminPage } from "../router";
+import { isAuthentication } from "../common/auth/getToken";
 const { Content, Sider, Footer } = Layout;
 
 const LayoutAdmin = () => {
+  const isAuth = isAuthentication();
   const items2: any = [
     {
       key: "group-application",
@@ -68,7 +67,7 @@ const LayoutAdmin = () => {
         className="custom-sider overflow-y-hidden bg-white shadow-lg"
         style={{ height: "100%", position: "fixed" }}
       >
-        <div className="logo_ p-3 text-center" >
+        <div className="logo_ p-3 text-center">
           <Link to="/" data-discover="true">
             <img
               src="/assets/images/logo.png"

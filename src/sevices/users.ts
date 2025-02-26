@@ -21,5 +21,30 @@ export const updateUser = async (data: any) => {
 };
 
 export const getUser = async (id: any) => {
-  return intances.get("/users/" +  id);
+  return intances.get("/users/" + id);
 };
+
+export const addUser = async (data: any) => {
+  return intances.post("/users", data);
+};
+
+export const getVerify = async (token: any) => {
+  return intancesLocal.get("/verify_email?token=" + token);
+};
+
+export const blockUser = async (data: any) => {
+  return intances.post("/users/change_status/" + data.id, data);
+};
+
+export const unLockUser = async (data: any) => {
+  return intances.post("/users/change_status/" + data.id, null);
+};
+
+export const sendEmailForgotPass = async (data: any) => {
+  return intancesLocal.post("/forgot-password", data);
+};
+
+export const sendResetPS = async (data: any) => {
+  return intancesLocal.post("/reset-password", data);
+};
+

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Form, Input, Button, Card, Select, Spin, Modal } from "antd";
 import { useMutation, useQuery } from "react-query";
-import { updateOrders } from "../../../../sevices/orders";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getUser, updateUser } from "../../../../sevices/users";
@@ -11,13 +10,12 @@ import { UploadOutlined } from "@ant-design/icons";
 const EditUser = () => {
   const { id } = useParams();
   const [form] = Form.useForm();
-	const [selectImage, setSelectImage] = useState([]);
+  const [selectImage, setSelectImage]: any = useState([]);
   const [selectOneImage, setSelectOneImage]: any = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const {
     isLoading,
     data: user,
-    refetch,
   }: any = useQuery({
     queryKey: ["user", id],
     queryFn: async () => {
@@ -42,8 +40,10 @@ const EditUser = () => {
     },
   });
   const onFinish = (values: any) => {
+    console.log(selectImage[0]?.id);
     const data = {
       id: id,
+      avatar: selectImage[0]?.id,
       ...values,
     };
     mutate(data);
@@ -64,7 +64,13 @@ const EditUser = () => {
   }
   return (
     <>
-		<Button type="dashed" variant="solid" className="mb-3" icon={<UploadOutlined />} onClick={showModal}>
+      <Button
+        type="dashed"
+        variant="solid"
+        className="mb-3"
+        icon={<UploadOutlined />}
+        onClick={showModal}
+      >
         Upload Image
       </Button>
 
@@ -82,29 +88,29 @@ const EditUser = () => {
           selectOneImage={selectOneImage}
         />
       </Modal>
-		<Card title={`Edit user: ${user?.name}`} bordered={false}>
-      <Form form={form} layout="vertical" onFinish={onFinish}>
-        <Form.Item label="Name" name="name">
-          <Input placeholder="Enter name" />
-        </Form.Item>
+      <Card title={`Edit user: ${user?.name}`} bordered={false}>
+        <Form form={form} layout="vertical" onFinish={onFinish}>
+          <Form.Item label="Name" name="name">
+            <Input placeholder="Enter name" />
+          </Form.Item>
 
-        <Form.Item label="Email" name="email">
-          <Input type="text" placeholder="Enter email" />
-        </Form.Item>
+          <Form.Item label="Email" name="email">
+            <Input type="text" placeholder="Enter email" />
+          </Form.Item>
 
-        <Form.Item label="Role" name="role">
-          <Select>
-            <Select.Option value={"member"}>Member</Select.Option>
-            <Select.Option value={"admin"}>Admin</Select.Option>
-          </Select>
-        </Form.Item>
+          <Form.Item label="Role" name="role">
+            <Select>
+              <Select.Option value={"member"}>Member</Select.Option>
+              <Select.Option value={"admin"}>Admin</Select.Option>
+            </Select>
+          </Form.Item>
 
-        <Button type="primary" htmlType="submit">
-          Save
-        </Button>
-      </Form>
-    </Card>
-		</>
+          <Button type="primary" htmlType="submit">
+            Save
+          </Button>
+        </Form>
+      </Card>
+    </>
   );
 };
 

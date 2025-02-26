@@ -4,6 +4,8 @@ import { useMutation } from "react-query";
 import { login } from "../../../sevices/users";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { UsersContext } from "../../../context/usersContext";
 
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
@@ -11,6 +13,7 @@ const { Text, Title, Link } = Typography;
 
 export default function Login() {
   const { token } = useToken();
+  const { setIslogin }: any = useContext(UsersContext) || {};
   const screens = useBreakpoint();
   const navigate = useNavigate();
   const styles: any = {
@@ -70,6 +73,8 @@ export default function Login() {
       toast.success(data?.message);
       localStorage.setItem("token", JSON.stringify(data));
       navigate("/");
+      setIslogin(true);
+      localStorage.setItem("isLogin", "1");
     },
     onError: ({ response }) => {
       toast.error(response?.data?.message);
@@ -117,8 +122,8 @@ export default function Login() {
               rules={[
                 { required: true, message: "Please input your Password!" },
                 {
-                  min: 6,
-                  message: "Password tối thiểu 6 ký tự",
+                  min: 8,
+                  message: "Password tối thiểu 8 ký tự",
                 },
               ]}
             >

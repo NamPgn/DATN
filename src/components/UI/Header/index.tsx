@@ -1,9 +1,9 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SearchUi from "../Search";
-import { isAuthentication } from "../../../common/auth/getToken";
 import AuthHeader from "./auth";
+import { UsersContext } from "../../../context/usersContext";
 
 const Header = () => {
   // Dữ liệu động cho menu
@@ -16,7 +16,7 @@ const Header = () => {
       setData(res.data);
     })();
   }, []);
-  const isAuth = isAuthentication();
+  const { isLogin }: any = useContext(UsersContext) || {};
   const menuItems = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
@@ -180,13 +180,15 @@ const Header = () => {
                       <i className="fa-solid fa-search" />
                     </div>
                     <div className="anUser">
-                      {isAuth ? (
-                        <AuthHeader auths={isAuth} />
-                      ) : (
-                        <Link to={"/auth/login"}>
-                          <i className="fa-solid fa-user" />
-                        </Link>
-                      )}
+                      <div className="anUser">
+                        {isLogin ? (
+                          <AuthHeader />
+                        ) : (
+                          <Link to={"/auth/login"}>
+                            <i className="fa-solid fa-user" />
+                          </Link>
+                        )}
+                      </div>
                     </div>
                     <div className="anCart">
                       <Link to="">
