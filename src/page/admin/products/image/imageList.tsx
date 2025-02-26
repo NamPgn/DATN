@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Image, Tag } from "antd";
-import { Link } from "react-router-dom";
+import { Image } from "antd";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
 import { delImageList, getImageLists } from "../../../../sevices/imageList";
 import MVConfirm from "../../../../components/UI/Core/Confirm";
-import { MyButton } from "../../../../components/UI/Core/Button";
+import { ButtonAdd, MyButton } from "../../../../components/UI/Core/Button";
 import MVTable from "../../../../components/UI/Core/MV/Table";
 import { columnsImageList } from "../../../../constant";
 
@@ -62,11 +61,7 @@ const ImageList = () => {
     });
   return (
     <React.Fragment>
-      <Link to={`/dashboard/image/add`}>
-        <MyButton type="primary" className="mb-3">
-          Add
-        </MyButton>
-      </Link>
+      <ButtonAdd path={`/dashboard/image/add`} />
       <MVTable
         columns={columnsImageList}
         rowSelection={rowSelection}

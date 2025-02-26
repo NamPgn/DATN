@@ -31,6 +31,7 @@ import { COLUMN_TABLE_USERS } from "../../../constant";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import BlockAccountModal from "./components/modalConfirmBlockUser";
+import { ButtonAdd } from "../../../components/UI/Core/Button";
 
 const EmloyeeTable = () => {
   const [page, setPage] = useState(1);
@@ -183,19 +184,17 @@ const EmloyeeTable = () => {
                             <div>Block</div>
                           </Menu.Item>
                         ) : (
-                          ""
+                          <Menu.Item
+                            key="unlock"
+                            onClick={() => {
+                              setSelectedUserId(item.id);
+                              handleUnlockUser();
+                            }}
+                            icon={<UnlockOutlined />}
+                          >
+                            Unlock
+                          </Menu.Item>
                         )}
-
-                        <Menu.Item
-                          key="unlock"
-                          onClick={(e: any) => {
-                            setSelectedUserId(item.id);
-                            handleUnlockUser();
-                          }}
-                          icon={<UnlockOutlined />}
-                        >
-                          Unlock
-                        </Menu.Item>
                       </>
 
                       <Menu.Item key="edit" icon={<EditOutlined />}>
@@ -274,16 +273,7 @@ const EmloyeeTable = () => {
         onCancel={handleCloseModalBlock}
         onSubmit={handleSubmit}
       />
-      <Link to={"/dashboard/users/add"}>
-        <Button
-          color="default"
-          className="mb-3"
-          variant="dashed"
-          icon={<PlusOutlined />}
-        >
-          Add
-        </Button>
-      </Link>
+      <ButtonAdd path={`/dashboard/users/add`} />
       <MVTable
         columns={COLUMN_TABLE_USERS}
         rowSelection={rowSelection}

@@ -443,5 +443,6 @@ export const COLUMN_TABLE_USERS = [
     title: "Action",
     key: "action",
     dataIndex: "action",
+    width: 100,
   },
 ];
