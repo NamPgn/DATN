@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Form, Grid, Input, theme, Typography } from "antd";
 import { MailOutlined, UserOutlined } from "@ant-design/icons";
 import { useMutation } from "react-query";

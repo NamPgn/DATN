@@ -38,7 +38,6 @@ import ProductAdd from "../page/admin/products/add";
 import ProductEdit from "../page/admin/products/edit";
 import CommentDetail from "../page/admin/comments/detail";
 import LazyComponent from "../components/Lazy/LazyComponent";
-import Shop from "../page/shop";
 import AddProductVariantEdit from "../page/admin/products/component/addProductVariantEdit";
 import ProductVariant from "../page/admin/products/variant";
 import EditProductVariant from "../page/admin/products/component/editProductVariantEdit";
@@ -63,6 +62,7 @@ import AddUser from "../page/admin/user/components/add";
 import PrivateRouter from "./security";
 import ForgotPassword from "../page/auth/forgotPassword";
 import ResetPassword from "../page/auth/resetPassword";
+import Shop from "../page/Shop";
 export const routerClient = [
   {
     path: "/",

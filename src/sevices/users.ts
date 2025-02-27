@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import intances, { intancesLocal } from "./instances";
 
 export const login = async (data: any) => {
@@ -47,4 +49,3 @@ export const sendEmailForgotPass = async (data: any) => {
 export const sendResetPS = async (data: any) => {
   return intancesLocal.post("/reset-password", data);
 };
-

@@ -11,6 +11,7 @@ import {
   replyComment,
   searchComment,
   statusComment,
+  statusMutipleComment,
 } from "../../../sevices/comment";
 import { MyButton } from "../../../components/UI/Core/Button";
 import MVConfirm from "../../../components/UI/Core/Confirm";
@@ -19,6 +20,7 @@ import { columnsComments } from "../../../constant";
 const { Option } = Select;
 const CommentAdmin = () => {
   const [page, setPage] = useState(1);
+  const [searchInput, setSearchInput] = useState("");
   const [hiddenComments, setHiddenComments] = useState<Record<string, boolean>>(
     {}
   );
@@ -90,8 +92,8 @@ const CommentAdmin = () => {
   };
 
   const { mutate: updateStatus } = useMutation({
-    mutationFn: async ({ id, isActive }: { id: string; isActive: boolean }) => {
-      return await statusComment(id, isActive);
+    mutationFn: async ({ id, status }: { id: string; status: boolean }) => {
+      return await statusComment(id, status);
     },
     onSuccess: () => {
       toast.success("Cập nhật trạng thái thành công");
@@ -106,7 +108,7 @@ const CommentAdmin = () => {
   const toggleCommentVisibility = (id: string) => {
     setHiddenComments((prev) => {
       const newHiddenState = !prev[id];
-      updateStatus({ id, isActive: !newHiddenState });
+      updateStatus({ id, status: !newHiddenState });
       return { ...prev, [id]: newHiddenState };
     });
   };
@@ -120,14 +122,24 @@ const CommentAdmin = () => {
     const allHidden = selectedRowKeys.every(
       (id: string | number) => hiddenComments[id]
     );
+
     setHiddenComments((prev) => {
       const updatedHidden = { ...prev };
       selectedRowKeys.forEach((id: string | number) => {
         updatedHidden[id] = !allHidden;
-        updateStatus({ id: String(id), isActive: allHidden });
       });
       return updatedHidden;
     });
+
+    statusMutipleComment(selectedRowKeys.map(String), !allHidden)
+      .then(() => {
+        toast.success("Cập nhật trạng thái thành công");
+        refetch();
+      })
+      .catch((error) => {
+        console.error("Lỗi khi cập nhật trạng thái:", error);
+        toast.error("Cập nhật trạng thái thất bại");
+      });
 
     setSelectAllHidden(!allHidden);
   };
@@ -167,6 +179,7 @@ const CommentAdmin = () => {
   };
 
   const handleSearch = () => {
+    setSearchKeyword(searchInput);
     setPage(1);
     refetch();
   };
@@ -175,7 +188,7 @@ const CommentAdmin = () => {
     comments &&
     comments?.data?.data?.data?.map((item: any) => {
       const isHidden =
-        item.isActive === 0 || item.isActive === "0" || item.isActive === false;
+        item.status === 0 || item.status === "0" || item.status === false;
       const isManuallyHidden = hiddenComments[item.id] ?? isHidden;
       return {
         key: item.id,
@@ -195,7 +208,7 @@ const CommentAdmin = () => {
           <Tag color="red">Chưa phản hồi</Tag>
         ),
         is_active:
-          item.isActive == 0 ? (
+          item.status == 0 ? (
             <Tag color="warning">Hidden</Tag>
           ) : (
             <Tag color="success">Active</Tag>
@@ -241,8 +254,8 @@ const CommentAdmin = () => {
       <div className="flex gap-2 mb-4">
         <Input
           placeholder="Nhập từ khóa tìm kiếm..."
-          value={searchKeyword}
-          onChange={(e) => setSearchKeyword(e.target.value)}
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
           style={{ width: "200px" }}
         />
         <Select

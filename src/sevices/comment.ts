@@ -22,16 +22,26 @@ export const delMultipleComments = async (ids: string[]) => {
   });
 };
 
+export const statusComment = async (id: string, status: boolean) => {
+  return intances.patch("/comments/status", {
+    data: { id: [id], status },
+    headers: { "Content-Type": "application/json" },
+  });
+};
+
+export const statusMutipleComment = async (ids: string[], status: boolean) => {
+  return intances.patch("/comments/status", {
+    data: { id: ids, status },
+    headers: { "Content-Type": "application/json" },
+  });
+};
+
 export const hiddenComment = async () => {
   return intances.get("/comments/hidden");
 };
 
 export const searchComment = async (keyword?: string, rating?: number) => {
   return intances.get("/comments/search", { params: { keyword, rating } });
-};
-
-export const statusComment = async (id: string, isActive: boolean) => {
-  return intances.patch("/comments/status", { id, isActive });
 };
 
 export const replyComment = async (id: string, reply: string) => {
