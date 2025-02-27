@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Tag } from "antd";
 import { Link } from "react-router-dom";
-import { MyButton } from "../../../../components/UI/Core/Button";
+import { ButtonAdd, MyButton } from "../../../../components/UI/Core/Button";
 import MVTable from "../../../../components/UI/Core/MV/Table";
 import { columnsATTR, columnsCategory } from "../../../../constant";
 import { useMutation, useQuery } from "react-query";
@@ -92,11 +92,7 @@ const Attribute = () => {
     });
   return (
     <React.Fragment>
-      <Link to={`/dashboard/attribute/add`}>
-        <MyButton type="primary" className="mb-3">
-          Add
-        </MyButton>
-      </Link>
+      <ButtonAdd path={`/dashboard/attribute/add`} />
       <MVTable
         columns={columnsATTR}
         rowSelection={rowSelection}

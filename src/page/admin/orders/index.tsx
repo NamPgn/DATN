@@ -115,7 +115,6 @@ const OrdersAdmin = () => {
           Add order
         </Button>
       </div>
-
       <MVTable
         columns={columnsOrders}
         rowSelection={rowSelection}
