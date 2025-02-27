@@ -15,6 +15,8 @@ import MVTitle from "../../Core/MV/Title";
 import { MVAvatar } from "../../Core/Avatar";
 import { toast } from "react-toastify";
 import { UsersContext } from "../../../../context/usersContext";
+import { useMutation } from "react-query";
+import { logout } from "../../../../sevices/users";
 const AuthHeader = () => {
   const { isLogin, setIslogin, token }: any = useContext(UsersContext) || {};
   const handleCheckCart = () => {
@@ -25,11 +27,22 @@ const AuthHeader = () => {
     // }
   };
   const nav = useNavigate();
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("isLogin");
-    toast.success("Đăng xuất thành công");
+  const { mutate } = useMutation({
+    mutationFn: async () => {
+      return await logout();
+    },
+    onSuccess: () => {
+      toast.success("Đăng xuất thành công");
+      localStorage.removeItem("token");
+      localStorage.removeItem("isLogin");
+    },
+    onError: () => {
+      toast.error("Đăng xuất không thành công");
+    },
+  });
+  const handleLogout = async () => {
     setIslogin(false);
+    mutate();
     nav("/");
   };
 

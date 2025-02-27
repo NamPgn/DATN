@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import intances from "./instances";
 
 export const getVouchers = async (page: number) => {

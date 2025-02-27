@@ -12,11 +12,9 @@ import { Header } from "antd/es/layout/layout";
 import AuthHeader from "../components/UI/Header/auth";
 import PageTitle from "../components/UI/Core/PageTitle";
 import { TableRouterAdminPage } from "../router";
-import { isAuthentication } from "../common/auth/getToken";
 const { Content, Sider, Footer } = Layout;
 
 const LayoutAdmin = () => {
-  const isAuth = isAuthentication();
   const items2: any = [
     {
       key: "group-application",

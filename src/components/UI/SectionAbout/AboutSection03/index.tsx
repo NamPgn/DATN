@@ -1,4 +1,55 @@
 const AboutSection03 = () => {
+  const teamMembers = [
+    {
+      id: 1,
+      name: "Lê Văn Thành",
+      role: "Founder & CEO",
+      image: "/assets/images/ceo/986ca0d7-2b80-42cd-ba0d-e4c37220b49c.jpg",
+      socials: ["fa-facebook-f", "fa-twitter", "fa-linkedin-in"],
+    },
+    {
+      id: 2,
+      name: "Phương Minh Hoàng",
+      role: "CTO",
+      image: "/assets/images/ceo/16dfbfd4-5e5f-4b12-8f62-572d860d03fd.jpg",
+      socials: ["fa-facebook-f", "fa-twitter"],
+    },
+    // {
+    //   id: 3,
+    //   name: "Phương Minh Hoàng",
+    //   role: "CTO",
+    //   image: "/assets/images/ceo/2.jpg",
+    //   socials: ["fa-facebook-f", "fa-twitter"],
+    // },
+    // {
+    //   id: 4,
+    //   name: "Nguyễn Hải Lâm",
+    //   role: "CTO",
+    //   image: "/assets/images/ceo/2.jpg",
+    //   socials: ["fa-facebook-f", "fa-twitter"],
+    // },
+    // {
+    //   id: 5,
+    //   name: "Thiện",
+    //   role: "CTO",
+    //   image: "/assets/images/ceo/2.jpg",
+    //   socials: ["fa-facebook-f", "fa-twitter"],
+    // },
+    // {
+    //   id: 7,
+    //   name: "Dương Tú",
+    //   role: "CTO",
+    //   image: "/assets/images/ceo/2.jpg",
+    //   socials: ["fa-facebook-f", "fa-twitter"],
+    // },
+    {
+      id: 6,
+      name: "Phạm Giang Nam",
+      role: "Lead Designer",
+      image: "/assets/images/ceo/cc07785f-d7b6-49f5-8a91-97fa8f9b7bf7.jpg",
+      socials: ["fa-facebook-f", "fa-linkedin-in"],
+    },
+  ];
   return (
     <section className="aboutPageSection03">
       <div className="container">
@@ -13,289 +64,38 @@ const AboutSection03 = () => {
             <div className="teamCarousel owl-carousel owl-loaded owl-drag">
               <div className="owl-stage-outer">
                 <div
-                  className="owl-stage"
                   style={{
                     transform: "translate3d(0px, 0px, 0px)",
                     transition: "all",
                     width: 3960,
                   }}
                 >
-                  <div
-                    className="owl-item active"
-                    style={{ width: 306, marginRight: 24 }}
-                  >
-                    <div className="teamMember01">
-                      <img src="/assets/images/team/1.jpg" alt="Orbto Team" />
-                      <div className="tm01Info">
-                        <h3>Mike Anderson</h3>
-                        <span>Founder &amp; CEO</span>
-                      </div>
-                      <div className="tm01Social">
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-facebook-f" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-twitter" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-linkedin-in" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="owl-item active"
-                    style={{ width: 306, marginRight: 24 }}
-                  >
-                    <div className="teamMember01">
-                      <img src="/assets/images/team/2.jpg" alt="Orbto Team" />
-                      <div className="tm01Info">
-                        <h3>Michel Jason</h3>
-                        <span>Sr. Developer</span>
-                      </div>
-                      <div className="tm01Social">
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-facebook-f" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-twitter" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-linkedin-in" />
-                        </a>
+                  {teamMembers.map((member) => (
+                    <div
+                      key={member.id}
+                      className="owl-item active"
+                      style={{ width: 306, marginRight: 24, height: 400 }}
+                    >
+                      <div className="teamMember01" style={{ height: "100%" }}>
+                        <img
+                          style={{ height: "100%", objectFit: "cover" }}
+                          src={member.image}
+                          alt={member.name}
+                        />
+                        <div className="tm01Info">
+                          <h3>{member.name}</h3>
+                          <span>{member.role}</span>
+                        </div>
+                        <div className="tm01Social">
+                          {member.socials.map((icon, index) => (
+                            <a key={index} href="#">
+                              <i className={`fa-brands ${icon}`} />
+                            </a>
+                          ))}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div
-                    className="owl-item active"
-                    style={{ width: 306, marginRight: 24 }}
-                  >
-                    <div className="teamMember01">
-                      <img src="/assets/images/team/3.jpg" alt="Orbto Team" />
-                      <div className="tm01Info">
-                        <h3>Ellyse Perry</h3>
-                        <span>Digital Marketer</span>
-                      </div>
-                      <div className="tm01Social">
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-facebook-f" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-twitter" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-linkedin-in" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="owl-item active"
-                    style={{ width: 306, marginRight: 24 }}
-                  >
-                    <div className="teamMember01">
-                      <img src="/assets/images/team/4.jpg" alt="Orbto Team" />
-                      <div className="tm01Info">
-                        <h3>Shane Watson</h3>
-                        <span>Graphic Designer</span>
-                      </div>
-                      <div className="tm01Social">
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-facebook-f" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-twitter" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-linkedin-in" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="owl-item"
-                    style={{ width: 306, marginRight: 24 }}
-                  >
-                    <div className="teamMember01">
-                      <img src="/assets/images/team/5.jpg" alt="Orbto Team" />
-                      <div className="tm01Info">
-                        <h3>Mike Anderson</h3>
-                        <span>Founder &amp; CEO</span>
-                      </div>
-                      <div className="tm01Social">
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-facebook-f" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-twitter" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-linkedin-in" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="owl-item"
-                    style={{ width: 306, marginRight: 24 }}
-                  >
-                    <div className="teamMember01">
-                      <img src="/assets/images/team/6.jpg" alt="Orbto Team" />
-                      <div className="tm01Info">
-                        <h3>Michel Jason</h3>
-                        <span>Sr. Developer</span>
-                      </div>
-                      <div className="tm01Social">
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-facebook-f" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-twitter" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-linkedin-in" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="owl-item"
-                    style={{ width: 306, marginRight: 24 }}
-                  >
-                    <div className="teamMember01">
-                      <img src="/assets/images/team/7.jpg" alt="Orbto Team" />
-                      <div className="tm01Info">
-                        <h3>Ellyse Perry</h3>
-                        <span>Digital Marketer</span>
-                      </div>
-                      <div className="tm01Social">
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-facebook-f" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-twitter" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-linkedin-in" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="owl-item"
-                    style={{ width: 306, marginRight: 24 }}
-                  >
-                    <div className="teamMember01">
-                      <img src="/assets/images/team/8.jpg" alt="Orbto Team" />
-                      <div className="tm01Info">
-                        <h3>Shane Watson</h3>
-                        <span>Graphic Designer</span>
-                      </div>
-                      <div className="tm01Social">
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-facebook-f" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-twitter" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-linkedin-in" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="owl-item"
-                    style={{ width: 306, marginRight: 24 }}
-                  >
-                    <div className="teamMember01">
-                      <img src="/assets/images/team/9.jpg" alt="Orbto Team" />
-                      <div className="tm01Info">
-                        <h3>Mike Anderson</h3>
-                        <span>Founder &amp; CEO</span>
-                      </div>
-                      <div className="tm01Social">
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-facebook-f" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-twitter" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-linkedin-in" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="owl-item"
-                    style={{ width: 306, marginRight: 24 }}
-                  >
-                    <div className="teamMember01">
-                      <img src="/assets/images/team/10.jpg" alt="Orbto Team" />
-                      <div className="tm01Info">
-                        <h3>Michel Jason</h3>
-                        <span>Sr. Developer</span>
-                      </div>
-                      <div className="tm01Social">
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-facebook-f" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-twitter" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-linkedin-in" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="owl-item"
-                    style={{ width: 306, marginRight: 24 }}
-                  >
-                    <div className="teamMember01">
-                      <img src="/assets/images/team/11.jpg" alt="Orbto Team" />
-                      <div className="tm01Info">
-                        <h3>Ellyse Perry</h3>
-                        <span>Digital Marketer</span>
-                      </div>
-                      <div className="tm01Social">
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-facebook-f" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-twitter" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-linkedin-in" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    className="owl-item"
-                    style={{ width: 306, marginRight: 24 }}
-                  >
-                    <div className="teamMember01">
-                      <img src="/assets/images/team/12.jpg" alt="Orbto Team" />
-                      <div className="tm01Info">
-                        <h3>Shane Watson</h3>
-                        <span>Graphic Designer</span>
-                      </div>
-                      <div className="tm01Social">
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-facebook-f" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-twitter" />
-                        </a>
-                        <a href="javascript:void(0);">
-                          <i className="fa-brands fa-linkedin-in" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
               <div className="owl-nav">

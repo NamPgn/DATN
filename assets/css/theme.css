@@ -1451,7 +1451,7 @@
     -webkit-transform: translateY(-50%);
 }
 
-.pi01Actions a {
+.pi01Actions div {
     width: 48px;
     height: 48px;
     background: #FFF;
@@ -1465,13 +1465,13 @@
     visibility: hidden;
 }
 
-.pi01Actions a.pi01QuickView i {
+.pi01Actions div.pi01QuickView i {
     transform: rotate(45deg);
     -moz-transform: rotate(45deg);
     -webkit-transform: rotate(45deg);
 }
 
-.pi01Actions a:nth-child(01) {
+.pi01Actions div:nth-child(01) {
     -webkit-transition: transform 400ms cubic-bezier(0.445, 0.05, 0.55, 0.95), opacity ease 350ms, visibility ease 350ms, background ease 350ms, color ease 350ms, border ease 350ms;
     -moz-transition: transform 400ms cubic-bezier(0.445, 0.05, 0.55, 0.95), opacity ease 350ms, visibility ease 350ms, background ease 350ms, color ease 350ms, border ease 350ms;
     -ms-transition: transform 400ms cubic-bezier(0.445, 0.05, 0.55, 0.95), opacity ease 350ms, visibility ease 350ms, background ease 350ms, color ease 350ms, border ease 350ms;
@@ -1485,7 +1485,7 @@
     -o-transform: translate3d(0, 60px, 0);
 }
 
-.pi01Actions a:nth-child(02) {
+.pi01Actions div:nth-child(02) {
     -webkit-transition: transform 500ms cubic-bezier(0.445, 0.05, 0.55, 0.95), opacity ease 350ms, visibility ease 350ms, background ease 350ms, color ease 350ms, border ease 350ms;
     -moz-transition: transform 500ms cubic-bezier(0.445, 0.05, 0.55, 0.95), opacity ease 350ms, visibility ease 350ms, background ease 350ms, color ease 350ms, border ease 350ms;
     -ms-transition: transform 500ms cubic-bezier(0.445, 0.05, 0.55, 0.95), opacity ease 350ms, visibility ease 350ms, background ease 350ms, color ease 350ms, border ease 350ms;
@@ -1499,7 +1499,7 @@
     -o-transform: translate3d(0, 60px, 0);
 }
 
-.pi01Actions a:nth-child(03) {
+.pi01Actions div:nth-child(03) {
     -webkit-transition: transform 600ms cubic-bezier(0.445, 0.05, 0.55, 0.95), opacity ease 350ms, visibility ease 350ms, background ease 350ms, color ease 350ms, border ease 350ms;
     -moz-transition: transform 600ms cubic-bezier(0.445, 0.05, 0.55, 0.95), opacity ease 350ms, visibility ease 350ms, background ease 350ms, color ease 350ms, border ease 350ms;
     -ms-transition: transform 600ms cubic-bezier(0.445, 0.05, 0.55, 0.95), opacity ease 350ms, visibility ease 350ms, background ease 350ms, color ease 350ms, border ease 350ms;
@@ -1513,7 +1513,7 @@
     -o-transform: translate3d(0, 60px, 0);
 }
 
-.pi01Actions a:nth-child(04) {
+.pi01Actions div:nth-child(04) {
     -webkit-transition: transform 700ms cubic-bezier(0.445, 0.05, 0.55, 0.95), opacity ease 350ms, visibility ease 350ms, background ease 350ms, color ease 350ms, border ease 350ms;
     -moz-transition: transform 700ms cubic-bezier(0.445, 0.05, 0.55, 0.95), opacity ease 350ms, visibility ease 350ms, background ease 350ms, color ease 350ms, border ease 350ms;
     -ms-transition: transform 700ms cubic-bezier(0.445, 0.05, 0.55, 0.95), opacity ease 350ms, visibility ease 350ms, background ease 350ms, color ease 350ms, border ease 350ms;
@@ -1527,15 +1527,15 @@
     -o-transform: translate3d(0, 60px, 0);
 }
 
-.productItem01:hover .pi01Actions a:nth-child(01),
-.productItem01:hover .pi01Actions a:nth-child(02),
-.productItem01:hover .pi01Actions a:nth-child(03),
-.productItem01:hover .pi01Actions a:nth-child(04),
+.productItem01:hover .pi01Actions div:nth-child(01),
+.productItem01:hover .pi01Actions div:nth-child(02),
+.productItem01:hover .pi01Actions div:nth-child(03),
+.productItem01:hover .pi01Actions div:nth-child(04),
 
-.productItem02:hover .pi01Actions a:nth-child(01),
-.productItem02:hover .pi01Actions a:nth-child(02),
-.productItem02:hover .pi01Actions a:nth-child(03),
-.productItem02:hover .pi01Actions a:nth-child(04) {
+.productItem02:hover .pi01Actions div:nth-child(01),
+.productItem02:hover .pi01Actions div:nth-child(02),
+.productItem02:hover .pi01Actions div:nth-child(03),
+.productItem02:hover .pi01Actions div:nth-child(04) {
     opacity: 1;
     visibility: visible;
     transform: translate3d(0, 0, 0);
@@ -1545,7 +1545,7 @@
     -o-transform: translate3d(0, 0, 0);
 }
 
-.pi01Actions a:hover {
+.pi01Actions div:hover {
     background: #7b9496;
     color: #FFF;
 }
@@ -4808,11 +4808,11 @@
     margin: 0 0 16px;
 }
 
-.pcMeta p a {
+.pcMeta p div {
     color: inherit;
 }
 
-.pcMeta p a:hover {
+.pcMeta p div:hover {
     color: #9ebbbd;
 }
 

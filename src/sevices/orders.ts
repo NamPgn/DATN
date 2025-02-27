@@ -9,7 +9,6 @@ export const getOrder = async (id: any) => {
 };
 
 export const updateOrders = async (data: any) => {
-  console.log(data);
   return intances.patch("/orders/" + Number(data?.id), data);
 };
 
