@@ -8,7 +8,7 @@ import { useMutation, useQuery } from "react-query";
 import { delCategorys, getCategorys } from "../../../sevices/category";
 import MVConfirm from "../../../components/UI/Core/Confirm";
 import { toast } from "react-toastify";
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 
 const CategoryAdmin = () => {
   const [page, setPage] = useState(1);
@@ -31,7 +31,7 @@ const CategoryAdmin = () => {
       refetch();
     },
     onError: () => {
-      toast.success("Xóa không thành công");
+      toast.error("Xóa không thành công");
     },
   });
   const rowSelection = {
@@ -103,7 +103,7 @@ const CategoryAdmin = () => {
   };
   const data =
     category &&
-    category?.data?.data?.map((item: any, index: number) => {
+    category?.data?.data?.map((item: any) => {
       return {
         key: item.id,
         child: item.children,

@@ -121,6 +121,7 @@ const HiddenComment = () => {
       content: <span className="text-gray-400">{item.content}</span>,
       product_id: item.product_id,
       rating: item.rating,
+      stt: item.id,
       user_id: item.user_id,
       reply: item.reply ? (
         <Tag color="blue">{item.reply}</Tag>

@@ -16,6 +16,11 @@ import { MyButton } from "../../../components/UI/Core/Button";
 import MVConfirm from "../../../components/UI/Core/Confirm";
 import MVTable from "../../../components/UI/Core/MV/Table";
 import { columnsComments } from "../../../constant";
+import {
+  DeleteOutlined,
+  EyeInvisibleOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
 const { Option } = Select;
 const CommentAdmin = () => {
   const [page, setPage] = useState(1);
@@ -218,13 +223,20 @@ const CommentAdmin = () => {
     });
   return (
     <React.Fragment>
-      <div className="flex gap-2 mb-4">
+      <div className="d-flex gap-2 mb-4">
         <Input
           placeholder="Nhập từ khóa tìm kiếm..."
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           style={{ width: "200px" }}
         />
+        <MyButton
+          type="primary"
+          icon={<SearchOutlined />}
+          onClick={handleSearch}
+        >
+          Tìm kiếm
+        </MyButton>
         <Select
           placeholder="Chọn rating"
           value={searchRating}
@@ -242,15 +254,20 @@ const CommentAdmin = () => {
           Tìm kiếm
         </MyButton>
       </div>
-      <div className="mb-3 mr-4">
+      <div className="mb-3">
         <MyButton
-          danger
-          className="mb-3 ml-2"
+          color="default"
+          variant="dashed"
+          icon={<DeleteOutlined />}
           onClick={handleDeleteSelectedData}
         >
           Delete Selected
         </MyButton>
-        <MyButton danger className="ml-2" onClick={toggleSelectedComments}>
+        <MyButton
+          icon={<EyeInvisibleOutlined />}
+          className="ml-2"
+          onClick={toggleSelectedComments}
+        >
           {selectAllHidden
             ? "Hiện các comment đã chọn"
             : "Ẩn các comment đã chọn"}
@@ -259,6 +276,7 @@ const CommentAdmin = () => {
           <MyButton type="default">Danh sách comment ẩn</MyButton>
         </Link>
       </div>
+
       <MVTable
         columns={columnsComments}
         rowSelection={rowSelection}
