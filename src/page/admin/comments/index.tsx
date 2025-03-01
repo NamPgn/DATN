@@ -10,7 +10,6 @@ import {
   getComments,
   replyComment,
   searchComment,
-  statusComment,
   statusMutipleComment,
 } from "../../../sevices/comment";
 import { MyButton } from "../../../components/UI/Core/Button";
@@ -74,7 +73,7 @@ const CommentAdmin = () => {
     },
     onSuccess: () => {
       toast.success("Xóa nhiều comment thành công");
-      setSelectedRowKeys([]); // Xóa selection sau khi xóa thành công
+      setSelectedRowKeys([]);
       refetch();
     },
     onError: (error) => {
@@ -89,28 +88,6 @@ const CommentAdmin = () => {
       return;
     }
     deleteMultiple(selectedRowKeys);
-  };
-
-  const { mutate: updateStatus } = useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: boolean }) => {
-      return await statusComment(id, status);
-    },
-    onSuccess: () => {
-      toast.success("Cập nhật trạng thái thành công");
-      refetch();
-    },
-    onError: (error) => {
-      console.error("Lỗi khi cập nhật trạng thái:", error);
-      toast.error("Cập nhật trạng thái thất bại");
-    },
-  });
-
-  const toggleCommentVisibility = (id: string) => {
-    setHiddenComments((prev) => {
-      const newHiddenState = !prev[id];
-      updateStatus({ id, status: !newHiddenState });
-      return { ...prev, [id]: newHiddenState };
-    });
   };
 
   const toggleSelectedComments = () => {
@@ -130,8 +107,11 @@ const CommentAdmin = () => {
       });
       return updatedHidden;
     });
-
-    statusMutipleComment(selectedRowKeys.map(String), !allHidden)
+    const data = {
+      id: selectedRowKeys,
+      status: !!allHidden,
+    };
+    statusMutipleComment(data)
       .then(() => {
         toast.success("Cập nhật trạng thái thành công");
         refetch();
@@ -215,24 +195,11 @@ const CommentAdmin = () => {
           ),
         action: (
           <div className="d-flex gap-1">
-            {/* <Link to={`/dashboard/comments/edit/${item.id}`}>
-              <MyButton type="primary">Edit</MyButton>
-            </Link> */}
             <MVConfirm title="Có xóa không" onConfirm={() => mutate(item.id)}>
               <MyButton danger className="ml-2">
                 Delete
               </MyButton>
             </MVConfirm>
-            {/* <Link to={`/dashboard/commentsValue/${item.id}`}>
-              <MyButton>Comments Value</MyButton>
-            </Link> */}
-            <MyButton
-              danger={isManuallyHidden}
-              onClick={() => toggleCommentVisibility(item.id)}
-              type="primary"
-            >
-              {isManuallyHidden ? "Hiện" : "Ẩn"}
-            </MyButton>
             <Link
               to={`/dashboard/comments/${item.id}`}
               className="text-blue-500"
@@ -275,7 +242,7 @@ const CommentAdmin = () => {
           Tìm kiếm
         </MyButton>
       </div>
-      <div className="mb-3">
+      <div className="mb-3 mr-4">
         <MyButton
           danger
           className="mb-3 ml-2"
@@ -288,6 +255,9 @@ const CommentAdmin = () => {
             ? "Hiện các comment đã chọn"
             : "Ẩn các comment đã chọn"}
         </MyButton>
+        <Link to="/dashboard/comments/hidden">
+          <MyButton type="default">Danh sách comment ẩn</MyButton>
+        </Link>
       </div>
       <MVTable
         columns={columnsComments}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import intances from "./instances";
 
 export const getComments = async (page: number) => {
@@ -22,18 +23,9 @@ export const delMultipleComments = async (ids: string[]) => {
   });
 };
 
-export const statusComment = async (id: string, status: boolean) => {
-  return intances.patch("/comments/status", {
-    data: { id: [id], status },
-    headers: { "Content-Type": "application/json" },
-  });
-};
-
-export const statusMutipleComment = async (ids: string[], status: boolean) => {
-  return intances.patch("/comments/status", {
-    data: { id: ids, status },
-    headers: { "Content-Type": "application/json" },
-  });
+export const statusMutipleComment = async (data: any) => {
+  console.log(data);
+  return intances.patch("/comments/status", data);
 };
 
 export const hiddenComment = async () => {

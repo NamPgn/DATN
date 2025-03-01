@@ -63,6 +63,7 @@ import PrivateRouter from "./security";
 import ForgotPassword from "../page/auth/forgotPassword";
 import ResetPassword from "../page/auth/resetPassword";
 import Shop from "../page/Shop";
+import HiddenComment from "../page/admin/comments/hidden";
 export const routerClient = [
   {
     path: "/",
@@ -216,6 +217,10 @@ export const routerClient = [
       {
         path: "comments/:id",
         element: <CommentDetail />,
+      },
+      {
+        path: "comments/hidden",
+        element: <HiddenComment />,
       },
       {
         path: "product/:id/variants",
