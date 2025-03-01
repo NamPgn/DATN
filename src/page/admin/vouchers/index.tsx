@@ -114,6 +114,7 @@ const VoucherAdmin = () => {
         description: item.description,
         discount_percent: item.discount_percent,
         max_discount_amount: item.max_discount_amount,
+        type: item.type,
         min_product_price: item.min_product_price,
         amount: item.amount,
         start_date: item.start_date,

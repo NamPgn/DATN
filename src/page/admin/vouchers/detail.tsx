@@ -33,6 +33,9 @@ const VoucherDetail = () => {
         <strong>Max Discount Amount:</strong> {voucher?.max_discount_amount}
       </p>
       <p>
+        <strong>Type:</strong> {voucher?.type}
+      </p>
+      <p>
         <strong>Min Product Price:</strong> {voucher?.min_product_price}
       </p>
       <p>
