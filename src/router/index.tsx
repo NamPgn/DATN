@@ -63,6 +63,10 @@ import AddUser from "../page/admin/user/components/add";
 import PrivateRouter from "./security";
 import ForgotPassword from "../page/auth/forgotPassword";
 import ResetPassword from "../page/auth/resetPassword";
+import AccountSetting from "../page/auth/account";
+import AddOrder from "../page/admin/orders/components/add";
+import SendOrder from "../page/admin/orders/components/send";
+
 export const routerClient = [
   {
     path: "/",
@@ -99,6 +103,10 @@ export const routerClient = [
       {
         path: "/product/detail/:id",
         element: <ProductDetail />,
+      },
+      {
+        path: "/profile",
+        element: <AccountSetting />,
       },
     ],
   },
@@ -244,8 +252,16 @@ export const routerClient = [
         element: <OrdersDetail />,
       },
       {
+        path: "orders/add",
+        element: <AddOrder />,
+      },
+      {
         path: "orders/edit/:id",
         element: <EditOrder />,
+      },
+      {
+        path: "orders/send/:id",
+        element: <SendOrder />,
       },
       {
         path: "vouchers/:id",
@@ -358,13 +374,6 @@ export const TableRouterAdminPage = [
     name: "Orders",
     icon: <BorderBottomOutlined />,
     path: "/dashboard/orders",
-    children: [
-      {
-        path: "/dashboard/category/deleted",
-        icon: <ControlOutlined />,
-        name: "Send Orders",
-      },
-    ],
   },
   {
     path: "/dashboard/product/image",

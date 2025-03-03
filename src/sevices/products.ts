@@ -4,6 +4,10 @@ export const getProducts = async (page: number) => {
   return intances.get("/products?page=" + page);
 };
 
+export const getProductsOrder = async (page: number) => {
+  return intances.get("/list_product_order?page=" + page);
+};
+
 export const getProduct = async (id: any) => {
   return intances.get("/products/" + id);
 };

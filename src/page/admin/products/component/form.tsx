@@ -147,6 +147,7 @@ const ProductForm = ({
       main_image: selectOneImage?.id,
       images: selectImage.map((item: any) => item.id),
       short_description: val.short_description,
+      weight: val.weight,
       description: isEditing
         ? val.description !== dataEdit.description
           ? val.description?.level?.content
@@ -272,7 +273,17 @@ const ProductForm = ({
         <Form.Item name="short_description" label="Mô tả ngắn">
           <Input className="w-50" placeholder="Mô tả ngắn" />
         </Form.Item>
-
+        <Form.Item
+          label="Cân nặng"
+          name="weight"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <InputNumber min={0} max={50000} placeholder="100gam" />
+        </Form.Item>
         <Form.Item label="Category Id" name="categories">
           <Select
             className="w-50"

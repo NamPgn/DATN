@@ -1,33 +1,16 @@
-import { useEffect } from "react";
-import { Form, Input, Button, Card, Select, Spin } from "antd";
+import { Form, Input, Button, Card, Spin } from "antd";
 import { useMutation, useQuery } from "react-query";
-import { getOrder, updateOrders } from "../../../../sevices/orders";
 import { useParams } from "react-router-dom";
-import { STATUSOPTIONS } from "../../../../constant";
+import { getOrder, updateOrders } from "../../../../sevices/orders";
 import { toast } from "react-toastify";
+import { EditOutlined } from "@ant-design/icons";
 
 const EditOrder = () => {
-  const { id } = useParams();
   const [form] = Form.useForm();
-
-  const { data: orderGet, isLoading } = useQuery(["order", id], () =>
-    getOrder(id!)
-  );
-
-  const order = orderGet?.data?.data;
-
-  useEffect(() => {
-    if (order) {
-      form.setFieldsValue(order);
-    }
-  }, [order, form]);
-
-  const currentStatus = Number(order?.stt_track);
-
-  const allowedNextStatus =
-    STATUSOPTIONS.find((status) => Number(status.id) === currentStatus)?.next ||
-    [];
-  const { mutate } = useMutation({
+  const { id } = useParams();
+  const { data, isLoading } = useQuery(["order", id], () => getOrder(id!));
+  const orderData = data?.data?.data;
+  const { mutate: mutate } = useMutation({
     mutationFn: async (data: any) => {
       return await updateOrders(data);
     },
@@ -35,107 +18,66 @@ const EditOrder = () => {
       toast.success("Sửa thành công");
     },
     onError: () => {
-      toast.error("Sửa không thành công");
+      toast.error("Sửa thất bại");
     },
   });
   const onFinish = (values: any) => {
     const data = {
       id: id,
-      ...values,
+      o_name: values.o_name,
+      o_address: values.o_address,
+      o_phone: values.o_phone,
+      o_mail: values.o_mail,
     };
     mutate(data);
   };
-
-  if (isLoading) {
-    return <Spin />;
-  }
+  if (isLoading) return <Spin />;
   return (
-    <Card title={`Edit Order: ${order?.code}`} bordered={false}>
-      <Form form={form} layout="vertical" onFinish={onFinish}>
-        <Form.Item
-          label="User ID"
-          name="user_id"
-          rules={[{ required: true, message: "User ID is required" }]}
-        >
-          <Input placeholder="Enter User ID" />
+    <Card title={`Chỉnh sửa đơn hàng: ${orderData?.code}`} bordered={false}>
+      <Form
+        form={form}
+        layout="vertical"
+        initialValues={orderData}
+        onFinish={onFinish}
+      >
+        <Form.Item label="Tên khách hàng" name="o_name">
+          <Input />
         </Form.Item>
-
-        <Form.Item label="Code" name="code">
-          <Input placeholder="Enter Order Code" />
+        <Form.Item label="Số điện thoại" name="o_phone">
+          <Input />
         </Form.Item>
-
-        <Form.Item label="Total Amount" name="total_amount">
-          <Input type="number" placeholder="Enter Total Amount" />
-        </Form.Item>
-
-        <Form.Item label="Discount Amount" name="discount_amount">
-          <Input type="number" placeholder="Enter Discount Amount" />
-        </Form.Item>
-
-        <Form.Item label="Final Amount" name="final_amount">
-          <Input type="number" placeholder="Enter Final Amount" />
-        </Form.Item>
-
-        <Form.Item label="Payment Method" name="payment_method">
-          <Select placeholder="Select Payment Method">
-            <Select.Option value="credit-card">Credit Card</Select.Option>
-            <Select.Option value="e-wallets">E-Wallets</Select.Option>
-            <Select.Option value="bank-transfer">Bank Transfer</Select.Option>
-          </Select>
-        </Form.Item>
-
-        <Form.Item label="Shipping Cost" name="shipping">
-          <Input type="number" placeholder="Enter Shipping Cost" />
-        </Form.Item>
-
-        <Form.Item label="Order Name" name="o_name">
-          <Input placeholder="Enter Order Name" />
-        </Form.Item>
-
-        <Form.Item label="Address" name="o_address">
-          <Input.TextArea placeholder="Enter Address" />
-        </Form.Item>
-
-        <Form.Item label="Phone" name="o_phone">
-          <Input placeholder="Enter Phone Number" />
-        </Form.Item>
-
         <Form.Item label="Email" name="o_mail">
-          <Input type="email" placeholder="Enter Email" />
+          <Input />
         </Form.Item>
-
-        <Form.Item label="Tracking Status" name="stt_track">
-          <Select>
-            {STATUSOPTIONS.map((status) => {
-              return (
-                <Select.Option
-                  key={status.id}
-                  value={Number(status.id)}
-                  disabled={
-                    !allowedNextStatus.includes(status.id) &&
-                    Number(status.id) !== currentStatus
-                  }
-                >
-                  {status.name}
-                </Select.Option>
-              );
-            })}
-          </Select>
-        </Form.Item>
-
-        <Form.Item label="Payment Status" name="stt_payment">
-          <Select defaultValue={order?.stt_payment }>
-            <Select.Option value={1}>Chưa Thanh Toán</Select.Option>
-            <Select.Option value={2}>Đã Thanh Toán</Select.Option>
-          </Select>
-        </Form.Item>
-
-        <Form.Item label="Created At" name="created_at">
+        <Form.Item label="Mã đơn hàng" name="code">
           <Input disabled />
         </Form.Item>
-
-        <Button type="primary" htmlType="submit">
-          Save
+        <Form.Item label="Phương thức thanh toán" name="payment_method">
+          <Input disabled />
+        </Form.Item>
+        <Form.Item label="Số tiền tổng" name="total_amount">
+          <Input disabled />
+        </Form.Item>
+        <Form.Item label="Phí vận chuyển" name="shipping">
+          <Input disabled />
+        </Form.Item>
+        <Form.Item label="Ghi chú" name="note">
+          <Input disabled />
+        </Form.Item>
+        <Form.Item
+          label="Địa chỉ"
+          name="o_address"
+          rules={[{ required: true, message: "Vui lòng nhập địa chỉ mới!" }]}
+        >
+          <Input />
+        </Form.Item>
+        <Button
+          color="blue"
+          icon={<EditOutlined />}
+          variant="filled"
+          htmlType="submit"
+        >
+          Cập nhật
         </Button>
       </Form>
     </Card>

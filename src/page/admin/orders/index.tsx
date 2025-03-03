@@ -3,12 +3,18 @@ import React, { useState } from "react";
 import MVTable from "../../../components/UI/Core/MV/Table";
 
 import { useMutation, useQuery } from "react-query";
-import { MyButton } from "../../../components/UI/Core/Button";
+import { ButtonAdd, MyButton } from "../../../components/UI/Core/Button";
 import { Link } from "react-router-dom";
 import { Button, Modal, Popconfirm } from "antd";
 import { toast } from "react-toastify";
 import { delOrders, getOrders } from "../../../sevices/orders";
 import { columnsOrders } from "../../../constant";
+import {
+  DeleteFilled,
+  EditOutlined,
+  EyeOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 
 const OrdersAdmin = () => {
   const [page, setPage] = useState(1);
@@ -85,7 +91,9 @@ const OrdersAdmin = () => {
         action: (
           <div className="d-flex gap-2">
             <Link to={`/dashboard/orders/${item.id}`} className="text-blue-500">
-              <MyButton type="dashed">Detail</MyButton>
+              <MyButton icon={<EyeOutlined />} type="dashed">
+                Detail
+              </MyButton>
             </Link>
             <Popconfirm
               title="Bạn có chắc chắn muốn xóa ?"
@@ -93,15 +101,21 @@ const OrdersAdmin = () => {
               okText="Yes"
               cancelText="No"
             >
-              <MyButton type="primary" danger>
+              <MyButton icon={<DeleteFilled />} type="primary" danger>
                 Delete
               </MyButton>
             </Popconfirm>
 
             <Link to={`/dashboard/orders/edit/${item.id}`}>
-              <MyButton type="primary" onClick={() => showEditorderModal(item)}>
+              <Button icon={<EditOutlined />} color="blue" variant="filled">
                 Edit
-              </MyButton>
+              </Button>
+            </Link>
+
+            <Link to={`/dashboard/orders/send/${item.id}`}>
+              <Button icon={<PlusOutlined />} color="green" variant="text">
+                Send
+              </Button>
             </Link>
           </div>
         ),
@@ -110,11 +124,8 @@ const OrdersAdmin = () => {
 
   return (
     <React.Fragment>
-      <div className="flex">
-        <Button type="primary" onClick={showAddorderModal} className="mb-3">
-          Add order
-        </Button>
-      </div>
+      <ButtonAdd path={`/dashboard/orders/add`} />
+
       <MVTable
         columns={columnsOrders}
         rowSelection={rowSelection}

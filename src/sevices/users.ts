@@ -52,3 +52,7 @@ export const sendResetPS = async (data: any) => {
 export const logout = async () => {
   return intancesLogout.post("/logout", null);
 };
+
+export const getUserId = async (id: any) => {
+  return intancesLogout.get("/admin/users/" + id);
+};
