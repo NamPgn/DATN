@@ -1,104 +1,71 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Product } from "../../../constant";
+import { getHomes } from "../../../sevices/home";
 
 const ProductSale = () => {
-  const products = [
-    {
-      id: 1,
-      name: "Men’s blue cotton t-shirt",
-      price: "$49",
-      oldPrice: "$60",
-      image1: "/assets/images/products/1.jpg",
-      image2: "/assets/images/products/1.1.jpg",
-      labels: ["- $49", "Sale"],
-      reviews: 10,
-    },
-    {
-      id: 2,
-      name: "Ulina black clean t-shirt",
-      price: "$14",
-      oldPrice: "$30",
-      image1: "/assets/images/products/2.jpg",
-      image2: "/assets/images/products/2.1.jpg",
-      labels: ["Hot"],
-      reviews: 10,
-    },
-  ];
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await getHomes(); // Gọi API lấy sản phẩm mới nhất
+        setProducts(response.data);
+      } catch (error) {
+        console.error("Lỗi khi lấy danh sách sản phẩm:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   return (
     <section className="latestArrivalSection">
       <div className="container">
-        <div className="row">
-          <div className="col-lg-12">
-            <h2 className="secTitle">Latest Arrival</h2>
-            <p className="secDesc">Showing our latest arrival on this summer</p>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-lg-12">
-            <div className="productCarousel owl-carousel owl-loaded owl-drag">
-              <div className="owl-stage-outer">
-                {products.map((product) => (
-                  <div
-                    key={product.id}
-                    className={`owl-item active ${
-                      !product.reviews ? "pi01NoRating" : ""
-                    }`}
-                    style={{ width: 306, marginRight: 24 }}
-                  >
-                    <div className="productItem01">
-                      <div className="pi01Thumb">
-                        <img src={product.image1} alt={product.name} />
-                        <img src={product.image2} alt={product.name} />
-                        <div className="pi01Actions">
-                          <div className="pi01Cart">
-                            <i className="fa-solid fa-shopping-cart" />
-                          </div>
-                          <div className="pi01QuickView">
-                            <i className="fa-solid fa-arrows-up-down-left-right" />
-                          </div>
-                          <div className="pi01Wishlist">
-                            <i className="fa-solid fa-heart" />
-                          </div>
-                        </div>
-                        <div className="productLabels clearfix">
-                          {product.labels.map((label, index) => (
-                            <span
-                              key={index}
-                              className={
-                                label.includes("Sale") ? "plSale" : "plDis"
-                              }
-                            >
-                              {label}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="pi01Details">
-                        {product.reviews !== null && (
-                          <div className="productRatings">
-                            <div className="productRatingWrap">
-                              <div className="star-rating">
-                                <span />
-                              </div>
-                            </div>
-                            <div className="ratingCounts">
-                              {product.reviews} Reviews
-                            </div>
-                          </div>
-                        )}
-                        <h3>
-                          <Link to="/product/detail/1">{product.name}</Link>
-                        </h3>
-                        <div className="pi01Price">
-                          <ins>{product.price}</ins>
-                          <del>{product.oldPrice}</del>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+        <h2 className="secTitle">Latest Arrival</h2>
+        <p className="secDesc">Showing our latest arrival this summer</p>
+        <div
+          className="productGrid"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", // Tự động điều chỉnh số cột
+            gap: "16px", // Khoảng cách giữa các sản phẩm
+            justifyContent: "center",
+          }}
+        >
+          {products.map((product) => (
+            <div
+              key={product.id}
+              className="productItem"
+              style={{
+                border: "1px solid #ddd",
+                padding: "10px",
+                borderRadius: "8px",
+                textAlign: "center",
+              }}
+            >
+              <div className="productImage">
+                <img
+                  src={product.library?.url || "/default-image.jpg"}
+                  alt={product.name}
+                  style={{ width: "100%", height: "auto", borderRadius: "8px" }}
+                />
+              </div>
+              <div className="productDetails">
+                <h3>
+                  <Link to={`/product/detail/${product.id}`}>
+                    {product.name}
+                  </Link>
+                </h3>
+                <div className="price">
+                  <ins>${product.variants[0]?.sale_price ?? "N/A"}</ins>
+                  {product.variants[0]?.regular_price && (
+                    <del>${product.variants[0]?.regular_price}</del>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>

@@ -453,3 +453,17 @@ export const COLUMN_TABLE_USERS = [
     width: 100,
   },
 ];
+
+export interface Product {
+  id: string;
+  name: string;
+  description?: string;
+  short_description?: string;
+  weight?: number;
+  library?: { url: string };
+  variants: {
+    sale_price?: number;
+    regular_price?: number;
+    stock_quantity?: number;
+  }[];
+}
