@@ -1,4 +1,4 @@
-import intances from "./instances";
+import intances, { intancesLocal } from "./instances";
 
 export const getProducts = async (page: number) => {
   return intances.get("/products?page=" + page);
@@ -57,4 +57,12 @@ export const editVariantsProduct = async (
 
 export const deleteVariantsProduct = async (data: any) => {
   return intances.delete(`/variants/${data}`);
+};
+
+export const getProductsClient = async () => {
+  return intancesLocal.get("/products/client");
+};
+
+export const getProductsDetailClient = async (id: any) => {
+  return intancesLocal.get("/products/client/" + id);
 };

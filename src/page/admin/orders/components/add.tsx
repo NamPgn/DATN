@@ -102,7 +102,6 @@ const AddOrder = () => {
       label: item.ProvinceName,
       value: item.ProvinceID,
     })) || [];
-
   const handleChange = (key: "select1" | "select2" | "select3", value: any) => {
     let selectedOption: any = {};
 
@@ -137,7 +136,6 @@ const AddOrder = () => {
       });
     }
   };
-
   const onFinish = (values: any) => {
     const totalAmount = selectedProducts.reduce(
       (sum: number, item: any) => sum + (item.regular_price || 0),
@@ -146,8 +144,9 @@ const AddOrder = () => {
     const data = {
       ...values,
       o_address:
-        values.o_address +  
-        ` ${selectedValues.select1.label} - ${selectedValues.select2.label} - ${selectedValues.select3.label}`,
+        values.o_address +
+        "," +
+        ` ${selectedValues.select3.label}, ${selectedValues.select2.label}, ${selectedValues.select1.label}`,
       discount_amount: 0,
       final_amount: 0,
       products: selectedProducts,
@@ -163,6 +162,8 @@ const AddOrder = () => {
       <ProductSelect
         setSelectedProducts={setSelectedProducts}
         selectedProducts={selectedProducts}
+        MutateShipping={MutateShipping}
+        selectedValues={selectedValues}
       />
 
       <Form form={form} layout="vertical" onFinish={onFinish}>

@@ -1,26 +1,30 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Description from "./description";
-
+import { useQuery } from "react-query";
+import { getProductsDetailClient } from "../../../sevices/products";
+import { Link, useParams } from "react-router-dom";
+const tags = ["Fashion", "Bags", "Girls"];
+const socialLinks = [
+  { platform: "facebook", icon: "fa-facebook-f", color: "#3b5998" },
+  { platform: "twitter", icon: "fa-twitter", color: "#00acee" },
+  { platform: "linkedin", icon: "fa-linkedin-in", color: "#0077b5" },
+  { platform: "instagram", icon: "fa-instagram", color: "#e4405f" },
+];
 const ProductDetail = () => {
-  const images = [
-    {
-      thumbnail: "/assets/images/product_details/t6.jpg",
-      fullImage: "/assets/images/product_details/6.jpg",
+  const { id } = useParams();
+  const { data: products, isLoading } = useQuery({
+    queryKey: ["products", id],
+    queryFn: async () => {
+      return (await getProductsDetailClient(id)).data;
     },
-    {
-      thumbnail: "/assets/images/product_details/t7.jpg",
-      fullImage: "/assets/images/product_details/7.jpg",
-    },
-    {
-      thumbnail: "/assets/images/product_details/t8.jpg",
-      fullImage: "/assets/images/product_details/8.jpg",
-    },
-    {
-      thumbnail: "/assets/images/product_details/t9.jpg",
-      fullImage: "/assets/images/product_details/9.jpg",
-    },
-  ];
-  const [currentImage, setCurrentImage] = useState(images[0].fullImage);
+  });
+  const [currentImage, setCurrentImage] = useState<any>(null);
+
+  useEffect(() => {
+    if (products?.product_images?.length) {
+      setCurrentImage(products.product_images[0].url);
+    }
+  }, [products]);
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [formData, setFormData] = useState({
@@ -31,15 +35,6 @@ const ProductDetail = () => {
     rating: 0,
   });
   const [quantity, setQuantity] = useState(1);
-  const sizes = ["S", "M", "L", "XL"];
-  const colors = ["Red", "Blue", "Green", "Yellow", "Black"];
-  const tags = ["Fashion", "Bags", "Girls"];
-  const socialLinks = [
-    { platform: "facebook", icon: "fa-facebook-f", color: "#3b5998" },
-    { platform: "twitter", icon: "fa-twitter", color: "#00acee" },
-    { platform: "linkedin", icon: "fa-linkedin-in", color: "#0077b5" },
-    { platform: "instagram", icon: "fa-instagram", color: "#e4405f" },
-  ];
 
   const handleSizeChange = (e: any) => setSelectedSize(e.target.value);
   const handleColorChange = (e: any) => setSelectedColor(e.target.value);
@@ -88,6 +83,27 @@ const ProductDetail = () => {
       rating,
     });
   };
+
+  const sizes = [
+    ...new Set(
+      products?.variants?.flatMap((v: any) =>
+        v.values
+          .map((val: any) => val.attribute_value.name)
+          .filter((name: any) => !name.includes("Màu"))
+      )
+    ),
+  ];
+
+  const colors = [
+    ...new Set(
+      products?.variants?.flatMap((v: any) =>
+        v.values
+          .map((val: any) => val.attribute_value.name)
+          .filter((name: any) => name.includes("Màu"))
+      )
+    ),
+  ];
+  if (isLoading) return "Sản phẩm đang tải";
   return (
     <section className="shopDetailsPageSection">
       <div className="container">
@@ -105,23 +121,25 @@ const ProductDetail = () => {
                     }}
                   >
                     {/* Lặp qua mảng để hiển thị các ảnh thumbnail */}
-                    {images.map((image, index) => (
-                      <div
-                        key={index}
-                        className={`pgtImage2 slick-slide ${
-                          image.fullImage == currentImage ? "border" : ""
-                        }`}
-                        aria-hidden="false"
-                        style={{ width: 120 }}
-                        tabIndex={0}
-                        onClick={() => handleImageClick(image.fullImage)}
-                      >
-                        <img
-                          src={image.thumbnail}
-                          alt={`Product Image ${index + 1}`}
-                        />
-                      </div>
-                    ))}
+                    {products?.product_images?.map(
+                      (image: any, index: number) => (
+                        <div
+                          key={image.id}
+                          className={`pgtImage2 slick-slide ${
+                            image.url === currentImage ? "border" : ""
+                          }`}
+                          aria-hidden="false"
+                          style={{ width: 120 }}
+                          tabIndex={0}
+                          onClick={() => handleImageClick(image.url)}
+                        >
+                          <img
+                            src={image.url}
+                            alt={`Product Image ${index + 1}`}
+                          />
+                        </div>
+                      )
+                    )}
                   </div>
                 </div>
               </div>
@@ -156,14 +174,13 @@ const ProductDetail = () => {
           <div className="col-lg-6">
             <div className="productContent pcMode2">
               <div className="pcCategory">
-                {product.category.map((cat, index) => (
+                {products?.categories?.map((cat: any, index: any) => (
                   <span key={index}>
-                    <a href={`#${cat.toLowerCase()}`}>{cat}</a>
-                    {index < product.category.length - 1 && ", "}
+                    <Link to={""}>{cat.name} </Link>
                   </span>
                 ))}
               </div>
-              <h2>{product.title}</h2>
+              <h2>{products?.name}</h2>
               <div className="pi01Price">
                 <ins>{product.price.discounted}</ins>
                 <del>{product.price.original}</del>
@@ -187,11 +204,11 @@ const ProductDetail = () => {
                   <span>Available: </span> {product.stock}
                 </div>
               </div>
-              <div className="pcExcerpt">{product.description}</div>
+              <div className="pcExcerpt">{products?.short_description}</div>
               <aside className="widget sizeFilter mb-4">
                 <h3 className="widgetTitle">Size</h3>
                 <div className="productSizeWrap">
-                  {sizes.map((size) => (
+                  {sizes.map((size:any) => (
                     <div className="pswItem" key={size}>
                       <input
                         type="radio"
@@ -211,22 +228,12 @@ const ProductDetail = () => {
               <div className="pcVariation">
                 <span>Color</span>
                 <div className="pcvContainer">
-                  {colors.map((color) => (
+                  {colors.map((color: any) => (
                     <div
                       className={`pi01VCItem ${color.toLowerCase()}s`}
                       key={color}
                     >
-                      <input
-                        type="radio"
-                        name="color_4_6"
-                        value={color}
-                        id={`color_4_6251_1_${color.toLowerCase()}`}
-                        checked={selectedColor === color}
-                        onChange={handleColorChange}
-                      />
-                      <label
-                        htmlFor={`color_4_6251_1_${color.toLowerCase()}`}
-                      />
+                      {color}
                     </div>
                   ))}
                 </div>
@@ -266,7 +273,7 @@ const ProductDetail = () => {
               <div className="pcMeta">
                 <p>
                   <span>Sku</span>
-                  <div>3489 JE0765</div>
+                  <div>{products.sku}</div>
                 </p>
                 <p className="pcmTags">
                   <span>Tags:</span>
@@ -294,7 +301,7 @@ const ProductDetail = () => {
           </div>
         </div>
         <Description
-          product={product}
+          product={products}
           handleRatingChange={handleRatingChange}
           handleInputChange={handleInputChange}
           formData={formData}

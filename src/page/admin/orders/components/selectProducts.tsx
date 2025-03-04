@@ -24,24 +24,23 @@ const columns = [
     key: "name",
   },
   {
-    title: "Cân Nặng",
-    dataIndex: "weight",
-    key: "weight",
-  },
-  {
     title: "Phân loại",
     dataIndex: "variants",
     key: "variants",
   },
 ];
 
-const ProductSelectModal = ({ setSelectedProducts, selectedProducts }: any) => {
+const ProductSelectModal = ({
+  setSelectedProducts,
+  selectedProducts,
+  MutateShipping,
+  selectedValues,
+}: any) => {
   const [visible, setVisible] = useState(false);
   const [page, setPage] = useState(1);
   const { data, isLoading } = useQuery(["products", page], () =>
     getProductsOrder(page)
   );
-
   const handleSelect = (variant: any, product: any) => {
     if (selectedProducts.some((v: any) => v.id === variant.id)) return;
     const variationObject = variant?.values.reduce(
@@ -64,7 +63,6 @@ const ProductSelectModal = ({ setSelectedProducts, selectedProducts }: any) => {
         image: product.image_url,
         price: variant.regular_price,
         quantity: variant.stock_quantity,
-        weight: product.weight,
         variation: variationObject,
       },
     ]);
@@ -84,34 +82,46 @@ const ProductSelectModal = ({ setSelectedProducts, selectedProducts }: any) => {
           : v
       )
     );
+
+    MutateShipping({
+      to_district_id: selectedValues.select2.value,
+      to_ward_code: selectedValues.select3.value,
+      weight: selectedProducts.reduce(
+        (sum: number, item: any) => sum + item.weight * item.quantity,
+        0
+      ),
+    });
   };
-  const dataSource = data?.data?.data?.data.map((product: any) => ({
+  const dataSource = data?.data?.data?.data?.map((product: any) => ({
     key: product.id,
     name: product.name,
     image: <Avatar src={product.image_url} />,
     weight: product.weight,
-    variants: product.variants.map((variant: any) => (
-      <div key={variant.id} className="border p-2 my-1">
-        <p>
-          Giá: <span className="line-through">{variant.regular_price}đ</span> -
-          <b className="text-red-500"> {variant.sale_price}đ</b>
-        </p>
-        <p>Số lượng tồn: {variant.stock_quantity}</p>
-        <p>
-          Thuộc tính:{" "}
-          {variant.values.map((v: any) => v.attribute_value.name).join(", ")}
-        </p>
-        <Button
-          variant="text"
-          color="default"
-          icon={<CheckOutlined />}
-          onClick={() => handleSelect(variant, product)}
-          disabled={selectedProducts.some((v: any) => v.id === variant.id)}
-        >
-          Chọn sản phẩm
-        </Button>
-      </div>
-    )),
+    variants: product.variants.map((variant: any) => {
+      return (
+        <div key={variant.id} className="border p-2 my-1">
+          <p>
+            Giá: <span className="line-through">{variant.regular_price}đ</span>{" "}
+            -<b className="text-red-500"> {variant.sale_price}đ</b>
+          </p>
+          <p>Số lượng tồn: {variant.stock_quantity}</p>
+          <p>
+            Thuộc tính:{" "}
+            {variant.values.map((v: any) => v.attribute_value.name).join(", ")}
+          </p>
+          <p>Cân nặng: {variant?.weight}</p>
+          <Button
+            variant="text"
+            color="default"
+            icon={<CheckOutlined />}
+            onClick={() => handleSelect(variant, product)}
+            disabled={selectedProducts.some((v: any) => v.id === variant.id)}
+          >
+            Chọn sản phẩm
+          </Button>
+        </div>
+      );
+    }),
     action: null,
   }));
 

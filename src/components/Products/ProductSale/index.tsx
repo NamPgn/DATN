@@ -1,7 +1,9 @@
+import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
+import { getProductsClient } from "../../../sevices/products";
 
 const ProductSale = () => {
-  const products = [
+  const product = [
     {
       id: 1,
       name: "Men’s blue cotton t-shirt",
@@ -23,6 +25,13 @@ const ProductSale = () => {
       reviews: 10,
     },
   ];
+
+  const { data: products } = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => {
+      return (await getProductsClient()).data;
+    },
+  });
   return (
     <section className="latestArrivalSection">
       <div className="container">
@@ -36,7 +45,7 @@ const ProductSale = () => {
           <div className="col-lg-12">
             <div className="productCarousel owl-carousel owl-loaded owl-drag">
               <div className="owl-stage-outer">
-                {products.map((product) => (
+                {products?.map((product: any) => (
                   <div
                     key={product.id}
                     className={`owl-item active ${
@@ -45,22 +54,28 @@ const ProductSale = () => {
                     style={{ width: 306, marginRight: 24 }}
                   >
                     <div className="productItem01">
-                      <div className="pi01Thumb">
-                        <img src={product.image1} alt={product.name} />
-                        <img src={product.image2} alt={product.name} />
-                        <div className="pi01Actions">
-                          <div className="pi01Cart">
-                            <i className="fa-solid fa-shopping-cart" />
+                      <Link to={`/product/detail/${product.id}`}>
+                        <div className="pi01Thumb">
+                          {product?.product_images?.map((item: any) => {
+                            return (
+                              <>
+                                <img src={item.url} />
+                              </>
+                            );
+                          })}
+                          <div className="pi01Actions">
+                            <div className="pi01Cart">
+                              <i className="fa-solid fa-shopping-cart" />
+                            </div>
+                            <div className="pi01QuickView">
+                              <i className="fa-solid fa-arrows-up-down-left-right" />
+                            </div>
+                            <div className="pi01Wishlist">
+                              <i className="fa-solid fa-heart" />
+                            </div>
                           </div>
-                          <div className="pi01QuickView">
-                            <i className="fa-solid fa-arrows-up-down-left-right" />
-                          </div>
-                          <div className="pi01Wishlist">
-                            <i className="fa-solid fa-heart" />
-                          </div>
-                        </div>
-                        <div className="productLabels clearfix">
-                          {product.labels.map((label, index) => (
+                          <div className="productLabels clearfix">
+                            {/* {product.labels.map((label, index) => (
                             <span
                               key={index}
                               className={
@@ -69,9 +84,10 @@ const ProductSale = () => {
                             >
                               {label}
                             </span>
-                          ))}
+                          ))} */}
+                          </div>
                         </div>
-                      </div>
+                      </Link>
                       <div className="pi01Details">
                         {product.reviews !== null && (
                           <div className="productRatings">
@@ -86,7 +102,9 @@ const ProductSale = () => {
                           </div>
                         )}
                         <h3>
-                          <Link to="/product/detail/1">{product.name}</Link>
+                          <Link to={`/product/detail/${product.id}`}>
+                            {product.name}
+                          </Link>
                         </h3>
                         <div className="pi01Price">
                           <ins>{product.price}</ins>

@@ -10,6 +10,10 @@ export const getOrder = async (id: any) => {
 };
 
 export const updateOrders = async (data: any) => {
+  return intancesLocal.post(`/ghn/post_order/${data?.id}`, data);
+};
+
+export const sendOrders = async (data: any) => {
   return intances.put(`/orders/${data?.id}/edit`, data);
 };
 

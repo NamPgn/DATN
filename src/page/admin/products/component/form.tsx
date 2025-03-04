@@ -59,6 +59,7 @@ const ProductForm = ({
                   sku: dataEdit.variants?.[0]?.sku || "",
                   variant_id: dataEdit.variants?.find((items: any) => items?.id)
                     ?.id,
+                  weight: dataEdit.variants?.[0]?.weight || "",
                 },
               ],
       });
@@ -108,6 +109,7 @@ const ProductForm = ({
           regular_price: 0,
           sale_price: 0,
           stock_quantity: 0,
+          weight: 0,
         }));
       }
 
@@ -127,6 +129,7 @@ const ProductForm = ({
         regular_price: variant.regular_price,
         stock_quantity: variant.stock_quantity,
         sku: variant.sku,
+        weight: variant.weight,
       })),
     });
   };
@@ -173,6 +176,7 @@ const ProductForm = ({
                 sale_price: val.variants?.[0]?.sale_price || 0,
                 sku: val.variants?.[0]?.sku || "",
                 stock_quantity: val.variants?.[0]?.stock_quantity,
+                weight: val.variants?.[0]?.weight,
                 values: [],
               },
             ],
@@ -221,14 +225,13 @@ const ProductForm = ({
             stock_quantity:
               simpleProductRef.current?.variants?.[0]?.stock_quantity || 0,
             sku: simpleProductRef.current?.variants?.[0]?.sku || "",
+            weight: simpleProductRef.current?.weight,
           },
         ], // Đảm bảo chỉ có 1 biến thể khi là sản phẩm đơn giản
       });
     }
-
     setTypeProduct(value);
   };
-
   return (
     <div>
       <Form
@@ -273,17 +276,7 @@ const ProductForm = ({
         <Form.Item name="short_description" label="Mô tả ngắn">
           <Input className="w-50" placeholder="Mô tả ngắn" />
         </Form.Item>
-        <Form.Item
-          label="Cân nặng"
-          name="weight"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-        >
-          <InputNumber min={0} max={50000} placeholder="100gam" />
-        </Form.Item>
+
         <Form.Item label="Category Id" name="categories">
           <Select
             className="w-50"
@@ -354,7 +347,8 @@ const ProductForm = ({
                         key={key}
                         style={{
                           display: "flex",
-                          alignItems: "baseline",
+                          alignContent: "center",
+                          alignItems: "center",
                           marginBottom: 8,
                         }}
                       >
@@ -367,6 +361,7 @@ const ProductForm = ({
                         </span>
 
                         <Form.Item
+                          label={"Giá Gốc"}
                           {...restField}
                           name={[name, "regular_price"]}
                         >
@@ -374,13 +369,30 @@ const ProductForm = ({
                         </Form.Item>
 
                         <Form.Item
+                          label={"Số Lượng"}
                           {...restField}
                           name={[name, "stock_quantity"]}
                         >
                           <InputNumber min={0} placeholder="Số lượng" />
                         </Form.Item>
 
-                        <Form.Item {...restField} name={[name, "sku"]}>
+                        <Form.Item
+                          label={"Cân Nặng"}
+                          {...restField}
+                          name={[name, "weight"]}
+                        >
+                          <InputNumber
+                            min={0}
+                            max={50000}
+                            placeholder="100gam"
+                          />
+                        </Form.Item>
+
+                        <Form.Item
+                          label={"Mã Sản Phẩm"}
+                          {...restField}
+                          name={[name, "sku"]}
+                        >
                           <Input defaultValue={variants[index]?.sku} />
                         </Form.Item>
 
@@ -410,11 +422,16 @@ const ProductForm = ({
                       key={key}
                       style={{
                         display: "flex",
-                        alignItems: "baseline",
+                        alignContent: "center",
+                        alignItems: "center",
                         marginBottom: 8,
                       }}
                     >
-                      <Form.Item {...restField} name={[name, "regular_price"]}>
+                      <Form.Item
+                        {...restField}
+                        label={"Giá gốc"}
+                        name={[name, "regular_price"]}
+                      >
                         <InputNumber
                           min={0}
                           placeholder="Giá gốc"
@@ -422,7 +439,11 @@ const ProductForm = ({
                         />
                       </Form.Item>
 
-                      <Form.Item {...restField} name={[name, "sale_price"]}>
+                      <Form.Item
+                        {...restField}
+                        label={"Giá khuyến mãi"}
+                        name={[name, "sale_price"]}
+                      >
                         <InputNumber
                           min={0}
                           placeholder="Giá khuyến mãi"
@@ -430,7 +451,11 @@ const ProductForm = ({
                         />
                       </Form.Item>
 
-                      <Form.Item {...restField} name={[name, "stock_quantity"]}>
+                      <Form.Item
+                        {...restField}
+                        label={"Số Lượng"}
+                        name={[name, "stock_quantity"]}
+                      >
                         <InputNumber
                           min={0}
                           placeholder="Số Lượng"
@@ -438,8 +463,16 @@ const ProductForm = ({
                         />
                       </Form.Item>
 
-                      <Form.Item {...restField} name={[name, "sku"]}>
+                      <Form.Item
+                        {...restField}
+                        label={"Mã SKU"}
+                        name={[name, "sku"]}
+                      >
                         <Input placeholder="Nhập mã SKU" />
+                      </Form.Item>
+
+                      <Form.Item label={'Cân nặng'} {...restField} name={[name, "weight"]}>
+                        <InputNumber  min={0} max={50000} placeholder="100gam" />
                       </Form.Item>
                     </Space>
                   ))}

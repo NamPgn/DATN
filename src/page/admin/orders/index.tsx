@@ -95,17 +95,6 @@ const OrdersAdmin = () => {
                 Detail
               </MyButton>
             </Link>
-            <Popconfirm
-              title="Bạn có chắc chắn muốn xóa ?"
-              onConfirm={() => deleteOrders(item.id)}
-              okText="Yes"
-              cancelText="No"
-            >
-              <MyButton icon={<DeleteFilled />} type="primary" danger>
-                Delete
-              </MyButton>
-            </Popconfirm>
-
             <Link to={`/dashboard/orders/edit/${item.id}`}>
               <Button icon={<EditOutlined />} color="blue" variant="filled">
                 Edit

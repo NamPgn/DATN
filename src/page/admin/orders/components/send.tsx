@@ -1,12 +1,4 @@
-import {
-  Form,
-  Input,
-  Button,
-  Card,
-  Select,
-  DatePicker,
-  InputNumber,
-} from "antd";
+import { Form, Input, Button, Card, Select } from "antd";
 import { useMutation } from "react-query";
 import { useParams } from "react-router-dom";
 import { updateOrders } from "../../../../sevices/orders";
@@ -21,19 +13,16 @@ const SendOrder = () => {
       return await updateOrders(data);
     },
     onSuccess: () => {
-      toast.success("Sửa thành công");
+      toast.success("Gửi đơn hàng thành công");
     },
     onError: () => {
-      toast.error("Sửa thất bại");
+      toast.error("Gửi đơn hàng thất bại");
     },
   });
   const onFinish = (values: any) => {
     const data = {
       id: id,
-      o_name: values.o_name,
-      o_address: values.o_address,
-      o_phone: values.o_phone,
-      o_mail: values.o_mail,
+      ...values,
     };
     mutate(data);
   };
@@ -47,64 +36,6 @@ const SendOrder = () => {
     >
       <Card title="Gửi đơn hàng" bordered={false} style={{ width: "500px" }}>
         <Form form={form} layout="vertical" onFinish={onFinish}>
-          <div
-            style={{
-              alignItems: "center",
-              justifyContent: "space-between",
-              display: "flex",
-            }}
-          >
-            <Form.Item
-              label="Chiều dài"
-              name="length"
-              rules={[
-                { required: true, message: "Vui lòng nhập chiều dài!" },
-                {
-                  type: "number",
-                  min: 1,
-                  message: "Chiều dài phải lớn hơn 0!",
-                },
-              ]}
-            >
-              <InputNumber placeholder="Nhập chiều dài" />
-            </Form.Item>
-
-            <Form.Item
-              label="Chiều rộng"
-              name="width"
-              rules={[
-                { required: true, message: "Vui lòng nhập chiều rộng!" },
-                {
-                  type: "number",
-                  min: 1,
-                  message: "Chiều rộng phải lớn hơn 0!",
-                },
-              ]}
-            >
-              <InputNumber placeholder="Nhập chiều rộng" />
-            </Form.Item>
-
-            <Form.Item
-              label="Chiều cao"
-              name="height"
-              rules={[
-                { required: true, message: "Vui lòng nhập chiều cao!" },
-                { pattern: /^[0-9]+$/, message: "Chỉ được nhập số!" },
-                {
-                  type: "number",
-                  min: 1,
-                  message: "Chiều cao phải lớn hơn 0!",
-                },
-              ]}
-            >
-              <InputNumber placeholder="Nhập chiều cao" />
-            </Form.Item>
-
-            <Form.Item label="Giá trị đơn hàng" name="insurance_value">
-              <InputNumber placeholder="Nhập giá trị đơn hàng" />
-            </Form.Item>
-          </div>
-
           <Form.Item
             label="Ghi chú bắt buộc"
             name="required_note"
@@ -113,12 +44,12 @@ const SendOrder = () => {
             <Select
               placeholder="Chọn ghi chú"
               options={[
-                { value: "chothuhang", label: "Cho Thử Hàng" },
+                { value: "CHOTHUHANG", label: "Cho Thử Hàng" },
                 {
-                  value: "choxemhangkhongthu",
+                  value: "CHOXEMHANGKHONGTHU",
                   label: "Cho Xem Hàng Không Thử",
                 },
-                { value: "khongchoxemhang", label: "Không Cho Xem Hàng" },
+                { value: "KHONGCHOXEMHANG", label: "Không Cho Xem Hàng" },
               ]}
             />
           </Form.Item>
@@ -133,8 +64,8 @@ const SendOrder = () => {
             <Select
               placeholder="Chọn người thanh toán"
               options={[
-                { value: "1", label: "Người Bán/Người Gửi" },
-                { value: "2", label: "Người Mua/Người Nhận" },
+                { value: 1, label: "Người Bán/Người Gửi" },
+                { value: 2, label: "Người Mua/Người Nhận" },
               ]}
             />
           </Form.Item>
