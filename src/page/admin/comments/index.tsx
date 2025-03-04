@@ -9,7 +9,6 @@ import {
   delMultipleComments,
   getComments,
   replyComment,
-  searchComment,
   statusMutipleComment,
 } from "../../../sevices/comment";
 import { MyButton } from "../../../components/UI/Core/Button";
@@ -24,7 +23,6 @@ import {
 const { Option } = Select;
 const CommentAdmin = () => {
   const [page, setPage] = useState(1);
-  const [searchInput, setSearchInput] = useState("");
   const [hiddenComments, setHiddenComments] = useState<Record<string, boolean>>(
     {}
   );
@@ -36,6 +34,10 @@ const CommentAdmin = () => {
   const [searchRating, setSearchRating] = useState<number | undefined>(
     undefined
   );
+  const [searchKeywordInput, setSearchKeywordInput] = useState("");
+  const [searchRatingInput, setSearchRatingInput] = useState<
+    number | undefined
+  >(undefined);
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -44,10 +46,11 @@ const CommentAdmin = () => {
   const { data: comments, refetch }: any = useQuery({
     queryKey: ["comments", page, searchKeyword, searchRating],
     queryFn: async () => {
-      if (searchKeyword || searchRating !== undefined) {
-        return await searchComment(searchKeyword, searchRating);
-      }
-      return await getComments(page);
+      return await getComments(
+        page,
+        searchKeyword.trim() !== "" ? searchKeyword : undefined,
+        searchRating ?? undefined
+      );
     },
   });
   const { mutate } = useMutation({
@@ -164,9 +167,9 @@ const CommentAdmin = () => {
   };
 
   const handleSearch = () => {
-    setSearchKeyword(searchInput);
+    setSearchKeyword(searchKeywordInput);
+    setSearchRating(searchRatingInput);
     setPage(1);
-    refetch();
   };
 
   const data =
@@ -226,21 +229,15 @@ const CommentAdmin = () => {
       <div className="d-flex gap-2 mb-4">
         <Input
           placeholder="Nhập từ khóa tìm kiếm..."
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
+          value={searchKeywordInput}
+          onChange={(e) => setSearchKeywordInput(e.target.value)}
           style={{ width: "200px" }}
         />
-        <MyButton
-          type="primary"
-          icon={<SearchOutlined />}
-          onClick={handleSearch}
-        >
-          Tìm kiếm
-        </MyButton>
+
         <Select
           placeholder="Chọn rating"
-          value={searchRating}
-          onChange={(value) => setSearchRating(value)}
+          value={searchRatingInput}
+          onChange={(value) => setSearchRatingInput(value)}
           style={{ width: "120px" }}
           allowClear
         >
@@ -250,7 +247,11 @@ const CommentAdmin = () => {
           <Option value={4}>4 sao</Option>
           <Option value={5}>5 sao</Option>
         </Select>
-        <MyButton type="primary" onClick={handleSearch}>
+        <MyButton
+          type="primary"
+          icon={<SearchOutlined />}
+          onClick={handleSearch}
+        >
           Tìm kiếm
         </MyButton>
       </div>

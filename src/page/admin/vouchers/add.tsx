@@ -87,7 +87,7 @@ const AddVoucher = ({ refetch }: any) => {
               label="Min Product Price"
               rules={[
                 {
-                  required: true,
+                  required: false,
                   message: "Giá sản phẩm tối thiểu có thể sử dụng mã",
                 },
               ]}
@@ -116,7 +116,7 @@ const AddVoucher = ({ refetch }: any) => {
               label="Max Discount Amount"
               rules={[
                 {
-                  required: true,
+                  required: false,
                   message: "Số tiền tối đa được giảm giá",
                 },
               ]}
