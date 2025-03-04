@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { Input, Modal, Select, Tag } from "antd";
+import { Input, Modal, Popconfirm, Select, Tag } from "antd";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
@@ -203,7 +203,10 @@ const CommentAdmin = () => {
           ),
         action: (
           <div className="d-flex gap-1">
-            <MVConfirm title="Có xóa không" onConfirm={() => mutate(item.id)}>
+            <MVConfirm
+              title="Bạn có chắc chắn muốn xóa ?"
+              onConfirm={() => mutate(item.id)}
+            >
               <MyButton danger className="ml-2">
                 Delete
               </MyButton>
@@ -256,14 +259,16 @@ const CommentAdmin = () => {
         </MyButton>
       </div>
       <div className="mb-3">
-        <MyButton
-          color="default"
-          variant="dashed"
-          icon={<DeleteOutlined />}
-          onClick={handleDeleteSelectedData}
+        <Popconfirm
+          title="Bạn có chắc chắn muốn xóa ?"
+          onConfirm={handleDeleteSelectedData}
+          okText="Yes"
+          cancelText="No"
         >
-          Delete Selected
-        </MyButton>
+          <MyButton type="primary" danger icon={<DeleteOutlined />}>
+            Delete Selected
+          </MyButton>
+        </Popconfirm>
         <MyButton
           icon={<EyeInvisibleOutlined />}
           className="ml-2"

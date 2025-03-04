@@ -40,10 +40,6 @@ export const getComments = async (
   return intances.get("/comments?page=" + page, { params });
 };
 
-// export const searchComment = async (keyword?: string, rating?: number) => {
-//   return intances.get("/comments/search", { params: { keyword, rating } });
-// };
-
 export const replyComment = async (id: string, reply: string) => {
   return intances.patch("/comments/reply", { id, reply });
 };
