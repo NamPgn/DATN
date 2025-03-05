@@ -1,71 +1,116 @@
-import { useEffect, useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
-import { Product } from "../../../constant";
-import { getHomes } from "../../../sevices/home";
+import { getProductsClient } from "../../../sevices/products";
 
 const ProductSale = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await getHomes(); // Gọi API lấy sản phẩm mới nhất
-        setProducts(response.data);
-      } catch (error) {
-        console.error("Lỗi khi lấy danh sách sản phẩm:", error);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
+  const { data: products } = useQuery({
+    queryKey: ["products"],
+    queryFn: async () => {
+      return (await getProductsClient()).data;
+    },
+  });
   return (
     <section className="latestArrivalSection">
       <div className="container">
-        <h2 className="secTitle">Latest Arrival</h2>
-        <p className="secDesc">Showing our latest arrival this summer</p>
-        <div
-          className="productGrid"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", // Tự động điều chỉnh số cột
-            gap: "16px", // Khoảng cách giữa các sản phẩm
-            justifyContent: "center",
-          }}
-        >
-          {products.map((product) => (
-            <div
-              key={product.id}
-              className="productItem"
-              style={{
-                border: "1px solid #ddd",
-                padding: "10px",
-                borderRadius: "8px",
-                textAlign: "center",
-              }}
-            >
-              <div className="productImage">
-                <img
-                  src={product.library?.url || "/default-image.jpg"}
-                  alt={product.name}
-                  style={{ width: "100%", height: "auto", borderRadius: "8px" }}
-                />
-              </div>
-              <div className="productDetails">
-                <h3>
-                  <Link to={`/product/detail/${product.id}`}>
-                    {product.name}
-                  </Link>
-                </h3>
-                <div className="price">
-                  <ins>${product.variants[0]?.sale_price ?? "N/A"}</ins>
-                  {product.variants[0]?.regular_price && (
-                    <del>${product.variants[0]?.regular_price}</del>
-                  )}
-                </div>
+        <div className="row">
+          <div className="col-lg-12">
+            <h2 className="secTitle">Latest Arrival</h2>
+            <p className="secDesc">Showing our latest arrival on this summer</p>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-lg-12">
+            <div className="productCarousel owl-carousel owl-loaded owl-drag">
+              <div
+                className="owl-stage-outer gap-5"
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(5, 1fr)",
+                }}
+              >
+                {products?.map((product: any) => (
+                  <div
+                    key={product.id}
+                    className={`owl-item active ${
+                      !product.reviews ? "pi01NoRating" : ""
+                    }`}
+                  >
+                    <div className="productItem01">
+                      <Link to={`/product/detail/${product.id}`}>
+                        <div className="pi01Thumb">
+                          {product?.library ? (
+                            <img
+                              src={product?.library?.url}
+                              className="w-100"
+                            />
+                          ) : (
+                            product?.product_images?.map((item: any) => {
+                              return (
+                                <>
+                                  <img src={item.url} className="w-100" />
+                                </>
+                              );
+                            })
+                          )}
+                          <div className="pi01Actions">
+                            <div className="pi01Cart">
+                              <i className="fa-solid fa-shopping-cart" />
+                            </div>
+                            <div className="pi01QuickView">
+                              <i className="fa-solid fa-arrows-up-down-left-right" />
+                            </div>
+                            <div className="pi01Wishlist">
+                              <i className="fa-solid fa-heart" />
+                            </div>
+                          </div>
+                          <div className="productLabels clearfix">
+                            {/* {product.labels.map((label, index) => (
+                            <span
+                              key={index}
+                              className={
+                                label.includes("Sale") ? "plSale" : "plDis"
+                              }
+                            >
+                              {label}
+                            </span>
+                          ))} */}
+                          </div>
+                        </div>
+                      </Link>
+                      <div className="pi01Details">
+                        {product.reviews !== null && (
+                          <div className="productRatings">
+                            <div className="productRatingWrap">
+                              <div className="star-rating">
+                                <span />
+                              </div>
+                            </div>
+                            <div className="ratingCounts">
+                              {product.reviews} Reviews
+                            </div>
+                          </div>
+                        )}
+                        <h3>
+                          <Link to={`/product/detail/${product.id}`}>
+                            {product.name}
+                          </Link>
+                        </h3>
+                        {product?.variants?.map((item: any) => {
+                          return (
+                            <div className="pi01Price">
+                              <ins>{item.regular_price}VND</ins>
+                              <del>{item.sale_price}VND</del>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          ))}
+          </div>
         </div>
       </div>
     </section>

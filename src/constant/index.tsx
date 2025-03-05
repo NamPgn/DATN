@@ -25,6 +25,10 @@ export const URLSECTION = [
     SECTTIONTITLE: "Shop",
   },
   {
+    PATH: "/products",
+    SECTTIONTITLE: "Products",
+  },
+  {
     PATH: "/cart",
     SECTTIONTITLE: "Shopping Cart",
   },
@@ -39,6 +43,10 @@ export const URLSECTION = [
   {
     PATH: "/checkout",
     SECTTIONTITLE: "Checkout",
+  },
+  {
+    PATH: "/profile",
+    SECTTIONTITLE: "Account Setting",
   },
 ];
 
@@ -361,25 +369,21 @@ export const columnsOrders = [
     title: "Code",
     dataIndex: "code",
     key: "code",
-    width: 300,
   },
   {
     title: "Name",
     dataIndex: "o_name",
     key: "o_name",
-    width: 150,
   },
   {
     title: "Phone",
     dataIndex: "o_phone",
     key: "o_phone",
-    width: 200,
   },
   {
     title: "Final Amount",
     dataIndex: "final_amount",
     key: "final_amount",
-    width: 250,
   },
   {
     title: "Payment Method",
@@ -401,7 +405,7 @@ export const columnsOrders = [
     dataIndex: "action",
     key: "action",
     fixed: "right",
-    width: 250,
+    width: 400,
   },
 ];
 

@@ -1627,8 +1627,7 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-
-    font-size: 21px;
+    font-size: 17px;
     line-height: 30px;
     font-weight: 500;
     color: #7b9496;
@@ -4396,7 +4395,7 @@
     justify-content: flex-start;
 }
 
-.shopPagination a,
+.shopPagination div,
 .shopPagination span {
     width: 48px;
     height: 48px;
@@ -4411,7 +4410,7 @@
     -webkit-transition: all ease 350ms;
 }
 
-.shopPagination a:hover,
+.shopPagination div:hover,
 .shopPagination span.current {
     background: #7b9496;
     color: #fff;

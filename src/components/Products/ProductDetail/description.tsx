@@ -44,8 +44,7 @@ const Description = ({
           <div className="row">
             <div className="col-lg-6">
               <div className="descriptionContent">
-                <h3>Product Details</h3>
-                <p>{product.description}</p>
+                <p>{product?.description}</p>
               </div>
             </div>
           </div>

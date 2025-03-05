@@ -1,8 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import intances from "./instances";
+import intances, { intancesLocal } from "./instances";
 
 export const getProducts = async (page: number) => {
   return intances.get("/products?page=" + page);
+};
+
+export const getProductsOrder = async (page: number) => {
+  return intances.get("/list_product_order?page=" + page);
 };
 
 export const getProduct = async (id: any) => {
@@ -54,4 +58,12 @@ export const editVariantsProduct = async (
 
 export const deleteVariantsProduct = async (data: any) => {
   return intances.delete(`/variants/${data}`);
+};
+
+export const getProductsClient = async () => {
+  return intancesLocal.get("/latest-products");
+};
+
+export const getProductsDetailClient = async (id: any) => {
+  return intancesLocal.get("/products/client/" + id);
 };

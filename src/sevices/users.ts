@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
-import intances, { intancesLocal } from "./instances";
-
+import intances, { intancesLocal, intancesLogout } from "./instances";
+import { token_auth } from "../common/auth/getToken";
+const token_ = token_auth();
 export const login = async (data: any) => {
   return intancesLocal.post("/login", data);
 };
@@ -48,4 +48,12 @@ export const sendEmailForgotPass = async (data: any) => {
 
 export const sendResetPS = async (data: any) => {
   return intancesLocal.post("/reset-password", data);
+};
+
+export const logout = async () => {
+  return intancesLogout.post("/logout", null);
+};
+
+export const getUserId = async (id: any) => {
+  return intancesLogout.get("/admin/users/" + id);
 };

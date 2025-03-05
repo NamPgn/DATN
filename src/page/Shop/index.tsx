@@ -1,4 +1,26 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useQuery } from "react-query";
+import { getProductsByCategory } from "../../sevices/client";
+import { Link, useParams } from "react-router-dom";
+import { Pagination } from "./components/pagination";
+import { useState } from "react";
+
 const Shop = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [openOption, setopenOption] = useState(false);
+  const handleClickOption = () => {
+    setopenOption((open) => !open);
+  };
+  const { data: products } = useQuery({
+    queryKey: ["products", currentPage],
+    queryFn: async () => {
+      return (await getProductsByCategory(currentPage)).data;
+    },
+  });
+  const totalItems = products?.total; // Tổng số sản phẩm
+  const itemsPerPage = 9; // Số sản phẩm trên mỗi trang
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
   return (
     <>
       <section className="shopPageSection shopPageHasSidebar">
@@ -240,8 +262,8 @@ const Shop = () => {
               <div className="row shopAccessRow">
                 <div className="col-sm-6">
                   <div className="productCount">
-                    Showing <strong>1 - 16</strong> of <strong>220</strong>{" "}
-                    items
+                    Showing <strong>1 - 16</strong> of{" "}
+                    <strong>{products?.total}</strong> items
                   </div>
                 </div>
                 <div className="col-sm-6">
@@ -259,7 +281,11 @@ const Shop = () => {
                           <option value={3}>Top rated</option>
                           <option value={4}>Recently viewed</option>
                         </select>
-                        <div className="nice-select" tabIndex={0}>
+                        <div
+                          className={`nice-select ${openOption ? "open" : ""}`}
+                          onClick={handleClickOption}
+                          tabIndex={0}
+                        >
                           <span className="current">Default</span>
                           <ul className="list">
                             <li data-value="" className="option selected">
@@ -281,42 +307,6 @@ const Shop = () => {
                         </div>
                       </form>
                     </div>
-                    <ul
-                      className="nav productViewTabnav"
-                      id="productViewTab"
-                      role="tablist"
-                    >
-                      <li role="presentation">
-                        <button
-                          id="list-tab"
-                          data-bs-toggle="tab"
-                          data-bs-target="#list-tab-pane"
-                          type="button"
-                          role="tab"
-                          data-aria-controls="list-tab-pane"
-                          data-aria-selected="false"
-                          aria-selected="false"
-                          tabIndex={-1}
-                        >
-                          <i className="fa-solid fa-list" />
-                        </button>
-                      </li>
-                      <li role="presentation">
-                        <button
-                          className="active"
-                          id="grid-tab"
-                          data-bs-toggle="tab"
-                          data-bs-target="#grid-tab-pane"
-                          type="button"
-                          role="tab"
-                          data-aria-controls="grid-tab-pane"
-                          data-aria-selected="true"
-                          aria-selected="true"
-                        >
-                          <i className="fa-solid fa-table-cells" />
-                        </button>
-                      </li>
-                    </ul>
                   </div>
                 </div>
               </div>
@@ -327,135 +317,113 @@ const Shop = () => {
                     id="productViewTabContent"
                   >
                     <div
-                      className="tab-pane show active"
+                      className={`tab-pane show active `}
                       id="grid-tab-pane"
                       role="tabpanel"
                       aria-labelledby="grid-tab"
                       tabIndex={0}
                     >
-                      <div className="row">
-                        <div className="col-sm-6 col-xl-4">
-                          <div className="productItem01">
-                            <div className="pi01Thumb">
-                              <img
-                                src="/assets/images/products/5.jpg"
-                                alt="Ulina Product"
-                              />
-                              <img
-                                src="/assets/images/products/5.1.jpg"
-                                alt="Ulina Product"
-                              />
-                              <div className="pi01Actions">
-                                <a
-                                  href="javascript:void(0);"
-                                  className="pi01Cart"
-                                >
-                                  <i className="fa-solid fa-shopping-cart" />
-                                </a>
-                                <a
-                                  href="javascript:void(0);"
-                                  className="pi01QuickView"
-                                >
-                                  <i className="fa-solid fa-arrows-up-down-left-right" />
-                                </a>
-                                <a
-                                  href="javascript:void(0);"
-                                  className="pi01Wishlist"
-                                >
-                                  <i className="fa-solid fa-heart" />
-                                </a>
-                              </div>
-                              <div className="productLabels clearfix">
-                                <span className="plDis">- $29</span>
-                                <span className="plSale">Sale</span>
-                              </div>
-                            </div>
-                            <div className="pi01Details">
-                              <div className="productRatings">
-                                <div className="productRatingWrap">
-                                  <div className="star-rating">
-                                    <span />
-                                  </div>
-                                </div>
-                                <div className="ratingCounts">10 Reviews</div>
-                              </div>
-                              <h3>
-                                <a href="shop_details1.html">
-                                  Stylish white leather bag
-                                </a>
-                              </h3>
-                              <div className="pi01Price">
-                                <ins>$29</ins>
-                                <del>$56</del>
-                              </div>
-                              <div className="pi01Variations">
-                                <div className="pi01VColor">
-                                  <div className="pi01VCItem">
-                                    <input
-                                      type="radio"
-                                      name="color_1_1"
-                                      defaultValue="Blue"
-                                      id="color_1_1_1_blue"
-                                    />
-                                    <label htmlFor="color_1_1_1_blue" />
-                                  </div>
-                                  <div className="pi01VCItem yellows">
-                                    <input
-                                      type="radio"
-                                      name="color_1_1"
-                                      defaultValue="Yellow"
-                                      id="color_1_1_2_blue"
-                                    />
-                                    <label htmlFor="color_1_1_2_blue" />
-                                  </div>
-                                  <div className="pi01VCItem reds">
-                                    <input
-                                      type="radio"
-                                      name="color_1_1"
-                                      defaultValue="Red"
-                                      id="color_1_1_3_blue"
-                                    />
-                                    <label htmlFor="color_1_1_3_blue" />
-                                  </div>
-                                </div>
-                                <div className="pi01VSize">
-                                  <div className="pi01VSItem">
-                                    <input
-                                      type="radio"
-                                      name="size_1_1"
-                                      defaultValue="Blue"
-                                      id="size1_1_1_1"
-                                    />
-                                    <label htmlFor="size1_1_1_1">S</label>
-                                  </div>
-                                  <div className="pi01VSItem">
-                                    <input
-                                      type="radio"
-                                      name="size_1_1"
-                                      defaultValue="Yellow"
-                                      id="size1_1_1_2"
-                                    />
-                                    <label htmlFor="size1_1_1_2">M</label>
-                                  </div>
-                                  <div className="pi01VSItem">
-                                    <input
-                                      type="radio"
-                                      name="size_1_1"
-                                      defaultValue="Red"
-                                      id="size1_1_1_3"
-                                    />
-                                    <label htmlFor="size1_1_1_3">XL</label>
+                      <div className="row ">
+                        {products?.data?.map((product: any) => (
+                          <div className="col-sm-6 col-xl-4">
+                            <div className="productItem01">
+                              <div
+                                key={product.id}
+                                className={`owl-item active ${
+                                  !product.reviews ? "pi01NoRating" : ""
+                                }`}
+                              >
+                                <div className="productItem01">
+                                  <Link to={`/product/detail/${product.id}`}>
+                                    <div className="pi01Thumb">
+                                      {product?.library ? (
+                                        <img
+                                          src={product?.library?.url}
+                                          className="w-100"
+                                        />
+                                      ) : (
+                                        product?.product_images?.map(
+                                          (item: any) => {
+                                            return (
+                                              <>
+                                                <img
+                                                  src={item.url}
+                                                  className="w-100"
+                                                />
+                                              </>
+                                            );
+                                          }
+                                        )
+                                      )}
+                                      <div className="pi01Actions">
+                                        <div className="pi01Cart">
+                                          <i className="fa-solid fa-shopping-cart" />
+                                        </div>
+                                        <div className="pi01QuickView">
+                                          <i className="fa-solid fa-arrows-up-down-left-right" />
+                                        </div>
+                                        <div className="pi01Wishlist">
+                                          <i className="fa-solid fa-heart" />
+                                        </div>
+                                      </div>
+                                      <div className="productLabels clearfix">
+                                        {/* {product.labels.map((label, index) => (
+                            <span
+                              key={index}
+                              className={
+                                label.includes("Sale") ? "plSale" : "plDis"
+                              }
+                            >
+                              {label}
+                            </span>
+                          ))} */}
+                                      </div>
+                                    </div>
+                                  </Link>
+                                  <div className="pi01Details">
+                                    {product.reviews !== null && (
+                                      <div className="productRatings">
+                                        <div className="productRatingWrap">
+                                          <div className="star-rating">
+                                            <span />
+                                          </div>
+                                        </div>
+                                        <div className="ratingCounts">
+                                          {product.reviews} Reviews
+                                        </div>
+                                      </div>
+                                    )}
+                                    <h3>
+                                      <Link
+                                        to={`/product/detail/${product.id}`}
+                                      >
+                                        {product.name}
+                                      </Link>
+                                    </h3>
+                                    {product?.variants?.map((item: any) => {
+                                      return (
+                                        <div className="pi01Price">
+                                          <ins>{item.regular_price}VND</ins>
+                                          <del>{item.sale_price}VND</del>
+                                        </div>
+                                      );
+                                    })}
                                   </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
+                        ))}
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+              <Pagination
+                totalPages={totalPages}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
+              />
             </div>
           </div>
         </div>

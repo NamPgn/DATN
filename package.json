@@ -13,6 +13,7 @@
     "@ant-design/icons": "^5.5.2",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@hookform/resolvers": "^4.1.2",
     "@mui/material": "^6.4.5",
     "@tinymce/tinymce-react": "^5.1.1",
     "antd": "^5.23.1",
@@ -29,7 +30,8 @@
     "react-toastify": "^11.0.3",
     "slick-carousel": "^1.8.1",
     "styled-components": "^6.1.14",
-    "vite-project": "file:"
+    "vite-project": "file:",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
