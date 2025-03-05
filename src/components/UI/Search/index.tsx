@@ -1,11 +1,29 @@
-const SearchUi = (props: any) => {
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+const SearchUi = (props: {
+  onOpen: boolean;
+  onClose: (state: boolean) => void;
+}) => {
+  const [query, setQuery] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (query.trim()) {
+      navigate(`/shop?search=${encodeURIComponent(query)}`);
+    }
+  };
   return (
     <section
       className={
         props.onOpen == true ? " popup_search_sec active " : "popup_search_sec"
       }
     >
-      <div className="popup_search_overlay" />
+      <div
+        className="popup_search_overlay"
+        onClick={() => props.onClose(false)}
+      />
       <div className="pop_search_background">
         <div className="container">
           <div className="row">
@@ -30,12 +48,14 @@ const SearchUi = (props: any) => {
             <div className="row">
               <div className="col-lg-12 text-center">
                 <div className="popup_search_form">
-                  <form method="get" action="#">
+                  <form onSubmit={handleSearch}>
                     <input
                       type="search"
                       name="s"
                       id="s"
-                      placeholder="Search..."
+                      placeholder="Nhập từ khóa tìm kiếm..."
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
                     />
                     <button type="submit">
                       <i className="fa-solid fa-search" />
