@@ -25,8 +25,17 @@ const ProductDetail = () => {
       setCurrentImage(products.product_images[0].url);
     }
   }, [products]);
-  const [selectedSize, setSelectedSize] = useState("");
-  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedSize, setSelectedSize] = useState<any>(null);
+  const [selectedColor, setSelectedColor] = useState<any>(null);
+  const [selectedVariant, setSelectedVariant] = useState<any>(null);
+
+  const handleSizeSelect = (sizeId: number) => {
+    setSelectedSize(sizeId);
+    const variant = products?.variants.find((v: any) =>
+      v.values.some((val: any) => val.attribute_value_id === sizeId)
+    );
+    setSelectedVariant(variant || null);
+  };
   const [formData, setFormData] = useState({
     title: "",
     comment: "",
@@ -35,9 +44,6 @@ const ProductDetail = () => {
     rating: 0,
   });
   const [quantity, setQuantity] = useState(1);
-
-  const handleSizeChange = (e: any) => setSelectedSize(e.target.value);
-  const handleColorChange = (e: any) => setSelectedColor(e.target.value);
   const handleQuantityChange = (e: any) => {
     const value = parseInt(e.target.value, 10);
     if (!isNaN(value) && value > 0) {
@@ -54,21 +60,7 @@ const ProductDetail = () => {
   const handleQuantityDecrease = () => {
     setQuantity((prev) => (prev > 1 ? prev - 1 : prev));
   };
-  const product = {
-    category: ["Fashion", "Sports"],
-    title: "Ulina luxurious shirt for men",
-    price: {
-      original: "$120",
-      discounted: "$108",
-    },
-    rating: {
-      average: 5,
-      reviews: 52,
-    },
-    stock: 12,
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
-  };
+
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
     setFormData({
@@ -88,26 +80,30 @@ const ProductDetail = () => {
     ...new Set(
       products?.variants?.flatMap((v: any) =>
         v.values
-          .map((val: any) => val.attribute_value.name)
-          .filter((name: any) => !name.includes("Màu"))
+          .map((val: any) => val.attribute_value)
+          .filter((attr: any) => !attr.name.includes("Màu"))
       )
-    ),
+    ).values(),
   ];
-
   const colors = [
-    ...new Set(
-      products?.variants?.flatMap((v: any) =>
-        v.values
-          .map((val: any) => val.attribute_value.name)
-          .filter((name: any) => name.includes("Màu"))
-      )
-    ),
+    ...new Map(
+      products?.variants
+        ?.flatMap((v: any) =>
+          v.values
+            .map((val: any) => val.attribute_value)
+            .filter((attr: any) => attr.name.includes("Màu"))
+        )
+        .map((attr: any) => [attr.id, attr])
+    ).values(),
   ];
+  const handleSubmit = () => {
+    console.log(formData);
+  };
   if (isLoading) return "Sản phẩm đang tải";
   return (
     <section className="shopDetailsPageSection">
       <div className="container">
-        <div className="row">
+        <div className="d-flex gap-2">
           <div className="col-lg-6">
             <div className="productGalleryWrap2 clearfix">
               <div className="productGalleryThumb2 slick-initialized slick-slider slick-vertical">
@@ -145,7 +141,7 @@ const ProductDetail = () => {
               </div>
 
               <div className="productGallery2 slick-initialized slick-slider">
-                <div className="slick-list draggable">
+                <div className="draggable">
                   <div
                     className="slick-track"
                     style={{ opacity: 1, width: 1772 }}
@@ -173,52 +169,51 @@ const ProductDetail = () => {
           </div>
           <div className="col-lg-6">
             <div className="productContent pcMode2">
-              <div className="pcCategory">
-                {products?.categories?.map((cat: any, index: any) => (
-                  <span key={index}>
-                    <Link to={""}>{cat.name} </Link>
-                  </span>
-                ))}
-              </div>
               <h2>{products?.name}</h2>
-              <div className="pi01Price">
-                <ins>{product.price.discounted}</ins>
-                <del>{product.price.original}</del>
-              </div>
-              <div className="productRadingsStock clearfix">
-                <div className="productRatings float-start">
-                  <div className="productRatingWrap">
-                    <div className="star-rating">
-                      <span
-                        style={{
-                          width: `${(product.rating.average / 5) * 100}%`,
-                        }}
-                      />
+              {selectedVariant ? (
+                <>
+                  <div className="pi01Price">
+                    <ins>
+                      {selectedVariant.regular_price.toLocaleString()} đ
+                    </ins>
+                  </div>
+                  <div className="productRadingsStock clearfix">
+                    <div className="productRatings float-start">
+                      <div className="productRatingWrap">
+                        <div className="star-rating">
+                          <span
+                            style={{
+                              width: `${(products.rating?.average / 5) * 100}%`,
+                            }}
+                          />
+                        </div>
+                      </div>
+                      <div className="ratingCounts">
+                        {products.rating?.reviews} Reviews
+                      </div>
+                    </div>
+                    <div className="productStock float-end">
+                      <span>Available: </span> {selectedVariant.stock_quantity}
                     </div>
                   </div>
-                  <div className="ratingCounts">
-                    {product.rating.reviews} Reviews
-                  </div>
-                </div>
-                <div className="productStock float-end">
-                  <span>Available: </span> {product.stock}
-                </div>
-              </div>
+                </>
+              ) : (
+                ""
+              )}
+
               <div className="pcExcerpt">{products?.short_description}</div>
               <aside className="widget sizeFilter mb-4">
                 <h3 className="widgetTitle">Size</h3>
-                <div className="productSizeWrap">
-                  {sizes.map((size:any) => (
-                    <div className="pswItem" key={size}>
-                      <input
-                        type="radio"
-                        name="ws_1"
-                        value={size}
-                        id={`ws_${size}`}
-                        checked={selectedSize === size}
-                        onChange={handleSizeChange}
-                      />
-                      <label htmlFor={`ws_${size}`}>{size}</label>
+                <div className="productSizeWrap d-flex gap-2 flex-wrap">
+                  {sizes.map((size: any) => (
+                    <div
+                      key={size.id}
+                      className={`btn btn-[#9ebbbd] ${
+                        selectedSize === size.id ? "active" : ""
+                      }`}
+                      onClick={() => handleSizeSelect(size.id)}
+                    >
+                      {size.name}
                     </div>
                   ))}
                 </div>
@@ -227,13 +222,18 @@ const ProductDetail = () => {
               {/* Color Filter */}
               <div className="pcVariation">
                 <span>Color</span>
-                <div className="pcvContainer">
+              </div>
+              <div className="mb-3">
+                <div className="btn-group" role="group">
                   {colors.map((color: any) => (
                     <div
-                      className={`pi01VCItem ${color.toLowerCase()}s`}
-                      key={color}
+                      key={color.id}
+                      className={`btn  ${
+                        selectedColor === color.id ? "active" : ""
+                      }`}
+                      onClick={() => setSelectedColor(color.id)}
                     >
-                      {color}
+                      {color.name}
                     </div>
                   ))}
                 </div>
@@ -265,25 +265,27 @@ const ProductDetail = () => {
                     +
                   </button>
                 </div>
-                <button type="submit" className="ulinaBTN">
-                  <span>Add to Cart</span>
-                </button>
+                {selectedVariant && selectedColor ? (
+                  <button onClick={handleSubmit} className="ulinaBTN">
+                    <span>Add to Cart</span>
+                  </button>
+                ) : (
+                  "  "
+                )}
               </div>
 
               <div className="pcMeta">
-                <p>
-                  <span>Sku</span>
-                  <div>{products.sku}</div>
-                </p>
-                <p className="pcmTags">
-                  <span>Tags:</span>
-                  {tags.map((tag, index) => (
+                <span>Sku: {selectedVariant?.sku}</span>
+                <div className="pcCategory my-4">
+                  {products?.categories?.map((cat: any, index: any) => (
                     <span key={index}>
-                      <a>{tag}</a>
-                      {index < tags.length - 1 && ", "}
+                      <Link to={""}>
+                        {cat.name}
+                        {","}{" "}
+                      </Link>
                     </span>
                   ))}
-                </p>
+                </div>
                 <p className="pcmSocial">
                   <span>Share</span>
                   {socialLinks.map((link, index) => (

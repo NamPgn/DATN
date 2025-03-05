@@ -93,10 +93,9 @@ const AddOrder = () => {
       toast.success("Thêm order thành công");
     },
     onError: () => {
-      toast.error("Lỗi tải danh sách giao hàng");
+      toast.error("Thêm order thất bại");
     },
   });
-
   const optionsSelectProvince =
     orderGetProvince?.data?.data?.map((item: any) => ({
       label: item.ProvinceName,
@@ -125,15 +124,22 @@ const AddOrder = () => {
       MutateWard({ district_id: value });
     } else if (key === "select3") {
       selectedOption = optionsWard.find((opt: any) => opt.value === value);
-      setSelectedValues((prev: any) => ({ ...prev, select3: selectedOption }));
-      MutateShipping({
-        to_district_id: selectedValues.select2.value,
-        to_ward_code: selectedOption.value,
-        weight: selectedProducts.reduce(
-          (sum: number, item: any) => sum + item.weight * item.quantity,
-          0
-        ),
-      });
+      setSelectedValues((prev: any) => ({
+        ...prev,
+        select3: selectedOption,
+      }));
+      if (selectedProducts.length == 0) {
+        setSelectedValues((prev: any) => ({ ...prev, select3: null }));
+      } else {
+        MutateShipping({
+          to_district_id: selectedValues.select2.value,
+          to_ward_code: selectedOption.value,
+          weight: selectedProducts.reduce(
+            (sum: number, item: any) => sum + item.weight * item.quantity,
+            0
+          ),
+        });
+      }
     }
   };
   const onFinish = (values: any) => {
@@ -154,7 +160,12 @@ const AddOrder = () => {
       time: optionsShip.time,
       total_amount: totalAmount,
     };
-    Mutate(data);
+    
+    if (selectedProducts.length == 0) {
+      toast.error("Bạn chưa chọn sản phẩm");
+    } else {
+      Mutate(data);
+    }
   };
   if (isLoading) return <Spin />;
   return (
@@ -169,7 +180,7 @@ const AddOrder = () => {
       <Form form={form} layout="vertical" onFinish={onFinish}>
         <Form.Item label="Chọn Tỉnh/Thành phố" name="province_id">
           <Select
-            style={{ width: "200px" }}
+            style={{ width: "600px" }}
             placeholder="Chọn Tỉnh/Thành phố"
             options={optionsSelectProvince}
             onChange={(value) => handleChange("select1", value)}
@@ -178,7 +189,7 @@ const AddOrder = () => {
 
         <Form.Item label="Chọn Quận/Huyện" name="district_id">
           <Select
-            style={{ width: "200px" }}
+            style={{ width: "600px" }}
             placeholder="Chọn Quận/Huyện"
             options={optionsDistrict}
             onChange={(value) => handleChange("select2", value)}
@@ -189,7 +200,7 @@ const AddOrder = () => {
 
         <Form.Item label="Chọn Phường/Xã" name="ward_id">
           <Select
-            style={{ width: "200px" }}
+            style={{ width: "600px" }}
             placeholder="Chọn Phường/Xã"
             options={optionsWard}
             onChange={(value) => handleChange("select3", value)}

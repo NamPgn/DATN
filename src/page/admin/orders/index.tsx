@@ -19,10 +19,6 @@ import {
 const OrdersAdmin = () => {
   const [page, setPage] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-  const [editingorder, setEditingorder] = useState<any>(null);
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -34,37 +30,6 @@ const OrdersAdmin = () => {
       return await getOrders(page);
     },
   });
-  const { mutate: deleteOrders } = useMutation({
-    mutationFn: async (id: string) => {
-      return await delOrders(id);
-    },
-    onSuccess: () => {
-      toast.success("Xóa order thành công");
-      refetch();
-    },
-    onError: (error) => {
-      console.error("Lỗi khi xóa", error);
-      toast.error("Xóa không thành công");
-    },
-  });
-
-  const showAddorderModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const showEditorderModal = (order: any) => {
-    setEditingorder(order);
-    setIsEditModalVisible(true);
-  };
-
-  const handleCancelEdit = () => {
-    setIsEditModalVisible(false);
-    setEditingorder(null);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
 
   const rowSelection = {
     selectedRowKeys,

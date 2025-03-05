@@ -54,6 +54,7 @@ const ProductSelectModal = ({
       },
       {}
     );
+    
     setSelectedProducts([
       ...selectedProducts,
       {
@@ -171,10 +172,11 @@ const ProductSelectModal = ({
                 ------- {variant.total_price}VND
               </span>
               <InputNumber
+                required
                 min={1}
                 max={variant?.stock_quantity}
                 placeholder="Số lượng"
-                value={variant.quantity}
+                defaultValue={1}
                 onChange={(value) => handleChangeQuantity(variant.id, value)}
               />
               <Button
@@ -182,7 +184,6 @@ const ProductSelectModal = ({
                 icon={<DeleteOutlined />}
                 onClick={() => handleRemove(variant.id)}
               >
-                Xóa
               </Button>
             </li>
           ))}
