@@ -3,7 +3,6 @@ import Description from "./description";
 import { useQuery } from "react-query";
 import { getProductsDetailClient } from "../../../sevices/products";
 import { Link, useParams } from "react-router-dom";
-const tags = ["Fashion", "Bags", "Girls"];
 const socialLinks = [
   { platform: "facebook", icon: "fa-facebook-f", color: "#3b5998" },
   { platform: "twitter", icon: "fa-twitter", color: "#00acee" },

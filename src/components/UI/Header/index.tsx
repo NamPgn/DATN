@@ -25,6 +25,7 @@ const Header = () => {
       path: "/shop",
       class: "menu-item-has-children",
     },
+    { name: "Products", path: "/products" },
     { name: "Contacts", path: "/contact" },
   ];
 

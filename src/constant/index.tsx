@@ -24,6 +24,10 @@ export const URLSECTION = [
     SECTTIONTITLE: "Shop",
   },
   {
+    PATH: "/products",
+    SECTTIONTITLE: "Products",
+  },
+  {
     PATH: "/cart",
     SECTTIONTITLE: "Shopping Cart",
   },
@@ -395,7 +399,6 @@ export const columnsOrders = [
     key: "action",
     fixed: "right",
     width: 400,
-
   },
 ];
 

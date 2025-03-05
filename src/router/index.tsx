@@ -66,6 +66,7 @@ import ResetPassword from "../page/auth/resetPassword";
 import AccountSetting from "../page/auth/account";
 import AddOrder from "../page/admin/orders/components/add";
 import SendOrder from "../page/admin/orders/components/send";
+import ProductAll from "../page/shop/productAll";
 
 export const routerClient = [
   {
@@ -85,8 +86,12 @@ export const routerClient = [
         element: <TeamPage />,
       },
       {
-        path: "/shop",
+        path: "/shop/:id",
         element: <Shop />,
+      },
+      {
+        path: "/products",
+        element: <ProductAll />,
       },
       {
         path: "/cart",

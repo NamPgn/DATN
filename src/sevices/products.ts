@@ -60,7 +60,7 @@ export const deleteVariantsProduct = async (data: any) => {
 };
 
 export const getProductsClient = async () => {
-  return intancesLocal.get("/products/client");
+  return intancesLocal.get("/latest-products");
 };
 
 export const getProductsDetailClient = async (id: any) => {
