@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery } from "react-query";
 import { getProductsByCategory } from "../../sevices/client";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Pagination } from "./components/pagination";
 import { useState } from "react";
 

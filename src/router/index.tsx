@@ -67,6 +67,7 @@ import AddOrder from "../page/admin/orders/components/add";
 import SendOrder from "../page/admin/orders/components/send";
 import Shop from "../page/Shop";
 import ProductAll from "../page/Shop/productAll";
+import ProductSearch from "../page/Shop/productSearch";
 
 export const routerClient = [
   {
@@ -92,6 +93,10 @@ export const routerClient = [
       {
         path: "/products",
         element: <ProductAll />,
+      },
+      {
+        path: "/search",
+        element: <ProductSearch />,
       },
       {
         path: "/cart",

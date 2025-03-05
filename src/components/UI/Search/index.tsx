@@ -1,29 +1,27 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-const SearchUi = (props: {
+const SearchUi = ({
+  onOpen,
+  onClose,
+}: {
   onOpen: boolean;
-  onClose: (state: boolean) => void;
+  onClose: (value: boolean) => void;
 }) => {
-  const [query, setQuery] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (query.trim()) {
-      navigate(`/shop?search=${encodeURIComponent(query)}`);
+    if (searchTerm.trim()) {
+      navigate(`/search?keyword=${encodeURIComponent(searchTerm)}`);
+      onClose(false);
     }
   };
   return (
     <section
-      className={
-        props.onOpen == true ? " popup_search_sec active " : "popup_search_sec"
-      }
+      className={onOpen ? "popup_search_sec active" : "popup_search_sec"}
     >
-      <div
-        className="popup_search_overlay"
-        onClick={() => props.onClose(false)}
-      />
+      <div className="popup_search_overlay" onClick={() => onClose(false)} />
       <div className="pop_search_background">
         <div className="container">
           <div className="row">
@@ -38,7 +36,7 @@ const SearchUi = (props: {
               <div
                 className="search_Closer"
                 style={{ cursor: "pointer" }}
-                onClick={() => props.onClose(false)}
+                onClick={() => onClose(false)}
               ></div>
             </div>
           </div>
@@ -48,14 +46,13 @@ const SearchUi = (props: {
             <div className="row">
               <div className="col-lg-12 text-center">
                 <div className="popup_search_form">
-                  <form onSubmit={handleSearch}>
+                  <form onSubmit={handleSearchSubmit}>
                     <input
                       type="search"
                       name="s"
                       id="s"
-                      placeholder="Nhập từ khóa tìm kiếm..."
-                      value={query}
-                      onChange={(e) => setQuery(e.target.value)}
+                      placeholder="Search..."
+                      onChange={(e) => setSearchTerm(e.target.value)}
                     />
                     <button type="submit">
                       <i className="fa-solid fa-search" />

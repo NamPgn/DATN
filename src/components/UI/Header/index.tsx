@@ -23,7 +23,7 @@ const Header = () => {
     { name: "About", path: "/about" },
     {
       name: "Shop",
-      path: "/shop",
+      path: "/shop/:id",
       class: "menu-item-has-children",
     },
     { name: "Products", path: "/products" },
