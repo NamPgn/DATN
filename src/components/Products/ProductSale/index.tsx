@@ -28,7 +28,7 @@ const ProductSale = () => {
                   gridTemplateColumns: "repeat(5, 1fr)",
                 }}
               >
-                {products?.map((product: any) => (
+                {products?.length ? products?.map((product: any) => (
                   <div
                     key={product.id}
                     className={`owl-item active ${
@@ -106,7 +106,7 @@ const ProductSale = () => {
                       </div>
                     </div>
                   </div>
-                ))}
+                )):"Không có sản phẩm"}
               </div>
             </div>
           </div>

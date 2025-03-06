@@ -145,6 +145,7 @@ const ProductForm = ({
         attributesValues[attribute.name] = selectedNames;
       }
     });
+    console.log(val.variants);
     const data = {
       attributes: attributesValues,
       main_image: selectOneImage?.id,
@@ -164,7 +165,7 @@ const ProductForm = ({
         typeProduct == "0"
           ? val.variants.map((item: any, index: number) => ({
               ...item,
-              variant_id: val.variants?.find((items: any) => items?.id)?.id,
+              variant_id: item.id,
               values: variants[index]?.nam || [],
             }))
           : [
@@ -471,8 +472,12 @@ const ProductForm = ({
                         <Input placeholder="Nhập mã SKU" />
                       </Form.Item>
 
-                      <Form.Item label={'Cân nặng'} {...restField} name={[name, "weight"]}>
-                        <InputNumber  min={0} max={50000} placeholder="100gam" />
+                      <Form.Item
+                        label={"Cân nặng"}
+                        {...restField}
+                        name={[name, "weight"]}
+                      >
+                        <InputNumber min={0} max={50000} placeholder="100gam" />
                       </Form.Item>
                     </Space>
                   ))}

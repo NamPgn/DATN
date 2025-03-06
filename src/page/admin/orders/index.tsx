@@ -60,11 +60,11 @@ const OrdersAdmin = () => {
                 Detail
               </MyButton>
             </Link>
-            <Link to={`/dashboard/orders/edit/${item.id}`}>
+            {/* <Link to={`/dashboard/orders/edit/${item.id}`}>
               <Button icon={<EditOutlined />} color="blue" variant="filled">
                 Edit
               </Button>
-            </Link>
+            </Link> */}
 
             <Link to={`/dashboard/orders/send/${item.id}`}>
               <Button icon={<PlusOutlined />} color="green" variant="text">

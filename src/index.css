@@ -44,6 +44,7 @@ a {
   margin: 5px 0px !important;
 }
 
-:where(.css-dev-only-do-not-override-mzhxf2).ant-popover .ant-popover-inner{
+:where(.css-dev-only-do-not-override-mzhxf2).ant-popover .ant-popover-inner {
   background-color: #fff !important;
 }
+

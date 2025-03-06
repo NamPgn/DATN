@@ -3882,20 +3882,20 @@
     margin: 0 30px 0 0;
 }
 
-.sortNav form {
+.sortNav div {
     margin: 0;
     padding: 0;
     display: inline-flex;
 }
 
-.sortNav form label {
+.sortNav div label {
     font-size: 16px;
     line-height: 24px;
     color: #7f8495;
     margin: 0 13px 0 0;
 }
 
-.sortNav form .nice-select {
+.sortNav div .nice-select {
     font-size: 16px;
     line-height: 24px;
     color: #7f8495;
@@ -3908,11 +3908,11 @@
     height: auto;
 }
 
-.sortNav form .nice-select span.current {
+.sortNav div .nice-select span.current {
     font-weight: 700;
 }
 
-.sortNav form .nice-select:after {
+.sortNav div .nice-select:after {
     content: '\f107';
     font-family: 'Font Awesome 6 Free';
     font-weight: 900;
@@ -3931,11 +3931,11 @@
     -webkit-transform: rotate(0deg);
 }
 
-.sortNav form .nice-select.open:after {
+.sortNav div .nice-select.open:after {
     content: '\f106';
 }
 
-.sortNav form .nice-select .list {
+.sortNav div .nice-select .list {
     margin: 10px 0 0;
     border-radius: 3px;
     border: none;
@@ -3943,7 +3943,7 @@
     min-width: 80px;
 }
 
-.sortNav form .nice-select .list .option {
+.sortNav div .nice-select .list .option {
     font-size: 16px;
     color: #7f8495;
     text-transform: capitalize;
@@ -3951,9 +3951,9 @@
     line-height: 40px;
 }
 
-.sortNav form .nice-select .option:hover,
-.sortNav form .nice-select .option.focus,
-.sortNav form .nice-select .option.selected.focus {
+.sortNav div .nice-select .option:hover,
+.sortNav div .nice-select .option.focus,
+.sortNav div .nice-select .option.selected.focus {
     background-color: #9ebbbd !important;
     color: #FFF !important;
 }

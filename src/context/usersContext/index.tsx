@@ -12,7 +12,12 @@ export const UserContextProvider = (props: any) => {
   const { data: userId } = useQuery({
     queryKey: ["userId", token?.user?.id],
     queryFn: async () => {
-      return (await getUserId(token.user?.id)).data;
+      return (await getUserId(token?.user?.id)).data;
+    },
+    enabled: !!token,
+    onSuccess: () => {},
+    onError: () => {
+      return {};
     },
   });
   const value: any = {
@@ -20,7 +25,7 @@ export const UserContextProvider = (props: any) => {
     setIslogin,
     isLogin,
     token,
-    userId
+    userId,
   };
   return (
     <UsersContext.Provider value={value}>
