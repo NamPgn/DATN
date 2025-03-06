@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Checkbox, Form, Grid, Input, theme, Typography } from "antd";
 import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
 import { useMutation } from "react-query";
@@ -6,6 +7,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { UsersContext } from "../../../context/usersContext";
+import "ionicons";
 
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
@@ -17,40 +19,26 @@ export default function Login() {
   const screens = useBreakpoint();
   const navigate = useNavigate();
   const styles: any = {
-    logo: {
-      width: "100px",
-      objectFit: "cover",
-    },
     section: {
       display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
       height: "100vh",
-      backgroundColor: token.colorBgContainer,
-    },
-    imageContainer: {
-      flex: "60%",
-      background: "url('/assets/images/slider/3.jpg') center/cover no-repeat",
+      backgroundColor: "#F5F5F5",
+      //   background: "url('/assets/images/bg/login.jpg') center/cover no-repeat",
     },
     formContainer: {
-      flex: "40%",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
+      margin: token.marginLG,
       padding: screens.md ? `${token.sizeXXL}px` : `${token.padding}px`,
-    },
-    formContent: {
+      backgroundColor: "#FFF",
+      borderRadius: "8px", // Tuỳ chỉnh bo góc nếu cần
+      boxShadow: "0 4px 50px rgba(0,0,0,.15)", // Tạo bóng cho container
       width: "100%",
-      maxWidth: "380px",
+      maxWidth: "500px", // Đảm bảo form không quá rộng
     },
-    header: {
+    title: {
       textAlign: "center",
       marginBottom: token.marginXL,
-    },
-    iconText: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: "8px",
     },
     text: {
       color: token.colorTextSecondary,
@@ -86,19 +74,12 @@ export default function Login() {
   };
   return (
     <section style={styles.section}>
-      <div style={styles.formContainer}>
+      <div className="animation" style={styles.formContainer}>
         <div style={styles.formContent}>
-          <div style={styles.header}>
-            <div style={styles.iconText}>
-              <img style={styles.logo} src="/assets/images/logo.png" alt="" />
-              <Title level={2} style={{ margin: 0 }}>
-                Sign in
-              </Title>
-            </div>
-            <Text style={styles.text}>
-              Welcome back to AntBlocks UI! Please enter your details below to
-              sign in.
-            </Text>
+          <div style={styles.title}>
+            <Title level={2} style={{ margin: 0, fontSize: "40px" }}>
+              ĐĂNG NHẬP
+            </Title>
           </div>
           <Form
             name="normal_login"
@@ -111,42 +92,71 @@ export default function Login() {
               rules={[
                 {
                   required: true,
-                  message: "Please input your username!",
+                  message: "Vui lòng nhập tên đăng nhập!",
                 },
               ]}
             >
-              <Input prefix={<UserOutlined />} placeholder="Username" />
+              <Input
+                prefix={<UserOutlined />}
+                placeholder="Tên đăng nhập"
+                style={{ fontSize: "16px" }} // Ghi đè kích thước font tại đây
+              />
             </Form.Item>
             <Form.Item
               name="password"
               rules={[
-                { required: true, message: "Please input your Password!" },
+                { required: true, message: "Vui lòng nhập mật khẩu!" },
                 {
                   min: 8,
-                  message: "Password tối thiểu 8 ký tự",
+                  message: "Mật khẩu tối thiểu 8 ký tự",
                 },
               ]}
             >
               <Input.Password
                 prefix={<LockOutlined />}
-                placeholder="Password"
+                placeholder="Mật khẩu"
+                style={{ fontSize: "16px" }} // Ghi đè kích thước font tại đây
               />
             </Form.Item>
-            <Form.Item>
+            <Form.Item style={{ marginTop: "-12px" }}>
               <Form.Item name="remember" valuePropName="checked" noStyle>
-                <Checkbox>Remember me</Checkbox>
+                <Checkbox>Ghi nhớ mật khẩu</Checkbox>
               </Form.Item>
-              <Link style={styles.forgotPassword} href="/auth/forgot-password">
-                Forgot password?
+              <Link
+                className="hover-underline"
+                style={styles.forgotPassword}
+                href="/auth/forgot-password"
+              >
+                Quên mật khẩu?
               </Link>
             </Form.Item>
             <Form.Item>
-              <Button block type="primary" htmlType="submit">
-                Log in
+              <Button
+                block
+                type="primary"
+                htmlType="submit"
+                style={{
+                  paddingTop: "20px",
+                  paddingBottom: "22px",
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                }}
+              >
+                Đăng nhập
               </Button>
               <div style={styles.footer}>
-                <Text style={styles.text}>Don't have an account?</Text>{" "}
-                <Link href="/auth/register">Sign up now</Link>
+                <Text style={styles.text}>Bạn không có tài khoản?</Text>
+                <Link
+                  className="hover-underline"
+                  style={{
+                    color: "red",
+                    fontWeight: "bold",
+                    marginLeft: "6px",
+                  }}
+                  href="/auth/register"
+                >
+                  Đăng ký
+                </Link>
               </div>
             </Form.Item>
           </Form>
