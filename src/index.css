@@ -48,3 +48,23 @@ a {
   background-color: #fff !important;
 }
 
+.variant-btn {
+  border: 1px solid #ccc;
+  padding: 1px 9px;
+  border-radius: 5px;
+  font-size: 15px;
+  cursor: pointer;
+  background-color: transparent;
+  color: black;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.variant-btn.selected {
+  background-color: #6e888b;
+  color: white;
+  border: 1px solid transparent;
+}
+
+.variant-btn:hover {
+  background-color: #e0e0e0;
+}

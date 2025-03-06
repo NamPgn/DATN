@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Description from "./description";
 import { useQuery } from "react-query";
 import { getProductsDetailClient } from "../../../sevices/products";
@@ -9,14 +9,92 @@ const socialLinks = [
   { platform: "linkedin", icon: "fa-linkedin-in", color: "#0077b5" },
   { platform: "instagram", icon: "fa-instagram", color: "#e4405f" },
 ];
+const products = {
+  id: 1,
+  name: "Áo Thun Nam Họa Tiết In Excursion Mighty Bear Form Regular",
+  description: "<p>Áo thun xịn của mình</p>",
+  short_description: "Áo thun xịn của mình",
+  url_main_image:
+    "https://res.cloudinary.com/dkrn3fe2o/image/upload/w_800,h_800,c_thumb/v1739066961/fwuyeublz9dda716tfpi.webp",
+  type: "0",
+  slug: "ao-thun-nam-hoa-tiet-in-excursion-mighty-bear-form-regular",
+  variants: [
+    {
+      id: 1,
+      sku: "PRD2",
+      regular_price: 300000,
+      sale_price: 199000,
+      weight: 120,
+      stock_quantity: 230,
+      values: [
+        {
+          attribute_id: 1,
+          attribute_name: "Màu sắc",
+          attribute_value_id: 1,
+          value: "Màu đỏ",
+        },
+        {
+          attribute_id: 2,
+          attribute_name: "Kích thước",
+          attribute_value_id: 7,
+          value: "36",
+        },
+      ],
+    },
+    {
+      id: 2,
+      sku: "PRD2",
+      regular_price: 300000,
+      sale_price: 189000,
+      weight: 200,
+      stock_quantity: 90,
+      values: [
+        {
+          attribute_id: 1,
+          attribute_name: "Màu sắc",
+          attribute_value_id: 1,
+          value: "Màu đỏ",
+        },
+        {
+          attribute_id: 2,
+          attribute_name: "Kích thước",
+          attribute_value_id: 8,
+          value: "37",
+        },
+        {
+          attribute_id: 3,
+          attribute_name: "Chất Liệu",
+          attribute_value_id: 1,
+          value: "Cotton",
+        },
+      ],
+    },
+  ],
+
+  categories: ["Áo", "Áo thun"],
+  product_images: [
+    {
+      url: "https://res.cloudinary.com/dkrn3fe2o/image/upload/w_800,h_800,c_thumb/v1739066958/ovmdtlu6ihcldyx9jckg.jpg",
+    },
+    {
+      url: "https://res.cloudinary.com/dkrn3fe2o/image/upload/w_800,h_800,c_thumb/v1739066964/wjhxgmfpytbtvbfne5yu.webp",
+    },
+    {
+      url: "https://res.cloudinary.com/dkrn3fe2o/image/upload/w_800,h_800,c_thumb/v1739066967/yq6mviubta0ujkpngjyr.jpg",
+    },
+    {
+      url: "https://res.cloudinary.com/dkrn3fe2o/image/upload/w_800,h_800,c_thumb/v1739066970/qjzs2nnqfcj2dqns4mx9.jpg",
+    },
+  ],
+};
 const ProductDetail = () => {
   const { id } = useParams();
-  const { data: products, isLoading } = useQuery({
-    queryKey: ["products", id],
-    queryFn: async () => {
-      return (await getProductsDetailClient(id)).data;
-    },
-  });
+  // const { data: products, isLoading } = useQuery({
+  //   queryKey: ["products", id],
+  //   queryFn: async () => {
+  //     return (await getProductsDetailClient(id)).data;
+  //   },
+  // });
   const [currentImage, setCurrentImage] = useState<any>(null);
 
   useEffect(() => {
@@ -24,17 +102,27 @@ const ProductDetail = () => {
       setCurrentImage(products.product_images[0].url);
     }
   }, [products]);
-  const [selectedSize, setSelectedSize] = useState<any>(null);
-  const [selectedColor, setSelectedColor] = useState<any>(null);
-  const [selectedVariant, setSelectedVariant] = useState<any>(null);
-
-  const handleSizeSelect = (sizeId: number) => {
-    setSelectedSize(sizeId);
-    const variant = products?.variants.find((v: any) =>
-      v.values.some((val: any) => val.attribute_value_id === sizeId)
-    );
-    setSelectedVariant(variant || null);
+  const [selectedVariants, setSelectedVariants]: any = useState<{
+    [key: string]: number | null;
+  }>({});
+  const handleSelect = (
+    groupName: string,
+    item: { id: number; name: string }
+  ) => {
+    setSelectedVariants((prev: any) => ({
+      ...prev,
+      [groupName]: prev[groupName]?.id === item.id ? null : item,
+    }));
   };
+  const selectedVariantss = useMemo(() => {
+    return products.variants.find((variant) =>
+      variant.values.every((val) =>
+        Object.values(selectedVariants).some(
+          (selected: any) => selected?.id === val.attribute_value_id
+        )
+      )
+    );
+  }, [selectedVariants]);
   const [formData, setFormData] = useState({
     title: "",
     comment: "",
@@ -75,30 +163,34 @@ const ProductDetail = () => {
     });
   };
 
-  const sizes = [
-    ...new Set(
-      products?.variants?.flatMap((v: any) =>
-        v.values
-          .map((val: any) => val.attribute_value)
-          .filter((attr: any) => !attr.name.includes("Màu"))
-      )
-    ).values(),
-  ];
-  const colors = [
-    ...new Map(
-      products?.variants
-        ?.flatMap((v: any) =>
-          v.values
-            .map((val: any) => val.attribute_value)
-            .filter((attr: any) => attr.name.includes("Màu"))
+  const variantGroups: Record<string, any[]> = {};
+
+  products?.variants?.forEach((variant: any) => {
+    variant.values.forEach((val: any) => {
+      const attributeName = val.attribute_name;
+
+      // Nếu nhóm chưa có, khởi tạo mảng rỗng
+      if (!variantGroups[attributeName]) {
+        variantGroups[attributeName] = [];
+      }
+
+      if (
+        !variantGroups[attributeName].some(
+          (item) => item.id === val.attribute_value_id
         )
-        .map((attr: any) => [attr.id, attr])
-    ).values(),
-  ];
+      ) {
+        variantGroups[attributeName].push({
+          id: val.attribute_value_id,
+          name: val.value,
+        });
+      }
+    });
+  });
+
   const handleSubmit = () => {
     console.log(formData);
   };
-  if (isLoading) return "Sản phẩm đang tải";
+  // if (isLoading) return "Sản phẩm đang tải";
   return (
     <section className="shopDetailsPageSection">
       <div className="container">
@@ -106,7 +198,7 @@ const ProductDetail = () => {
           <div className="col-lg-6">
             <div className="productGalleryWrap2 clearfix">
               <div className="productGalleryThumb2 slick-initialized slick-slider slick-vertical">
-                <div className="slick-list draggable" style={{ height: 544 }}>
+                <div className="draggable" style={{ height: 544 }}>
                   <div
                     className="slick-track"
                     style={{
@@ -169,16 +261,16 @@ const ProductDetail = () => {
           <div className="col-lg-6">
             <div className="productContent pcMode2">
               <h2>{products?.name}</h2>
-              {selectedVariant ? (
+              {selectedVariantss ? (
                 <>
                   <div className="pi01Price">
                     <ins>
-                      {selectedVariant.regular_price.toLocaleString()} đ
+                      {selectedVariantss.regular_price.toLocaleString()} đ
                     </ins>
                   </div>
                   <div className="productRadingsStock clearfix">
                     <div className="productRatings float-start">
-                      <div className="productRatingWrap">
+                      {/* <div className="productRatingWrap">
                         <div className="star-rating">
                           <span
                             style={{
@@ -189,10 +281,11 @@ const ProductDetail = () => {
                       </div>
                       <div className="ratingCounts">
                         {products.rating?.reviews} Reviews
-                      </div>
+                      </div> */}
                     </div>
                     <div className="productStock float-end">
-                      <span>Available: </span> {selectedVariant.stock_quantity}
+                      <span>Available: </span>{" "}
+                      {selectedVariantss.stock_quantity}
                     </div>
                   </div>
                 </>
@@ -201,42 +294,28 @@ const ProductDetail = () => {
               )}
 
               <div className="pcExcerpt">{products?.short_description}</div>
-              <aside className="widget sizeFilter mb-4">
-                <h3 className="widgetTitle">Size</h3>
-                <div className="productSizeWrap d-flex gap-2 flex-wrap">
-                  {sizes.map((size: any) => (
-                    <div
-                      key={size.id}
-                      className={`btn btn-[#9ebbbd] ${
-                        selectedSize === size.id ? "active" : ""
-                      }`}
-                      onClick={() => handleSizeSelect(size.id)}
-                    >
-                      {size.name}
-                    </div>
-                  ))}
-                </div>
-              </aside>
-
-              {/* Color Filter */}
-              <div className="pcVariation">
-                <span>Color</span>
-              </div>
-              <div className="mb-3">
-                <div className="btn-group" role="group">
-                  {colors.map((color: any) => (
-                    <div
-                      key={color.id}
-                      className={`btn  ${
-                        selectedColor === color.id ? "active" : ""
-                      }`}
-                      onClick={() => setSelectedColor(color.id)}
-                    >
-                      {color.name}
-                    </div>
-                  ))}
-                </div>
-              </div>
+              {Object.entries(variantGroups).map(([groupName, values]) => (
+                <aside key={groupName} className="widget sizeFilter mb-4 d-flex gap-3" style={{ alignItems:"center" }}>
+                  <div className="">{groupName}:</div>
+                  <div className="productSizeWrap d-flex gap-2 flex-wrap">
+                    {values.map((item: any) => {
+                      const isSelected =
+                        selectedVariants[groupName]?.id === item.id;
+                      return (
+                        <div
+                          key={item.id}
+                          className={`variant-btn ${
+                            isSelected ? "selected" : ""
+                          }`}
+                          onClick={() => handleSelect(groupName, item)}
+                        >
+                          {item.name}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </aside>
+              ))}
 
               <div className="pcBtns">
                 <div className="quantity clearfix">
@@ -264,7 +343,7 @@ const ProductDetail = () => {
                     +
                   </button>
                 </div>
-                {selectedVariant && selectedColor ? (
+                {selectedVariantss ? (
                   <button onClick={handleSubmit} className="ulinaBTN">
                     <span>Add to Cart</span>
                   </button>
@@ -274,12 +353,12 @@ const ProductDetail = () => {
               </div>
 
               <div className="pcMeta">
-                <span>Sku: {selectedVariant?.sku}</span>
+                <span>Sku: {selectedVariantss?.sku}</span>
                 <div className="pcCategory my-4">
                   {products?.categories?.map((cat: any, index: any) => (
                     <span key={index}>
                       <Link to={""}>
-                        {cat.name}
+                        {cat}
                         {","}{" "}
                       </Link>
                     </span>
