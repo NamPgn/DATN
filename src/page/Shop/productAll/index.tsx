@@ -7,26 +7,41 @@ import { Pagination } from "../components/pagination";
 
 const ProductAll = () => {
   const [currentPage, setCurrentPage] = useState(1);
+
   const [openOption, setopenOption] = useState(false);
+  const [selectedValue, setSelectedValue] = useState(`?page=${currentPage}`);
   const handleClickOption = () => {
     setopenOption((open) => !open);
   };
   const { data: products } = useQuery({
-    queryKey: ["products", currentPage],
+    queryKey: ["products", selectedValue],
     queryFn: async () => {
-      return (await getProductsByCategory(currentPage)).data;
+      return (await getProductsByCategory(selectedValue)).data;
     },
   });
-  const totalItems = products?.total; // Tổng số sản phẩm
-  const itemsPerPage = 9; // Số sản phẩm trên mỗi trang
+  const totalItems = products?.total;
+  const itemsPerPage = 9;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const options = [
+    { label: "Default", value: `?page=${currentPage}` },
+    { label: "High to low", value: "?sort_by=high_to_low" },
+    { label: "Low to high", value: "?sort_by=low_to_high" },
+    { label: "Top rated", value: "?sort_by=top_rated" },
+  ];
+  const handleChange = (e: any) => {
+    console.log(e);
+  };
+  const handleSelect = (value: string) => {
+    setSelectedValue(value);
+    console.log("Selected:", value);
+  };
   return (
     <section className="shopPageSection">
       <div className="container">
         <div className="row shopAccessRow">
           <div className="col-sm-6 col-xl-4">
             <div className="productCount">
-              Showing <strong>1 - 16</strong> of <strong>220</strong> items
+              Showing <strong>1 - {itemsPerPage}</strong> of <strong>{products?.data?.length}</strong> items
             </div>
           </div>
           <div className="d-none col-lg-4 col-xl-4 d-xl-flex">
@@ -47,40 +62,45 @@ const ProductAll = () => {
                 </a>
               </div>
               <div className="sortNav">
-                <form method="post" action="#">
+                <div>
                   <label>Sort By</label>
-                  <select name="productFilter" style={{ display: "none" }}>
-                    <option value="">Default</option>
-                    <option value={1}>High to low</option>
-                    <option value={2}>Low to high</option>
-                    <option value={3}>Top rated</option>
-                    <option value={4}>Recently viewed</option>
+                  <select
+                    name="productFilter"
+                    style={{ display: "none" }}
+                    onChange={(e) => handleChange(e)}
+                  >
+                    <option value={`?page=${currentPage}`}>Default</option>
+                    <option value={`?sort_by=high_to_low`}>High to low</option>
+                    <option value={`?sort_by=low_to_high`}>Low to high</option>
+                    <option value={`?sort_by=top_rated`}>Top rated</option>
                   </select>
                   <div
                     className={`nice-select ${openOption ? "open" : ""}`}
                     onClick={handleClickOption}
                     tabIndex={0}
                   >
-                    <span className="current">Default</span>
-                    <ul className="list">
-                      <li data-value="" className="option selected">
-                        Default
-                      </li>
-                      <li data-value={1} className="option">
-                        High to low
-                      </li>
-                      <li data-value={2} className="option">
-                        Low to high
-                      </li>
-                      <li data-value={3} className="option">
-                        Top rated
-                      </li>
-                      <li data-value={4} className="option">
-                        Recently viewed
-                      </li>
+                    <span className="current">
+                      {
+                        options.find((opt) => opt.value === selectedValue)
+                          ?.label
+                      }
+                    </span>
+                    <ul className={`list ${openOption ? "block" : "hidden"}`}>
+                      {options.map((option) => (
+                        <li
+                          key={option.value}
+                          data-value={option.value}
+                          className={`option ${
+                            selectedValue === option.value ? "selected" : ""
+                          }`}
+                          onClick={() => handleSelect(option.value)}
+                        >
+                          {option.label}
+                        </li>
+                      ))}
                     </ul>
                   </div>
-                </form>
+                </div>
               </div>
             </div>
           </div>
@@ -100,7 +120,10 @@ const ProductAll = () => {
               >
                 <div className="row">
                   {products?.data?.map((product: any) => (
-                    <div className="col-sm-6 col-lg-4 col-xl-3">
+                    <div
+                      className="col-sm-6 col-lg-4 col-xl-3"
+                      key={product?.id}
+                    >
                       <div className="productItem01">
                         <div
                           key={product.id}

@@ -97,49 +97,23 @@ const Header = () => {
                     {menuItems.map((item, index) => (
                       <li key={index} className={item.class}>
                         <Link to={item.path}>{item.name}</Link>
-                        {item.class ? (
-                          <>
-                            <div className="megaMenu" key={item.name}>
-                              <div className="row">
-                                <div className="col-lg-6">
-                                  <h3>List Categories</h3>
-                                  <ul>
-                                    {data?.data?.map((content: any) => {
-                                      return (
-                                        <li>
-                                          <Link to={content.slug}>
-                                            {content.name}
-                                          </Link>
-                                        </li>
-                                      );
-                                    })}
-                                  </ul>
-                                </div>
-
-                                <div className="col-lg-6 hideOnMobile">
-                                  <div className="lookBook01 lb01M2">
-                                    <div className="lbContent">
-                                      <h3>Be Stylish</h3>
-                                      <h2>Girl’s Latest Fashion</h2>
-                                      <a
-                                        href="shop_left_sidebar.html"
-                                        className="ulinaLink"
-                                      >
-                                        <i className="fa-solid fa-angle-right" />
-                                        Shop Now
-                                      </a>
-                                    </div>
-                                    <img
-                                      src="/assets/images/home1/3.png"
-                                      alt="Mans Latest Collection"
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </>
-                        ) : (
-                          ""
+                        {item.class && (
+                          <ul className="submenu">
+                            <li className="menu-item-has-children">
+                              <Link to={""}>Blog Standard</Link>
+                              <ul>
+                                <li>
+                                  <Link to={""}>Blog Standard</Link>
+                                </li>
+                                <li>
+                                  <Link to={""}>Blog Standard</Link>
+                                </li>
+                                <li>
+                                  <Link to={""}>Blog Standard</Link>
+                                </li>
+                              </ul>
+                            </li>
+                          </ul>
                         )}
                       </li>
                     ))}

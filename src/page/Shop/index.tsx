@@ -3,20 +3,39 @@ import { useQuery } from "react-query";
 import { getProductsByCategory } from "../../sevices/client";
 import { Link } from "react-router-dom";
 import { Pagination } from "./components/pagination";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import "rc-slider/assets/index.css";
+import PriceRange from "./productAll/changeRange";
+import debounce from "lodash.debounce";
+import Loading from "../../components/Loading/Loading";
 
 const Shop = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState("?page=1");
   const [openOption, setopenOption] = useState(false);
+
   const handleClickOption = () => {
     setopenOption((open) => !open);
   };
-  const { data: products } = useQuery({
+
+  const debouncedSetPrice = useCallback(
+    debounce((value) => {
+      const [min, max] = value;
+      setCurrentPage(`?min_price=${min}&max_price=${max}`);
+    }, 1000),
+    []
+  );
+
+  const handlePriceChange = (value: any) => {
+    debouncedSetPrice(value);
+  };
+
+  const { data: products, isLoading }: any = useQuery({
     queryKey: ["products", currentPage],
     queryFn: async () => {
       return (await getProductsByCategory(currentPage)).data;
     },
   });
+
   const totalItems = products?.total; // Tổng số sản phẩm
   const itemsPerPage = 9; // Số sản phẩm trên mỗi trang
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -106,39 +125,12 @@ const Shop = () => {
                     </li>
                   </ul>
                 </aside>
-
-                <aside className="widget priceFilter">
-                  <h3 className="widgetTitle">Price Range</h3>
-                  <div className="shopWidgetWraper">
-                    <div className="priceFilterSlider">
-                      <form action="#" method="get" className="clearfix">
-                        <div
-                          id="sliderRange"
-                          className="ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
-                        >
-                          <div
-                            className="ui-slider-range ui-corner-all ui-widget-header"
-                            style={{ left: "0%", width: "20%" }}
-                          />
-                          <span
-                            tabIndex={0}
-                            className="ui-slider-handle ui-corner-all ui-state-default"
-                            style={{ left: "0%" }}
-                          />
-                          <span
-                            tabIndex={0}
-                            className="ui-slider-handle ui-corner-all ui-state-default"
-                            style={{ left: "20%" }}
-                          />
-                        </div>
-                        <div className="pfsWrap">
-                          <label>Price</label>
-                          <span id="amount">$0 - $2000</span>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </aside>
+                <PriceRange
+                  minPrice={0}
+                  maxPrice={2000000}
+                  onChange={handlePriceChange}
+                />
+                ;
                 <aside className="widget sizeFilter">
                   <h3 className="widgetTitle">Size</h3>
                   <div className="productSizeWrap">
@@ -262,7 +254,7 @@ const Shop = () => {
               <div className="row shopAccessRow">
                 <div className="col-sm-6">
                   <div className="productCount">
-                    Showing <strong>1 - 16</strong> of{" "}
+                    Showing <strong>1 - {products?.data?.length}</strong> of{" "}
                     <strong>{products?.total}</strong> items
                   </div>
                 </div>
@@ -323,51 +315,55 @@ const Shop = () => {
                       aria-labelledby="grid-tab"
                       tabIndex={0}
                     >
-                      <div className="row ">
-                        {products?.data?.map((product: any) => (
-                          <div className="col-sm-6 col-xl-4">
-                            <div className="productItem01">
-                              <div
-                                key={product.id}
-                                className={`owl-item active ${
-                                  !product.reviews ? "pi01NoRating" : ""
-                                }`}
-                              >
-                                <div className="productItem01">
-                                  <Link to={`/product/detail/${product.id}`}>
-                                    <div className="pi01Thumb">
-                                      {product?.library ? (
-                                        <img
-                                          src={product?.library?.url}
-                                          className="w-100"
-                                        />
-                                      ) : (
-                                        product?.product_images?.map(
-                                          (item: any) => {
-                                            return (
-                                              <>
-                                                <img
-                                                  src={item.url}
-                                                  className="w-100"
-                                                />
-                                              </>
-                                            );
-                                          }
-                                        )
-                                      )}
-                                      <div className="pi01Actions">
-                                        <div className="pi01Cart">
-                                          <i className="fa-solid fa-shopping-cart" />
-                                        </div>
-                                        <div className="pi01QuickView">
-                                          <i className="fa-solid fa-arrows-up-down-left-right" />
-                                        </div>
-                                        <div className="pi01Wishlist">
-                                          <i className="fa-solid fa-heart" />
-                                        </div>
-                                      </div>
-                                      <div className="productLabels clearfix">
-                                        {/* {product.labels.map((label, index) => (
+                      {!isLoading ? (
+                        <div className="row ">
+                          {products?.data?.length
+                            ? products?.data?.map((product: any) => (
+                                <div className="col-sm-6 col-xl-4">
+                                  <div className="productItem01">
+                                    <div
+                                      key={product.id}
+                                      className={`owl-item active ${
+                                        !product.reviews ? "pi01NoRating" : ""
+                                      }`}
+                                    >
+                                      <div className="productItem01">
+                                        <Link
+                                          to={`/product/detail/${product.id}`}
+                                        >
+                                          <div className="pi01Thumb">
+                                            {product?.library ? (
+                                              <img
+                                                src={product?.library?.url}
+                                                className="w-100"
+                                              />
+                                            ) : (
+                                              product?.product_images?.map(
+                                                (item: any) => {
+                                                  return (
+                                                    <>
+                                                      <img
+                                                        src={item.url}
+                                                        className="w-100"
+                                                      />
+                                                    </>
+                                                  );
+                                                }
+                                              )
+                                            )}
+                                            <div className="pi01Actions">
+                                              <div className="pi01Cart">
+                                                <i className="fa-solid fa-shopping-cart" />
+                                              </div>
+                                              <div className="pi01QuickView">
+                                                <i className="fa-solid fa-arrows-up-down-left-right" />
+                                              </div>
+                                              <div className="pi01Wishlist">
+                                                <i className="fa-solid fa-heart" />
+                                              </div>
+                                            </div>
+                                            <div className="productLabels clearfix">
+                                              {/* {product.labels.map((label, index) => (
                             <span
                               key={index}
                               className={
@@ -377,44 +373,54 @@ const Shop = () => {
                               {label}
                             </span>
                           ))} */}
+                                            </div>
+                                          </div>
+                                        </Link>
+                                        <div className="pi01Details">
+                                          {product.reviews !== null && (
+                                            <div className="productRatings">
+                                              <div className="productRatingWrap">
+                                                <div className="star-rating">
+                                                  <span />
+                                                </div>
+                                              </div>
+                                              <div className="ratingCounts">
+                                                {product.reviews} Reviews
+                                              </div>
+                                            </div>
+                                          )}
+                                          <h3>
+                                            <Link
+                                              to={`/product/detail/${product.id}`}
+                                            >
+                                              {product.name}
+                                            </Link>
+                                          </h3>
+                                          {product?.variants?.map(
+                                            (item: any) => {
+                                              return (
+                                                <div className="pi01Price">
+                                                  <ins>
+                                                    {item.regular_price}VND
+                                                  </ins>
+                                                  <del>
+                                                    {item.sale_price}VND
+                                                  </del>
+                                                </div>
+                                              );
+                                            }
+                                          )}
+                                        </div>
                                       </div>
                                     </div>
-                                  </Link>
-                                  <div className="pi01Details">
-                                    {product.reviews !== null && (
-                                      <div className="productRatings">
-                                        <div className="productRatingWrap">
-                                          <div className="star-rating">
-                                            <span />
-                                          </div>
-                                        </div>
-                                        <div className="ratingCounts">
-                                          {product.reviews} Reviews
-                                        </div>
-                                      </div>
-                                    )}
-                                    <h3>
-                                      <Link
-                                        to={`/product/detail/${product.id}`}
-                                      >
-                                        {product.name}
-                                      </Link>
-                                    </h3>
-                                    {product?.variants?.map((item: any) => {
-                                      return (
-                                        <div className="pi01Price">
-                                          <ins>{item.regular_price}VND</ins>
-                                          <del>{item.sale_price}VND</del>
-                                        </div>
-                                      );
-                                    })}
                                   </div>
                                 </div>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                              ))
+                            : "Không có sản phẩm"}
+                        </div>
+                      ) : (
+                        <Loading />
+                      )}
                     </div>
                   </div>
                 </div>
