@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import intances, { intancesLocal } from "./instances";
 
 export const getProducts = async (page: number) => {

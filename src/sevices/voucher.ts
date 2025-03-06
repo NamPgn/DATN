@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import intances from "./instances";
 
 export const getVouchers = async (page: number) => {
@@ -6,13 +7,6 @@ export const getVouchers = async (page: number) => {
 
 export const getVoucher = async (id: string | undefined) => {
   return intances.get(`/vouchers/${id}`);
-};
-
-export const delVouchers = async (id: string) => {
-  return intances.delete("/vouchers/", {
-    data: { ids: [id] },
-    headers: { "Content-Type": "application/json" },
-  });
 };
 
 export const delMultipleVouchers = async (ids: string[]) => {
@@ -28,15 +22,13 @@ export const createVoucher = async (data: string) => {
   return intances.post(`/vouchers/create`, data);
 };
 
-export const updateVoucher = async (data: any, id: string) => {
+export const updateVoucher = async (data: any, id: string | number) => {
   const formData = new FormData();
   for (const key in data) {
     formData.append(key, data[key]);
   }
   formData.append("_method", "put");
-  return intances.post(`/vouchers/${id}`, formData, {
-    headers: {
-      "Content-Type": "application.json",
-    },
+  return intances.post(`/vouchers/${Number(id)}`, formData, {
+    headers: {},
   });
 };

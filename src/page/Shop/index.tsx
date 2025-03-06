@@ -1,12 +1,12 @@
 import { useQuery } from "react-query";
 import { getProductsByCategory } from "../../sevices/client";
 import { Link } from "react-router-dom";
-import { Pagination } from "./components/pagination";
 import { useCallback, useState } from "react";
 import "rc-slider/assets/index.css";
 import PriceRange from "./productAll/changeRange";
 import debounce from "lodash.debounce";
 import Loading from "../../components/Loading/Loading";
+import Paginations from "./components/pagination";
 
 const Shop = () => {
   const [currentPage, setCurrentPage] = useState("?page=1");
@@ -424,7 +424,7 @@ const Shop = () => {
                   </div>
                 </div>
               </div>
-              <Pagination
+              <Paginations
                 totalPages={totalPages}
                 currentPage={currentPage}
                 onPageChange={setCurrentPage}

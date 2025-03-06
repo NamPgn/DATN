@@ -1,4 +1,4 @@
-export const Pagination = ({ totalPages, currentPage, onPageChange }: any) => {
+ const Paginations = ({ totalPages, currentPage, onPageChange }: any) => {
   return (
     <div className="row shopPaginationRow">
       <div className="col-lg-12 text-center">
@@ -33,3 +33,5 @@ export const Pagination = ({ totalPages, currentPage, onPageChange }: any) => {
     </div>
   );
 };
+
+export default Paginations

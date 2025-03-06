@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { getProductsClient } from "../../../sevices/products";
@@ -95,7 +96,7 @@ const ProductSale = () => {
                             {product.name}
                           </Link>
                         </h3>
-                        {product?.variants?.map((item:any) => {
+                        {product?.variants?.map((item: any) => {
                           return (
                             <div className="pi01Price">
                               <ins>{item.regular_price}VND</ins>

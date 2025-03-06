@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useContext } from "react";
 import {
   LikeOutlined,
@@ -15,8 +16,6 @@ import MVTitle from "../../Core/MV/Title";
 import { MVAvatar } from "../../Core/Avatar";
 import { toast } from "react-toastify";
 import { UsersContext } from "../../../../context/usersContext";
-import { useMutation } from "react-query";
-import { logout } from "../../../../sevices/users";
 const AuthHeader = () => {
   const { isLogin, setIslogin, token }: any = useContext(UsersContext) || {};
   const handleCheckCart = () => {
@@ -27,22 +26,11 @@ const AuthHeader = () => {
     // }
   };
   const nav = useNavigate();
-  const { mutate } = useMutation({
-    mutationFn: async () => {
-      return await logout();
-    },
-    onSuccess: () => {
-      toast.success("Đăng xuất thành công");
-      localStorage.removeItem("token");
-      localStorage.removeItem("isLogin");
-    },
-    onError: () => {
-      toast.error("Đăng xuất không thành công");
-    },
-  });
-  const handleLogout = async () => {
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("isLogin");
+    toast.success("Đăng xuất thành công");
     setIslogin(false);
-    mutate();
     nav("/");
   };
 

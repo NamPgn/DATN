@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery } from "react-query";
 import { getProductsByCategory } from "../../../sevices/client";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Pagination } from "../components/pagination";
+import Paginations from "../components/pagination";
 
 const ProductAll = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -209,7 +210,7 @@ const ProductAll = () => {
             </div>
           </div>
         </div>
-        <Pagination
+        <Paginations
           totalPages={totalPages}
           currentPage={currentPage}
           onPageChange={setCurrentPage}

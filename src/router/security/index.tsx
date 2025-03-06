@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { Link, Navigate } from "react-router-dom";
 import { isAuthentication } from "../../common/auth/getToken";
 

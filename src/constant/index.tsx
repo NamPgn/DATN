@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   ControlOutlined,
   DashboardOutlined,
@@ -274,7 +275,7 @@ export const columnsComments = [
     title: "Action",
     dataIndex: "action",
     key: "action",
-    width: 100,
+    width: 150,
   },
 ];
 
@@ -305,6 +306,12 @@ export const columnsVouchers = [
     title: "Description",
     dataIndex: "description",
     key: "description",
+    width: 100,
+  },
+  {
+    title: "Type",
+    dataIndex: "type",
+    key: "type",
     width: 100,
   },
   {
@@ -450,3 +457,17 @@ export const COLUMN_TABLE_USERS = [
     width: 100,
   },
 ];
+
+export interface Product {
+  id: string;
+  name: string;
+  description?: string;
+  short_description?: string;
+  weight?: number;
+  library?: { url: string };
+  variants: {
+    sale_price?: number;
+    regular_price?: number;
+    stock_quantity?: number;
+  }[];
+}

@@ -1,7 +1,8 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { Card, Spin } from "antd";
 import { getVoucher } from "../../../sevices/voucher";
+import { MyButton } from "../../../components/UI/Core/Button";
 
 const VoucherDetail = () => {
   const { id } = useParams();
@@ -33,6 +34,9 @@ const VoucherDetail = () => {
         <strong>Max Discount Amount:</strong> {voucher?.max_discount_amount}
       </p>
       <p>
+        <strong>Type:</strong> {voucher?.type}
+      </p>
+      <p>
         <strong>Min Product Price:</strong> {voucher?.min_product_price}
       </p>
       <p>
@@ -50,6 +54,11 @@ const VoucherDetail = () => {
       <p>
         <strong>Times Used:</strong> {voucher?.times_used}
       </p>
+      <div className="">
+        <Link to="/dashboard/vouchers">
+          <MyButton type="primary">Quay lại danh sách vouchers</MyButton>
+        </Link>
+      </div>
     </Card>
   );
 };
