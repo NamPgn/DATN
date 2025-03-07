@@ -4,6 +4,8 @@ import { Link, useParams } from "react-router-dom";
 import Quantity from "../Quantity";
 import { useCart } from "../../../context/Cart/cartContext";
 import { toast } from "react-toastify";
+import { useQuery } from "react-query";
+import { getProductsDetailClient } from "../../../sevices/products";
 const socialLinks = [
   { platform: "facebook", icon: "fa-facebook-f", color: "#3b5998" },
   { platform: "twitter", icon: "fa-twitter", color: "#00acee" },
@@ -90,12 +92,12 @@ const products = {
 };
 const ProductDetail = () => {
   const { id } = useParams();
-  // const { data: products, isLoading } = useQuery({
-  //   queryKey: ["products", id],
-  //   queryFn: async () => {
-  //     return (await getProductsDetailClient(id)).data;
-  //   },
-  // });
+  const { data: products, isLoading } = useQuery({
+    queryKey: ["products", id],
+    queryFn: async () => {
+      return (await getProductsDetailClient(id)).data;
+    },
+  });
   const [currentImage, setCurrentImage] = useState<any>(null);
   const [filteredVariantGroups, setFilteredVariantGroups] = useState<{
     [key: string]: any[];
@@ -119,7 +121,7 @@ const ProductDetail = () => {
     }
     let newVariantGroups: { [key: string]: any[] } = {};
     if (Object.keys(selectedVariants).length === 0) {
-      products.variants.forEach((variant: any) => {
+      products?.variants?.forEach((variant: any) => {
         variant.values.forEach((val: any) => {
           const attributeName = val.attribute_name;
 
@@ -192,8 +194,8 @@ const ProductDetail = () => {
   };
   const selectedVariantss: any = useMemo(() => {
     //tìm thằng varian đã chọn cho vào mảng
-    return products.variants.find((variant) =>
-      variant.values.every((val) =>
+    return products?.variants?.find((variant: any) =>
+      variant.values.every((val: any) =>
         Object.values(selectedVariants).some(
           (selected: any) => selected?.id === val.attribute_value_id
         )
