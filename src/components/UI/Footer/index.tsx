@@ -1,5 +1,3 @@
-import React from "react";
-
 const Footer = () => {
   return (
     <footer className="footer">
@@ -9,7 +7,7 @@ const Footer = () => {
             <aside className="widget aboutWidget">
               <div className="footerLogo">
                 <a href="index.html">
-                  <img src="images/logo2.png" alt="Ulina" />
+                  <img src="/assets/images/logo2.png" alt="Ulina" />
                 </a>
               </div>
               <div className="aboutWidContent">

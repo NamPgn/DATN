@@ -10,11 +10,29 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.5.2",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@hookform/resolvers": "^4.1.2",
+    "@mui/material": "^6.4.5",
+    "@tinymce/tinymce-react": "^5.1.1",
+    "antd": "^5.23.1",
+    "axios": "^1.7.9",
+    "ionicons": "^7.4.0",
+    "moment": "^2.30.1",
     "react": "^18.3.1",
+    "react-chartjs-2": "^5.3.0",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.54.2",
+    "react-query": "^3.39.3",
+    "react-quill": "^2.0.0",
     "react-router-dom": "^7.1.1",
     "react-slick": "^0.30.3",
-    "slick-carousel": "^1.8.1"
+    "react-toastify": "^11.0.3",
+    "slick-carousel": "^1.8.1",
+    "styled-components": "^6.1.14",
+    "vite-project": "file:",
+    "zod": "^3.24.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",

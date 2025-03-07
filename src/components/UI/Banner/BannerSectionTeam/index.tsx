@@ -6,8 +6,7 @@ const BannerSectionMain = ({ pathName }: { pathName: string }) => {
   const [state, setState] = useState("Home");
   useEffect(() => {
     if (pathName.startsWith("/product/detail")) {
-      const productId = pathName.split("/product/detail/")[1];
-      setState(`Product Detail - ${productId}`);
+      setState(`Product Detail`);
     } else {
       const section = URLSECTION.find((item) => item.PATH === pathName);
       if (section) {
