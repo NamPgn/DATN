@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import Description from "./description";
-import { useQuery } from "react-query";
-import { getProductsDetailClient } from "../../../sevices/products";
 import { Link, useParams } from "react-router-dom";
+import Quantity from "../Quantity";
+import { useCart } from "../../../context/Cart/cartContext";
+import { toast } from "react-toastify";
 const socialLinks = [
   { platform: "facebook", icon: "fa-facebook-f", color: "#3b5998" },
   { platform: "twitter", icon: "fa-twitter", color: "#00acee" },
@@ -96,25 +97,101 @@ const ProductDetail = () => {
   //   },
   // });
   const [currentImage, setCurrentImage] = useState<any>(null);
+  const [filteredVariantGroups, setFilteredVariantGroups] = useState<{
+    [key: string]: any[];
+  }>({});
+  const [selectedVariants, setSelectedVariants]: any = useState<{
+    [key: string]: number | null;
+  }>({});
+  const [formData, setFormData] = useState({
+    title: "",
+    comment: "",
+    name: "",
+    email: "",
+    rating: 0,
+  });
+  const { addToCart }: any = useCart();
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     if (products?.product_images?.length) {
       setCurrentImage(products.product_images[0].url);
     }
-  }, [products]);
-  const [selectedVariants, setSelectedVariants]: any = useState<{
-    [key: string]: number | null;
-  }>({});
-  const handleSelect = (
-    groupName: string,
-    item: { id: number; name: string }
-  ) => {
-    setSelectedVariants((prev: any) => ({
-      ...prev,
-      [groupName]: prev[groupName]?.id === item.id ? null : item,
-    }));
+    let newVariantGroups: { [key: string]: any[] } = {};
+    if (Object.keys(selectedVariants).length === 0) {
+      products.variants.forEach((variant: any) => {
+        variant.values.forEach((val: any) => {
+          const attributeName = val.attribute_name;
+
+          if (!newVariantGroups[attributeName]) {
+            newVariantGroups[attributeName] = [];
+          }
+
+          if (
+            !newVariantGroups[attributeName].some(
+              (item) => item.id === val.attribute_value_id
+            )
+          ) {
+            newVariantGroups[attributeName].push({
+              id: val.attribute_value_id,
+              name: val.value,
+            });
+          }
+        });
+      });
+
+      setFilteredVariantGroups(newVariantGroups);
+      return;
+    }
+    //lọc tất cả biến thể theo thằng tên
+    const filteredVariants = products.variants.filter((variant: any) =>
+      Object.entries(selectedVariants).every(([key, selected]: any) =>
+        variant.values.some(
+          (val: any) =>
+            val?.attribute_name === key &&
+            val?.attribute_value_id === selected?.id
+        )
+      )
+    );
+
+    filteredVariants.forEach((variant: any) => {
+      variant.values.forEach((val: any) => {
+        const attributeName = val.attribute_name;
+
+        if (!newVariantGroups[attributeName]) {
+          newVariantGroups[attributeName] = [];
+        }
+
+        if (
+          !newVariantGroups[attributeName].some(
+            (item) => item.id === val.attribute_value_id
+          )
+        ) {
+          newVariantGroups[attributeName].push({
+            id: val.attribute_value_id,
+            name: val.value,
+          });
+        }
+      });
+    });
+
+    setFilteredVariantGroups(newVariantGroups);
+  }, [selectedVariants, products?.variants]);
+
+  const handleSelect = (groupName: string, item: any) => {
+    setSelectedVariants((prev: any) => {
+      const isAlreadySelected = prev[groupName]?.id === item.id; //tìm thằng đã có trong cái mảng đấy
+      const newSelected = isAlreadySelected //nếu mà có thằng mới thì remove thằng cũ đê
+        ? Object.fromEntries(
+            Object.entries(prev).filter(([key]) => key !== groupName)
+          )
+        : { ...prev, [groupName]: item };
+
+      return newSelected;
+    });
   };
-  const selectedVariantss = useMemo(() => {
+  const selectedVariantss: any = useMemo(() => {
+    //tìm thằng varian đã chọn cho vào mảng
     return products.variants.find((variant) =>
       variant.values.every((val) =>
         Object.values(selectedVariants).some(
@@ -123,29 +200,9 @@ const ProductDetail = () => {
       )
     );
   }, [selectedVariants]);
-  const [formData, setFormData] = useState({
-    title: "",
-    comment: "",
-    name: "",
-    email: "",
-    rating: 0,
-  });
-  const [quantity, setQuantity] = useState(1);
-  const handleQuantityChange = (e: any) => {
-    const value = parseInt(e.target.value, 10);
-    if (!isNaN(value) && value > 0) {
-      setQuantity(value);
-    }
-  };
+
   const handleImageClick = (fullImage: any) => {
     setCurrentImage(fullImage);
-  };
-  const handleQuantityIncrease = () => {
-    setQuantity((prev) => prev + 1);
-  };
-
-  const handleQuantityDecrease = () => {
-    setQuantity((prev) => (prev > 1 ? prev - 1 : prev));
   };
 
   const handleInputChange = (e: any) => {
@@ -163,13 +220,12 @@ const ProductDetail = () => {
     });
   };
 
-  const variantGroups: Record<string, any[]> = {};
+  const variantGroups: Record<string, any[]> = {}; //tìm ra tất cả biến thể đã có trong cái mảng
 
   products?.variants?.forEach((variant: any) => {
     variant.values.forEach((val: any) => {
       const attributeName = val.attribute_name;
 
-      // Nếu nhóm chưa có, khởi tạo mảng rỗng
       if (!variantGroups[attributeName]) {
         variantGroups[attributeName] = [];
       }
@@ -186,9 +242,20 @@ const ProductDetail = () => {
       }
     });
   });
-
   const handleSubmit = () => {
-    console.log(formData);
+    const length = Object.keys(selectedVariants).length;
+    const find = selectedVariantss?.values?.length === length;
+    const data = {
+      quantity,
+      variant_id: selectedVariantss?.id,
+      product_id: id,
+    };
+    if (find) {
+      addToCart(data);
+      toast.success("Thêm giỏ hàng thành công");
+    } else {
+      toast.error("Thêm đầy đủ thông tin");
+    }
   };
   // if (isLoading) return "Sản phẩm đang tải";
   return (
@@ -294,61 +361,43 @@ const ProductDetail = () => {
               )}
 
               <div className="pcExcerpt">{products?.short_description}</div>
-              {Object.entries(variantGroups).map(([groupName, values]) => (
-                <aside key={groupName} className="widget sizeFilter mb-4 d-flex gap-3" style={{ alignItems:"center" }}>
-                  <div className="">{groupName}:</div>
-                  <div className="productSizeWrap d-flex gap-2 flex-wrap">
-                    {values.map((item: any) => {
-                      const isSelected =
-                        selectedVariants[groupName]?.id === item.id;
-                      return (
-                        <div
-                          key={item.id}
-                          className={`variant-btn ${
-                            isSelected ? "selected" : ""
-                          }`}
-                          onClick={() => handleSelect(groupName, item)}
-                        >
-                          {item.name}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </aside>
-              ))}
+              {Object.entries(filteredVariantGroups).map(
+                ([groupName, values]) => (
+                  <aside
+                    key={groupName}
+                    className="widget sizeFilter mb-4 d-flex gap-3"
+                    style={{ alignItems: "center" }}
+                  >
+                    <div className="">{groupName}:</div>
+                    <div className="productSizeWrap d-flex gap-2 flex-wrap">
+                      {values.map((item: any) => {
+                        const isSelected =
+                          selectedVariants[groupName]?.id === item.id;
+                        return (
+                          <div
+                            key={item.id}
+                            className={`variant-btn ${
+                              isSelected ? "selected" : ""
+                            }`}
+                            onClick={() => handleSelect(groupName, item)}
+                          >
+                            {item.name}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </aside>
+                )
+              )}
 
               <div className="pcBtns">
-                <div className="quantity clearfix">
-                  <button
-                    type="button"
-                    name="btnMinus"
-                    className="qtyBtn btnMinus z-3"
-                    onClick={() => handleQuantityDecrease()}
-                  >
-                    _
-                  </button>
-                  <input
-                    type="number"
-                    className="carqty input-text qty text"
-                    name="quantity"
-                    value={quantity}
-                    onChange={handleQuantityChange}
-                  />
-                  <button
-                    type="button"
-                    name="btnPlus"
-                    className="qtyBtn btnPlus"
-                    onClick={handleQuantityIncrease}
-                  >
-                    +
-                  </button>
-                </div>
+                <Quantity quantity={quantity} setQuantity={setQuantity} />
                 {selectedVariantss ? (
                   <button onClick={handleSubmit} className="ulinaBTN">
                     <span>Add to Cart</span>
                   </button>
                 ) : (
-                  "  "
+                  ""
                 )}
               </div>
 

@@ -52,16 +52,16 @@ const Footer = () => {
               <h3 className="widgetTitle">Useful Links</h3>
               <ul>
                 <li>
-                  <a href="javascript:void(0);">Shop Coupon</a>
+                  <a href="#">Shop Coupon</a>
                 </li>
                 <li>
                   <a href="about.html">About us</a>
                 </li>
                 <li>
-                  <a href="javascript:void(0);">Carrer</a>
+                  <a href="#">Carrer</a>
                 </li>
                 <li>
-                  <a href="javascript:void(0);">Supports</a>
+                  <a href="#">Supports</a>
                 </li>
               </ul>
             </aside>
@@ -101,38 +101,38 @@ const Footer = () => {
         <div className="row footerAccessRow">
           <div className="col-md-6">
             <div className="footerSocial">
-              <a href="javascript:void(0);">
+              <a href="#">
                 <i className="fa-brands fa-facebook-f" />
               </a>
-              <a href="javascript:void(0);">
+              <a href="#">
                 <i className="fa-brands fa-twitter" />
               </a>
-              <a href="javascript:void(0);">
+              <a href="#">
                 <i className="fa-brands fa-linkedin-in" />
               </a>
-              <a href="javascript:void(0);">
+              <a href="#">
                 <i className="fa-brands fa-instagram" />
               </a>
             </div>
           </div>
           <div className="col-md-6">
             <div className="footerPayments">
-              <a href="javascript:void(0);">
+              <a href="#">
                 <i className="fa-brands fa-cc-paypal" />
               </a>
-              <a href="javascript:void(0);">
+              <a href="#">
                 <i className="fa-brands fa-cc-stripe" />
               </a>
-              <a href="javascript:void(0);">
+              <a href="#">
                 <i className="fa-brands fa-cc-mastercard" />
               </a>
-              <a href="javascript:void(0);">
+              <a href="#">
                 <i className="fa-brands fa-cc-visa" />
               </a>
-              <a href="javascript:void(0);">
+              <a href="#">
                 <i className="fa-brands fa-cc-apple-pay" />
               </a>
-              <a href="javascript:void(0);">
+              <a href="#">
                 <i className="fa-brands fa-cc-amazon-pay" />
               </a>
             </div>
