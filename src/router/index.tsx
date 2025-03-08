@@ -65,9 +65,9 @@ import ResetPassword from "../page/auth/resetPassword";
 import AccountSetting from "../page/auth/account";
 import AddOrder from "../page/admin/orders/components/add";
 import SendOrder from "../page/admin/orders/components/send";
-import Shop from "../page/Shop";
-import ProductAll from "../page/Shop/productAll";
-import ProductSearch from "../page/Shop/productSearch";
+import Shop from "../page/shop";
+import ProductAll from "../page/shop/productAll";
+import ProductSearch from "../page/shop/productSearch";
 
 export const routerClient = [
   {

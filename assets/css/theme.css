@@ -197,7 +197,7 @@
 }
 
 .mainMenu ul li ul li ul {
-    left: calc(100% + 10px);
+    left: calc(95% + 10px);
     top: calc(80% - 40px);
 }
 

@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { getProductsSearch } from "../../../sevices/client";
 import { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { Pagination } from "../components/pagination";
+import Paginations from "../components/pagination";
 
 const ProductSearch = () => {
   const [searchParams] = useSearchParams();
@@ -111,7 +111,7 @@ const ProductSearch = () => {
             </div>
           </div>
         </div>
-        <Pagination
+        <Paginations
           totalPages={totalPages}
           currentPage={currentPage}
           onPageChange={setCurrentPage}

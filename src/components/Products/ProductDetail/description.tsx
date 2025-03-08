@@ -43,9 +43,7 @@ const Description = ({
         <div className="productDescContentArea">
           <div className="row">
             <div className="col-lg-6">
-              <div className="descriptionContent">
-                <p>{product?.description}</p>
-              </div>
+              <div className="descriptionContent">{product?.description}</div>
             </div>
           </div>
         </div>

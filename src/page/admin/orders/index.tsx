@@ -11,7 +11,6 @@ import { delOrders, getOrders } from "../../../sevices/orders";
 import { columnsOrders } from "../../../constant";
 import {
   DeleteFilled,
-  EditOutlined,
   EyeOutlined,
   PlusOutlined,
 } from "@ant-design/icons";

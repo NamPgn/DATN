@@ -65,5 +65,5 @@ export const getProductsClient = async () => {
 };
 
 export const getProductsDetailClient = async (id: any) => {
-  return intancesLocal.get("/products/client/" + id);
+  return intancesLocal.get("/product_detail/" + id);
 };
