@@ -57,3 +57,7 @@ export const logout = async () => {
 export const getUserId = async (id: any) => {
   return intancesLogout.get("/admin/users/" + id);
 };
+
+export const loginGoogle = async (response: any) => {
+  return intancesLocal.post("/auth/google/callback", response);
+};

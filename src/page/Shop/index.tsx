@@ -1,23 +1,28 @@
 import { useQuery } from "react-query";
 import { getProductsByCategory } from "../../sevices/client";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useCallback, useState } from "react";
 import "rc-slider/assets/index.css";
 import PriceRange from "./productAll/changeRange";
 import debounce from "lodash.debounce";
 import Loading from "../../components/Loading/Loading";
 import Paginations from "./components/pagination";
+import {
+  getCategory,
+  getProductByCategory,
+} from "../../sevices/client/category";
 
 const Shop = () => {
+  const { id }: any = useParams();
   const [currentPage, setCurrentPage] = useState("?page=1");
   const [openOption, setopenOption] = useState(false);
-
+  const [active, setActive] = useState(false);
   const handleClickOption = () => {
     setopenOption((open) => !open);
   };
 
   const debouncedSetPrice = useCallback(
-    debounce((value) => {
+    debounce((value: any) => {
       const [min, max] = value;
       setCurrentPage(`?min_price=${min}&max_price=${max}`);
     }, 1000),
@@ -35,10 +40,25 @@ const Shop = () => {
     },
   });
 
-  const totalItems = products?.total; // Tổng số sản phẩm
-  const itemsPerPage = 9; // Số sản phẩm trên mỗi trang
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const { data: categoriesByProduct }: any = useQuery({
+    queryKey: ["categories", id],
+    queryFn: async () => {
+      return (await getProductByCategory(id)).data;
+    },
+  });
 
+  const { data: category }: any = useQuery({
+    queryKey: ["c"],
+    queryFn: async () => {
+      return (await getCategory()).data;
+    },
+  });
+  const totalItems = products?.total;
+  const itemsPerPage = 9;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const handleActive = () => {
+    setActive((active) => !active);
+  };
   return (
     <>
       <section className="shopPageSection shopPageHasSidebar">
@@ -49,79 +69,34 @@ const Shop = () => {
                 <aside className="widget">
                   <h3 className="widgetTitle">Item Categories</h3>
                   <ul>
-                    <li className="menu-item-has-children">
-                      <a href="javascript:void(0);">Accessories</a>
-                      <ul>
-                        <li>
-                          <a href="shop_full_width.html">Bag</a>
+                    {category?.map((item: any) => {
+                      return (
+                        <li
+                          className={
+                            "menu-item-has-children " +
+                            `${active ? "active" : ""}`
+                          }
+                          onClick={handleActive}
+                        >
+                          <Link to={`/shop/${item?.id}`}>{item?.name}</Link>
+                          {active ? (
+                            <ul>
+                              <li>
+                                <a href="shop_full_width.html">Bag</a>
+                              </li>
+                              <li>
+                                <a href="shop_left_sidebar.html">wallet</a>
+                              </li>
+                              <li>
+                                <a href="shop_right_sidebar.html">Hat</a>
+                              </li>
+                            </ul>
+                          ) : (
+                            ""
+                          )}
                         </li>
-                        <li>
-                          <a href="shop_left_sidebar.html">wallet</a>
-                        </li>
-                        <li>
-                          <a href="shop_right_sidebar.html">Hat</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li className="menu-item-has-children">
-                      <a href="javascript:void(0);">Fashions</a>
-                      <ul>
-                        <li>
-                          <a href="shop_full_width.html">Men</a>
-                        </li>
-                        <li>
-                          <a href="shop_left_sidebar.html">Women</a>
-                        </li>
-                        <li>
-                          <a href="shop_right_sidebar.html">Kids</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">Electronics</a>
-                    </li>
-                    <li className="menu-item-has-children">
-                      <a href="javascript:void(0);">Furniture</a>
-                      <ul>
-                        <li>
-                          <a href="shop_full_width.html">Living</a>
-                        </li>
-                        <li>
-                          <a href="shop_left_sidebar.html">Kitchen</a>
-                        </li>
-                        <li>
-                          <a href="shop_right_sidebar.html">Office</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">Shoes</a>
-                    </li>
-                    <li className="menu-item-has-children">
-                      <a href="javascript:void(0);">Jewellary</a>
-                      <ul>
-                        <li>
-                          <a href="shop_full_width.html">Gold</a>
-                        </li>
-                        <li>
-                          <a href="shop_left_sidebar.html">Diamond</a>
-                        </li>
-                        <li>
-                          <a href="shop_right_sidebar.html">Imitation</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li className="menu-item-has-children">
-                      <a href="javascript:void(0);">Others</a>
-                      <ul>
-                        <li>
-                          <a href="shop_full_width.html">Electronics</a>
-                        </li>
-                        <li>
-                          <a href="shop_left_sidebar.html">Phone</a>
-                        </li>
-                      </ul>
-                    </li>
+                      );
+                    })}
                   </ul>
                 </aside>
                 <PriceRange
@@ -395,20 +370,12 @@ const Shop = () => {
                                               {product.name}
                                             </Link>
                                           </h3>
-                                          {product?.variants?.map(
-                                            (item: any) => {
-                                              return (
-                                                <div className="pi01Price">
-                                                  <ins>
-                                                    {item.regular_price}VND
-                                                  </ins>
-                                                  <del>
-                                                    {item.sale_price}VND
-                                                  </del>
-                                                </div>
-                                              );
-                                            }
-                                          )}
+                                          <div className="pi01Price">
+                                            <ins>
+                                              {product.regular_price}VND
+                                            </ins>
+                                            <del>{product.sale_price}VND</del>
+                                          </div>
                                         </div>
                                       </div>
                                     </div>

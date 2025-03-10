@@ -41,7 +41,8 @@ const ProductAll = () => {
         <div className="row shopAccessRow">
           <div className="col-sm-6 col-xl-4">
             <div className="productCount">
-              Showing <strong>1 - {itemsPerPage}</strong> of <strong>{products?.data?.length}</strong> items
+              Showing <strong>1 - {itemsPerPage}</strong> of{" "}
+              <strong>{products?.data?.length}</strong> items
             </div>
           </div>
           <div className="d-none col-lg-4 col-xl-4 d-xl-flex">
@@ -191,14 +192,10 @@ const ProductAll = () => {
                                   {product.name}
                                 </Link>
                               </h3>
-                              {product?.variants?.map((item: any) => {
-                                return (
-                                  <div className="pi01Price">
-                                    <ins>{item.regular_price}VND</ins>
-                                    <del>{item.sale_price}VND</del>
-                                  </div>
-                                );
-                              })}
+                              <div className="pi01Price">
+                                <ins>{product.regular_price}VND</ins>
+                                <del>{product.sale_price}VND</del>
+                              </div>
                             </div>
                           </div>
                         </div>

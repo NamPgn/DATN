@@ -87,14 +87,10 @@ const ProductSale = () => {
                                 {product.name}
                               </Link>
                             </h3>
-                            {product?.variants?.map((item: any) => {
-                              return (
-                                <div className="pi01Price">
-                                  <ins>{item.regular_price}VND</ins>
-                                  <del>{item.sale_price}VND</del>
-                                </div>
-                              );
-                            })}
+                            <div className="pi01Price">
+                              <ins>{product?.regular_price}VND</ins>
+                              <del>{product?.sale_price}VND</del>
+                            </div>
                           </div>
                         </div>
                       </div>

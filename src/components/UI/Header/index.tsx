@@ -94,29 +94,44 @@ const Header = () => {
                     {menuItems.map((item: any, index) => (
                       <li key={index} className={item.class}>
                         <Link to={item.path}>{item.name}</Link>
-                        {item.class &&
-                          data?.map((category: any) => {
-                            return (
-                              <ul className="submenu" key={category.id}>
-                                <li className="menu-item-has-children">
-                                  <Link to={`/shop/${category.slug}`}>
+
+                        {item.class ? (
+                          <ul className="submenu">
+                            {data?.map((category: any) => {
+                              return (
+                                <li
+                                  key={category.slug}
+                                  className={`${
+                                    category?.children?.length > 0
+                                      ? item.class
+                                      : " "
+                                  }`}
+                                >
+                                  <Link to={`/shop/${category.id}`}>
                                     {category.name}
                                   </Link>
-                                  <ul key={category?.slug}>
-                                    {category?.children?.map((child: any) => {
-                                      return (
-                                        <li key={child?.slug}>
-                                          <Link to={`/shop/${child.slug}`}>
-                                            {child.name}
-                                          </Link>
-                                        </li>
-                                      );
-                                    })}
-                                  </ul>
+                                  {category?.children?.length > 0 ? (
+                                    <ul key={category?.slug}>
+                                      {category?.children?.map((child: any) => {
+                                        return (
+                                          <li key={child?.slug}>
+                                            <Link to={`/shop/${child.id}`}>
+                                              {child.name}
+                                            </Link>
+                                          </li>
+                                        );
+                                      })}
+                                    </ul>
+                                  ) : (
+                                    ""
+                                  )}
                                 </li>
-                              </ul>
-                            );
-                          })}
+                              );
+                            })}
+                          </ul>
+                        ) : (
+                          ""
+                        )}
                       </li>
                     ))}
                   </ul>
@@ -169,51 +184,10 @@ const Header = () => {
                       </div>
                     </div>
                     <div className="anCart">
-                      <Link to="">
+                      <Link to="/cart">
                         <i className="fa-solid fa-shopping-cart"></i>
                         <span>{cartProducts.length}</span>
                       </Link>
-                      <div className="cartWidgetArea">
-                        {cartProducts.map((product) => (
-                          <div className="cartWidgetProduct" key={product.id}>
-                            <img src={product.image} alt={product.name} />
-                            <Link to={product.detailsLink}>{product.name}</Link>
-                            <div className="cartProductPrice clearfix">
-                              <span className="price">
-                                <span>
-                                  <span>$</span>
-                                  {product.price.toFixed(2)}
-                                </span>
-                              </span>
-                            </div>
-                            <a href="#" className="cartRemoveProducts">
-                              <i className="fa-solid fa-xmark" />
-                            </a>
-                          </div>
-                        ))}
-                        <div className="totalPrice">
-                          Subtotal:{" "}
-                          <span className="price">
-                            <span>
-                              <span>$</span>
-                              {cartProducts
-                                .reduce(
-                                  (sum, product) => sum + product.price,
-                                  0
-                                )
-                                .toFixed(2)}
-                            </span>
-                          </span>
-                        </div>
-                        <div className="cartWidgetBTN clearfix">
-                          <Link className="cart" to="/cart">
-                            View Cart
-                          </Link>
-                          <Link className="checkout" to="/checkout">
-                            Checkout
-                          </Link>
-                        </div>
-                      </div>
                     </div>
                   </div>
 

@@ -21,10 +21,27 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const addToCart = (product: any) => {
-    setCart([...cart, product]);
-    localStorage.setItem("cart", JSON.stringify([...cart, product]));
+    setCart((prevCart) => {
+      const existingProductIndex = prevCart.findIndex((item) => item.id === Number(product.id));
+  
+      let updatedCart;
+      if (existingProductIndex !== -1) {
+        updatedCart = prevCart.map((item, index) =>
+          index === existingProductIndex
+            ? { ...item, quantity: item.quantity + product.quantity }
+            : item
+        );
+      } else {
+        updatedCart = [...prevCart, product];
+      }
+  
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+  
+      return updatedCart;
+    });
   };
-
+  
+ 
   return (
     <CartContext.Provider value={{ cart, addToCart }}>
       {children}
