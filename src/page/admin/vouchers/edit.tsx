@@ -1,103 +1,153 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
-import { Form, Input, InputNumber, DatePicker, Button } from "antd";
+import {
+  Button,
+  DatePicker,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  Select,
+} from "antd";
+import { useEffect, useRef } from "react";
 import { updateVoucher } from "../../../sevices/voucher";
-import { toast } from "react-toastify";
-import dayjs from "dayjs";
+import moment from "moment";
 
-const EditVoucher = ({ voucher, refetch, onClose }: any) => {
+const EditVoucher = ({ voucher, refetch }: any) => {
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState(false);
+  const prevVoucherRef = useRef<any>(null);
 
-  // Set initial values
-  React.useEffect(() => {
-    form.setFieldsValue({
-      code: voucher.code,
-      name: voucher.name,
-      description: voucher.description,
-      discount_percent: voucher.discount_percent,
-      max_discount_amount: voucher.max_discount_amount,
-      min_product_price: voucher.min_product_price,
-      amount: voucher.amount,
-      start_date: dayjs(voucher.start_date),
-      expiry_date: dayjs(voucher.expiry_date),
-      usage_limit: voucher.usage_limit,
-      type: voucher.type,
-    });
-  }, [voucher]);
-
-  const handleSubmit = async (values: any) => {
-    if (values.amount === null || values.amount === undefined) {
-      delete values.amount;
+  useEffect(() => {
+    if (voucher && voucher !== prevVoucherRef.current) {
+      prevVoucherRef.current = voucher;
+      form.setFieldsValue({
+        ...voucher,
+        start_date: moment(voucher.start_date),
+        expiry_date: moment(voucher.expiry_date),
+      });
     }
-    if (
-      values.discount_percent === null ||
-      values.discount_percent === undefined
-    ) {
-      delete values.discount_percent;
-    }
-    values.start_date = dayjs(values.start_date).format("YYYY-MM-DD");
-    values.expiry_date = dayjs(values.expiry_date).format("YYYY-MM-DD");
-    setLoading(true);
+  }, [voucher, form]);
 
+  const onFinish = async (values: any) => {
     try {
-      await updateVoucher(values, voucher.id);
-      toast.success("Cập nhật voucher thành công!");
+      const cleanedValues = Object.fromEntries(
+        Object.entries(values).map(([key, value]) => [
+          key,
+          value === undefined || value === "" || value === null ? 0 : value,
+        ])
+      );
+
+      const data = {
+        ...cleanedValues,
+        start_date: values.start_date.format("YYYY-MM-DD"),
+        expiry_date: values.expiry_date.format("YYYY-MM-DD"),
+      };
+
+      await updateVoucher(data, Number(voucher.id));
+      message.success("Cập nhật Voucher thành công");
       refetch();
-      onClose();
     } catch (error) {
-      console.error("Lỗi cập nhật voucher:", error);
-      toast.error("Cập nhật không thành công!");
-    } finally {
-      setLoading(false);
+      console.error("Lỗi khi cập nhật Voucher:", error);
+      message.error("Cập nhật Voucher không thành công");
     }
   };
 
   return (
-    <Form form={form} onFinish={handleSubmit} layout="vertical">
-      <Form.Item name="code" label="Mã voucher" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="name" label="Tên" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="description" label="Mô tả">
-        <Input.TextArea />
-      </Form.Item>
-      <Form.Item name="discount_percent" label="Giảm giá theo phần trăm">
-        <InputNumber min={0} max={100} />
-      </Form.Item>
-      <Form.Item name="max_discount_amount" label="Số tiền giảm tối đa">
-        <InputNumber min={0} />
-      </Form.Item>
-      <Form.Item name="min_product_price" label="Giá tối thiểu để áp dụng">
-        <InputNumber min={0} />
-      </Form.Item>
-      <Form.Item name="amount" label="Giảm giá bằng số tiền">
-        <InputNumber min={1} />
-      </Form.Item>
-      <Form.Item name="start_date" label="Ngày bắt đầu">
-        <DatePicker />
-      </Form.Item>
-      <Form.Item name="expiry_date" label="Ngày hết hạn">
-        <DatePicker />
-      </Form.Item>
+    <div className="edit-voucher-form">
+      <Form form={form} onFinish={onFinish}>
+        <Form.Item
+          name="code"
+          label="Voucher Code"
+          rules={[{ required: true }]}
+        >
+          <Input disabled />
+        </Form.Item>
 
-      <Form.Item
-        name="type"
-        label="Type"
-        rules={[{ required: true, message: "Số lần được sử dụng mã" }]}
-      >
-        <InputNumber />
-      </Form.Item>
+        <Form.Item
+          name="name"
+          label="Voucher Name"
+          rules={[{ required: true }]}
+        >
+          <Input />
+        </Form.Item>
 
-      <Form.Item name="usage_limit" label="Giới hạn sử dụng">
-        <InputNumber min={1} />
-      </Form.Item>
-      <Button type="primary" htmlType="submit" loading={loading}>
-        Cập nhật
-      </Button>
-    </Form>
+        <Form.Item name="description" label="Description">
+          <Input />
+        </Form.Item>
+
+        <Form.Item label="Type" name="type">
+          <Select className="w-50">
+            <Select.Option value={0}>Giảm giá theo số tiền</Select.Option>
+            <Select.Option value={1}>Giảm giá theo phần trăm</Select.Option>
+          </Select>
+        </Form.Item>
+
+        <Form.Item shouldUpdate>
+          {({ getFieldValue }) => {
+            const type = getFieldValue("type");
+            return (
+              <>
+                {type === 0 && (
+                  <>
+                    <Form.Item name="amount" label="Amount">
+                      <InputNumber />
+                    </Form.Item>
+                    <Form.Item
+                      name="min_product_price"
+                      label="Min Product Price"
+                    >
+                      <InputNumber />
+                    </Form.Item>
+                  </>
+                )}
+                {type === 1 && (
+                  <>
+                    <Form.Item name="discount_percent" label="Discount Percent">
+                      <InputNumber />
+                    </Form.Item>
+                    <Form.Item
+                      name="max_discount_amount"
+                      label="Max Discount Amount"
+                    >
+                      <InputNumber />
+                    </Form.Item>
+                  </>
+                )}
+              </>
+            );
+          }}
+        </Form.Item>
+
+        <Form.Item
+          name="usage_limit"
+          label="Usage Limit"
+          rules={[{ required: true }]}
+        >
+          <InputNumber />
+        </Form.Item>
+
+        <Form.Item
+          name="start_date"
+          label="Start Date"
+          rules={[{ required: true }]}
+        >
+          <DatePicker />
+        </Form.Item>
+
+        <Form.Item
+          name="expiry_date"
+          label="Expiry Date"
+          rules={[{ required: true }]}
+        >
+          <DatePicker />
+        </Form.Item>
+
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Update Voucher
+          </Button>
+        </Form.Item>
+      </Form>
+    </div>
   );
 };
 

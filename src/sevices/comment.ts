@@ -1,8 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import intances from "./instances";
-
-export const getComments = async (page: number) => {
-  return intances.get("/comments?page=" + page);
-};
 
 export const getComment = async (id: string) => {
   return intances.get(`/comments/${id}`);
@@ -22,16 +19,25 @@ export const delMultipleComments = async (ids: string[]) => {
   });
 };
 
+export const statusMutipleComment = async (data: any) => {
+  console.log(data);
+  return intances.patch("/comments/status", data);
+};
+
 export const hiddenComment = async () => {
   return intances.get("/comments/hidden");
 };
 
-export const searchComment = async (keyword?: string, rating?: number) => {
-  return intances.get("/comments/search", { params: { keyword, rating } });
-};
+export const getComments = async (
+  page: number,
+  keyword?: string,
+  rating?: number
+) => {
+  const params: Record<string, any> = { page };
+  if (keyword) params.keyword = keyword;
+  if (rating !== undefined) params.rating = rating;
 
-export const statusComment = async (id: string, isActive: boolean) => {
-  return intances.patch("/comments/status", { id, isActive });
+  return intances.get("/comments?page=" + page, { params });
 };
 
 export const replyComment = async (id: string, reply: string) => {

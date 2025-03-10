@@ -1,10 +1,12 @@
-import type { AxiosRequestConfig, Method } from 'axios';
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { AxiosRequestConfig, Method } from "axios";
 
-import { message as $message } from 'antd';
-import axios from 'axios';
+import { message as $message } from "antd";
+import axios from "axios";
 
-import store from '@/stores';
-import { setGlobalState } from '@/stores/global.store';
+import store from "@/stores";
+import { setGlobalState } from "@/stores/global.store";
 // import { history } from '@/routes/history';
 
 const axiosInstance = axios.create({
@@ -12,31 +14,31 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.request.use(
-  config => {
+  (config) => {
     store.dispatch(
       setGlobalState({
         loading: true,
-      }),
+      })
     );
 
     return config;
   },
-  error => {
+  (error) => {
     store.dispatch(
       setGlobalState({
         loading: false,
-      }),
+      })
     );
     Promise.reject(error);
-  },
+  }
 );
 
 axiosInstance.interceptors.response.use(
-  config => {
+  (config) => {
     store.dispatch(
       setGlobalState({
         loading: false,
-      }),
+      })
     );
 
     if (config?.data?.message) {
@@ -45,18 +47,18 @@ axiosInstance.interceptors.response.use(
 
     return config?.data;
   },
-  error => {
+  (error) => {
     store.dispatch(
       setGlobalState({
         loading: false,
-      }),
+      })
     );
     // if needs to navigate to login page when request exception
     // history.replace('/login');
-    let errorMessage = '系统异常';
+    let errorMessage = "系统异常";
 
-    if (error?.message?.includes('Network Error')) {
-      errorMessage = '网络错误，请检查您的网络';
+    if (error?.message?.includes("Network Error")) {
+      errorMessage = "网络错误，请检查您的网络";
     } else {
       errorMessage = error?.message;
     }
@@ -69,7 +71,7 @@ axiosInstance.interceptors.response.use(
       message: errorMessage,
       result: null,
     };
-  },
+  }
 );
 
 export type Response<T = any> = {
@@ -90,14 +92,14 @@ export const request = <T = any>(
   method: Lowercase<Method>,
   url: string,
   data?: any,
-  config?: AxiosRequestConfig,
+  config?: AxiosRequestConfig
 ): MyResponse<T> => {
   // const prefix = '/api'
-  const prefix = '';
+  const prefix = "";
 
   url = prefix + url;
 
-  if (method === 'post') {
+  if (method === "post") {
     return axiosInstance.post(url, data, config);
   } else {
     return axiosInstance.get(url, {

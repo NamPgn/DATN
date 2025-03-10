@@ -2,11 +2,7 @@
 import React, { useState } from "react";
 import MVTable from "../../../components/UI/Core/MV/Table";
 import { columnsVouchers } from "../../../constant";
-import {
-  delMultipleVouchers,
-  delVouchers,
-  getVouchers,
-} from "../../../sevices/voucher";
+import { delMultipleVouchers, getVouchers } from "../../../sevices/voucher";
 import { useMutation, useQuery } from "react-query";
 import { MyButton } from "../../../components/UI/Core/Button";
 import { Link } from "react-router-dom";
@@ -14,7 +10,7 @@ import { Button, Modal, Popconfirm } from "antd";
 import AddVoucher from "./add";
 import { toast } from "react-toastify";
 import EditVoucher from "./edit";
-import MVConfirm from "../../../components/UI/Core/Confirm";
+import { DeleteOutlined } from "@ant-design/icons";
 
 const VoucherAdmin = () => {
   const [page, setPage] = useState(1);
@@ -35,20 +31,6 @@ const VoucherAdmin = () => {
     },
   });
 
-  const { mutate: deleteVouchers } = useMutation({
-    mutationFn: async (id: string) => {
-      return await delVouchers(id);
-    },
-    onSuccess: () => {
-      toast.success("Xóa voucher thành công");
-      refetch();
-    },
-    onError: (error) => {
-      console.error("Lỗi khi xóa", error);
-      toast.error("Xóa không thành công");
-    },
-  });
-
   const { mutate: deleteMultipleVouchers } = useMutation({
     mutationFn: async (ids: string[]) => {
       return await delMultipleVouchers(ids);
@@ -63,6 +45,14 @@ const VoucherAdmin = () => {
       toast.error("Xóa không thành công");
     },
   });
+
+  const handleDeleteSelectedData = () => {
+    if (selectedRowKeys.length === 0) {
+      toast.warning("VUi lòng chọn ít nhất một voucher để xóa");
+      return;
+    }
+    deleteMultipleVouchers(selectedRowKeys);
+  };
 
   const showAddVoucherModal = () => {
     setIsModalVisible(true);
@@ -91,18 +81,6 @@ const VoucherAdmin = () => {
     setPage(page);
   };
 
-  const handleDeleteSelectedData = () => {
-    if (selectedRowKeys.length === 0) {
-      toast.warning("VUi lòng chọn ít nhất một voucher để xóa");
-      return;
-    }
-    if (Array.isArray(selectedRowKeys)) {
-      deleteMultipleVouchers(selectedRowKeys);
-    } else {
-      toast.error("Dữ liệu không hợp lệ");
-    }
-  };
-
   const data =
     vouchers &&
     vouchers?.data?.data?.map((item: any) => {
@@ -112,7 +90,13 @@ const VoucherAdmin = () => {
         code: item.code,
         name: item.name,
         description: item.description,
+        discount_percent: item.discount_percent,
+        max_discount_amount: item.max_discount_amount,
+        type: item.type,
+        min_product_price: item.min_product_price,
+        amount: item.amount,
         start_date: item.start_date,
+        times_used: item.times_used,
         expiry_date: item.expiry_date,
         usage_limit: item.usage_limit,
         action: (
@@ -123,17 +107,6 @@ const VoucherAdmin = () => {
             >
               <MyButton type="dashed">Detail</MyButton>
             </Link>
-            <Popconfirm
-              title="Bạn có chắc chắn muốn xóa ?"
-              onConfirm={() => deleteVouchers(item.id)}
-              okText="Yes"
-              cancelText="No"
-            >
-              <MyButton type="primary" danger>
-                Delete
-              </MyButton>
-            </Popconfirm>
-
             <MyButton type="primary" onClick={() => showEditVoucherModal(item)}>
               Edit
             </MyButton>
@@ -149,14 +122,17 @@ const VoucherAdmin = () => {
           Add Voucher
         </Button>
       </div>
-      <MVConfirm
-        title="Có xóa không"
-        onConfirm={() => handleDeleteSelectedData()}
+
+      <Popconfirm
+        title="Bạn có chắc chắn muốn xóa ?"
+        onConfirm={handleDeleteSelectedData}
+        okText="Yes"
+        cancelText="No"
       >
-        <MyButton danger className="mb-3 ml-2">
+        <MyButton type="primary" danger icon={<DeleteOutlined />}>
           Delete Selected
         </MyButton>
-      </MVConfirm>
+      </Popconfirm>
 
       <MVTable
         columns={columnsVouchers}

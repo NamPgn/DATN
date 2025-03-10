@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import intances, { intancesLocal, intancesLogout } from "./instances";
 import { token_auth } from "../common/auth/getToken";
 const token_ = token_auth();

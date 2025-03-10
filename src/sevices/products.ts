@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import intances, { intancesLocal } from "./instances";
 
 export const getProducts = async (page: number) => {
@@ -64,5 +65,5 @@ export const getProductsClient = async () => {
 };
 
 export const getProductsDetailClient = async (id: any) => {
-  return intancesLocal.get("/products/client/" + id);
+  return intancesLocal.get("/product_detail/" + id);
 };

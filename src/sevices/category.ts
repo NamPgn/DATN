@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import intances from "./instances";
 
 export const getCategorys = async (page: number) => {

@@ -1,13 +1,49 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SearchUi from "../Search";
 import AuthHeader from "./auth";
 import { UsersContext } from "../../../context/usersContext";
+const menuItems = [
+  { name: "Home", path: "/" },
+  { name: "About", path: "/about" },
+  {
+    name: "Categories",
+    path: "/shop",
+    class: "menu-item-has-children",
+  },
+  { name: "Products", path: "/products" },
+  { name: "Contacts", path: "/contact" },
+];
 
+const socialIcons = [
+  {
+    name: "Facebook",
+    className: "fa-brands fa-facebook-f",
+    link: "#",
+    color: "#3b5998",
+  },
+  {
+    name: "Twitter",
+    className: "fa-brands fa-twitter",
+    link: "#",
+    color: "#00acee",
+  },
+  {
+    name: "LinkedIn",
+    className: "fa-brands fa-linkedin-in",
+    link: "#",
+    color: "#0077b5",
+  },
+  {
+    name: "Instagram",
+    className: "fa-brands fa-instagram",
+    link: "#",
+    color: "#e4405f",
+  },
+];
 const Header = () => {
-  // Dữ liệu động cho menu
-
   const [openSearch, setOpenSearch] = useState(false);
   const [data, setData]: any = useState([]);
   useEffect(() => {
@@ -17,44 +53,6 @@ const Header = () => {
     })();
   }, []);
   const { isLogin }: any = useContext(UsersContext) || {};
-  const menuItems = [
-    { name: "Home", path: "/" },
-    { name: "About", path: "/about" },
-    {
-      name: "Shop",
-      path: "/shop",
-      class: "menu-item-has-children",
-    },
-    { name: "Products", path: "/products" },
-    { name: "Contacts", path: "/contact" },
-  ];
-
-  const socialIcons = [
-    {
-      name: "Facebook",
-      className: "fa-brands fa-facebook-f",
-      link: "#",
-      color: "#3b5998",
-    },
-    {
-      name: "Twitter",
-      className: "fa-brands fa-twitter",
-      link: "#",
-      color: "#00acee",
-    },
-    {
-      name: "LinkedIn",
-      className: "fa-brands fa-linkedin-in",
-      link: "#",
-      color: "#0077b5",
-    },
-    {
-      name: "Instagram",
-      className: "fa-brands fa-instagram",
-      link: "#",
-      color: "#e4405f",
-    },
-  ];
 
   const cartProducts = [
     {
@@ -93,53 +91,32 @@ const Header = () => {
                 {/* Main Menu */}
                 <div className="mainMenu">
                   <ul>
-                    {menuItems.map((item, index) => (
+                    {menuItems.map((item: any, index) => (
                       <li key={index} className={item.class}>
                         <Link to={item.path}>{item.name}</Link>
-                        {item.class ? (
-                          <>
-                            <div className="megaMenu" key={item.name}>
-                              <div className="row">
-                                <div className="col-lg-6">
-                                  <h3>List Categories</h3>
-                                  <ul>
-                                    {data?.data?.map((content: any) => {
+                        {item.class &&
+                          data?.map((category: any) => {
+                            return (
+                              <ul className="submenu" key={category.id}>
+                                <li className="menu-item-has-children">
+                                  <Link to={`/shop/${category.slug}`}>
+                                    {category.name}
+                                  </Link>
+                                  <ul key={category?.slug}>
+                                    {category?.children?.map((child: any) => {
                                       return (
-                                        <li>
-                                          <Link to={content.slug}>
-                                            {content.name}
+                                        <li key={child?.slug}>
+                                          <Link to={`/shop/${child.slug}`}>
+                                            {child.name}
                                           </Link>
                                         </li>
                                       );
                                     })}
                                   </ul>
-                                </div>
-
-                                <div className="col-lg-6 hideOnMobile">
-                                  <div className="lookBook01 lb01M2">
-                                    <div className="lbContent">
-                                      <h3>Be Stylish</h3>
-                                      <h2>Girl’s Latest Fashion</h2>
-                                      <a
-                                        href="shop_left_sidebar.html"
-                                        className="ulinaLink"
-                                      >
-                                        <i className="fa-solid fa-angle-right" />
-                                        Shop Now
-                                      </a>
-                                    </div>
-                                    <img
-                                      src="/assets/images/home1/3.png"
-                                      alt="Mans Latest Collection"
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </>
-                        ) : (
-                          ""
-                        )}
+                                </li>
+                              </ul>
+                            );
+                          })}
                       </li>
                     ))}
                   </ul>

@@ -86,7 +86,6 @@ const ProductForm = ({
     queryKey: ["attrAll"],
     queryFn: async () => (await getAttributesAll()).data,
   });
-
   const optionsSelectCategory = category?.map((item: any) => ({
     label: item.name,
     value: item.id,
@@ -145,6 +144,7 @@ const ProductForm = ({
         attributesValues[attribute.name] = selectedNames;
       }
     });
+    console.log(val.variants);
     const data = {
       attributes: attributesValues,
       main_image: selectOneImage?.id,
@@ -164,7 +164,7 @@ const ProductForm = ({
         typeProduct == "0"
           ? val.variants.map((item: any, index: number) => ({
               ...item,
-              variant_id: val.variants?.find((items: any) => items?.id)?.id,
+              variant_id: item.id,
               values: variants[index]?.nam || [],
             }))
           : [
@@ -342,66 +342,82 @@ const ProductForm = ({
               <Form.List name="variants">
                 {(fields, { remove }) => (
                   <>
-                    {fields.map(({ key, name, ...restField }, index) => (
-                      <Space
-                        key={key}
-                        style={{
-                          display: "flex",
-                          alignContent: "center",
-                          alignItems: "center",
-                          marginBottom: 8,
-                        }}
-                      >
-                        <span
-                          style={{ fontWeight: "bold", marginRight: "10px" }}
+                    {fields.map(({ key, name, ...restField }, index) => {
+                      const attributeNames = variants[index].nam
+                        ?.map((id: number) => {
+                          for (const group of attrAll) {
+                            const found = group.data.find(
+                              (item: any) => item.id === id
+                            );
+                            if (found) return found.label;
+                          }
+                          return null;
+                        })
+                        .filter(Boolean)
+                        .join(", ");
+                      const variantValues =
+                        variants[index]?.values
+                          ?.map((v: any) => v.name)
+                          .join(", ") || "Chưa có biến thể";
+                      return (
+                        <Space
+                          key={key}
+                          style={{
+                            display: "flex",
+                            alignContent: "center",
+                            alignItems: "center",
+                            marginBottom: 8,
+                          }}
                         >
-                          {variants[index]?.values
-                            ?.map((v: any) => v.name)
-                            .join(", ")}
-                        </span>
+                          <span
+                            style={{ fontWeight: "bold", marginRight: "10px" }}
+                          >
+                            {isEditing ? variantValues : attributeNames}
+                          </span>
 
-                        <Form.Item
-                          label={"Giá Gốc"}
-                          {...restField}
-                          name={[name, "regular_price"]}
-                        >
-                          <InputNumber min={0} placeholder="Giá gốc" />
-                        </Form.Item>
+                          <Form.Item
+                            label={"Giá Gốc"}
+                            {...restField}
+                            name={[name, "regular_price"]}
+                          >
+                            <InputNumber min={0} placeholder="Giá gốc" />
+                          </Form.Item>
 
-                        <Form.Item
-                          label={"Số Lượng"}
-                          {...restField}
-                          name={[name, "stock_quantity"]}
-                        >
-                          <InputNumber min={0} placeholder="Số lượng" />
-                        </Form.Item>
+                          <Form.Item
+                            label={"Số Lượng"}
+                            {...restField}
+                            name={[name, "stock_quantity"]}
+                          >
+                            <InputNumber min={0} placeholder="Số lượng" />
+                          </Form.Item>
 
-                        <Form.Item
-                          label={"Cân Nặng"}
-                          {...restField}
-                          name={[name, "weight"]}
-                        >
-                          <InputNumber
-                            min={0}
-                            max={50000}
-                            placeholder="100gam"
+                          <Form.Item
+                            label={"Cân Nặng"}
+                            {...restField}
+                            name={[name, "weight"]}
+                          >
+                            <InputNumber
+                              min={0}
+                              max={50000}
+                              placeholder="100gam"
+                            />
+                          </Form.Item>
+
+                          <Form.Item
+                            label={"Mã Sản Phẩm"}
+                            {...restField}
+                            name={[name, "sku"]}
+                          >
+                            <Input defaultValue={variants[index]?.sku} />
+                          </Form.Item>
+
+                          <Button
+                            icon={<MinusCircleOutlined />}
+                            onClick={() => remove(name)}
                           />
-                        </Form.Item>
-
-                        <Form.Item
-                          label={"Mã Sản Phẩm"}
-                          {...restField}
-                          name={[name, "sku"]}
-                        >
-                          <Input defaultValue={variants[index]?.sku} />
-                        </Form.Item>
-
-                        <Button
-                          icon={<MinusCircleOutlined />}
-                          onClick={() => remove(name)}
-                        />
-                      </Space>
-                    ))}
+                        </Space>
+                      );
+                    })}
                   </>
                 )}
               </Form.List>
@@ -471,8 +487,12 @@ const ProductForm = ({
                         <Input placeholder="Nhập mã SKU" />
                       </Form.Item>
 
-                      <Form.Item label={'Cân nặng'} {...restField} name={[name, "weight"]}>
-                        <InputNumber  min={0} max={50000} placeholder="100gam" />
+                      <Form.Item
+                        label={"Cân nặng"}
+                        {...restField}
+                        name={[name, "weight"]}
+                      >
+                        <InputNumber min={0} max={50000} placeholder="100gam" />
                       </Form.Item>
                     </Space>
                   ))}

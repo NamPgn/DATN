@@ -1,5 +1,15 @@
+import { useState } from "react";
+import Quantity from "../../components/Products/Quantity";
+import { useCart } from "../../context/Cart/cartContext";
 
 const Cart = () => {
+  const [quantity, setQuantity] = useState(1);
+  const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
+  const updateQuantity = (id: number, quantity: number) => {
+    setQuantities((prev) => ({ ...prev, [id]: quantity }));
+  };
+  const { cart }: any = useCart();
+  console.log(cart)
   return (
     <section className="cartPageSection woocommerce">
       <div className="container">
@@ -22,57 +32,62 @@ const Cart = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td className="product-thumbnail">
-                    <a href="shop_details1.html">
-                      <img src="/assets/images/cart/1.jpg" alt="Cart Item" />
-                    </a>
-                  </td>
-                  <td className="product-name">
-                    <a href="shop_details1.html">
-                      Ulina luxurious bag for men women
-                    </a>
-                  </td>
-                  <td className="product-price">
-                    <div className="pi01Price">
-                      <ins>$48.00</ins>
-                    </div>
-                  </td>
-                  <td className="product-quantity">
-                    <div className="quantity clearfix">
-                      <button
-                        type="button"
-                        name="btnMinus"
-                        className="qtyBtn btnMinus"
-                      >
-                        _
-                      </button>
-                      <input
-                        type="number"
-                        className="carqty input-text qty text"
-                        name="quantity"
-                      />
-                      <button
-                        type="button"
-                        name="btnPlus"
-                        className="qtyBtn btnPlus"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </td>
-                  <td className="product-subtotal">
-                    <div className="pi01Price">
-                      <ins>$48.00</ins>
-                    </div>
-                  </td>
-                  <td className="product-remove">
-                    <a href="javascript:void(0);" className="remove">
-                      <span />
-                    </a>
-                  </td>
-                </tr>
-            
+                {cart.length > 0 ? (
+                  cart.map((product: any) => {
+                    const price =
+                      product.variants[0]?.sale_price ||
+                      product.variants[0]?.regular_price ||
+                      0;
+                    const quantity = quantities[product.id] || 1;
+                    const total = price * quantity;
+
+                    return (
+                      <tr key={product.id}>
+                        <td className="product-thumbnail">
+                          <a href={`/product/${product.slug}`}>
+                            <img src={product.url} alt={product.name} />
+                          </a>
+                        </td>
+                        <td className="product-name">
+                          <a href={`/product/${product.slug}`}>
+                            {product.name}
+                          </a>
+                        </td>
+                        <td className="product-price">
+                          <div className="pi01Price">
+                            <ins>${price.toLocaleString()}</ins>
+                          </div>
+                        </td>
+                        <td className="product-quantity">
+                          <div className="pcBtns m-0">
+                            <Quantity
+                              quantity={quantity}
+                              setQuantity={(q: any) =>
+                                updateQuantity(product.id, q)
+                              }
+                            />
+                          </div>
+                        </td>
+                        <td className="product-subtotal">
+                          <div className="pi01Price">
+                            <ins>${total.toLocaleString()}</ins>
+                          </div>
+                        </td>
+                        <td className="product-remove">
+                          <div className="remove">
+                            <span onClick={() => console.log("Xóa sản phẩm")} />
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td colSpan={6} className="text-center p-4">
+                      Giỏ hàng trống
+                    </td>
+                  </tr>
+                )}
               </tbody>
               <tfoot>
                 <tr className="actions">

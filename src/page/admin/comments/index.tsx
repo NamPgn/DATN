@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { Input, Modal, Select, Tag } from "antd";
+import { Input, Modal, Popconfirm, Select, Tag } from "antd";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
@@ -9,8 +9,7 @@ import {
   delMultipleComments,
   getComments,
   replyComment,
-  searchComment,
-  statusComment,
+  statusMutipleComment,
 } from "../../../sevices/comment";
 import { MyButton } from "../../../components/UI/Core/Button";
 import MVConfirm from "../../../components/UI/Core/Confirm";
@@ -35,6 +34,10 @@ const CommentAdmin = () => {
   const [searchRating, setSearchRating] = useState<number | undefined>(
     undefined
   );
+  const [searchKeywordInput, setSearchKeywordInput] = useState("");
+  const [searchRatingInput, setSearchRatingInput] = useState<
+    number | undefined
+  >(undefined);
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -43,10 +46,11 @@ const CommentAdmin = () => {
   const { data: comments, refetch }: any = useQuery({
     queryKey: ["comments", page, searchKeyword, searchRating],
     queryFn: async () => {
-      if (searchKeyword || searchRating !== undefined) {
-        return await searchComment(searchKeyword, searchRating);
-      }
-      return await getComments(page);
+      return await getComments(
+        page,
+        searchKeyword.trim() !== "" ? searchKeyword : undefined,
+        searchRating ?? undefined
+      );
     },
   });
   const { mutate } = useMutation({
@@ -77,7 +81,7 @@ const CommentAdmin = () => {
     },
     onSuccess: () => {
       toast.success("Xóa nhiều comment thành công");
-      setSelectedRowKeys([]); // Xóa selection sau khi xóa thành công
+      setSelectedRowKeys([]);
       refetch();
     },
     onError: (error) => {
@@ -94,28 +98,6 @@ const CommentAdmin = () => {
     deleteMultiple(selectedRowKeys);
   };
 
-  const { mutate: updateStatus } = useMutation({
-    mutationFn: async ({ id, isActive }: { id: string; isActive: boolean }) => {
-      return await statusComment(id, isActive);
-    },
-    onSuccess: () => {
-      toast.success("Cập nhật trạng thái thành công");
-      refetch();
-    },
-    onError: (error) => {
-      console.error("Lỗi khi cập nhật trạng thái:", error);
-      toast.error("Cập nhật trạng thái thất bại");
-    },
-  });
-
-  const toggleCommentVisibility = (id: string) => {
-    setHiddenComments((prev) => {
-      const newHiddenState = !prev[id];
-      updateStatus({ id, isActive: !newHiddenState });
-      return { ...prev, [id]: newHiddenState };
-    });
-  };
-
   const toggleSelectedComments = () => {
     if (selectedRowKeys.length === 0) {
       toast.warning("Vui lòng chọn ít nhất một comment");
@@ -125,14 +107,27 @@ const CommentAdmin = () => {
     const allHidden = selectedRowKeys.every(
       (id: string | number) => hiddenComments[id]
     );
+
     setHiddenComments((prev) => {
       const updatedHidden = { ...prev };
       selectedRowKeys.forEach((id: string | number) => {
         updatedHidden[id] = !allHidden;
-        updateStatus({ id: String(id), isActive: allHidden });
       });
       return updatedHidden;
     });
+    const data = {
+      id: selectedRowKeys,
+      status: !!allHidden,
+    };
+    statusMutipleComment(data)
+      .then(() => {
+        toast.success("Cập nhật trạng thái thành công");
+        refetch();
+      })
+      .catch((error) => {
+        console.error("Lỗi khi cập nhật trạng thái:", error);
+        toast.error("Cập nhật trạng thái thất bại");
+      });
 
     setSelectAllHidden(!allHidden);
   };
@@ -172,15 +167,16 @@ const CommentAdmin = () => {
   };
 
   const handleSearch = () => {
+    setSearchKeyword(searchKeywordInput);
+    setSearchRating(searchRatingInput);
     setPage(1);
-    refetch();
   };
 
   const data =
     comments &&
     comments?.data?.data?.data?.map((item: any) => {
       const isHidden =
-        item.isActive === 0 || item.isActive === "0" || item.isActive === false;
+        item.status === 0 || item.status === "0" || item.status === false;
       const isManuallyHidden = hiddenComments[item.id] ?? isHidden;
       return {
         key: item.id,
@@ -200,31 +196,21 @@ const CommentAdmin = () => {
           <Tag color="red">Chưa phản hồi</Tag>
         ),
         is_active:
-          item.isActive == 0 ? (
+          item.status == 0 ? (
             <Tag color="warning">Hidden</Tag>
           ) : (
             <Tag color="success">Active</Tag>
           ),
         action: (
           <div className="d-flex gap-1">
-            {/* <Link to={`/dashboard/comments/edit/${item.id}`}>
-              <MyButton type="primary">Edit</MyButton>
-            </Link> */}
-            <MVConfirm title="Có xóa không" onConfirm={() => mutate(item.id)}>
+            <MVConfirm
+              title="Bạn có chắc chắn muốn xóa ?"
+              onConfirm={() => mutate(item.id)}
+            >
               <MyButton danger className="ml-2">
                 Delete
               </MyButton>
             </MVConfirm>
-            {/* <Link to={`/dashboard/commentsValue/${item.id}`}>
-              <MyButton>Comments Value</MyButton>
-            </Link> */}
-            <MyButton
-              danger={isManuallyHidden}
-              onClick={() => toggleCommentVisibility(item.id)}
-              type="primary"
-            >
-              {isManuallyHidden ? "Hiện" : "Ẩn"}
-            </MyButton>
             <Link
               to={`/dashboard/comments/${item.id}`}
               className="text-blue-500"
@@ -246,21 +232,15 @@ const CommentAdmin = () => {
       <div className="d-flex gap-2 mb-4">
         <Input
           placeholder="Nhập từ khóa tìm kiếm..."
-          value={searchKeyword}
-          onChange={(e) => setSearchKeyword(e.target.value)}
+          value={searchKeywordInput}
+          onChange={(e) => setSearchKeywordInput(e.target.value)}
           style={{ width: "200px" }}
         />
-        <MyButton
-          type="primary"
-          icon={<SearchOutlined />}
-          onClick={handleSearch}
-        >
-          Tìm kiếm
-        </MyButton>
+
         <Select
           placeholder="Chọn rating"
-          value={searchRating}
-          onChange={(value) => setSearchRating(value)}
+          value={searchRatingInput}
+          onChange={(value) => setSearchRatingInput(value)}
           style={{ width: "120px" }}
           allowClear
         >
@@ -270,15 +250,25 @@ const CommentAdmin = () => {
           <Option value={4}>4 sao</Option>
           <Option value={5}>5 sao</Option>
         </Select>
-
         <MyButton
-          color="default"
-          variant="dashed"
-          icon={<DeleteOutlined />}
-          onClick={handleDeleteSelectedData}
+          type="primary"
+          icon={<SearchOutlined />}
+          onClick={handleSearch}
         >
-          Delete Selected
+          Tìm kiếm
         </MyButton>
+      </div>
+      <div className="mb-3">
+        <Popconfirm
+          title="Bạn có chắc chắn muốn xóa ?"
+          onConfirm={handleDeleteSelectedData}
+          okText="Yes"
+          cancelText="No"
+        >
+          <MyButton type="primary" danger icon={<DeleteOutlined />}>
+            Delete Selected
+          </MyButton>
+        </Popconfirm>
         <MyButton
           icon={<EyeInvisibleOutlined />}
           className="ml-2"
@@ -288,6 +278,9 @@ const CommentAdmin = () => {
             ? "Hiện các comment đã chọn"
             : "Ẩn các comment đã chọn"}
         </MyButton>
+        <Link to="/dashboard/comments/hidden">
+          <MyButton type="default">Danh sách comment ẩn</MyButton>
+        </Link>
       </div>
 
       <MVTable

@@ -38,7 +38,6 @@ import ProductAdd from "../page/admin/products/add";
 import ProductEdit from "../page/admin/products/edit";
 import CommentDetail from "../page/admin/comments/detail";
 import LazyComponent from "../components/Lazy/LazyComponent";
-import Shop from "../page/shop";
 import AddProductVariantEdit from "../page/admin/products/component/addProductVariantEdit";
 import ProductVariant from "../page/admin/products/variant";
 import EditProductVariant from "../page/admin/products/component/editProductVariantEdit";
@@ -66,7 +65,9 @@ import ResetPassword from "../page/auth/resetPassword";
 import AccountSetting from "../page/auth/account";
 import AddOrder from "../page/admin/orders/components/add";
 import SendOrder from "../page/admin/orders/components/send";
+import Shop from "../page/shop";
 import ProductAll from "../page/shop/productAll";
+import ProductSearch from "../page/shop/productSearch";
 
 export const routerClient = [
   {
@@ -92,6 +93,10 @@ export const routerClient = [
       {
         path: "/products",
         element: <ProductAll />,
+      },
+      {
+        path: "/search",
+        element: <ProductSearch />,
       },
       {
         path: "/cart",
