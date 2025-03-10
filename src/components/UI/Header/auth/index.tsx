@@ -127,7 +127,7 @@ const AuthHeader = () => {
             className="text-center"
             title={token?.user?.name}
             size={"sm"}
-            src={token?.user?.library?.url}
+            src={token?.user?.avatar}
           />
         </Popover>
       ) : (

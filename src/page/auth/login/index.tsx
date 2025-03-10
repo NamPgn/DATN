@@ -96,9 +96,13 @@ export default function Login() {
 
   const handleGoogleLoginSuccess = async (response: any) => {
     try {
-      const res = await loginGoogle(response.credential);
-      localStorage.setItem("token", res.data.token);
+      const res = await loginGoogle({
+        token: response.credential,
+      });
+      console.log(res.data);
+      localStorage.setItem("token", JSON.stringify(res?.data));
       setIslogin(true);
+      localStorage.setItem("isLogin", "1");
       toast.success("Đăng nhập thành công!");
       navigate("/");
     } catch (error) {
