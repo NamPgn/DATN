@@ -1,31 +1,87 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useCart } from "../../context/Cart/cartContext";
-import { useMutation } from "react-query";
-import { getCart } from "../../sevices/client/cart";
+import { useMutation, useQuery } from "react-query";
+import {
+  changeCartAdd,
+  getCart,
+  userCart,
+  userCartClear,
+  userCartDelete,
+} from "../../sevices/client/cart";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-
+import debounce from "lodash.debounce";
 const Cart = () => {
   const [cartLocal, setCart] = useState([]);
+  const [cart_item_id, setCart_item_id] = useState<number | null>(null);
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
-  const updateQuantity = (id: number, quantity: number) => {
+  const { mutate: changeCart } = useMutation({
+    mutationFn: async (cartData: any) => {
+      return await changeCartAdd(cartData);
+    },
+  });
+
+  const debouncedChangeCart = useCallback(
+    debounce((id: number, quantity: number, cart_item_id: number) => {
+      const data = {
+        cart_item_id: cart_item_id,
+        variation_id: id,
+        quantity,
+      };
+      changeCart(data);
+      refetch();
+    }, 2000),
+    []
+  );
+
+  const updateQuantity = (
+    id: number,
+    quantity: number,
+    cart_item_id: number
+  ) => {
+    setCart_item_id(cart_item_id);
     setQuantities((prev) => ({ ...prev, [id]: quantity }));
+    debouncedChangeCart(id, quantity, cart_item_id);
   };
+
+  const { data: cartUser, refetch } = useQuery({
+    queryKey: ["userCart"],
+    queryFn: async () => {
+      return (await userCart())?.data?.data;
+    },
+  });
   const { cart }: any = useCart();
   const cartData = cart?.map((item: any) => ({
     variant: item.variant_id,
     quantity: item.quantity,
   }));
-  const handleQuantityIncrease = (id: number, maxStock: number) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [id]: prev[id] < maxStock ? prev[id] + 1 : maxStock,
-    }));
+  const handleQuantityIncrease = (
+    id: number,
+    maxStock: number,
+    currentQuantity: number,
+    cart_item_id: number
+  ) => {
+    setQuantities((prev) => {
+      const prevQuantity = prev[id] ?? currentQuantity;
+      const newQuantity = prevQuantity < maxStock ? prevQuantity + 1 : maxStock;
+      debouncedChangeCart(id, newQuantity, cart_item_id);
+      return {
+        ...prev,
+        [id]: prevQuantity < maxStock ? prevQuantity + 1 : maxStock,
+      };
+    });
   };
 
-  const handleQuantityDecrease = (id: number, stockQuantity: number) => {
+  const handleQuantityDecrease = (
+    id: number,
+    stockQuantity: number,
+    currentQuantity: number,
+    cart_item_id: number
+  ) => {
     setQuantities((prev) => {
-      const currentQuantity = prev[id] ?? stockQuantity;
+      const prevQuantity = prev[id] ?? currentQuantity;
+      const newQuantity = prevQuantity > 1 ? prevQuantity - 1 : 1;
+      debouncedChangeCart(id, newQuantity, cart_item_id);
       return {
         ...prev,
         [id]: currentQuantity > 1 ? currentQuantity - 1 : 1,
@@ -50,26 +106,45 @@ const Cart = () => {
       setQuantities(initialQuantities);
     }
   }, [cart]);
-  useEffect(() => {
-    if (cart?.length > 0) {
-      mutate();
-    }
-  }, [cart]);
 
-  const handleDelete = (id: any) => {
-    const cartNew = cart.filter((item: any) => Number(item.product_id) !== id);
-    localStorage.setItem("cart", JSON.stringify(cartNew));
-    setCart(cartNew);
-    toast.success("Xóa sản phẩm thành công");
+  useEffect(() => {
+    if (cartUser?.length >= 0) {
+      setCart(cartUser);
+    } else {
+      if (cart?.length > 0) {
+        mutate();
+      }
+    }
+  }, [cart, cartUser]);
+
+  const handleDelete = async (id: any) => {
+    if (cartUser) {
+      await userCartDelete(id);
+      toast.success("Xóa sản phẩm thành công");
+      refetch();
+    } else {
+      const cartNew = cart.filter(
+        (item: any) => Number(item.product_id) !== id
+      );
+      localStorage.setItem("cart", JSON.stringify(cartNew));
+      setCart(cartNew);
+      toast.success("Xóa sản phẩm thành công");
+    }
   };
 
-  const handleClear = () => {
-    if (cart.length <= 0) {
-      toast.error("Không có sản phẩm");
-    } else {
-      localStorage.clear();
-      setCart([]);
+  const handleClear = async () => {
+    if (cartUser.length >= 0) {
+      await userCartClear();
+      refetch();
       toast.success("Xóa sản phẩm thành công");
+    } else {
+      if (cart.length <= 0) {
+        toast.error("Không có sản phẩm");
+      } else {
+        localStorage.clear();
+        setCart([]);
+        toast.success("Xóa sản phẩm thành công");
+      }
     }
   };
 
@@ -113,7 +188,7 @@ const Cart = () => {
                         </td>
                         <td className="product-name">
                           <a href={`/product/${product.slug}`}>
-                            {product?.name }
+                            {product?.name}
                             <div>{product?.value}</div>
                           </a>
                         </td>
@@ -132,7 +207,9 @@ const Cart = () => {
                                 onClick={() =>
                                   handleQuantityDecrease(
                                     product.id,
-                                    product.stock_quantity
+                                    product.stock_quantity,
+                                    product.quantity,
+                                    product.cart_item_id
                                   )
                                 }
                               >
@@ -143,8 +220,7 @@ const Cart = () => {
                                 className="carqty input-text qty text"
                                 name="quantity"
                                 value={
-                                  quantities[product.id] ||
-                                  product.stock_quantity
+                                  quantities[product.id] || product.quantity
                                 }
                                 onChange={(e) => {
                                   const value = parseInt(e.target.value, 10);
@@ -153,7 +229,11 @@ const Cart = () => {
                                     value > 0 &&
                                     value <= product.stock_quantity
                                   ) {
-                                    updateQuantity(product.id, value);
+                                    updateQuantity(
+                                      product.id,
+                                      value,
+                                      product.cart_item_id
+                                    );
                                   }
                                 }}
                               />
@@ -164,7 +244,9 @@ const Cart = () => {
                                 onClick={() =>
                                   handleQuantityIncrease(
                                     product.id,
-                                    product.stock_quantity
+                                    product.stock_quantity,
+                                    product.quantity,
+                                    product.cart_item_id
                                   )
                                 }
                               >
@@ -186,7 +268,11 @@ const Cart = () => {
                         <td className="product-remove">
                           <div
                             className="remove"
-                            onClick={() => handleDelete(product.id)}
+                            onClick={() =>
+                              handleDelete(
+                                cartUser ? product.cart_item_id : product.id
+                              )
+                            }
                           >
                             <a href="javascript:void(0);" className="remove">
                               <span></span>

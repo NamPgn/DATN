@@ -10,6 +10,7 @@ import { UsersContext } from "../../../context/usersContext";
 import { useCart } from "../../../context/Cart/cartContext";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { intancesLocal } from "../../../sevices/instances";
+import { cartSync } from "../../../sevices/client/cart";
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
 const { Text, Title, Link } = Typography;
@@ -69,7 +70,11 @@ export default function Login() {
       float: "right",
     },
   };
-
+  const { mutate: syncCart } = useMutation({
+    mutationFn: async (data: any) => {
+      return await cartSync(data);
+    },
+  });
   const { mutate } = useMutation({
     mutationFn: async (data: string) => {
       return await login(data);
@@ -81,9 +86,13 @@ export default function Login() {
       setIslogin(true);
       localStorage.setItem("isLogin", "1");
       const cartData = cart?.map((item: any) => ({
-        variant: item.variant_id,
+        variation_id: item.variant_id,
         quantity: item.quantity,
       }));
+      syncCart({
+        cart: cartData,
+      });
+      localStorage.removeItem("cart");
     },
     onError: ({ response }) => {
       toast.error(response?.data?.message);
@@ -99,11 +108,18 @@ export default function Login() {
       const res = await loginGoogle({
         token: response.credential,
       });
-      console.log(res.data);
       localStorage.setItem("token", JSON.stringify(res?.data));
       setIslogin(true);
       localStorage.setItem("isLogin", "1");
       toast.success("Đăng nhập thành công!");
+      const cartData = cart?.map((item: any) => ({
+        variation_id: item.variant_id,
+        quantity: item.quantity,
+      }));
+      syncCart({
+        cart: cartData,
+      });
+      localStorage.removeItem("cart");
       navigate("/");
     } catch (error) {
       toast.error("Đăng nhập thất bại!");
