@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery } from "react-query";
 import { getProductsByCategory } from "../../sevices/client";
 import { Link, useParams } from "react-router-dom";
@@ -17,8 +18,32 @@ const Shop = () => {
   const [currentPage, setCurrentPage] = useState("?page=1");
   const [openOption, setopenOption] = useState(false);
   const [active, setActive] = useState(false);
+  const [selectedValue, setSelectedValue] = useState(`?page=${currentPage}`);
   const handleClickOption = () => {
     setopenOption((open) => !open);
+  };
+
+  const { data: products, isLoading }: any = useQuery({
+    queryKey: ["products", currentPage, selectedValue],
+    queryFn: async () => {
+      return (await getProductsByCategory(`${currentPage}${selectedValue}`))
+        .data;
+    },
+  });
+
+  const options = [
+    { label: "Default", value: "" },
+    { label: "High to low", value: "&sort_by=high_to_low" },
+    { label: "Low to high", value: "&sort_by=low_to_high" },
+    { label: "Top rated", value: "&sort_by=top_rated" },
+  ];
+  const handleChange = (e: any) => {
+    console.log(e);
+  };
+
+  const handleSelect = (value: string) => {
+    setSelectedValue(value);
+    console.log(`?page=1${value}`);
   };
 
   const debouncedSetPrice = useCallback(
@@ -32,13 +57,6 @@ const Shop = () => {
   const handlePriceChange = (value: any) => {
     debouncedSetPrice(value);
   };
-
-  const { data: products, isLoading }: any = useQuery({
-    queryKey: ["products", currentPage],
-    queryFn: async () => {
-      return (await getProductsByCategory(currentPage)).data;
-    },
-  });
 
   const { data: categoriesByProduct }: any = useQuery({
     queryKey: ["categories", id],
@@ -232,46 +250,68 @@ const Shop = () => {
                     <strong>{products?.total}</strong> items
                   </div>
                 </div>
-                <div className="col-sm-6">
+                <div className="col-sm-6 col-xl-4">
                   <div className="shopAccessBar">
+                    <div className="filterNav">
+                      <a href="javascript:void(0);">
+                        Filter
+                        <i className="fa-solid fa-sliders" />
+                      </a>
+                    </div>
                     <div className="sortNav">
-                      <form method="post" action="#">
+                      <div>
                         <label>Sort By</label>
                         <select
                           name="productFilter"
                           style={{ display: "none" }}
+                          onChange={(e) => handleChange(e.target.value)}
                         >
-                          <option value="">Default</option>
-                          <option value={1}>High to low</option>
-                          <option value={2}>Low to high</option>
-                          <option value={3}>Top rated</option>
-                          <option value={4}>Recently viewed</option>
+                          <option value={`?page=${currentPage}`}>
+                            Default
+                          </option>
+                          <option value={`?sort_by=high_to_low`}>
+                            High to low
+                          </option>
+                          <option value={`?sort_by=low_to_high`}>
+                            Low to high
+                          </option>
+                          <option value={`?sort_by=top_rated`}>
+                            Top rated
+                          </option>
                         </select>
                         <div
                           className={`nice-select ${openOption ? "open" : ""}`}
                           onClick={handleClickOption}
                           tabIndex={0}
                         >
-                          <span className="current">Default</span>
-                          <ul className="list">
-                            <li data-value="" className="option selected">
-                              Default
-                            </li>
-                            <li data-value={1} className="option">
-                              High to low
-                            </li>
-                            <li data-value={2} className="option">
-                              Low to high
-                            </li>
-                            <li data-value={3} className="option">
-                              Top rated
-                            </li>
-                            <li data-value={4} className="option">
-                              Recently viewed
-                            </li>
+                          <span className="current">
+                            {
+                              options.find((opt) => opt.value === selectedValue)
+                                ?.label
+                            }
+                          </span>
+                          <ul
+                            className={`list ${
+                              openOption ? "block" : "hidden"
+                            }`}
+                          >
+                            {options.map((option) => (
+                              <li
+                                key={option.value}
+                                data-value={option.value}
+                                className={`option ${
+                                  selectedValue === option.value
+                                    ? "selected"
+                                    : ""
+                                }`}
+                                onClick={() => handleSelect(option.value)}
+                              >
+                                {option.label}
+                              </li>
+                            ))}
                           </ul>
                         </div>
-                      </form>
+                      </div>
                     </div>
                   </div>
                 </div>
