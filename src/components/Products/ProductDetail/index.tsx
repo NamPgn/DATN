@@ -4,8 +4,10 @@ import { Link, useParams } from "react-router-dom";
 import Quantity from "../Quantity";
 import { useCart } from "../../../context/Cart/cartContext";
 import { toast } from "react-toastify";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { getProductsDetailClient } from "../../../sevices/products";
+import { userCartAdd } from "../../../sevices/client/cart";
+import { token_auth } from "../../../common/auth/getToken";
 const socialLinks = [
   { platform: "facebook", icon: "fa-facebook-f", color: "#3b5998" },
   { platform: "twitter", icon: "fa-twitter", color: "#00acee" },
@@ -91,6 +93,7 @@ const products = {
   ],
 };
 const ProductDetail = () => {
+  const token_ = token_auth();
   const { id } = useParams();
   const { data: products, isLoading } = useQuery({
     queryKey: ["products", id],
@@ -114,7 +117,11 @@ const ProductDetail = () => {
   });
   const { addToCart }: any = useCart();
   const [quantity, setQuantity] = useState(1);
-
+  const { mutate: addCartApi } = useMutation({
+    mutationFn: async (data: any) => {
+      return await userCartAdd(data);
+    },
+  });
   useEffect(() => {
     if (products?.product_images?.length) {
       setCurrentImage(products.product_images[0].url);
@@ -247,16 +254,26 @@ const ProductDetail = () => {
   const handleSubmit = () => {
     const length = Object.keys(selectedVariants).length;
     const find = selectedVariantss?.values?.length === length;
-    const data = {
-      quantity,
-      variant_id: selectedVariantss?.id,
-      product_id: id,
-    };
-    if (find) {
-      addToCart(data);
+    if (token_) {
+      const data = {
+        quantity,
+        variation_id: selectedVariantss?.id,
+        product_id: id,
+      };
+      addCartApi(data);
       toast.success("Thêm giỏ hàng thành công");
     } else {
-      toast.error("Thêm đầy đủ thông tin");
+      const data = {
+        quantity,
+        variant_id: selectedVariantss?.id,
+        product_id: id,
+      };
+      if (find) {
+        addToCart(data);
+        toast.success("Thêm giỏ hàng thành công");
+      } else {
+        toast.error("Thêm đầy đủ thông tin");
+      }
     }
   };
   // if (isLoading) return "Sản phẩm đang tải";
