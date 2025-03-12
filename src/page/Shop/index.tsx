@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery } from "react-query";
 import { getProductsByCategory } from "../../sevices/client";

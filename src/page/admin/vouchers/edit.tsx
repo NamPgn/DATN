@@ -117,6 +117,13 @@ const EditVoucher = ({ voucher, refetch }: any) => {
           }}
         </Form.Item>
 
+        <Form.Item label="Dành cho" name="for_logged_in_users">
+          <Select className="w-50">
+            <Select.Option value={0}>Người chưa đăng nhập</Select.Option>
+            <Select.Option value={1}>Người đã đăng nhập</Select.Option>
+          </Select>
+        </Form.Item>
+
         <Form.Item
           name="usage_limit"
           label="Usage Limit"

@@ -43,6 +43,9 @@ const VoucherDetail = () => {
         <strong>Amount:</strong> {voucher?.amount}
       </p>
       <p>
+        <strong>Apply:</strong> {voucher?.for_logged_in_users}
+      </p>
+      <p>
         <strong>Start Date:</strong> {voucher?.start_date}
       </p>
       <p>
