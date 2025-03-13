@@ -6,7 +6,7 @@ const BannerSectionMain = ({ pathName }: { pathName: string }) => {
   const [state, setState] = useState("Home");
   useEffect(() => {
     if (pathName.startsWith("/product/detail")) {
-      setState(`Product Detail`);
+      setState(`Chi tiết sản phẩm`);
     } else {
       const section = URLSECTION.find((item) => item.PATH === pathName);
       if (section) {

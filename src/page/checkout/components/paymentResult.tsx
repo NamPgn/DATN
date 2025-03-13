@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineCheckCircle, AiOutlineCloseCircle } from "react-icons/ai";
 import { useQuery } from "react-query";
 import { paymentReusult } from "../../../sevices/client/orders";
@@ -26,10 +26,9 @@ const PaymentResult = () => {
     queryFn: async () => await paymentReusult(queryString),
     enabled: isSuccessFromBank,
   });
-
   useEffect(() => {
     if (orderResult) {
-      setPaymentStatus(orderResult.success ? "success" : "failed");
+      setPaymentStatus(orderResult?.data?.success ? "success" : "failed");
     }
   }, [orderResult]);
 
@@ -74,7 +73,7 @@ const PaymentResult = () => {
             </button>
             {paymentStatus === "success" && (
               <button
-                onClick={() => navigate("/o/order-history")}
+                onClick={() => navigate("/o/orders-history")}
                 className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
               >
                 Xem đơn hàng

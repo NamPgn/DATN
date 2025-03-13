@@ -27,11 +27,13 @@ const schema = z.object({
   }),
 });
 const Checkout = () => {
-  const { checkoutItems } = useCheckout();
+  const { checkoutItems } = useCheckout() || {};
   const [optionsShip, setOptionsShip]: any = useState({});
   const [total_amount, settotal_amount]: any = useState(0);
+  const [fn_amount, setFn_amount]: any = useState(0);
   const [shippingFee, setShippingFee]: any = useState(0);
   const [discountAmount, setDiscountAmount]: any = useState(0);
+  const [voucherData, setDataVoucher] = useState<any | null>(null);
   const navigate = useNavigate();
   const [selectedValues, setSelectedValues] = useState<any>({
     select1: { value: null, label: "" },
@@ -58,15 +60,22 @@ const Checkout = () => {
   } = useForm({
     resolver: zodResolver(schema),
   });
-
   useEffect(() => {
     const totalAmount = checkoutItems.reduce(
       (sum: number, item: any) =>
-        sum + (item.sale_price ? item.sale_price : item.regular_price || 0) * item.quantity,
+        sum +
+        (item.sale_price ? item.sale_price : item.regular_price || 0) *
+          item.quantity,
       0
     );
     settotal_amount(totalAmount);
-  }, [checkoutItems]);
+    setFn_amount(
+      voucherData?.final_total && !isNaN(voucherData.final_total)
+        ? voucherData.final_total
+        : totalAmount
+    );
+    setDiscountAmount(voucherData ? voucherData.discount : 0);
+  }, [checkoutItems, voucherData]);
 
   const { mutate: MutateShipping } = useMutation({
     mutationFn: async (data: any) => {
@@ -210,22 +219,20 @@ const Checkout = () => {
       return;
     }
   };
-  const onSubmit = async (values: any) => {
-    const discount = 0;
 
+  const onSubmit = async (values: any) => {
     setShippingFee(optionsShip.fee);
-    setDiscountAmount(0);
     //final tổng tiền + phí ship - discount
 
-    console.log(total_amount + optionsShip.fee - discount)
+    console.log(discountAmount);
     const data = {
       ...values,
       o_address:
         values.address +
         "," +
         ` ${selectedValues.select3.label}, ${selectedValues.select2.label}, ${selectedValues.select1.label}`,
-      discount_amount: 0,
-      final_amount: total_amount + optionsShip.fee - discount,
+      discount_amount: voucherData ? voucherData.discount : 0,
+      final_amount: total_amount + optionsShip.fee - discountAmount,
       products: checkoutItems,
       shipping: optionsShip.fee,
       time: optionsShip.time,
@@ -263,8 +270,13 @@ const Checkout = () => {
               optionsWard={optionsWard}
             />
             <div className="col-lg-6">
-              <AddCode />
+              <AddCode
+                setVoucher={setDataVoucher}
+                setDataVoucher={setDataVoucher}
+                total_amount={total_amount}
+              />
               <TableCheckout
+                voucher={voucherData}
                 register={register}
                 errors={errors}
                 checkoutItems={checkoutItems}
@@ -274,6 +286,7 @@ const Checkout = () => {
                 handleValidate={handleValidate}
                 optionsShip={optionsShip}
                 loadingPayment={loadingPayment}
+                fn_amount={fn_amount}
               />
             </div>
           </div>

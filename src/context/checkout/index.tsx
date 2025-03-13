@@ -22,7 +22,6 @@ export const CheckoutProvider = ({ children }: { children: ReactNode }) => {
         selectedProducts.includes(p.id)
       );
       setCheckoutItems(selectedItems);
-      console.log(selectedItems)
     }
   }, [selectedProducts, cartLocal]);
   return (

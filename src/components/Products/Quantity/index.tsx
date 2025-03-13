@@ -17,6 +17,7 @@ const Quantity = ({ quantity, setQuantity }: any) => {
   return (
     <div className="quantity clearfix">
       <button
+       style={{ zIndex: 99 }}
         type="button"
         className="qtyBtn btnMinus"
         onClick={handleQuantityDecrease}

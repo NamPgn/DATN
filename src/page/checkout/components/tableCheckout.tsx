@@ -7,6 +7,8 @@ const TableCheckout = ({
   errors,
   optionsShip,
   loadingPayment,
+  voucher,
+  fn_amount,
 }: any) => {
   return (
     <div className="orderReviewWrap">
@@ -61,6 +63,7 @@ const TableCheckout = ({
                 </div>
               </td>
             </tr>
+
             <tr className="shippingRow">
               <th>Ngày nhận hàng dự kiến</th>
               <td>
@@ -76,11 +79,33 @@ const TableCheckout = ({
                 </div>
               </td>
             </tr>
+            <tr className="shippingRow">
+              <th>Giảm giá</th>
+              <td>
+                <div className="pi01Price">
+                  <ins>
+                    {voucher?.discount
+                      ? voucher?.discount
+                      : "Vui lòng chọn mã giảm giá"}
+                  </ins>
+                </div>
+              </td>
+            </tr>
             <tr>
               <th>Tổng cộng</th>
               <td>
                 <div className="pi01Price">
-                  <ins>{totalAmount.toLocaleString("vi-VN")}₫</ins>
+                  <ins>
+                    {(
+                      (fn_amount && !isNaN(fn_amount)
+                        ? fn_amount
+                        : totalAmount) +
+                      (optionsShip?.fee && !isNaN(optionsShip.fee)
+                        ? optionsShip.fee
+                        : 0)
+                    ).toLocaleString("vi-VN")}
+                    ₫
+                  </ins>
                 </div>
               </td>
             </tr>

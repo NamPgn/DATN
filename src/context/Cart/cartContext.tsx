@@ -49,7 +49,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, []);
   useEffect(() => {
     if (cartUser && cartUser.length > 0) {
-      console.log('abc')
+      console.log("abc");
       setCartLocal(cartUser);
     }
   }, [cartUser]);
@@ -62,7 +62,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const addToCart = (product: any) => {
     setCart((prevCart: any) => {
       const existingProductIndex = prevCart.findIndex(
-        (item: any) => Number(item.product_id) === Number(product.product_id)
+        (item: any) => Number(item.variant_id) === Number(product.variant_id)
       );
 
       let updatedCart;
@@ -93,7 +93,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         setCartLocal,
         setCart,
         mutate,
-        // setReset,
       }}
     >
       {children}

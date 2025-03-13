@@ -31,8 +31,10 @@ const Cart = () => {
           variation_id: id,
           quantity,
         };
-        changeCart(data); 
-        refetchCart();
+        changeCart(data);
+        setTimeout(() => {
+          refetchCart();
+        }, 1200);
       } else {
         const localCart = JSON.parse(localStorage.getItem("cart") || "[]");
         const updatedCart = localCart.map((item: any) =>
@@ -40,7 +42,7 @@ const Cart = () => {
         );
         localStorage.setItem("cart", JSON.stringify(updatedCart));
       }
-    }, 3000),
+    }, 1000),
     [token]
   );
 
@@ -125,6 +127,7 @@ const Cart = () => {
     const localDataCart: any = localStorage.getItem("checkId");
     const storedProducts = localDataCart ? JSON.parse(localDataCart) : [];
     if (storedProducts.length == 0) {
+      localStorage.removeItem("checkId");
       const data = cartLocal?.map((item: any) => item.id);
       setSelectedProducts(data);
       localStorage.setItem("checkId", JSON.stringify(data));
@@ -195,7 +198,9 @@ const Cart = () => {
               <thead>
                 <tr>
                   <th style={{ width: "50px" }}></th>
-                  <th className="product-thumbnail">Tên Sản Phẩm</th>
+                  <th className="product-thumbnail" style={{ width: 200 }}>
+                    Tên Sản Phẩm
+                  </th>
                   <th className="product-name">&nbsp;</th>
                   <th className="product-price">Giá</th>
                   <th className="product-quantity">Số Lượng</th>
@@ -212,7 +217,6 @@ const Cart = () => {
                     //   0;
                     // const quantity = quantities[product.id] || 1;
                     // const total = price * quantity;
-
                     return (
                       <tr key={product.id}>
                         <td className="product-checkbox">
@@ -299,9 +303,10 @@ const Cart = () => {
                         <td className="product-subtotal">
                           <div className="pi01Price">
                             <ins>
-                              $
-                              {quantities[product.id] * product.regular_price ||
-                                product.stock_quantity * product.regular_price}
+                              {!token
+                                ? quantities[product.id] * product.regular_price
+                                : product?.quantity * product?.regular_price}
+                              đ
                             </ins>
                           </div>
                         </td>

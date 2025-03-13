@@ -9,11 +9,12 @@ import { getProductsDetailClient } from "../../../sevices/products";
 import { userCartAdd } from "../../../sevices/client/cart";
 import { token_auth } from "../../../common/auth/getToken";
 import { socialLinks } from "../../../constant";
+import Loading from "../../Loading/Loading";
 
 const ProductDetail = () => {
   const token_ = token_auth();
   const { id } = useParams();
-  const { data: products } = useQuery({
+  const { data: products, isLoading } = useQuery({
     queryKey: ["products", id],
     queryFn: async () => {
       return (await getProductsDetailClient(id)).data;
@@ -33,13 +34,16 @@ const ProductDetail = () => {
     email: "",
     rating: 0,
   });
-  const { addToCart }: any = useCart();
+  const { addToCart, refetchCart }: any = useCart();
   const [quantity, setQuantity] = useState(1);
   const { mutate: addCartApi } = useMutation({
     mutationFn: async (data: any) => {
       return await userCartAdd(data);
     },
   });
+
+
+
   useEffect(() => {
     if (products?.product_images?.length) {
       setCurrentImage(products.product_images[0].url);
@@ -184,6 +188,7 @@ const ProductDetail = () => {
         addCartApi(dataProduct1, {
           onSuccess: () => {
             toast.success("Thêm giỏ hàng thành công");
+            refetchCart();
           },
           onError: () => {
             toast.error("Thêm giỏ hàng thất bại");
@@ -191,7 +196,7 @@ const ProductDetail = () => {
         });
       } else {
         if (selectedVariantss !== undefined) {
-          addCartApi(dataProduct1, {
+          addCartApi(dataProduct0, {
             onSuccess: () => {
               toast.success("Thêm giỏ hàng thành công");
             },
@@ -226,7 +231,7 @@ const ProductDetail = () => {
       }
     }
   };
-  // if (isLoading) return "Sản phẩm đang tải";
+  if (isLoading) return <Loading />;
   return (
     <section className="shopDetailsPageSection">
       <div className="container">
@@ -362,12 +367,12 @@ const ProductDetail = () => {
               <div className="pcBtns">
                 <Quantity quantity={quantity} setQuantity={setQuantity} />
                 <button onClick={handleSubmit} className="ulinaBTN">
-                  <span>Add to Cart</span>
+                  <span>Thêm vào giỏ hàng</span>
                 </button>
               </div>
 
               <div className="pcMeta">
-                <span>Sku: {selectedVariantss?.sku}</span>
+                <span>Mã sản phẩm: {selectedVariantss?.sku}</span>
                 <div className="pcCategory my-4">
                   {products?.categories?.map((cat: any, index: any) => (
                     <span key={index}>
@@ -379,7 +384,7 @@ const ProductDetail = () => {
                   ))}
                 </div>
                 <p className="pcmSocial">
-                  <span>Share</span>
+                  <span>Chia sẻ</span>
                   {socialLinks?.map((link, index) => (
                     <a
                       key={index}
