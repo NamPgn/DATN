@@ -242,37 +242,37 @@ export const columnsComments = [
     sortDirections: ["descend"],
   },
   {
-    title: "Content",
+    title: "Nội dung",
     dataIndex: "content",
     key: "content",
     width: 100,
   },
   {
-    title: "User id",
+    title: "Mã người dùng",
     dataIndex: "user_id",
     key: "user_id",
     width: 100,
   },
   {
-    title: "Product id",
+    title: "ID Sản phẩm",
     dataIndex: "product_id",
     key: "product_id",
     width: 100,
   },
   {
-    title: "Active",
+    title: "Trạng thái",
     dataIndex: "is_active",
     key: "is_active",
     width: 100,
   },
   {
-    title: "Rating",
+    title: "Đánh giá",
     dataIndex: "rating",
     key: "rating",
     width: 100,
   },
   {
-    title: "Action",
+    title: "Hành động",
     dataIndex: "action",
     key: "action",
     width: 150,
@@ -309,10 +309,22 @@ export const columnsVouchers = [
     width: 100,
   },
   {
-    title: "Type",
+    title: "Loại Giảm Giá",
     dataIndex: "type",
     key: "type",
     width: 100,
+    render: (type: number) =>
+      type === 0 ? "Giảm theo số tiền" : "Giảm theo phần trăm",
+  },
+  {
+    title: "Loại Voucher",
+    dataIndex: "for_logged_in_users",
+    key: "for_logged_in_users",
+    width: 150,
+    render: (userType: number | string) =>
+      Number(userType) === 1
+        ? "Chỉ dành cho người dùng đã đăng nhập"
+        : "Mọi người đều có thể sử dụng",
   },
   {
     title: "Số Lượng",

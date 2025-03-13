@@ -40,14 +40,18 @@ const VoucherDetail = () => {
         {voucher?.max_discount_amount}
       </p>
       <p>
-        <strong>Type:</strong> {voucher?.type}
+        <strong>Loại Giảm Giá:</strong>{" "}
+        {voucher?.type === 0 ? "Giảm theo số tiền" : "Giảm theo phần trăm"}
       </p>
       <p>
         <strong>Giá tối thiểu của đơn hàng:</strong>
         {voucher?.min_product_price}
       </p>
       <p>
-        <strong>Loại Voucher:</strong> {voucher?.for_logged_in_users}
+        <strong>Loại Voucher:</strong>{" "}
+        {voucher?.for_logged_in_users === 1
+          ? "Chỉ dành cho người dùng đã đăng nhập"
+          : "Mọi người đều có thể sử dụng"}
       </p>
       <p>
         <strong>Ngày tạo:</strong> {voucher?.start_date}

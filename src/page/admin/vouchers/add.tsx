@@ -19,8 +19,8 @@ const AddVoucher = ({ refetch }: any) => {
     try {
       const data = {
         ...values,
-        start_date: values.start_date.format("YYYY-MM-DD"),
-        expiry_date: values.expiry_date.format("YYYY-MM-DD"),
+        start_date: values.start_date.format("YYYY-MM-DD "),
+        expiry_date: values.expiry_date.format("YYYY-MM-DD "),
       };
       await createVoucher(data);
       message.success("Thêm Voucher thành công");

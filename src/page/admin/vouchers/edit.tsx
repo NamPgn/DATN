@@ -38,8 +38,8 @@ const EditVoucher = ({ voucher, refetch }: any) => {
 
       const data = {
         ...cleanedValues,
-        start_date: values.start_date.format("YYYY-MM-DD"),
-        expiry_date: values.expiry_date.format("YYYY-MM-DD"),
+        start_date: values.start_date.format("YYYY-MM-DD HH:mm:ss"),
+        expiry_date: values.expiry_date.format("YYYY-MM-DD HH:mm:ss"),
       };
 
       await updateVoucher(data, Number(voucher.id));
