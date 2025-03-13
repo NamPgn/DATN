@@ -45,7 +45,7 @@ const AddVoucher = ({ refetch }: any) => {
       >
         <Form.Item
           name="code"
-          label="Voucher Code"
+          label="Mã Voucher"
           rules={[{ required: true, message: "Vui lòng nhập mã code" }]}
         >
           <Input />
@@ -53,90 +53,89 @@ const AddVoucher = ({ refetch }: any) => {
 
         <Form.Item
           name="name"
-          label="Voucher Name"
+          label="Tên Voucher"
           rules={[{ required: true, message: "Vui lòng nhập name" }]}
         >
           <Input />
         </Form.Item>
 
-        <Form.Item name="description" label="Description">
-          <Input />
+        <Form.Item name="description" label="Mô tả">
+          <Input.TextArea
+            style={{ width: "100%" }}
+            placeholder="Nhập mô tả..."
+            autoSize={{ minRows: 3, maxRows: 10 }}
+          />
         </Form.Item>
 
-        <Form.Item label="Type" name="type">
-          <Select className="w-50" placeholder="Giảm giá theo ?">
+        <Form.Item label="Loại" name="type">
+          <Select style={{ width: "250px" }} placeholder="Giảm giá theo ?">
             <Select.Option value={0}>
               Vorcher giảm giá theo số tiền
             </Select.Option>
-            <Select.Option value={1}>Giảm giá theo phần trăm</Select.Option>
+            <Select.Option value={1}>
+              Voucher giảm giá theo phần trăm
+            </Select.Option>
           </Select>
         </Form.Item>
 
-        {type === 0 && (
-          <>
-            <Form.Item
-              name="amount"
-              label="Amount"
-              rules={[
-                { required: false, message: "Vui lòng nhập số tiền giảm giá" },
-              ]}
-            >
-              <InputNumber />
-            </Form.Item>
-            <Form.Item
-              name="min_product_price"
-              label="Min Product Price"
-              rules={[
-                {
-                  required: false,
-                  message: "Giá sản phẩm tối thiểu có thể sử dụng mã",
-                },
-              ]}
-            >
-              <InputNumber />
-            </Form.Item>
-          </>
-        )}
+        {type === 0 ? (
+          <Form.Item
+            name="amount"
+            label="Số tiền giảm"
+            rules={[
+              { required: false, message: "Vui lòng nhập số tiền giảm giá" },
+            ]}
+          >
+            <InputNumber />
+          </Form.Item>
+        ) : type === 1 ? (
+          <Form.Item
+            name="discount_percent"
+            label="Phần trăm giảm"
+            rules={[
+              { required: false, message: "Vui lòng nhập phần trăm giảm giá" },
+            ]}
+          >
+            <InputNumber />
+          </Form.Item>
+        ) : null}
 
-        {type === 1 && (
-          <>
-            <Form.Item
-              name="discount_percent"
-              label="Discount Percent"
-              rules={[
-                {
-                  required: false,
-                  message: "Vui lòng nhập phần trăm giảm giá",
-                },
-              ]}
-            >
-              <InputNumber />
-            </Form.Item>
-            <Form.Item
-              name="max_discount_amount"
-              label="Max Discount Amount"
-              rules={[
-                {
-                  required: false,
-                  message: "Số tiền tối đa được giảm giá",
-                },
-              ]}
-            >
-              <InputNumber />
-            </Form.Item>
-          </>
-        )}
+        <Form.Item
+          name="min_product_price"
+          label="Giá tối thiểu của đơn hàng"
+          rules={[
+            {
+              required: false,
+              message: "Giá sản phẩm tối thiểu có thể sử dụng mã",
+            },
+          ]}
+        >
+          <InputNumber />
+        </Form.Item>
 
-        <Form.Item label="Dành cho" name="for_logged_in_users">
-          <Select className="w-50">
-            <Select.Option value={0}>Người chưa đăng nhập</Select.Option>
-            <Select.Option value={1}>Người đã đăng nhập</Select.Option>
+        <Form.Item
+          name="max_discount_amount"
+          label="Số tiền giảm tối đa của đơn hàng"
+          rules={[
+            {
+              required: false,
+              message: "Số tiền tối đa được giảm giá",
+            },
+          ]}
+        >
+          <InputNumber />
+        </Form.Item>
+
+        <Form.Item label="Loại Voucher" name="for_logged_in_users">
+          <Select style={{ width: "220px" }}>
+            <Select.Option value={0}>Mọi người có thể sử dụng</Select.Option>
+            <Select.Option value={1}>Người dùng đã đăng nhập</Select.Option>
           </Select>
         </Form.Item>
 
         <Form.Item
           name="usage_limit"
-          label="Usage Limit"
+          label="Số lượng Voucher"
           rules={[{ required: true, message: "Số lần được sử dụng mã" }]}
         >
           <InputNumber />
@@ -144,7 +143,7 @@ const AddVoucher = ({ refetch }: any) => {
 
         <Form.Item
           name="start_date"
-          label="Start Date"
+          label="Ngày tạo"
           rules={[{ required: true, message: "Ngày tạo mã giảm" }]}
         >
           <DatePicker />
@@ -152,7 +151,7 @@ const AddVoucher = ({ refetch }: any) => {
 
         <Form.Item
           name="expiry_date"
-          label="Expiry Date"
+          label="Ngày hết hạn"
           rules={[{ required: true, message: "Ngày kết thúc mã giảm" }]}
         >
           <DatePicker />

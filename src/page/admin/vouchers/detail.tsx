@@ -6,7 +6,6 @@ import { MyButton } from "../../../components/UI/Core/Button";
 
 const VoucherDetail = () => {
   const { id } = useParams();
-
   const { data, isLoading } = useQuery(["voucher", id], () => getVoucher(id!));
 
   if (isLoading) {
@@ -18,47 +17,52 @@ const VoucherDetail = () => {
   return (
     <Card title={`Voucher: ${voucher?.id}`} bordered={false}>
       <p>
-        <strong>Code:</strong> {voucher?.code}
+        <strong>Mã Voucher:</strong> {voucher?.code}
       </p>
       <p>
-        <strong>Name:</strong> {voucher?.name}
-      </p>
-
-      <p>
-        <strong>Description:</strong> {voucher?.description}
+        <strong>Tên Voucher:</strong> {voucher?.name}
       </p>
       <p>
-        <strong>Discount Percent:</strong> {voucher?.discount_percent || "N/A"}
+        <strong>Mô tả:</strong> {voucher?.description}
       </p>
+      {voucher?.amount && (
+        <p>
+          <strong>Số tiền giảm:</strong> {voucher?.amount}
+        </p>
+      )}
+      {!voucher?.amount && (
+        <p>
+          <strong>Phần trăm giảm:</strong> {voucher?.discount_percent}
+        </p>
+      )}
       <p>
-        <strong>Max Discount Amount:</strong> {voucher?.max_discount_amount}
+        <strong>Số tiền giảm tối đa của đơn hàng:</strong>
+        {voucher?.max_discount_amount}
       </p>
       <p>
         <strong>Type:</strong> {voucher?.type}
       </p>
       <p>
-        <strong>Min Product Price:</strong> {voucher?.min_product_price}
+        <strong>Giá tối thiểu của đơn hàng:</strong>
+        {voucher?.min_product_price}
       </p>
       <p>
-        <strong>Amount:</strong> {voucher?.amount}
+        <strong>Loại Voucher:</strong> {voucher?.for_logged_in_users}
       </p>
       <p>
-        <strong>Apply:</strong> {voucher?.for_logged_in_users}
+        <strong>Ngày tạo:</strong> {voucher?.start_date}
       </p>
       <p>
-        <strong>Start Date:</strong> {voucher?.start_date}
+        <strong>Ngày hết hạn:</strong> {voucher?.expiry_date}
       </p>
       <p>
-        <strong>Expiry Date:</strong> {voucher?.expiry_date}
+        <strong>Số lượng Voucher:</strong> {voucher?.usage_limit}
       </p>
       <p>
-        <strong>Usage Limit:</strong> {voucher?.usage_limit}
-      </p>
-      <p>
-        <strong>Times Used:</strong> {voucher?.times_used}
+        <strong>Số lượt đã sử dụng:</strong> {voucher?.times_used}
       </p>
       <div className="">
-        <Link to="/dashboard/vouchers">
+        <Link to="/dashboard/vouchers/">
           <MyButton type="primary">Quay lại danh sách vouchers</MyButton>
         </Link>
       </div>

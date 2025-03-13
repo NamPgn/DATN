@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MVTable from "../../../components/UI/Core/MV/Table";
 import { columnsVouchers } from "../../../constant";
 import { delMultipleVouchers, getVouchers } from "../../../sevices/voucher";
@@ -13,13 +13,17 @@ import EditVoucher from "./edit";
 import { DeleteOutlined } from "@ant-design/icons";
 
 const VoucherAdmin = () => {
-  const [page, setPage] = useState(1);
+  const savedPage = sessionStorage.getItem("voucherPage");
+  const [page, setPage] = useState<number>(savedPage ? Number(savedPage) : 1);
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [editingVoucher, setEditingVoucher] = useState<any>(null);
 
+  useEffect(() => {
+    sessionStorage.setItem("voucherPage", String(page));
+  }, [page]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
@@ -103,6 +107,9 @@ const VoucherAdmin = () => {
           <div className="d-flex gap-2">
             <Link
               to={`/dashboard/vouchers/${item.id}`}
+              onClick={() =>
+                sessionStorage.setItem("voucherPage", String(page))
+              }
               className="text-blue-500"
             >
               <MyButton type="dashed">Detail</MyButton>
@@ -128,6 +135,7 @@ const VoucherAdmin = () => {
         onConfirm={handleDeleteSelectedData}
         okText="Yes"
         cancelText="No"
+        className="mb-3"
       >
         <MyButton type="primary" danger icon={<DeleteOutlined />}>
           Delete Selected
@@ -150,7 +158,7 @@ const VoucherAdmin = () => {
       ></MVTable>
 
       <Modal
-        title="Add New Voucher"
+        title="Thêm Mới Voucher"
         open={isModalVisible}
         onCancel={handleCancel}
         footer={null}
