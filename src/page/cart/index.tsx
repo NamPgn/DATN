@@ -1,37 +1,47 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { useCart } from "../../context/Cart/cartContext";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import {
   changeCartAdd,
   getCart,
-  userCart,
   userCartClear,
   userCartDelete,
 } from "../../sevices/client/cart";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import debounce from "lodash.debounce";
+import { useCheckout } from "../../context/checkout";
+import { UsersContext } from "../../context/usersContext";
 const Cart = () => {
-  const [cartLocal, setCart] = useState([]);
-  const [cart_item_id, setCart_item_id] = useState<number | null>(null);
   const [quantities, setQuantities] = useState<{ [key: number]: number }>({});
+  const { selectedProducts, setSelectedProducts } = useCheckout() || {};
+  const { token }: any = useContext(UsersContext) || {};
+  const { cart, cartUser, refetchCart, cartLocal, setCartLocal, setCart }: any =
+    useCart();
   const { mutate: changeCart } = useMutation({
     mutationFn: async (cartData: any) => {
       return await changeCartAdd(cartData);
     },
   });
-
   const debouncedChangeCart = useCallback(
     debounce((id: number, quantity: number, cart_item_id: number) => {
-      const data = {
-        cart_item_id: cart_item_id,
-        variation_id: id,
-        quantity,
-      };
-      changeCart(data);
-      refetch();
-    }, 2000),
-    []
+      if (token) {
+        const data = {
+          cart_item_id,
+          variation_id: id,
+          quantity,
+        };
+        changeCart(data); 
+        refetchCart();
+      } else {
+        const localCart = JSON.parse(localStorage.getItem("cart") || "[]");
+        const updatedCart = localCart.map((item: any) =>
+          item.product_id === id ? { ...item, quantity } : item
+        );
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+      }
+    }, 3000),
+    [token]
   );
 
   const updateQuantity = (
@@ -39,22 +49,18 @@ const Cart = () => {
     quantity: number,
     cart_item_id: number
   ) => {
-    setCart_item_id(cart_item_id);
     setQuantities((prev) => ({ ...prev, [id]: quantity }));
-    debouncedChangeCart(id, quantity, cart_item_id);
+    if (token) {
+      debouncedChangeCart(id, quantity, cart_item_id);
+    } else {
+      const localCart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const updatedCart = localCart.map((item: any) =>
+        item.product_id === id ? { ...item, quantity } : item
+      );
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+    }
   };
 
-  const { data: cartUser, refetch } = useQuery({
-    queryKey: ["userCart"],
-    queryFn: async () => {
-      return (await userCart())?.data?.data;
-    },
-  });
-  const { cart }: any = useCart();
-  const cartData = cart?.map((item: any) => ({
-    variant: item.variant_id,
-    quantity: item.quantity,
-  }));
   const handleQuantityIncrease = (
     id: number,
     maxStock: number,
@@ -64,11 +70,18 @@ const Cart = () => {
     setQuantities((prev) => {
       const prevQuantity = prev[id] ?? currentQuantity;
       const newQuantity = prevQuantity < maxStock ? prevQuantity + 1 : maxStock;
-      debouncedChangeCart(id, newQuantity, cart_item_id);
-      return {
-        ...prev,
-        [id]: prevQuantity < maxStock ? prevQuantity + 1 : maxStock,
-      };
+
+      if (token) {
+        debouncedChangeCart(id, newQuantity, cart_item_id);
+      } else {
+        const localCart = JSON.parse(localStorage.getItem("cart") || "[]");
+        const updatedCart = localCart.map((item: any) =>
+          item.variant_id === id ? { ...item, quantity: newQuantity } : item
+        );
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+      }
+
+      return { ...prev, [id]: newQuantity };
     });
   };
 
@@ -81,25 +94,25 @@ const Cart = () => {
     setQuantities((prev) => {
       const prevQuantity = prev[id] ?? currentQuantity;
       const newQuantity = prevQuantity > 1 ? prevQuantity - 1 : 1;
-      debouncedChangeCart(id, newQuantity, cart_item_id);
-      return {
-        ...prev,
-        [id]: currentQuantity > 1 ? currentQuantity - 1 : 1,
-      };
+
+      if (token) {
+        debouncedChangeCart(id, newQuantity, cart_item_id);
+      } else {
+        console.log(id);
+        const localCart = JSON.parse(localStorage.getItem("cart") || "[]");
+        const updatedCart = localCart.map((item: any) =>
+          item.variant_id === id ? { ...item, quantity: newQuantity } : item
+        );
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
+      }
+
+      return { ...prev, [id]: newQuantity };
     });
   };
-  const { mutate } = useMutation({
-    mutationFn: async () => {
-      return await getCart(cartData);
-    },
-    onSuccess: ({ data }: any) => {
-      setCart(data?.data);
-    },
-  });
 
   useEffect(() => {
     if (cart?.length > 0) {
-      const initialQuantities = cartLocal.reduce((acc: any, item: any) => {
+      const initialQuantities = cartLocal?.reduce((acc: any, item: any) => {
         acc[item.id] = item.quantity;
         return acc;
       }, {});
@@ -108,26 +121,36 @@ const Cart = () => {
   }, [cart]);
 
   useEffect(() => {
-    if (cartUser?.length >= 0) {
-      setCart(cartUser);
+    if (!cartLocal || cartLocal.length === 0) return;
+    const localDataCart: any = localStorage.getItem("checkId");
+    const storedProducts = localDataCart ? JSON.parse(localDataCart) : [];
+    if (storedProducts.length == 0) {
+      const data = cartLocal?.map((item: any) => item.id);
+      setSelectedProducts(data);
+      localStorage.setItem("checkId", JSON.stringify(data));
     } else {
-      if (cart?.length > 0) {
-        mutate();
-      }
+      setSelectedProducts(storedProducts);
     }
-  }, [cart, cartUser]);
-
+  }, [cartLocal]);
   const handleDelete = async (id: any) => {
     if (cartUser) {
       await userCartDelete(id);
       toast.success("Xóa sản phẩm thành công");
-      refetch();
+      refetchCart();
     } else {
       const cartNew = cart.filter(
-        (item: any) => Number(item.product_id) !== id
+        (item: any) => Number(item.variant_id) !== id
       );
-      localStorage.setItem("cart", JSON.stringify(cartNew));
+      console.log(cartNew);
+      if (selectedProducts.length) {
+        const cartNewCheckOutId = selectedProducts.filter(
+          (item: any) => Number(item) !== id
+        );
+        localStorage.setItem("checkId", JSON.stringify(cartNewCheckOutId));
+      }
       setCart(cartNew);
+      // setReset((re: any) => !re);
+      localStorage.setItem("cart", JSON.stringify(cartNew));
       toast.success("Xóa sản phẩm thành công");
     }
   };
@@ -135,17 +158,27 @@ const Cart = () => {
   const handleClear = async () => {
     if (cartUser.length >= 0) {
       await userCartClear();
-      refetch();
+      refetchCart();
       toast.success("Xóa sản phẩm thành công");
     } else {
       if (cart.length <= 0) {
         toast.error("Không có sản phẩm");
       } else {
         localStorage.clear();
-        setCart([]);
+        setCartLocal([]);
         toast.success("Xóa sản phẩm thành công");
       }
     }
+  };
+
+  const handleSelectProduct = (productId: any) => {
+    setSelectedProducts((prev: any) => {
+      const newSelected = prev.includes(productId)
+        ? prev.filter((id: any) => id !== productId)
+        : [...prev, productId];
+      localStorage.setItem("checkId", JSON.stringify(newSelected));
+      return newSelected;
+    });
   };
 
   return (
@@ -154,24 +187,25 @@ const Cart = () => {
         <div className="row">
           <div className="col-lg-12">
             <div className="cartHeader">
-              <h3>Your Cart Items</h3>
+              <h3>Giỏ Hàng</h3>
             </div>
           </div>
           <div className="col-lg-12">
             <table className="shop_table cart_table">
               <thead>
                 <tr>
-                  <th className="product-thumbnail">Item Name</th>
+                  <th style={{ width: "50px" }}></th>
+                  <th className="product-thumbnail">Tên Sản Phẩm</th>
                   <th className="product-name">&nbsp;</th>
-                  <th className="product-price">Price</th>
-                  <th className="product-quantity">Quantity</th>
-                  <th className="product-subtotal">Total</th>
+                  <th className="product-price">Giá</th>
+                  <th className="product-quantity">Số Lượng</th>
+                  <th className="product-subtotal">Tổng Tiền</th>
                   <th className="product-remove">&nbsp;</th>
                 </tr>
               </thead>
               <tbody>
-                {cartLocal.length > 0 ? (
-                  cartLocal.map((product: any) => {
+                {cartLocal?.length > 0 ? (
+                  cartLocal?.map((product: any) => {
                     // const price =
                     //   product.variants[0]?.sale_price ||
                     //   product.variants[0]?.regular_price ||
@@ -181,6 +215,13 @@ const Cart = () => {
 
                     return (
                       <tr key={product.id}>
+                        <td className="product-checkbox">
+                          <input
+                            type="checkbox"
+                            checked={selectedProducts.includes(product.id)}
+                            onChange={() => handleSelectProduct(product.id)}
+                          />
+                        </td>
                         <td className="product-thumbnail">
                           <a href={`/product/${product.slug}`}>
                             <img src={product.image_url} alt={product.name} />
@@ -194,7 +235,7 @@ const Cart = () => {
                         </td>
                         <td className="product-price">
                           <div className="pi01Price">
-                            <ins>${product?.regular_price}</ins>
+                            <ins>{product?.regular_price}đ</ins>
                           </div>
                         </td>
                         <td className="product-quantity">
@@ -293,14 +334,14 @@ const Cart = () => {
               <tfoot>
                 <tr className="actions">
                   <td colSpan={2} className="text-start">
-                    <Link to="/checkout" className="ulinaBTN">
+                    <Link to="/" className="ulinaBTN">
                       <span>Continue Shopping</span>
                     </Link>
                   </td>
                   <td colSpan={4} className="text-end">
-                    <a href="javascript:void(0);" className="ulinaBTN2">
-                      Update Cart
-                    </a>
+                    <Link to="/checkout" className="ulinaBTN2">
+                      <span>Continue Checkout</span>
+                    </Link>
                     <a
                       onClick={() => handleClear()}
                       href="javascript:void(0);"

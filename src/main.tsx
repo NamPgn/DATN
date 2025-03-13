@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ConfigProvider } from "antd";
 import { UserContextProvider } from "./context/usersContext/index.tsx";
 import { CartProvider } from "./context/Cart/cartContext.tsx";
+import { CheckoutProvider } from "./context/checkout/index.tsx";
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")!).render(
@@ -45,11 +46,13 @@ createRoot(document.getElementById("root")!).render(
   >
     <QueryClientProvider client={queryClient}>
       <CartProvider>
-        <UserContextProvider>
-          <BrowserRouter>
-            <App />
-          </BrowserRouter>
-        </UserContextProvider>
+        <CheckoutProvider>
+          <UserContextProvider>
+            <BrowserRouter>
+              <App />
+            </BrowserRouter>
+          </UserContextProvider>
+        </CheckoutProvider>
       </CartProvider>
     </QueryClientProvider>
   </ConfigProvider>

@@ -68,6 +68,10 @@ import SendOrder from "../page/admin/orders/components/send";
 import Shop from "../page/shop";
 import ProductAll from "../page/shop/productAll";
 import ProductSearch from "../page/shop/productSearch";
+import OrderHistory from "../page/orders/orderHistory";
+import ThankYou from "../page/orders/thank";
+import Layout from "../layouts/Layout";
+import PaymentResult from "../page/checkout/components/paymentResult";
 
 export const routerClient = [
   {
@@ -143,6 +147,24 @@ export const routerClient = [
       {
         path: "reset-password",
         element: <ResetPassword />,
+      },
+    ],
+  },
+  {
+    path: "o",
+    element: <Layout />,
+    children: [
+      {
+        path: "orders-history",
+        element: <OrderHistory />,
+      },
+      {
+        path: "thanks",
+        element: <ThankYou />,
+      },
+      {
+        path: "payment",
+        element: <PaymentResult />,
       },
     ],
   },
@@ -265,6 +287,7 @@ export const routerClient = [
         path: "orders/add",
         element: <AddOrder />,
       },
+
       {
         path: "orders/edit/:id",
         element: <EditOrder />,

@@ -4,7 +4,7 @@ const AddCode = () => {
   return (
     <form action="">
       <div className="shippingCoupons">
-        <h3>Coupon Code</h3>
+        <h3>Mã giảm giá</h3>
         <div className="couponFormWrap clearfix">
           <input
             type="text"
@@ -12,10 +12,10 @@ const AddCode = () => {
             className="input-text"
             id="coupon_code"
             defaultValue=""
-            placeholder="Write your Coupon Code"
+            placeholder="Mã giảm giá"
           />
-          <div className="ulinaBTN"  >
-            <span>Apply Code</span>
+          <div className="ulinaBTN" style={{ cursor:'pointer' }}>
+            <span>Sử dụng</span>
           </div>
         </div>
       </div>

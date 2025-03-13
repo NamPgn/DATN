@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import {
   getApiOrderAdress,
   postApiOrderDistrict,
+  postApiOrderGetShip,
   postApiOrderWard,
 } from "../../sevices/orders";
 import { toast } from "react-toastify";
@@ -10,17 +11,28 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import AddCode from "./components/addCode";
+import { useCheckout } from "../../context/checkout";
+import CheckoutForm from "./components/form";
+import TableCheckout from "./components/tableCheckout";
+import { paymentOrder } from "../../sevices/client/orders";
+import { useNavigate } from "react-router-dom";
 const schema = z.object({
-  firstName: z.string().min(1, "Vui lòng nhập Họ."),
-  lastName: z.string().min(1, "Vui lòng nhập Tên."),
-  email: z.string().email("Email không hợp lệ."),
-  phone: z.string().min(1, "Vui lòng nhập số điện thoại."),
+  o_name: z.string().min(1, "Vui lòng nhập Họ và tên"),
+  o_mail: z.string().email("Email không hợp lệ."),
+  o_phone: z.string().min(1, "Vui lòng nhập số điện thoại."),
   address: z.string().min(1, "Vui lòng nhập Địa chỉ."),
-  city: z.string().min(1, "Vui lòng nhập Thành phố."),
-  zipCode: z.string().min(1, "Vui lòng nhập Mã bưu điện."),
-  orderNote: z.string().optional(),
+  note: z.string().optional(),
+  payment_method: z.enum(["vnpay", "ship_cod"], {
+    message: "Vui lòng chọn phương thức thanh toán.",
+  }),
 });
 const Checkout = () => {
+  const { checkoutItems } = useCheckout();
+  const [optionsShip, setOptionsShip]: any = useState({});
+  const [total_amount, settotal_amount]: any = useState(0);
+  const [shippingFee, setShippingFee]: any = useState(0);
+  const [discountAmount, setDiscountAmount]: any = useState(0);
+  const navigate = useNavigate();
   const [selectedValues, setSelectedValues] = useState<any>({
     select1: { value: null, label: "" },
     select2: { value: null, label: "" },
@@ -42,16 +54,37 @@ const Checkout = () => {
     register,
     handleSubmit,
     formState: { errors },
+    trigger,
   } = useForm({
     resolver: zodResolver(schema),
   });
 
+  useEffect(() => {
+    const totalAmount = checkoutItems.reduce(
+      (sum: number, item: any) =>
+        sum + (item.sale_price ? item.sale_price : item.regular_price || 0) * item.quantity,
+      0
+    );
+    settotal_amount(totalAmount);
+  }, [checkoutItems]);
+
+  const { mutate: MutateShipping } = useMutation({
+    mutationFn: async (data: any) => {
+      return (await postApiOrderGetShip(data)).data;
+    },
+    onSuccess: (data) => {
+      setOptionsShip(data);
+    },
+    onError: () => {
+      toast.error("Lỗi tải danh sách giao hàng");
+    },
+  });
   const handleClickOption = (key: "select1" | "select2" | "select3") => {
     setOpenDropdown((prev) => ({
       select1: false,
       select2: false,
       select3: false,
-      [key]: !prev[key], // Chỉ mở dropdown đang click
+      [key]: !prev[key],
     }));
   };
 
@@ -97,6 +130,11 @@ const Checkout = () => {
       toast.error("Lỗi tải danh sách phường");
     },
   });
+  const { mutate: payment, isLoading: loadingPayment } = useMutation({
+    mutationFn: async (data: any) => {
+      return await paymentOrder(data);
+    },
+  });
   const optionsSelectProvince =
     orderGetProvince?.data?.data?.map((item: any) => ({
       label: item.ProvinceName,
@@ -129,11 +167,20 @@ const Checkout = () => {
 
         MutateWard({ district_id: value });
       } else if (key === "select3") {
-        const selectedOption = optionsWard.find(
+        const selectedOption: any = optionsWard.find(
           (opt: any) => opt.value === value
         );
         updatedValues = { ...prev, select3: selectedOption };
+        MutateShipping({
+          to_district_id: selectedValues.select2.value,
+          to_ward_code: selectedOption?.value,
+          weight: checkoutItems.reduce(
+            (sum: number, item: any) => sum + item.weight * item.quantity,
+            0
+          ),
+        });
       }
+
       setOpenDropdown({ select1: false, select2: false, select3: false });
       setErrorsState((prevErrors) => ({ ...prevErrors, [key]: "" }));
       return updatedValues;
@@ -142,325 +189,92 @@ const Checkout = () => {
   const validateForm = () => {
     let newErrors = {
       select1:
-        selectedValues.select1 !== "" ? "Vui lòng chọn tỉnh/thành phố." : "",
-      select2: selectedValues.select2 !== "" ? "Vui lòng chọn quận/huyện." : "",
-      select3: selectedValues.select3 !== "" ? "Vui lòng chọn phường/xã." : "",
+        selectedValues.select1?.value === null
+          ? "Vui lòng chọn tỉnh/thành phố."
+          : "",
+      select2:
+        selectedValues.select2?.value === null
+          ? "Vui lòng chọn quận/huyện."
+          : "",
+      select3:
+        selectedValues.select3?.value === null
+          ? "Vui lòng chọn phường/xã."
+          : "",
     };
-
     setErrorsState(newErrors);
-    console.log(Object.values(newErrors));
     return Object.values(newErrors).every((error) => error === "");
   };
-  const onSubmit = (data: any) => {
-    console.log("Dữ liệu gửi:", data);
-    if (validateForm()) {
-      console.log("Dữ liệu hợp lệ:", selectedValues);
+  const handleValidate = () => {
+    const isFormValid = validateForm();
+    if (!isFormValid) {
+      return;
     }
+  };
+  const onSubmit = async (values: any) => {
+    const discount = 0;
+
+    setShippingFee(optionsShip.fee);
+    setDiscountAmount(0);
+    //final tổng tiền + phí ship - discount
+
+    console.log(total_amount + optionsShip.fee - discount)
+    const data = {
+      ...values,
+      o_address:
+        values.address +
+        "," +
+        ` ${selectedValues.select3.label}, ${selectedValues.select2.label}, ${selectedValues.select1.label}`,
+      discount_amount: 0,
+      final_amount: total_amount + optionsShip.fee - discount,
+      products: checkoutItems,
+      shipping: optionsShip.fee,
+      time: optionsShip.time,
+      total_amount: total_amount,
+    };
+    payment(data, {
+      onSuccess: (order: any) => {
+        if (values.payment_method === "vnpay") {
+          window.location.href = order?.data?.url;
+        } else {
+          toast.success(order?.data?.message);
+          navigate("/o/thanks");
+        }
+      },
+      onError: () => {
+        toast.error("Thanh toán thất bại!");
+      },
+    });
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <section className="checkoutPage">
         <div className="container">
           <div className="row">
-            <div className="col-lg-6">
-              <div className="checkoutForm">
-                <h3>Your Billing Address</h3>
-                <div className="row">
-                  <>
-                    <div className="col-md-6">
-                      <input
-                        {...register("firstName")}
-                        placeholder="Họ *"
-                        type="text"
-                      />
-                      {errors.firstName && <p>{errors.firstName.message}</p>}
-                    </div>
-                    <div className="col-md-6">
-                      <input
-                        {...register("lastName")}
-                        placeholder="Tên *"
-                        type="text"
-                      />
-                      {errors.lastName && <p>{errors.lastName.message}</p>}
-                    </div>
-                    <div className="col-md-6">
-                      <input
-                        type="text"
-                        {...register("email")}
-                        placeholder="Email address *"
-                      />
-                      {errors.email && <p>{errors.email.message}</p>}
-                    </div>
-                    <div className="col-md-6">
-                      <input
-                        type="text"
-                        {...register("phone")}
-                        placeholder="Số điện thoại *"
-                      />
-                      {errors.phone && <p>{errors.phone.message}</p>}
-                    </div>
-                  </>
-
-                  <div className="col-lg-12">
-                    <div
-                      className={`nice-select ${
-                        openDropdown.select1 ? "open" : ""
-                      }`}
-                      onClick={() => handleClickOption("select1")}
-                    >
-                      <span className="current">
-                        {selectedValues.select1?.label || "Chọn tỉnh/thành phố"}
-                      </span>
-                      <ul className="list">
-                        {optionsSelectProvince.map((option: any) => (
-                          <li
-                            key={option.value}
-                            className="option"
-                            onClick={() =>
-                              handleChange("select1", option.value)
-                            }
-                          >
-                            {option.label}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    {errorsState.select1 && (
-                      <p className="text-red-500">{errorsState.select1}</p>
-                    )}
-                  </div>
-
-                  {/* Select quận/huyện */}
-                  <div className="col-lg-12">
-                    <div
-                      className={`nice-select ${
-                        openDropdown.select2 ? "open" : ""
-                      }`}
-                      onClick={() => handleClickOption("select2")}
-                    >
-                      <span className="current">
-                        {selectedValues.select2?.label || "Chọn quận/huyện"}
-                      </span>
-                      <ul className="list">
-                        {optionsDistrict.map((option: any) => (
-                          <li
-                            key={option.value}
-                            className="option"
-                            onClick={() =>
-                              handleChange("select2", option.value)
-                            }
-                          >
-                            {option.label}
-                          </li>
-                        ))}
-                      </ul>
-                      {errorsState.select2 && (
-                        <p className="text-red-500">{errorsState.select2}</p>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Select phường/xã */}
-                  <div className="col-lg-12">
-                    <div
-                      className={`nice-select ${
-                        openDropdown.select3 ? "open" : ""
-                      }`}
-                      onClick={() => handleClickOption("select3")}
-                    >
-                      <span className="current">
-                        {selectedValues.select3?.label || "Chọn phường/xã"}
-                      </span>
-                      <ul className="list">
-                        {optionsWard.map((option: any) => (
-                          <li
-                            key={option.value}
-                            className="option"
-                            onClick={() =>
-                              handleChange("select3", option.value)
-                            }
-                          >
-                            {option.label}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                    {errorsState.select3 && (
-                      <p className="text-red-500">{errorsState.select3}</p>
-                    )}
-                  </div>
-                  <div className="col-lg-12">
-                    <input type="text" name="field7" placeholder="Address *" />
-                  </div>
-                  <div className="col-lg-12">
-                    <input
-                      type="text"
-                      {...register("address")}
-                      placeholder="Địa chỉ *"
-                    />
-                    {errors.address && <p>{errors.address.message}</p>}
-                  </div>
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      {...register("city")}
-                      placeholder="Thành phố *"
-                    />
-                    {errors.city && <p>{errors.city.message}</p>}
-                  </div>
-                  <div className="col-md-6">
-                    <input
-                      type="text"
-                      {...register("zipCode")}
-                      placeholder="Mã bưu điện *"
-                    />
-                    {errors.zipCode && <p>{errors.zipCode.message}</p>}
-                  </div>
-                  <div className="col-lg-12">
-                    <textarea
-                      {...register("orderNote")}
-                      placeholder="Ghi chú đơn hàng"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <CheckoutForm
+              register={register}
+              errors={errors}
+              openDropdown={openDropdown}
+              selectedValues={selectedValues}
+              handleClickOption={handleClickOption}
+              optionsSelectProvince={optionsSelectProvince}
+              handleChange={handleChange}
+              errorsState={errorsState}
+              optionsDistrict={optionsDistrict}
+              optionsWard={optionsWard}
+            />
             <div className="col-lg-6">
               <AddCode />
-              <div className="orderReviewWrap">
-                <h3>Your Order</h3>
-                <div className="orderReview">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Item</th>
-                        <th>Price</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>
-                          <a href="javascript:void(0);">
-                            Ulina casual shirt for men
-                          </a>
-                        </td>
-                        <td>
-                          <div className="pi01Price">
-                            <ins>$99.00</ins>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <a href="javascript:void(0);">Korra UVR sunglass</a>
-                        </td>
-                        <td>
-                          <div className="pi01Price">
-                            <ins>$59.00</ins>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <a href="javascript:void(0);">
-                            Marjo fashionable bag
-                          </a>
-                        </td>
-                        <td>
-                          <div className="pi01Price">
-                            <ins>$39.00</ins>
-                          </div>
-                        </td>
-                      </tr>
-                    </tbody>
-                    <tfoot>
-                      <tr>
-                        <th>Sub Total</th>
-                        <td>
-                          <div className="pi01Price">
-                            <ins>$183.00</ins>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr className="shippingRow">
-                        <th>Shipping (Standard)</th>
-                        <td>
-                          <div className="pi01Price">
-                            <ins>$20.00</ins>
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <th>Total</th>
-                        <td>
-                          <div className="pi01Price">
-                            <ins>$203.00</ins>
-                          </div>
-                        </td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                  <ul className="wc_payment_methods">
-                    <li className="active">
-                      <input
-                        type="radio"
-                        defaultValue={1}
-                        name="paymentMethod"
-                        id="paymentMethod01"
-                      />
-                      <label htmlFor="paymentMethod01">
-                        Direct bank transfer
-                      </label>
-                      <div className="paymentDesc shows">
-                        Arkono ridoy venge tumi met, consectetur adipisicing
-                        elit, sed do eiusmod tempor incidid gna aliqua.
-                      </div>
-                    </li>
-                    <li>
-                      <input
-                        type="radio"
-                        defaultValue={4}
-                        name="paymentMethod"
-                        id="paymentMethod04"
-                      />
-                      <label htmlFor="paymentMethod04">Payment by cheque</label>
-                      <div className="paymentDesc">
-                        Arkono ridoy venge tumi met, consectetur adipisicing
-                        elit, sed do eiusmod tempor incidid gna aliqua.
-                      </div>
-                    </li>
-                    <li>
-                      <input
-                        type="radio"
-                        defaultValue={2}
-                        name="paymentMethod"
-                        id="paymentMethod02"
-                      />
-                      <label htmlFor="paymentMethod02">Cash on delivery</label>
-                      <div className="paymentDesc">
-                        Arkono ridoy venge tumi met, consectetur adipisicing
-                        elit, sed do eiusmod tempor incidid gna aliqua.
-                      </div>
-                    </li>
-                    <li>
-                      <input
-                        type="radio"
-                        defaultValue={3}
-                        name="paymentMethod"
-                        id="paymentMethod03"
-                      />
-                      <label htmlFor="paymentMethod03">Paypal</label>
-                      <div className="paymentDesc">
-                        Arkono ridoy venge tumi met, consectetur adipisicing
-                        elit, sed do eiusmod tempor incidid gna aliqua.
-                      </div>
-                    </li>
-                  </ul>
-                  <button type="submit" className="placeOrderBTN ulinaBTN">
-                    <span>Place Order</span>
-                  </button>
-                </div>
-              </div>
+              <TableCheckout
+                register={register}
+                errors={errors}
+                checkoutItems={checkoutItems}
+                discount_amount={discountAmount}
+                shippingFee={shippingFee}
+                totalAmount={total_amount}
+                handleValidate={handleValidate}
+                optionsShip={optionsShip}
+                loadingPayment={loadingPayment}
+              />
             </div>
           </div>
         </div>
