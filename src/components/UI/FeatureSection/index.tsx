@@ -46,7 +46,7 @@ const FeatureSection: React.FC<FeatureSectionProps> = ({ vouchers }) => {
     month: new Date(item.start_date).toLocaleDateString("default", {
       month: "short",
     }),
-    name: item.name,
+    code: item.code,
     startDate: new Date(item.start_date).toLocaleDateString(),
     expiryDate: new Date(item.expiry_date).toLocaleDateString(),
     description: item.description,
@@ -69,7 +69,7 @@ const FeatureSection: React.FC<FeatureSectionProps> = ({ vouchers }) => {
               </section>
               <section className="card-cont">
                 <small>Voucher Event</small>
-                <h3>{item.name}</h3>
+                <h3>{item.code}</h3>
                 <div className="even-date">
                   <i className="fa fa-calendar" />
                   <time>
@@ -84,9 +84,9 @@ const FeatureSection: React.FC<FeatureSectionProps> = ({ vouchers }) => {
                   type="primary"
                   danger
                   onClick={() => {
-                    navigator.clipboard.writeText(item.name);
+                    navigator.clipboard.writeText(item.code);
                     message.success(
-                      `Mã Voucher "${item.name}" Bạn đã thành công sao chép`
+                      `Mã Voucher "${item.code}" Bạn đã thành công sao chép`
                     );
                   }}
                 >
