@@ -130,7 +130,7 @@ export default function Login() {
     toast.error("Google Login Failed!");
   };
   return (
-    <GoogleOAuthProvider clientId="895957711042-9jrluih95ace3s0qlt8neu1kvurjsdvr.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_CLIENT_ID}>
       <section style={styles.section}>
         <div style={styles.formContainer}>
           <div style={styles.formContent}>

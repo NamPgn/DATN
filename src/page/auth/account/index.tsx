@@ -8,6 +8,7 @@ import {
   schemaChangePassWord,
   schemaUserInfo,
 } from "../../../schema/userSchema";
+import OrderHistory from "../../orders/orderHistory";
 
 const AccountSetting = () => {
   const { userId }: any = useContext(UsersContext) || {};
@@ -50,7 +51,7 @@ const AccountSetting = () => {
                 }`}
                 onClick={() => setActiveTab("profile")}
               >
-                Edit Profile
+                Chỉnh sửa thông tin
               </button>
             </li>
             <li className="nav-item">
@@ -60,7 +61,17 @@ const AccountSetting = () => {
                 }`}
                 onClick={() => setActiveTab("password")}
               >
-                Change Password
+                Thay đổi mật khẩu
+              </button>
+            </li>
+            <li className="nav-item">
+              <button
+                className={`nav-link ${
+                  activeTab === "history" ? "active" : ""
+                }`}
+                onClick={() => setActiveTab("history")}
+              >
+                Lịch sử đơn hàng
               </button>
             </li>
           </ul>
@@ -120,7 +131,7 @@ const AccountSetting = () => {
 
                       <div className="text-center">
                         <div className="square position-relative display-2 mb-3">
-                          {userId?.avatar === "string" ? (
+                          {userId?.avatar ? (
                             <img
                               className="w-100 h-100"
                               src={userId?.avatar}
@@ -209,6 +220,7 @@ const AccountSetting = () => {
                 </div>
               </form>
             )}
+            {activeTab === "history" && <OrderHistory />}
           </div>{" "}
         </div>
       </div>
