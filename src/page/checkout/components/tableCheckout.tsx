@@ -10,6 +10,7 @@ const TableCheckout = ({
   voucher,
   fn_amount,
 }: any) => {
+  console.log(fn_amount);
   return (
     <div className="orderReviewWrap">
       <h3>Đơn hàng của bạn</h3>
@@ -34,7 +35,10 @@ const TableCheckout = ({
                       {(item?.sale_price
                         ? item?.sale_price
                         : item?.regular_price
-                      )?.toLocaleString('vi', {style : 'currency', currency : 'VND'})}
+                      )?.toLocaleString("vi", {
+                        style: "currency",
+                        currency: "VND",
+                      })}
                     </ins>
                   </div>
                 </td>
@@ -99,13 +103,12 @@ const TableCheckout = ({
                 <div className="pi01Price">
                   <ins>
                     {(
-                      (fn_amount && !isNaN(fn_amount)
-                        ? fn_amount
-                        : totalAmount) +
-                      (optionsShip?.fee && !isNaN(optionsShip.fee)
-                        ? optionsShip.fee
-                        : 0)
-                    ).toLocaleString('vi', {style : 'currency', currency : 'VND'})}
+                      (isNaN(fn_amount) ? totalAmount : fn_amount) +
+                      (isNaN(optionsShip?.fee) ? 0 : optionsShip?.fee)
+                    ).toLocaleString("vi-VN", {
+                      style: "currency",
+                      currency: "VND",
+                    })}
                   </ins>
                 </div>
               </td>

@@ -72,6 +72,7 @@ import OrderHistory from "../page/orders/orderHistory";
 import ThankYou from "../page/orders/thank";
 import Layout from "../layouts/Layout";
 import PaymentResult from "../page/checkout/components/paymentResult";
+import HiddenComment from "../page/admin/comments/hidden";
 
 export const routerClient = [
   {
@@ -80,7 +81,11 @@ export const routerClient = [
     children: [
       {
         path: "/",
-        element: <HomePage />,
+        element: (
+          <LazyComponent>
+            <HomePage />
+          </LazyComponent>
+        ),
       },
       {
         path: "/about",
@@ -256,6 +261,10 @@ export const routerClient = [
       {
         path: "comments/:id",
         element: <CommentDetail />,
+      },
+      {
+        path: "comments/hidden",
+        element: <HiddenComment />,
       },
       {
         path: "product/:id/variants",

@@ -178,7 +178,7 @@ const Header = () => {
                   {/* Support Info */}
                   <div className="anSupport">
                     <i className="fa-solid fa-headset" />
-                    <h3>Helpline</h3>
+                    <h3>Liên Hệ</h3>
                     <h3>+123 - 456 - 7890</h3>
                   </div>
                 </div>

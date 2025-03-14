@@ -7,7 +7,6 @@ import Paginations from "../components/pagination";
 
 const ProductAll = () => {
   const [currentPage, setCurrentPage] = useState(1);
-
   const [openOption, setopenOption] = useState(false);
   const [selectedValue, setSelectedValue] = useState(`?page=${currentPage}`);
   const handleClickOption = () => {

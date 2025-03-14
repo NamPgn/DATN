@@ -69,13 +69,9 @@ const Checkout = () => {
       0
     );
     settotal_amount(totalAmount);
-    setFn_amount(
-      voucherData?.final_total && !isNaN(voucherData.final_total)
-        ? voucherData.final_total
-        : totalAmount
-    );
+    setFn_amount(voucherData ? voucherData.final_total : totalAmount);
     setDiscountAmount(voucherData ? voucherData.discount : 0);
-  }, [checkoutItems, voucherData]);
+  }, [checkoutItems, voucherData, fn_amount]);
 
   const { mutate: MutateShipping } = useMutation({
     mutationFn: async (data: any) => {

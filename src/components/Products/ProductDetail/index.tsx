@@ -42,8 +42,6 @@ const ProductDetail = () => {
     },
   });
 
-
-
   useEffect(() => {
     if (products?.product_images?.length) {
       setCurrentImage(products.product_images[0].url);
@@ -199,6 +197,7 @@ const ProductDetail = () => {
           addCartApi(dataProduct0, {
             onSuccess: () => {
               toast.success("Thêm giỏ hàng thành công");
+              refetchCart();
             },
             onError: () => {
               toast.error("Thêm giỏ hàng thất bại");

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Checkbox, Form, Grid, Input, theme, Typography } from "antd";
 import { GoogleOutlined, LockOutlined, UserOutlined } from "@ant-design/icons";
