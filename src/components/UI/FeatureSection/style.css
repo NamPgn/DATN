@@ -33,7 +33,7 @@ h1 {
 
 .card {
     display: table-row;
-    width: 49%;
+    width: 31%;
     background-color: #fff;
     color: #989898;
     margin-bottom: 10px;
@@ -41,10 +41,6 @@ h1 {
     text-transform: uppercase;
     border-radius: 4px;
     position: relative
-}
-
-.card+.card {
-    margin-left: 2%
 }
 
 .date {
