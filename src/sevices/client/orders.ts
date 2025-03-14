@@ -1,5 +1,7 @@
 import axios from "axios";
-
+import { intancesLocal } from "../instances";
+import { token_auth } from "../../common/auth/getToken";
+const token_ = token_auth();
 export const getApiOrderAdress = async () => {
   return axios.get(
     "https://dev-online-gateway.ghn.vn/shiip/public-api/master-data/province",
@@ -33,4 +35,16 @@ export const postApiOrderWard = async (data: any) => {
       },
     }
   );
+};
+
+export const paymentOrder = async (data: any) => {
+  return intancesLocal.post("/checkout", data);
+};
+
+export const paymentReusult = async (queryString: any) => {
+  return intancesLocal.get(`/vnpay-return?${queryString}`, {
+    headers: {
+      Authorization: `Bearer ${token_}`,
+    },
+  });
 };

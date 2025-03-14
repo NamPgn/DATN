@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import SearchUi from "../Search";
 import AuthHeader from "./auth";
 import { UsersContext } from "../../../context/usersContext";
-import { CartContext } from "../../../context/Cart/cartContext";
+import { useCart } from "../../../context/Cart/cartContext";
 const menuItems = [
   { name: "Home", path: "/" },
   { name: "About", path: "/about" },
@@ -47,7 +47,7 @@ const socialIcons = [
 const Header = () => {
   const [openSearch, setOpenSearch] = useState(false);
   const [data, setData]: any = useState([]);
-  const { cartUser }: any = useContext(CartContext) || {};
+  const { cartLocal }: any = useCart() || {};
   useEffect(() => {
     (async () => {
       const res: any = await axios.get("http://127.0.0.1:8000/api/categories");
@@ -170,7 +170,7 @@ const Header = () => {
                     <div className="anCart">
                       <Link to="/cart">
                         <i className="fa-solid fa-shopping-cart"></i>
-                        <span>{cartUser ? cartUser.length : cart?.length || 0}</span>
+                        <span>{(cartLocal && cartLocal.length) || 0}</span>
                       </Link>
                     </div>
                   </div>

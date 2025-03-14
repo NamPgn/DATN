@@ -7,46 +7,49 @@ import {
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
+export const socialLinks = [
+  { platform: "facebook", icon: "fa-facebook-f", color: "#3b5998" },
+  { platform: "twitter", icon: "fa-twitter", color: "#00acee" },
+  { platform: "linkedin", icon: "fa-linkedin-in", color: "#0077b5" },
+  { platform: "instagram", icon: "fa-instagram", color: "#e4405f" },
+];
+
 export const URLSECTION = [
   {
-    PATH: "/team",
-    SECTTIONTITLE: "Team Members",
-  },
-  {
     PATH: "/about",
-    SECTTIONTITLE: "About Ulina",
+    SECTTIONTITLE: "Giới Thiệu",
   },
   {
     PATH: "/team",
-    SECTTIONTITLE: "ABOUT",
+    SECTTIONTITLE: "Đội Ngũ",
   },
   {
     PATH: "/shop",
-    SECTTIONTITLE: "Shop",
+    SECTTIONTITLE: "Cửa Hàng",
   },
   {
     PATH: "/products",
-    SECTTIONTITLE: "Products",
+    SECTTIONTITLE: "Sản Phẩm",
   },
   {
     PATH: "/cart",
-    SECTTIONTITLE: "Shopping Cart",
+    SECTTIONTITLE: "Giỏ Hàng",
   },
   {
     PATH: "/product/detail",
-    SECTTIONTITLE: "Product Detail",
+    SECTTIONTITLE: "Chi Tiết Sản Phẩm",
   },
   {
     PATH: "/contact",
-    SECTTIONTITLE: "Contact",
+    SECTTIONTITLE: "Liên Hệ",
   },
   {
     PATH: "/checkout",
-    SECTTIONTITLE: "Checkout",
+    SECTTIONTITLE: "Thanh Toán",
   },
   {
     PATH: "/profile",
-    SECTTIONTITLE: "Account Setting",
+    SECTTIONTITLE: "Thông Tin",
   },
 ];
 

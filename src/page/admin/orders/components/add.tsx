@@ -138,6 +138,7 @@ const AddOrder = () => {
             (sum: number, item: any) => sum + item.weight * item.quantity,
             0
           ),
+          
         });
       }
     }
