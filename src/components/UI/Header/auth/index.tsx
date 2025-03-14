@@ -29,6 +29,8 @@ const AuthHeader = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("isLogin");
+    localStorage.removeItem("checkId");
+    localStorage.removeItem("cart");
     toast.success("Đăng xuất thành công");
     setIslogin(false);
     nav("/");

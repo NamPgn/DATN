@@ -34,8 +34,7 @@ const TableCheckout = ({
                       {(item?.sale_price
                         ? item?.sale_price
                         : item?.regular_price
-                      )?.toLocaleString("vi-VN")}
-                      ₫
+                      )?.toLocaleString('vi', {style : 'currency', currency : 'VND'})}
                     </ins>
                   </div>
                 </td>
@@ -85,7 +84,10 @@ const TableCheckout = ({
                 <div className="pi01Price">
                   <ins>
                     {voucher?.discount
-                      ? voucher?.discount
+                      ? voucher?.discount.toLocaleString("vi", {
+                          style: "currency",
+                          currency: "VND",
+                        })
                       : "Vui lòng chọn mã giảm giá"}
                   </ins>
                 </div>
@@ -103,8 +105,7 @@ const TableCheckout = ({
                       (optionsShip?.fee && !isNaN(optionsShip.fee)
                         ? optionsShip.fee
                         : 0)
-                    ).toLocaleString("vi-VN")}
-                    ₫
+                    ).toLocaleString('vi', {style : 'currency', currency : 'VND'})}
                   </ins>
                 </div>
               </td>

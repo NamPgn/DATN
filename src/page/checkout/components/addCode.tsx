@@ -3,15 +3,15 @@ import { applyVoucher } from "../../../sevices/client/voucher";
 import { toast } from "react-toastify";
 import { useState } from "react";
 
-const AddCode = ({ setVoucherData, total_amount }: any) => {
+const AddCode = ({ setDataVoucher, total_amount }: any) => {
   const [voucher, setVoucher] = useState<any | null>(null);
 
   const { mutate: apply, isLoading } = useMutation({
     mutationFn: async (data: any) => {
       return await applyVoucher(data);
     },
-    onSuccess: ({ data }) => {
-      setVoucherData(data);
+    onSuccess: (data) => {
+      setDataVoucher(data?.data);
     },
     onError({ response }: any) {
       toast.error(response?.data?.message);

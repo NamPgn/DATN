@@ -271,7 +271,6 @@ const Checkout = () => {
             />
             <div className="col-lg-6">
               <AddCode
-                setVoucher={setDataVoucher}
                 setDataVoucher={setDataVoucher}
                 total_amount={total_amount}
               />
