@@ -27,7 +27,7 @@ const FeatureSection: React.FC<FeatureSectionProps> = ({ vouchers }) => {
     const fetchVouchers = async () => {
       try {
         const res = await vouchers(1);
-        setVoucherList(res.data?.slice(0, 3) || []);
+        setVoucherList(res.data || []);
       } catch (error) {
         console.error("Failed to fetch vouchers:", error);
       } finally {
