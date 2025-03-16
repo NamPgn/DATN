@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { token_auth } from "../../common/auth/getToken";
 import { intancesLocal } from "../instances";
 export const applyVoucher = async (data: any) => {
@@ -10,4 +11,8 @@ export const applyVoucher = async (data: any) => {
   }
 
   return intancesLocal.post(`/voucher/apply-voucher`, data, { headers });
+};
+
+export const getVouchers = async () => {
+  return intancesLocal.get("/voucher");
 };

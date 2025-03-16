@@ -42,8 +42,6 @@ const ProductDetail = () => {
     },
   });
 
-
-
   useEffect(() => {
     if (products?.product_images?.length) {
       setCurrentImage(products.product_images[0].url);
@@ -325,8 +323,7 @@ const ProductDetail = () => {
                       </div> */}
                     </div>
                     <div className="productStock float-end">
-                      <span>Available: </span>{" "}
-                      {selectedVariantss.stock_quantity}
+                      <span>Số lượng: </span> {selectedVariantss.stock_quantity}
                     </div>
                   </div>
                 </>
