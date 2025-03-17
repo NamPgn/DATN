@@ -27,7 +27,7 @@ const SearchUi = ({
           <div className="row">
             <div className="col-sm-6 col-md-6">
               <div className="popup_logo">
-                <a href="index.html">
+                <a href="">
                   <img src="/assets/images/logo2.png" alt="Ulina" />
                 </a>
               </div>
@@ -51,7 +51,7 @@ const SearchUi = ({
                       type="search"
                       name="s"
                       id="s"
-                      placeholder="Search..."
+                      placeholder="Nhập từ khóa tìm kiếm..."
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
                     <button type="submit">
