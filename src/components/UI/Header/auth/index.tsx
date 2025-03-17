@@ -16,8 +16,10 @@ import MVTitle from "../../Core/MV/Title";
 import { MVAvatar } from "../../Core/Avatar";
 import { toast } from "react-toastify";
 import { UsersContext } from "../../../../context/usersContext";
+import { useCart } from "../../../../context/Cart/cartContext";
 const AuthHeader = () => {
   const { isLogin, setIslogin, token }: any = useContext(UsersContext) || {};
+  const { mutate }: any = useCart();
   const handleCheckCart = () => {
     // if (!user) {
     //   MVError("Bạn cần đăng nhập!");
@@ -29,6 +31,9 @@ const AuthHeader = () => {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("isLogin");
+    localStorage.removeItem("checkId");
+    localStorage.removeItem("cart");
+    mutate();
     toast.success("Đăng xuất thành công");
     setIslogin(false);
     nav("/");

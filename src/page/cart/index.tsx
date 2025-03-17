@@ -239,7 +239,15 @@ const Cart = () => {
                         </td>
                         <td className="product-price">
                           <div className="pi01Price">
-                            <ins>{product?.regular_price}đ</ins>
+                            <ins>
+                              {(product?.sale_price !== null
+                                ? product.sale_price
+                                : product?.regular_price
+                              )?.toLocaleString("vi-VN", {
+                                style: "currency",
+                                currency: "VND",
+                              })}
+                            </ins>
                           </div>
                         </td>
                         <td className="product-quantity">
@@ -303,10 +311,20 @@ const Cart = () => {
                         <td className="product-subtotal">
                           <div className="pi01Price">
                             <ins>
-                              {!token
-                                ? quantities[product.id] * product.regular_price
-                                : product?.quantity * product?.regular_price}
-                              đ
+                              {(
+                                (!token
+                                  ? (quantities?.[product?.id] ?? 0) *
+                                    (product?.sale_price ??
+                                      product?.regular_price ??
+                                      0)
+                                  : (product?.quantity ?? 0) *
+                                    (product?.sale_price ??
+                                      product?.regular_price ??
+                                      0)) || 0
+                              ).toLocaleString("vi-VN", {
+                                style: "currency",
+                                currency: "VND",
+                              })}
                             </ins>
                           </div>
                         </td>

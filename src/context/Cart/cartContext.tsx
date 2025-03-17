@@ -48,13 +48,13 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setCart(storedCart);
   }, []);
   useEffect(() => {
-    if (cartUser && cartUser.length > 0) {
+    if (cartUser && token_) {
       console.log("abc");
       setCartLocal(cartUser);
     }
   }, [cartUser]);
   useEffect(() => {
-    if (cart && cart?.length > 0) {
+    if (cart && !token_) {
       console.log("Calling mutate...");
       mutate();
     }

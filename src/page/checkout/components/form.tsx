@@ -56,7 +56,10 @@ const CheckoutForm = ({
               <span className="current">
                 {selectedValues.select1?.label || "Chọn tỉnh/thành phố"}
               </span>
-              <ul className="list">
+              <ul
+                className="list"
+                style={{ height: "400px", overflowY: "scroll" }}
+              >
                 {optionsSelectProvince.map((option: any) => (
                   <li
                     key={option.value}
@@ -144,10 +147,7 @@ const CheckoutForm = ({
             )}
           </div>
           <div className="col-lg-12">
-            <textarea
-              {...register("note")}
-              placeholder="Ghi chú đơn hàng"
-            />
+            <textarea {...register("note")} placeholder="Ghi chú đơn hàng" />
           </div>
         </div>
       </div>

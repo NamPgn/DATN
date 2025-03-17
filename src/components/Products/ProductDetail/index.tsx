@@ -197,6 +197,7 @@ const ProductDetail = () => {
           addCartApi(dataProduct0, {
             onSuccess: () => {
               toast.success("Thêm giỏ hàng thành công");
+              refetchCart();
             },
             onError: () => {
               toast.error("Thêm giỏ hàng thất bại");

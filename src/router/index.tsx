@@ -81,7 +81,11 @@ export const routerClient = [
     children: [
       {
         path: "/",
-        element: <HomePage />,
+        element: (
+          <LazyComponent>
+            <HomePage />
+          </LazyComponent>
+        ),
       },
       {
         path: "/about",

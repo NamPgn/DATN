@@ -5,7 +5,6 @@ import { getProductsByCategory } from "../../sevices/client";
 import { Link, useParams } from "react-router-dom";
 import { useCallback, useState } from "react";
 import "rc-slider/assets/index.css";
-import PriceRange from "./productAll/changeRange";
 import debounce from "lodash.debounce";
 import Loading from "../../components/Loading/Loading";
 import Paginations from "./components/pagination";
@@ -13,22 +12,21 @@ import {
   getCategory,
   getProductByCategory,
 } from "../../sevices/client/category";
+import PriceRange from "./productAll/changeRange";
 
 const Shop = () => {
   const { id }: any = useParams();
   const [currentPage, setCurrentPage] = useState("?page=1");
   const [openOption, setopenOption] = useState(false);
   const [active, setActive] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(`?page=${currentPage}`);
+  const [selectedValue, setSelectedValue] = useState(`${currentPage}`);
   const handleClickOption = () => {
     setopenOption((open) => !open);
   };
-
   const { data: products, isLoading }: any = useQuery({
     queryKey: ["products", currentPage, selectedValue],
     queryFn: async () => {
-      return (await getProductsByCategory(`${currentPage}${selectedValue}`))
-        .data;
+      return (await getProductsByCategory(`${selectedValue}`)).data;
     },
   });
 
@@ -78,6 +76,7 @@ const Shop = () => {
   const handleActive = () => {
     setActive((active) => !active);
   };
+  console.log(category);
   return (
     <>
       <section className="shopPageSection shopPageHasSidebar">
@@ -97,22 +96,20 @@ const Shop = () => {
                           }
                           onClick={handleActive}
                         >
-                          <Link to={`/shop/${item?.id}`}>{item?.name}</Link>
-                          {active ? (
-                            <ul>
-                              <li>
-                                <a href="shop_full_width.html">Bag</a>
-                              </li>
-                              <li>
-                                <a href="shop_left_sidebar.html">wallet</a>
-                              </li>
-                              <li>
-                                <a href="shop_right_sidebar.html">Hat</a>
-                              </li>
-                            </ul>
-                          ) : (
-                            ""
-                          )}
+                          <a href="javascript:void(0);">{item?.name}</a>
+                          <ul
+                            style={{ display: `${active ? "block" : "none"}` }}
+                          >
+                            {item?.children.map((item: any) => {
+                              return (
+                                <li>
+                                  <Link to={`/shop/${item?.id}`}>
+                                    {item?.name}
+                                  </Link>
+                                </li>
+                              );
+                            })}
+                          </ul>
                         </li>
                       );
                     })}
@@ -412,10 +409,10 @@ const Shop = () => {
                                             </Link>
                                           </h3>
                                           <div className="pi01Price">
-                                            <ins>
+                                            <ins>{product.sale_price}VND</ins>
+                                            <del>
                                               {product.regular_price}VND
-                                            </ins>
-                                            <del>{product.sale_price}VND</del>
+                                            </del>
                                           </div>
                                         </div>
                                       </div>

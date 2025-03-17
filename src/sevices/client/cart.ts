@@ -6,10 +6,15 @@ export const getCart = async (data: any) => {
 };
 
 export const cartSync = async (data: any) => {
+  const token_ = token_auth();
+
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
   return intancesLocal.post(`/cart/sync`, data, {
-    headers: {
-      Authorization: `Bearer ${token_}`,
-    },
+    headers,
   });
 };
 
@@ -46,7 +51,7 @@ export const changeCartAdd = async (data: any) => {
 };
 
 export const userCartClear = async () => {
-  return intancesLocal.post(`/cart/clear`, null,{
+  return intancesLocal.post(`/cart/clear`, null, {
     headers: {
       Authorization: `Bearer ${token_}`,
     },

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Checkbox, Form, Grid, Input, theme, Typography } from "antd";
-import { GoogleOutlined, LockOutlined, UserOutlined } from "@ant-design/icons";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { useMutation } from "react-query";
 import { login, loginGoogle } from "../../../sevices/users";
 import { toast } from "react-toastify";
@@ -10,7 +9,6 @@ import { useContext } from "react";
 import { UsersContext } from "../../../context/usersContext";
 import { useCart } from "../../../context/Cart/cartContext";
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
-import { intancesLocal } from "../../../sevices/instances";
 import { cartSync } from "../../../sevices/client/cart";
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
