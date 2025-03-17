@@ -18,8 +18,10 @@ const ProductSale = () => {
       <div className="container">
         <div className="row">
           <div className="col-lg-12">
-            <h2 className="secTitle">Latest Arrival</h2>
-            <p className="secDesc">Showing our latest arrival on this summer</p>
+            <h2 className="secTitle">SẢN PHẨM MỚI</h2>
+            <p className="secDesc">
+              Hiển thị sản phẩm mới nhất của chúng tôi trong mùa hè này
+            </p>
           </div>
         </div>
         <div className="row">

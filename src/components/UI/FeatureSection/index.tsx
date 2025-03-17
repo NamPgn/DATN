@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./style.css";
 import { Button, message } from "antd";
+import { useQuery } from "react-query";
 
 interface Voucher {
   id: number;
@@ -21,23 +22,13 @@ interface FeatureSectionProps {
 }
 
 const FeatureSection: React.FC<FeatureSectionProps> = ({ vouchers }) => {
-  const [voucherList, setVoucherList] = useState<Voucher[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    const fetchVouchers = async () => {
-      try {
-        const res = await vouchers(1);
-        setVoucherList(res.data?.slice(0, 3) || []);
-      } catch (error) {
-        console.error("Failed to fetch vouchers:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchVouchers();
-  }, [vouchers]);
-  const data = voucherList.map((item) => ({
+  const { data: voucherList, isLoading }: any = useQuery({
+    queryKey: ["VOUCHERCL"],
+    queryFn: async () => {
+      return (await vouchers(1)).data || [];
+    },
+  });
+  const data = voucherList?.map((item: any) => ({
     key: item.id,
     day: new Date(item.start_date).getDate(),
     month: new Date(item.start_date).toLocaleDateString("default", {
@@ -50,7 +41,6 @@ const FeatureSection: React.FC<FeatureSectionProps> = ({ vouchers }) => {
     expiryDate: new Date(item.expiry_date).toLocaleDateString(),
     description: item.description,
   }));
-
   return (
     <section className="container my-5">
       <h1>Voucher</h1>

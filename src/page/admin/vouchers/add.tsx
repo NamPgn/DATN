@@ -26,9 +26,8 @@ const AddVoucher = ({ refetch }: any) => {
       message.success("Thêm Voucher thành công");
       form.resetFields();
       refetch();
-    } catch (error) {
-      console.error("Lỗi khi thêm Voucher:", error);
-      message.error("Thêm Voucher không thành công");
+    } catch (error:any) {
+      message.error(error?.response?.data?.message);
     }
   };
   return (
@@ -146,7 +145,7 @@ const AddVoucher = ({ refetch }: any) => {
           label="Ngày tạo"
           rules={[{ required: true, message: "Ngày tạo mã giảm" }]}
         >
-          <DatePicker />
+          <DatePicker placeholder="Ngày tạo" />
         </Form.Item>
 
         <Form.Item
@@ -154,12 +153,12 @@ const AddVoucher = ({ refetch }: any) => {
           label="Ngày hết hạn"
           rules={[{ required: true, message: "Ngày kết thúc mã giảm" }]}
         >
-          <DatePicker />
+          <DatePicker placeholder="Ngày hết hạn" />
         </Form.Item>
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Add Voucher
+            Thêm Voucher
           </Button>
         </Form.Item>
       </Form>

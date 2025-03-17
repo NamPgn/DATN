@@ -36,7 +36,7 @@ const AddProductVariantEdit = () => {
       return await addVariantsProduct(id, values);
     },
     onSuccess: () => {
-      message.success("Variant created successfully!");
+      message.success("Tạo thuộc tính thành công");
       refetch();
       refetchVariant();
     },
@@ -137,6 +137,9 @@ const AddProductVariantEdit = () => {
           </Form.Item>
           <Form.Item label="Sku" name="sku" labelCol={{ span: 24 }}>
             <Input placeholder="Sku" style={{ marginBottom: "10px" }} />
+          </Form.Item>
+          <Form.Item label="Weight" name="weight" labelCol={{ span: 24 }}>
+            <Input placeholder="Weight" style={{ marginBottom: "10px" }} />
           </Form.Item>
           <Form.Item
             label="Variant_image"

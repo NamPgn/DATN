@@ -209,7 +209,7 @@ const Cart = () => {
                 </tr>
               </thead>
               <tbody>
-                {cartLocal?.length > 0 ? (
+                {cartLocal && cartLocal.length > 0 ? (
                   cartLocal?.map((product: any) => {
                     // const price =
                     //   product.variants[0]?.sale_price ||
@@ -311,16 +311,17 @@ const Cart = () => {
                         <td className="product-subtotal">
                           <div className="pi01Price">
                             <ins>
-                              {(
-                                (!token
-                                  ? (quantities?.[product?.id] ?? 0) *
-                                    (product?.sale_price ??
-                                      product?.regular_price ??
-                                      0)
-                                  : (product?.quantity ?? 0) *
-                                    (product?.sale_price ??
-                                      product?.regular_price ??
-                                      0)) || 0
+                              {(!token
+                                ? (quantities?.[product?.id] ??
+                                    product?.quantity ??
+                                    1) *
+                                  (product?.sale_price ??
+                                    product?.regular_price ??
+                                    0)
+                                : (product?.quantity ?? 1) *
+                                  (product?.sale_price ??
+                                    product?.regular_price ??
+                                    0)
                               ).toLocaleString("vi-VN", {
                                 style: "currency",
                                 currency: "VND",

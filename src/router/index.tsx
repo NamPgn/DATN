@@ -344,82 +344,82 @@ export const routerClient = [
 export const TableRouterAdminPage = [
   {
     path: "/dashboard",
-    name: "Admin",
+    name: "Trang chủ",
     icon: <DashboardOutlined />,
   },
   {
     path: "/dashboard/products",
-    name: "Products",
+    name: "Sản phẩm",
     icon: <NotificationOutlined />,
     children: [
       {
         path: "/dashboard/attribute",
-        name: "Attribute",
+        name: "Thuộc tính",
         icon: <UserOutlined />,
       },
     ],
   },
   {
-    name: "User",
+    name: "Người dùng",
     path: "/dashboard/users",
     icon: <PicLeftOutlined />,
     children: [
       {
         path: "/dashboard/users",
-        name: "Users",
+        name: "Danh sách người dùng",
         icon: <UserOutlined />,
       },
       {
         path: "/dashboard/adminUer",
-        name: "Admin",
+        name: "Quản trị viên",
         icon: <LaptopOutlined />,
       },
     ],
   },
   {
-    name: "Category",
+    name: "Danh mục",
     icon: <SlidersOutlined />,
     path: "/dashboard/category",
     children: [
       {
         path: "/dashboard/category/deleted",
         icon: <ControlOutlined />,
-        name: "Deleted",
+        name: "Đã xóa",
       },
     ],
   },
   {
-    name: "Comment",
+    name: "Bình luận",
     icon: <CommentOutlined />,
     path: "/dashboard/comments",
     children: [
       {
         path: "/dashboard/category/deleted",
         icon: <ControlOutlined />,
-        name: "Deleted",
+        name: "Đã xóa",
       },
     ],
   },
   {
-    name: "Voucher",
+    name: "Mã giảm giá",
     icon: <GiftOutlined />,
     path: "/dashboard/vouchers",
     children: [
       {
         path: "/dashboard/category/deleted",
         icon: <ControlOutlined />,
-        name: "Deleted",
+        name: "Đã xóa",
       },
     ],
   },
   {
-    name: "Orders",
+    name: "Đơn hàng",
     icon: <BorderBottomOutlined />,
     path: "/dashboard/orders",
   },
   {
     path: "/dashboard/product/image",
-    name: "Image List",
+    name: "Danh sách ảnh",
     icon: <FileImageOutlined />,
   },
 ];
