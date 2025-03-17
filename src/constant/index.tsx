@@ -126,13 +126,13 @@ export const columnsCategory = [
 
 export const columnsProducts = [
   {
-    title: "Name",
+    title: "Tên sản phẩm",
     dataIndex: "name",
     key: "name",
     width: 300,
   },
   {
-    title: "Main Image",
+    title: "Ảnh chính",
     dataIndex: "main_image",
     key: "main_image",
     width: 100,
@@ -144,18 +144,18 @@ export const columnsProducts = [
     width: 300,
   },
   {
-    title: "Url",
+    title: "URL",
     dataIndex: "url",
     key: "url",
     width: 250,
   },
   {
-    title: "Categories Name",
+    title: "Danh mục",
     dataIndex: "categoryName",
     key: "categoryName",
   },
   {
-    title: "Action",
+    title: "Hành động",
     dataIndex: "action",
     key: "action",
     fixed: "right",
@@ -210,7 +210,7 @@ export const columnsProductVariant = [
 
 export const columnsATTR = [
   {
-    title: "Stt",
+    title: "STT",
     dataIndex: "stt",
     key: "stt",
     width: 100,
@@ -220,13 +220,13 @@ export const columnsATTR = [
     sortDirections: ["descend"],
   },
   {
-    title: "Name",
+    title: "Tên",
     dataIndex: "name",
     key: "name",
     width: 100,
   },
   {
-    title: "Action",
+    title: "Hành động",
     dataIndex: "action",
     key: "action",
     width: 100,
@@ -366,13 +366,13 @@ export const columnsImageList = [
     sortDirections: ["descend"],
   },
   {
-    title: "Image",
+    title: "Ảnh",
     dataIndex: "image",
     key: "image",
     width: 100,
   },
   {
-    title: "Action",
+    title: "Hành động",
     dataIndex: "action",
     key: "action",
     width: 100,
@@ -381,42 +381,42 @@ export const columnsImageList = [
 
 export const columnsOrders = [
   {
-    title: "Code",
+    title: "Mã đơn hàng",
     dataIndex: "code",
     key: "code",
   },
   {
-    title: "Name",
+    title: "Tên khách hàng",
     dataIndex: "o_name",
     key: "o_name",
   },
   {
-    title: "Phone",
+    title: "Số điện thoại",
     dataIndex: "o_phone",
     key: "o_phone",
   },
   {
-    title: "Final Amount",
+    title: "Tổng tiền",
     dataIndex: "final_amount",
     key: "final_amount",
   },
   {
-    title: "Payment Method",
+    title: "Phương thức thanh toán",
     dataIndex: "payment_method",
     key: "payment_method",
   },
   {
-    title: "Payment Status",
+    title: "Trạng thái thanh toán",
     dataIndex: "stt_payment",
     key: "stt_payment",
   },
   {
-    title: " Status Track",
+    title: "Trạng thái vận chuyển",
     dataIndex: "stt_track",
     key: "stt_track",
   },
   {
-    title: "Action",
+    title: "Hành động",
     dataIndex: "action",
     key: "action",
     fixed: "right",
@@ -436,12 +436,12 @@ export const STATUSOPTIONS = [
 
 export const COLUMN_TABLE_USERS = [
   {
-    title: "Name",
+    title: "Tên",
     dataIndex: "name",
     key: "name",
   },
   {
-    title: "User Name",
+    title: "Tên người dùng",
     dataIndex: "username",
     key: "username",
   },
@@ -451,22 +451,22 @@ export const COLUMN_TABLE_USERS = [
     key: "email",
   },
   {
-    title: "Customer",
+    title: "Khách hàng",
     dataIndex: "customer",
     key: "customer",
   },
   {
-    title: "Role",
+    title: "Vai trò",
     dataIndex: "role",
     key: "role",
   },
   {
-    title: "Active",
+    title: "Trạng thái",
     dataIndex: "is_active",
     key: "is_active",
   },
   {
-    title: "Action",
+    title: "Hành động",
     key: "action",
     dataIndex: "action",
     width: 100,
@@ -486,3 +486,10 @@ export interface Product {
     stock_quantity?: number;
   }[];
 }
+
+export const REASONS = [
+  "Vi phạm điều khoản sử dụng",
+  "Spam hoặc gửi tin rác",
+  "Hành vi gian lận",
+  "Báo cáo từ người dùng khác",
+];

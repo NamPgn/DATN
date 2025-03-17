@@ -13,10 +13,7 @@ const EditUser = () => {
   const [selectImage, setSelectImage]: any = useState([]);
   const [selectOneImage, setSelectOneImage]: any = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const {
-    isLoading,
-    data: user,
-  }: any = useQuery({
+  const { isLoading, data: user }: any = useQuery({
     queryKey: ["user", id],
     queryFn: async () => {
       return (await getUser(id)).data;
@@ -71,12 +68,12 @@ const EditUser = () => {
         icon={<UploadOutlined />}
         onClick={showModal}
       >
-        Upload Image
+        Tải ảnh lên
       </Button>
 
       <Modal
         width={800}
-        title="Upload Image"
+        title="Tải ảnh lên"
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -88,25 +85,40 @@ const EditUser = () => {
           selectOneImage={selectOneImage}
         />
       </Modal>
-      <Card title={`Edit user: ${user?.name}`} bordered={false}>
+      <Card title={`Sửa tài khoản: ${user?.name}`} bordered={false}>
         <Form form={form} layout="vertical" onFinish={onFinish}>
-          <Form.Item label="Name" name="name">
-            <Input placeholder="Enter name" />
+          <Form.Item
+            label="Name"
+            name="name"
+            rules={[{ required: true, message: "Vui lòng nhập tên!" }]}
+          >
+            <Input placeholder="Nhập tên" />
           </Form.Item>
 
-          <Form.Item label="Email" name="email">
-            <Input type="text" placeholder="Enter email" />
+          <Form.Item
+            label="Email"
+            name="email"
+            rules={[
+              { required: true, message: "Vui lòng nhập email!" },
+              { type: "email", message: "Email không hợp lệ!" },
+            ]}
+          >
+            <Input type="text" placeholder="Nhập email" />
           </Form.Item>
 
-          <Form.Item label="Role" name="role">
-            <Select>
-              <Select.Option value={"member"}>Member</Select.Option>
-              <Select.Option value={"admin"}>Admin</Select.Option>
+          <Form.Item
+            label="Role"
+            name="role"
+            rules={[{ required: true, message: "Vui lòng chọn quyền!" }]}
+          >
+            <Select placeholder="Chọn quyền">
+              <Select.Option value="member">Thành viên</Select.Option>
+              <Select.Option value="admin">Quản trị viên</Select.Option>
             </Select>
           </Form.Item>
 
           <Button type="primary" htmlType="submit">
-            Save
+            Lưu
           </Button>
         </Form>
       </Card>

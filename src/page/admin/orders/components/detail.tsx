@@ -11,7 +11,7 @@ const OrdersDetail = () => {
   }
   const order = data?.data?.data;
   return (
-    <Card title={`Orders code: ${order?.code}`} bordered={false}>
+    <Card title={`Mã đơn hàng: ${order?.code}`} bordered={false}>
       {Object.entries(order).map(([key, value]) => {
         return (
           <p key={key}>

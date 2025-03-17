@@ -67,22 +67,14 @@ const AttributeValue = () => {
         child: item.children,
         stt: item.id,
         name: <Link to={"/q/" + item.id}>{item.name}</Link>,
-        slug: item.slug,
-        createAt: item.createdAt,
-        isActive:
-          item.isActive == 0 ? (
-            <Tag color="warning">isPending</Tag>
-          ) : (
-            <Tag color="success">Done</Tag>
-          ),
         action: (
           <div className="d-flex gap-1">
             <Link to={`/dashboard/attributeVal/edit/${item.id}`}>
-              <MyButton type="primary">Edit</MyButton>
+              <MyButton type="primary">Sửa</MyButton>
             </Link>
             <MVConfirm title="Có xóa không" onConfirm={() => mutate(item.id)}>
               <MyButton danger className="ml-2">
-                Delete
+                Xóa
               </MyButton>
             </MVConfirm>
           </div>
@@ -93,7 +85,7 @@ const AttributeValue = () => {
     <React.Fragment>
       <Link to={`/dashboard/attributeVal/add`}>
         <MyButton type="primary" className="mb-3">
-          Add
+          Thêm
         </MyButton>
       </Link>
       <MVTable

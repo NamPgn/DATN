@@ -8,6 +8,7 @@ import {
 import { useMutation, useQuery } from "react-query";
 import { getCart, userCart } from "../../sevices/client/cart";
 import { token_auth } from "../../common/auth/getToken";
+import { toast } from "react-toastify";
 
 interface CartContextType {
   cart: any[];
@@ -39,9 +40,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       return await getCart(cartData);
     },
     onSuccess: ({ data }: any) => {
-      setCartLocal(data?.data);
+      if (data?.data) {
+        setCartLocal(data.data);
+      }
     },
   });
+  useEffect(() => {
+    console.log("Cart Local:", cartLocal);
+  }, [cartLocal]);
 
   useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -59,7 +65,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       mutate();
     }
   }, [cart]);
-  const addToCart = (product: any) => {
+  const addToCart = (product: any): boolean => {
+    let isAdded = false;
+
     setCart((prevCart: any) => {
       const existingProductIndex = prevCart.findIndex(
         (item: any) => Number(item.variant_id) === Number(product.variant_id)
@@ -67,19 +75,34 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
       let updatedCart;
       if (existingProductIndex !== -1) {
+        const existingProduct = prevCart[existingProductIndex];
+        const newQuantity = existingProduct.quantity + product.quantity;
+
+        if (newQuantity > product.stock_quantity) {
+          toast.error("Bạn đã thêm tối đa số lượng sản phẩm này!");
+          return prevCart;
+        }
+
         updatedCart = prevCart.map((item: any, index: any) =>
           index === existingProductIndex
-            ? { ...item, quantity: item.quantity + product.quantity }
+            ? { ...item, quantity: newQuantity }
             : item
         );
       } else {
+        if (product.quantity > product.stock_quantity) {
+          toast.error("Bạn đã thêm tối đa số lượng sản phẩm này!");
+          return prevCart;
+        }
+
         updatedCart = [...prevCart, product];
       }
 
       localStorage.setItem("cart", JSON.stringify(updatedCart));
-
+      isAdded = true;
       return updatedCart;
     });
+
+    return isAdded;
   };
 
   return (

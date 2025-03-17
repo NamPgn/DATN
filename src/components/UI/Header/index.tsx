@@ -7,15 +7,15 @@ import AuthHeader from "./auth";
 import { UsersContext } from "../../../context/usersContext";
 import { useCart } from "../../../context/Cart/cartContext";
 const menuItems = [
-  { name: "Home", path: "/" },
-  { name: "About", path: "/about" },
+  { name: "Trang chủ", path: "/" },
+  { name: "Giới thiệu", path: "/about" },
   {
-    name: "Categories",
+    name: "Danh mục",
     path: "/shop",
     class: "menu-item-has-children",
   },
-  { name: "Products", path: "/products" },
-  { name: "Contacts", path: "/contact" },
+  { name: "Sản phẩm", path: "/products" },
+  { name: "Liên hệ", path: "/contact" },
 ];
 
 const socialIcons = [

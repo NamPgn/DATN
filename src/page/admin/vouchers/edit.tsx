@@ -12,11 +12,12 @@ import {
 import { useEffect, useRef } from "react";
 import { updateVoucher } from "../../../sevices/voucher";
 import moment from "moment";
+import { useQueryClient } from "react-query";
 
 const EditVoucher = ({ voucher, refetch }: any) => {
   const [form] = Form.useForm();
   const prevVoucherRef = useRef<any>(null);
-
+  const queryClient = useQueryClient();
   useEffect(() => {
     if (voucher && voucher !== prevVoucherRef.current) {
       prevVoucherRef.current = voucher;
@@ -45,9 +46,9 @@ const EditVoucher = ({ voucher, refetch }: any) => {
       await updateVoucher(data, Number(voucher.id));
       message.success("Cập nhật Voucher thành công");
       refetch();
-    } catch (error) {
-      console.error("Lỗi khi cập nhật Voucher:", error);
-      message.error("Cập nhật Voucher không thành công");
+      queryClient.invalidateQueries(["VOUCHERCL"]);
+    } catch (error: any) {
+      message.error(error?.response?.data?.message);
     }
   };
 
@@ -118,7 +119,7 @@ const EditVoucher = ({ voucher, refetch }: any) => {
           label="Ngày tạo"
           rules={[{ required: true, message: "Ngày tạo mã giảm" }]}
         >
-          <DatePicker />
+          <DatePicker placeholder="Ngày tạo" />
         </Form.Item>
 
         <Form.Item
@@ -126,12 +127,12 @@ const EditVoucher = ({ voucher, refetch }: any) => {
           label="Ngày hết hạn"
           rules={[{ required: true, message: "Ngày kết thúc mã giảm" }]}
         >
-          <DatePicker />
+          <DatePicker placeholder="Ngày hết hạn" />
         </Form.Item>
 
         <Form.Item>
           <Button type="primary" htmlType="submit">
-            Update Voucher
+            Sửa Voucher
           </Button>
         </Form.Item>
       </Form>

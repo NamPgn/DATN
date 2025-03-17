@@ -127,8 +127,7 @@ const ProductDetail = () => {
         )
       )
     );
-  }, [selectedVariants]);
-
+  }, [selectedVariants, products]);
   const handleImageClick = (fullImage: any) => {
     setCurrentImage(fullImage);
   };
@@ -176,11 +175,13 @@ const ProductDetail = () => {
         quantity,
         variant_id: selectedVariantss?.id,
         product_id: id,
+        stock_quantity: selectedVariantss?.stock_quantity,
       };
       const dataProduct1 = {
         quantity,
         variant_id: products?.variants[0]?.id,
         product_id: id,
+        stock_quantity: products?.variants[0]?.stock_quantity,
       };
       if (products?.type == "1") {
         addCartApi(dataProduct1, {
@@ -212,24 +213,32 @@ const ProductDetail = () => {
         quantity,
         variant_id: selectedVariantss?.id,
         product_id: id,
+        stock_quantity: selectedVariantss?.stock_quantity,
       };
       const dataProduct1 = {
         quantity,
         variant_id: products?.variants[0]?.id,
+        stock_quantity: products?.variants[0]?.stock_quantity,
       };
+
+      let success;
       if (products?.type == "1") {
-        addToCart(dataProduct1);
-        toast.success("Thêm giỏ hàng thành công");
+        success = addToCart(dataProduct1);
       } else {
         if (selectedVariantss !== undefined) {
-          addToCart(dataProduct0);
-          toast.success("Thêm giỏ hàng thành công");
+          success = addToCart(dataProduct0);
         } else {
           toast.error("Thêm đầy đủ thông tin");
+          return;
         }
+      }
+
+      if (success) {
+        toast.success("Thêm giỏ hàng thành công");
       }
     }
   };
+
   if (isLoading) return <Loading />;
   return (
     <section className="shopDetailsPageSection">
@@ -305,9 +314,19 @@ const ProductDetail = () => {
                 <>
                   <div className="pi01Price">
                     <ins>
-                      {selectedVariantss.regular_price.toLocaleString()} đ
+                      {(
+                        selectedVariantss.sale_price ??
+                        selectedVariantss.regular_price
+                      ).toLocaleString()}{" "}
+                      đ
                     </ins>
+                    {selectedVariantss.sale_price && (
+                      <del>
+                        {selectedVariantss.regular_price.toLocaleString()} đ
+                      </del>
+                    )}
                   </div>
+
                   <div className="productRadingsStock clearfix">
                     <div className="productRatings float-start">
                       {/* <div className="productRatingWrap">
@@ -363,7 +382,11 @@ const ProductDetail = () => {
               )}
 
               <div className="pcBtns">
-                <Quantity quantity={quantity} setQuantity={setQuantity} />
+                <Quantity
+                  quantity={quantity}
+                  stock={selectedVariantss.stock_quantity}
+                  setQuantity={setQuantity}
+                />
                 <button onClick={handleSubmit} className="ulinaBTN">
                   <span>Thêm vào giỏ hàng</span>
                 </button>

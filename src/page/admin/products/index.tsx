@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Image } from "antd";
+import { Button, Image } from "antd";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
@@ -81,11 +81,13 @@ const ProductsAdmin = () => {
         action: (
           <div className="d-flex gap-1">
             <Link to={`/dashboard/products/edit/${item.id}`}>
-              <MyButton type="primary">Edit</MyButton>
+              <Button variant="filled" color="geekblue">
+                Sửa
+              </Button>
             </Link>
             <MVConfirm title="Có xóa không" onConfirm={() => mutate(item.id)}>
-              <MyButton danger className="ml-2">
-                Delete
+              <MyButton variant="filled" color="danger" className="ml-2">
+                Xóa
               </MyButton>
             </MVConfirm>
             {item.type == "0" ? (

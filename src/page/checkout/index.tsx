@@ -243,8 +243,8 @@ const Checkout = () => {
           navigate("/o/thanks");
         }
       },
-      onError: () => {
-        toast.error("Thanh toán thất bại!");
+      onError: (error: any) => {
+        toast.error(error?.response?.data?.message);
       },
     });
   };
