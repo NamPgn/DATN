@@ -27,7 +27,7 @@ const ProductVariant = () => {
       return await deleteVariantsProduct(data);
     },
     onSuccess: () => {
-      message.success("Variant created successfully!");
+      message.success("Tạo biến thể thành công!");
       refetch();
     },
     onError: ({ response }: any) => {
@@ -55,7 +55,7 @@ const ProductVariant = () => {
             onConfirm={() => mutate(productsVariants?.id)}
           >
             <MyButton danger className="ml-2">
-              Delete
+              Xóa
             </MyButton>
           </MVConfirm>
         </div>

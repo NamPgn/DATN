@@ -25,7 +25,7 @@ const AttributeForm = ({ idProduct }: any) => {
       return await addAttributeVariant(data);
     },
     onSuccess: () => {
-      message.success("Variant created successfully!");
+      message.success("Tạo biến thể thành công!");
       refetch();
       queryClient.invalidateQueries("attrAll");
     },
@@ -65,7 +65,7 @@ const AttributeForm = ({ idProduct }: any) => {
     MUTATE_PRODUCTVARIANT(data);
   };
 
-  if (!attrAll) return <div>Loading...</div>;
+  if (!attrAll) return <div>Đang tải...</div>;
 
   return (
     <div>

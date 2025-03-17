@@ -13,7 +13,6 @@ import {
   EditOutlined,
   LockOutlined,
   MoreOutlined,
-  PlusOutlined,
   SendOutlined,
   UnlockOutlined,
 } from "@ant-design/icons";
@@ -161,9 +160,9 @@ const EmloyeeTable = () => {
             </Space>
           ),
           is_active: item.is_active ? (
-            <Tag color="green">Active</Tag>
+            <Tag color="green">Hoạt động</Tag>
           ) : (
-            <Tag color="red">Inactive</Tag>
+            <Tag color="red">Đã khóa</Tag>
           ),
           action: (
             <Dropdown
@@ -181,7 +180,7 @@ const EmloyeeTable = () => {
                               setIsModalOpenBlock(true);
                             }}
                           >
-                            <div>Block</div>
+                            <div>Khóa</div>
                           </Menu.Item>
                         ) : (
                           <Menu.Item
@@ -192,7 +191,7 @@ const EmloyeeTable = () => {
                             }}
                             icon={<UnlockOutlined />}
                           >
-                            Unlock
+                            Bỏ khóa
                           </Menu.Item>
                         )}
                       </>
@@ -212,7 +211,7 @@ const EmloyeeTable = () => {
                         }}
                         icon={<SendOutlined />}
                       >
-                        Reset Password
+                        Đặt lại mật khẩu
                       </Menu.Item>
                       <Menu.Item key="delete" icon={<DeleteOutlined />} danger>
                         <div
@@ -222,7 +221,7 @@ const EmloyeeTable = () => {
                             setIsModalOpen(true);
                           }}
                         >
-                          Delete
+                          Xóa
                         </div>
                       </Menu.Item>
                     </Menu>

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import MVTable from "../../../components/UI/Core/MV/Table";
 import { columnsVouchers } from "../../../constant";
 import { delMultipleVouchers, getVouchers } from "../../../sevices/voucher";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { MyButton } from "../../../components/UI/Core/Button";
 import { Link } from "react-router-dom";
 import { Button, Modal, Popconfirm } from "antd";
@@ -13,6 +13,7 @@ import EditVoucher from "./edit";
 import { DeleteOutlined } from "@ant-design/icons";
 
 const VoucherAdmin = () => {
+  const queryClient = useQueryClient();
   const savedPage = sessionStorage.getItem("voucherPage");
   const [page, setPage] = useState<number>(savedPage ? Number(savedPage) : 1);
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
@@ -42,6 +43,7 @@ const VoucherAdmin = () => {
     onSuccess: () => {
       toast.success("Xóa nhiều voucher thành công");
       setSelectedRowKeys([]);
+      queryClient.invalidateQueries(["VOUCHERCL"]);
       refetch();
     },
     onError: (error) => {
@@ -60,6 +62,7 @@ const VoucherAdmin = () => {
 
   const showAddVoucherModal = () => {
     setIsModalVisible(true);
+    queryClient.invalidateQueries(["VOUCHERCL"]);
   };
 
   const showEditVoucherModal = (voucher: any) => {
@@ -113,10 +116,10 @@ const VoucherAdmin = () => {
               }
               className="text-blue-500"
             >
-              <MyButton type="dashed">Detail</MyButton>
+              <MyButton type="dashed">Chi Tiết</MyButton>
             </Link>
             <MyButton type="primary" onClick={() => showEditVoucherModal(item)}>
-              Edit
+              Sửa
             </MyButton>
           </div>
         ),
@@ -125,23 +128,23 @@ const VoucherAdmin = () => {
 
   return (
     <React.Fragment>
-      <div className="flex">
+      <div className="d-flex gap-2">
         <Button type="primary" onClick={showAddVoucherModal} className="mb-3">
-          Add Voucher
+          Thêm Voucher
         </Button>
-      </div>
 
-      <Popconfirm
-        title="Bạn có chắc chắn muốn xóa ?"
-        onConfirm={handleDeleteSelectedData}
-        okText="Yes"
-        cancelText="No"
-        className="mb-3"
-      >
-        <MyButton type="primary" danger icon={<DeleteOutlined />}>
-          Delete Selected
-        </MyButton>
-      </Popconfirm>
+        <Popconfirm
+          title="Bạn có chắc chắn muốn xóa ?"
+          onConfirm={handleDeleteSelectedData}
+          okText="Yes"
+          cancelText="No"
+          className="mb-3"
+        >
+          <MyButton type="primary" danger icon={<DeleteOutlined />}>
+            Xóa Voucher
+          </MyButton>
+        </Popconfirm>
+      </div>
 
       <MVTable
         columns={columnsVouchers}

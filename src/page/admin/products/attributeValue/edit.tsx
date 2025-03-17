@@ -1,19 +1,7 @@
-import {
-  Form,
-  Input,
-  Button,
-  Upload,
-  Switch,
-  message,
-  Select,
-  CheckboxProps,
-  Checkbox,
-} from "antd";
-import { SyncOutlined, UploadOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { Form, Input, Button, message } from "antd";
+import { SyncOutlined } from "@ant-design/icons";
 import { useParams } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
-import { updateAttribute } from "../../../../sevices/attribute";
 import {
   getAttributesVal,
   updateAttributesVal,
@@ -35,16 +23,18 @@ const EditAttributeVal = () => {
       return await updateAttributesVal(id, values);
     },
     onSuccess: () => {
-      message.success("AttributeVal created successfully!");
+      message.success("Cập nhật giá trị thuộc tính thành công!");
     },
     onError: () => {
-      message.error("AttributeVal created failure!");
+      message.error("Cập nhật giá trị thuộc tính thất bại!");
     },
   });
+
   const handleSubmit = (values: any) => {
     console.log(values);
     mutate(values);
   };
+
   return (
     <Form
       form={form}
@@ -53,17 +43,17 @@ const EditAttributeVal = () => {
       initialValues={findById}
     >
       <Form.Item
-        label="AttributeVal Name"
+        label="Tên giá trị thuộc tính"
         name="name"
         rules={[
-          { required: true, message: "Please enter the AttributeVal name!" },
+          { required: true, message: "Vui lòng nhập tên giá trị thuộc tính!" },
           {
             max: 100,
-            message: "AttributeVal name cannot exceed 50 characters!",
+            message: "Tên giá trị thuộc tính không được vượt quá 50 ký tự!",
           },
         ]}
       >
-        <Input placeholder="Enter AttributeVal name" />
+        <Input placeholder="Nhập tên giá trị thuộc tính" />
       </Form.Item>
       <Form.Item>
         <Button
@@ -71,7 +61,7 @@ const EditAttributeVal = () => {
           loading={isLoading ?? <SyncOutlined spin />}
           htmlType="submit"
         >
-          Update AttributeVal
+          Cập nhật giá trị thuộc tính
         </Button>
       </Form.Item>
     </Form>

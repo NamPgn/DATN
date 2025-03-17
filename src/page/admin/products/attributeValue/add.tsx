@@ -20,10 +20,10 @@ const AddAttributeValue = () => {
       return await addAttributesVal(values);
     },
     onSuccess: () => {
-      message.success("AttributeValue created successfully!");
+      message.success("Tạo giá trị thuộc tính thành công!");
     },
     onError: () => {
-      message.error("AttributeValue created failure!");
+      message.error("Tạo giá trị thuộc tính thất bại!");
     },
   });
 
@@ -37,19 +37,19 @@ const AddAttributeValue = () => {
   return (
     <Form form={form} layout="vertical" onFinish={handleSubmit}>
       <Form.Item
-        label="AttributeValue Name"
+        label="Tên giá trị thuộc tính"
         name="name"
         rules={[
-          { required: true, message: "Please enter the AttributeValue name!" },
+          { required: true, message: "Vui lòng nhập tên giá trị thuộc tính!" },
           {
             max: 100,
-            message: "AttributeValue name cannot exceed 50 characters!",
+            message: "Tên giá trị thuộc tính không được vượt quá 50 ký tự!",
           },
         ]}
       >
-        <Input placeholder="Enter AttributeValue name" />
+        <Input placeholder="Nhập tên giá trị thuộc tính" />
       </Form.Item>
-      <Form.Item label="Attribute Id" name="attribute_id">
+      <Form.Item label="Thuộc tính" name="attribute_id">
         <Select
           style={{ width: "200px" }}
           placeholder="Vui lòng chọn"
@@ -62,7 +62,7 @@ const AddAttributeValue = () => {
           loading={isLoading ?? <SyncOutlined spin />}
           htmlType="submit"
         >
-          Create AttributeValue
+          Tạo giá trị thuộc tính
         </Button>
       </Form.Item>
     </Form>

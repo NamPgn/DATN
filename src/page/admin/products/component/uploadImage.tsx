@@ -124,7 +124,7 @@ const UploadImage = memo(
 
         <Tabs.TabPane tab="Tải ảnh lên" key="1">
           <Form form={form} layout="vertical" onFinish={handleSubmit}>
-            <Form.Item label="Upload Files">
+            <Form.Item label="Tải ảnh lên">
               <Upload
                 name="images"
                 multiple
@@ -134,7 +134,7 @@ const UploadImage = memo(
                 onChange={handleFileChange}
               >
                 <Button>
-                  <UploadOutlined /> Select Files
+                  <UploadOutlined /> Chọn ít nhất 1 ảnh
                 </Button>
               </Upload>
             </Form.Item>
@@ -144,7 +144,7 @@ const UploadImage = memo(
                 htmlType="submit"
                 disabled={isLoading}
               >
-                Upload Images
+                Tải lên
               </Button>
             </Form.Item>
           </Form>

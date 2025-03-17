@@ -15,7 +15,7 @@ export const ButtonAdd = memo(({ children, path, ...rest }: any) => {
         variant="dashed"
         icon={<PlusOutlined />}
       >
-        Add
+        Thêm
       </MyButton>
     </Link>
   );
