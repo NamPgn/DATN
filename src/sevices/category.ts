@@ -44,7 +44,15 @@ export const getsCategoryDeleted = async () => {
 };
 
 export const retoreCategoryDeleted = async (id: string) => {
-  return intances.put("/categories/restore/" + id);
+  return intances.patch("/categories/restore", {
+    ids: [id],
+  });
+};
+
+export const retoreMultipleCategoryDeleted = async (ids: string[]) => {
+  return intances.patch("/categories/restore", {
+    ids,
+  });
 };
 
 export const deleteHardCategorys = async (id: string) => {

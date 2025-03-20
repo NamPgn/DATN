@@ -7,15 +7,15 @@ import MVTable from "../../../components/UI/Core/MV/Table";
 import { columnsCategory } from "../../../constant";
 import { useMutation, useQuery } from "react-query";
 import {
-  delCategories,
   deleteHardCategorys,
   deleteMultipleHardCategorys,
   getsCategoryDeleted,
   retoreCategoryDeleted,
+  retoreMultipleCategoryDeleted,
 } from "../../../sevices/category";
 import MVConfirm from "../../../components/UI/Core/Confirm";
 import { toast } from "react-toastify";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, ReloadOutlined } from "@ant-design/icons";
 
 const CategoryDeleted = () => {
   const [page, setPage] = useState(1);
@@ -90,14 +90,27 @@ const CategoryDeleted = () => {
     }
     deleteMultiple(selectedRowKeys);
   };
-  const handleDelete = async (id: string) => {
-    const res = await delCategories(id);
-    if (res.status == 200) {
-      toast.success("Xóa thành công");
-    } else {
-      toast.error("Xóa không thành công:" + res.data.message);
+
+  const { mutate: restoreCategories } = useMutation({
+    mutationFn: async (ids: string[]) => {
+      return await retoreMultipleCategoryDeleted(ids);
+    },
+    onSuccess: () => {
+      toast.success("Khôi phục nhiều danh mục thành công");
+      setSelectedRowKeys([]);
+      refetch();
+    },
+    onError: () => {
+      toast.error("Khôi phục thất bại");
+    },
+  });
+
+  const handleRestoreSelected = () => {
+    if (selectedRowKeys.length === 0) {
+      toast.warning("Vui lòng chọn ít nhất 1 danh mục để khôi phục!");
+      return;
     }
-    refetch();
+    restoreCategories(selectedRowKeys);
   };
 
   const data = categoryDeleted?.data?.map((item: any, index: number) => {
@@ -163,6 +176,22 @@ const CategoryDeleted = () => {
         >
           <MyButton type="primary" danger icon={<DeleteOutlined />}>
             Delete Selected
+          </MyButton>
+        </Popconfirm>
+      </div>
+      <div className="mb-3">
+        <Popconfirm
+          title="Bạn có chắc chắn muốn khôi phục"
+          onConfirm={handleRestoreSelected}
+          okText="Yes"
+          cancelText="No"
+        >
+          <MyButton
+            type="primary"
+            className="bg-green-600 text-white hover:bg-green-700"
+            icon={<ReloadOutlined />}
+          >
+            Khôi phục lại các danh mục đã chọn
           </MyButton>
         </Popconfirm>
       </div>
