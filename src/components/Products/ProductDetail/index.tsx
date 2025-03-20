@@ -344,7 +344,7 @@ const ProductDetail = () => {
                     </div>
                     <div className="productStock float-end">
                       <span>Available: </span>{" "}
-                      {selectedVariantss.stock_quantity}
+                      {selectedVariantss?.stock_quantity}
                     </div>
                   </div>
                 </>
@@ -385,7 +385,7 @@ const ProductDetail = () => {
               <div className="pcBtns">
                 <Quantity
                   quantity={quantity}
-                  stock={selectedVariantss.stock_quantity}
+                  stock={selectedVariantss?.stock_quantity}
                   setQuantity={setQuantity}
                 />
                 <button onClick={handleSubmit} className="ulinaBTN">

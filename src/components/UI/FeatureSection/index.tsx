@@ -43,7 +43,7 @@ const FeatureSection: React.FC<FeatureSectionProps> = ({ vouchers }) => {
   }));
   return (
     <section className="container my-5">
-      <h1>Voucher</h1>
+      <h1>Mã Giảm Giá</h1>
       {isLoading ? (
         <p>Loading vouchers...</p>
       ) : (
@@ -86,7 +86,7 @@ const FeatureSection: React.FC<FeatureSectionProps> = ({ vouchers }) => {
                     );
                   }}
                 >
-                  Copy Voucher
+                  Sao Chép Mã
                 </Button>
               </section>
             </article>

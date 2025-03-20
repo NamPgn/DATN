@@ -1,4 +1,5 @@
 import { Bar, Line } from "react-chartjs-2";
+import OrderNotification from "../../components/UI/Notification";
 
 const Admin = () => {
   const barData = {
@@ -68,6 +69,7 @@ const Admin = () => {
           <li>82 Items</li>
         </ul>
       </div>
+      <OrderNotification />
     </div>
   );
 };

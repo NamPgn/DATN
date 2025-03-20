@@ -220,7 +220,6 @@ const Checkout = () => {
     setShippingFee(optionsShip.fee);
     //final tổng tiền + phí ship - discount
 
-    console.log(discountAmount);
     const data = {
       ...values,
       o_address:
