@@ -48,5 +48,15 @@ export const retoreCategoryDeleted = async (id: string) => {
 };
 
 export const deleteHardCategorys = async (id: string) => {
-  return intances.delete("/categories/hard-delete/" + id);
+  return intances.delete("/categories/hard-delete", {
+    data: { ids: [id] },
+    headers: { "Content-Type": "application/json" },
+  });
+};
+
+export const deleteMultipleHardCategorys = async (ids: string[]) => {
+  return intances.delete("/categories/hard-delete", {
+    data: { ids },
+    headers: { "Content-Type": "application/json" },
+  });
 };

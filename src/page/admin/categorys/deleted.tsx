@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { Image, Tag } from "antd";
+import { Image, Popconfirm, Tag } from "antd";
 import { Link } from "react-router-dom";
 import { MyButton } from "../../../components/UI/Core/Button";
 import MVTable from "../../../components/UI/Core/MV/Table";
@@ -9,6 +9,7 @@ import { useMutation, useQuery } from "react-query";
 import {
   delCategories,
   deleteHardCategorys,
+  deleteMultipleHardCategorys,
   getsCategoryDeleted,
   retoreCategoryDeleted,
 } from "../../../sevices/category";
@@ -34,10 +35,11 @@ const CategoryDeleted = () => {
       return await deleteHardCategorys(id);
     },
     onSuccess: () => {
-      toast.success("Xóa thành công");
+      toast.success("Xóa danh mục thành công");
       refetch();
     },
-    onError: () => {
+    onError: (error) => {
+      console.error("Lỗi khi xóa nhiều danh mục:", error);
       toast.error("Xóa không thành công");
     },
   });
@@ -51,7 +53,7 @@ const CategoryDeleted = () => {
       refetch();
     },
     onError: () => {
-      toast.error("Khôi phục thành công");
+      toast.error("Khôi phục không thành công");
     },
   });
   const rowSelection = {
@@ -66,15 +68,27 @@ const CategoryDeleted = () => {
     setPage(page);
   };
 
-  const handleDeleteSelectedData = async () => {
-    console.log(selectedRowKeys);
-    // const response: any = await deleteMultipleProduct(selectedRowKeys);
-    // if (response.data.success == true) {
-    //   setInit(!init);
-    //   toast.success("Delete products successfully");
-    // } else {
-    //   toast.error("Error deleting products");
-    // }
+  const { mutate: deleteMultiple } = useMutation({
+    mutationFn: async (ids: string[]) => {
+      return await deleteMultipleHardCategorys(ids);
+    },
+    onSuccess: () => {
+      toast.success("Xóa nhiều danh mục thành công");
+      setSelectedRowKeys([]);
+      refetch();
+    },
+    onError: (error) => {
+      console.error("Lỗi khi xóa nhiều danh mục:", error);
+      toast.error("Xóa không thành công");
+    },
+  });
+
+  const handleDeleteSelectedData = () => {
+    if (selectedRowKeys.length === 0) {
+      toast.warning("Vui lòng chọn ít nhất một danh mục để xóa");
+      return;
+    }
+    deleteMultiple(selectedRowKeys);
   };
   const handleDelete = async (id: string) => {
     const res = await delCategories(id);
@@ -126,7 +140,10 @@ const CategoryDeleted = () => {
               Retore
             </MyButton>
           </MVConfirm>
-          <MVConfirm title="Có xóa không" onConfirm={() => mutate(item.id)}>
+          <MVConfirm
+            title="Có xóa vĩnh viễn danh mục không"
+            onConfirm={() => mutate(item.id)}
+          >
             <MyButton danger className="ml-3">
               Delete
             </MyButton>
@@ -137,6 +154,18 @@ const CategoryDeleted = () => {
   });
   return (
     <React.Fragment>
+      <div className="mb-3">
+        <Popconfirm
+          title="Bạn có chắc chắn muốn xóa ?"
+          onConfirm={handleDeleteSelectedData}
+          okText="Yes"
+          cancelText="No"
+        >
+          <MyButton type="primary" danger icon={<DeleteOutlined />}>
+            Delete Selected
+          </MyButton>
+        </Popconfirm>
+      </div>
       <MVTable
         columns={columnsCategory}
         rowSelection={rowSelection}
