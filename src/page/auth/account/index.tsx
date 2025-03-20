@@ -126,7 +126,7 @@ const AccountSetting = () => {
                       <div className="row g-3">
                         <h4 className="mb-4 mt-0">Contact Detail</h4>
                         <div className="col-md-6">
-                          <label className="form-label">Name</label>
+                          <label className="form-label">Tên</label>
                           <input
                             {...register("name")}
                             className="form-control"
@@ -136,7 +136,7 @@ const AccountSetting = () => {
                           )}
                         </div>
                         <div className="col-md-6">
-                          <label className="form-label">Username</label>
+                          <label className="form-label">Tên đăng nhập</label>
                           <input
                             disabled
                             {...register("username")}
@@ -164,13 +164,18 @@ const AccountSetting = () => {
                         </div>
                       </div>
                     </div>
+                    <div className="gap-3 d-md-flex text-center mb-3 px-4">
+                  <button type="submit" className="btn btn-primary mt-5">
+                    Lưu
+                  </button>
+                </div>
                   </div>
 
                   {/* Upload Avatar */}
                   <div className="col-xxl-4">
                     <div className="bg-secondary-soft px-4 rounded">
                       <h4 className="mb-4 mt-0 text-center">
-                        Upload your profile photo
+                        Tải lên ảnh của bạn
                       </h4>
                       <div className="text-center">
                         <div className="square position-relative display-2 mb-3">
@@ -187,6 +192,7 @@ const AccountSetting = () => {
                         <input
                           type="file"
                           id="customFile"
+                          multiple
                           className="d-none"
                           accept="image/*"
                           onChange={handleFileChange}
@@ -195,18 +201,14 @@ const AccountSetting = () => {
                           className="btn btn-success-soft"
                           htmlFor="customFile"
                         >
-                          {uploading ? "Uploading..." : "Upload"}
+                          {uploading ? "Đâng tải..." : "Tải ảnh lên"}
                         </label>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="gap-3 d-md-flex text-center mb-3 px-4">
-                  <button type="submit" className="btn btn-primary btn-lg">
-                    Update profile
-                  </button>
-                </div>
+               
               </form>
             )}
 

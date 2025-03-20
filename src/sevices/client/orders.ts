@@ -1,5 +1,5 @@
 import axios from "axios";
-import { intancesLocal } from "../instances";
+import intances, { intancesLocal } from "../instances";
 import { token_auth } from "../../common/auth/getToken";
 const token_ = token_auth();
 export const getApiOrderAdress = async () => {
@@ -47,4 +47,48 @@ export const paymentReusult = async (queryString: any) => {
       Authorization: `Bearer ${token_}`,
     },
   });
+};
+
+export const getAdreeUser = async () => {
+  const token_ = token_auth();
+
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.get(`/addresses`, { headers });
+};
+
+export const getAdreesDefault = async () => {
+  const token_ = token_auth();
+
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.get(`/addresses/default`, { headers });
+};
+
+export const addAddress = async (data: any) => {
+  const token_ = token_auth();
+
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.post(`/addresses`, data, { headers });
+};
+
+export const getAddressList = async () => {
+  const token_ = token_auth();
+
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.get(`/addresses`, { headers });
 };
