@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
 import { Image, Tag } from "antd";
 import { Link } from "react-router-dom";
@@ -6,7 +7,7 @@ import MVTable from "../../../components/UI/Core/MV/Table";
 import { columnsCategory } from "../../../constant";
 import { useMutation, useQuery } from "react-query";
 import {
-  delCategorys,
+  delCategories,
   deleteHardCategorys,
   getsCategoryDeleted,
   retoreCategoryDeleted,
@@ -76,7 +77,7 @@ const CategoryDeleted = () => {
     // }
   };
   const handleDelete = async (id: string) => {
-    const res = await delCategorys(id);
+    const res = await delCategories(id);
     if (res.status == 200) {
       toast.success("Xóa thành công");
     } else {
@@ -117,9 +118,11 @@ const CategoryDeleted = () => {
             title="Có khôi phục không"
             onConfirm={() => mutateRetore(item.id)}
           >
-            <MyButton  style={{ 
-              marginRight:"10px"
-             }}>
+            <MyButton
+              style={{
+                marginRight: "10px",
+              }}
+            >
               Retore
             </MyButton>
           </MVConfirm>

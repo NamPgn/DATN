@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo, useState } from "react";
 import Description from "./description";
 import { Link, useParams } from "react-router-dom";
@@ -343,12 +344,9 @@ const ProductDetail = () => {
                       </div> */}
                     </div>
                     <div className="productStock float-end">
-<<<<<<< HEAD
                       <span>Số lượng: </span> {selectedVariantss.stock_quantity}
-=======
                       <span>Available: </span>{" "}
                       {selectedVariantss?.stock_quantity}
->>>>>>> dev
                     </div>
                   </div>
                 </>
