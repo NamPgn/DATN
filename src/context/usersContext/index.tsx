@@ -1,7 +1,7 @@
 import { createContext, useState } from "react";
 import { isAuthentication } from "../../common/auth/getToken";
 import { useQuery } from "react-query";
-import { getUserId } from "../../sevices/users";
+import { getUserId, getUserInfo } from "../../sevices/users";
 
 export const UsersContext: any = createContext(null);
 export const UserContextProvider = (props: any) => {
@@ -9,10 +9,10 @@ export const UserContextProvider = (props: any) => {
   const isAuth = !!token;
 
   const [isLogin, setIslogin] = useState(!!localStorage.getItem("isLogin"));
-  const { data: userId } = useQuery({
+  const { data: userId,isLoading,refetch } = useQuery({
     queryKey: ["userId", token?.user?.id],
     queryFn: async () => {
-      return (await getUserId(token?.user?.id)).data;
+      return (await getUserInfo()).data?.data;
     },
     enabled: !!token,
     onSuccess: () => {},
@@ -26,6 +26,8 @@ export const UserContextProvider = (props: any) => {
     isLogin,
     token,
     userId,
+    isLoading,
+    refetch
   };
   return (
     <UsersContext.Provider value={value}>

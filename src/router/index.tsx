@@ -3,6 +3,7 @@ import {
   CommentOutlined,
   ControlOutlined,
   DashboardOutlined,
+  DeleteOutlined,
   FileImageOutlined,
   GiftOutlined,
   LaptopOutlined,
@@ -73,6 +74,7 @@ import ThankYou from "../page/orders/thank";
 import Layout from "../layouts/Layout";
 import PaymentResult from "../page/checkout/components/paymentResult";
 import HiddenComment from "../page/admin/comments/hidden";
+import DeletedProducts from "../page/admin/products/component/deleted";
 
 export const routerClient = [
   {
@@ -333,6 +335,10 @@ export const routerClient = [
         path: "users/edit/:id",
         element: <EditUser />,
       },
+      {
+        path: "deleted",
+        element: <DeletedProducts />,
+      },
     ],
   },
   {
@@ -356,6 +362,11 @@ export const TableRouterAdminPage = [
         path: "/dashboard/attribute",
         name: "Thuộc tính",
         icon: <UserOutlined />,
+      },
+      {
+        path: "/dashboard/deleted",
+        name: "Thùng rác",
+        icon: <DeleteOutlined />,
       },
     ],
   },
