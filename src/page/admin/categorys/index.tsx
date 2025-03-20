@@ -86,10 +86,7 @@ const CategoryAdmin = () => {
           <>
             <MVConfirm
               title="Delete the category"
-              onConfirm={
-                () => ""
-                // handleDeleteCategoryByWeek(record.key, category._id)
-              }
+              onConfirm={() => mutate(category.id)}
               okText="Yes"
               cancelText="No"
             >
