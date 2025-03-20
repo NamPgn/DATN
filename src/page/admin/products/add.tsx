@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, message, Modal } from "antd";
 import { useState } from "react";
 import { useMutation } from "react-query";
@@ -5,7 +6,9 @@ import { addProduct } from "../../../sevices/products";
 import UploadImage from "./component/uploadImage";
 import ProductForm from "./component/form";
 import { UploadOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 const ProductAdd = () => {
+  const navigate = useNavigate();
   const [selectImage, setSelectImage] = useState([]);
   const [selectOneImage, setSelectOneImage]: any = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -13,8 +16,15 @@ const ProductAdd = () => {
     mutationFn: async (values: any) => {
       return await addProduct(values);
     },
-    onSuccess: () => message.success("Sản phẩm đã được tạo thành công!"),
-    onError: () => message.error("Tạo sản phẩm thất bại!"),
+    onSuccess: () => {
+      message.success("Sản phẩm đã được tạo thành công!");
+      setTimeout(() => {
+        navigate("/dashboard/products");
+      }, 800);
+    },
+    onError: () => {
+      message.error("Tạo sản phẩm thất bại!");
+    },
   });
 
   const showModal = () => {
@@ -30,7 +40,13 @@ const ProductAdd = () => {
   };
   return (
     <>
-      <Button type="dashed" variant="solid" className="mb-3" icon={<UploadOutlined />} onClick={showModal}>
+      <Button
+        type="dashed"
+        variant="solid"
+        className="mb-3"
+        icon={<UploadOutlined />}
+        onClick={showModal}
+      >
         Upload Image
       </Button>
 
