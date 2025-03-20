@@ -55,30 +55,31 @@ export const URLSECTION = [
 
 export const BreadcrumbRouterAdminPage = [
   {
-    title: <Link to="/dashboard">Home</Link>,
+    title: <Link to="/dashboard">Trang chủ</Link>,
     icon: <DashboardOutlined />,
     href: "/dashboard",
     name: "Admin",
   },
   {
-    title: <Link to="/dashboard/products">Products</Link>,
+    title: <Link to="/dashboard/products">Sản phẩm</Link>,
     icon: <NotificationOutlined />,
     href: "/dashboard/products",
     name: "Products",
   },
   {
-    title: <Link to="/dashboard/products">Category</Link>,
+    title: <Link to="/dashboard/category">Danh mục</Link>,
     icon: <SlidersOutlined />,
     href: "/dashboard/category",
     name: "Category",
   },
   {
     href: "category/deleted",
-    title: <Link to="category/deleted">Category</Link>,
+    title: <Link to="category/deleted">Đã xoá</Link>,
     icon: <ControlOutlined />,
     name: "Deleted",
   },
 ];
+
 export const columnsCategory = [
   {
     title: "Stt",

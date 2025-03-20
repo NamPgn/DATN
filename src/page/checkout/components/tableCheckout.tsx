@@ -10,7 +10,6 @@ const TableCheckout = ({
   voucher,
   fn_amount,
 }: any) => {
-  console.log(fn_amount);
   return (
     <div className="orderReviewWrap">
       <h3>Đơn hàng của bạn</h3>

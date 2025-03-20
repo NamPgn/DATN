@@ -22,11 +22,12 @@ const ProductAll = () => {
   const itemsPerPage = 9;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const options = [
-    { label: "Default", value: `?page=${currentPage}` },
-    { label: "High to low", value: "?sort_by=high_to_low" },
-    { label: "Low to high", value: "?sort_by=low_to_high" },
-    { label: "Top rated", value: "?sort_by=top_rated" },
+    { label: "Mặc định", value: `?page=${currentPage}` },
+    { label: "Giá cao đến thấp", value: "?sort_by=high_to_low" },
+    { label: "Giá thấp đến cao", value: "?sort_by=low_to_high" },
+    { label: "Đánh giá cao nhất", value: "?sort_by=top_rated" },
   ];
+
   const handleChange = (e: any) => {
     console.log(e);
   };
@@ -40,39 +41,32 @@ const ProductAll = () => {
         <div className="row shopAccessRow">
           <div className="col-sm-6 col-xl-4">
             <div className="productCount">
-              Showing <strong>1 - {itemsPerPage}</strong> of{" "}
-              <strong>{products?.data?.length}</strong> items
+              Hiển thị <strong>1 - {itemsPerPage}</strong> trên tổng số{" "}
+              <strong>{products?.data?.length}</strong> sản phẩm
             </div>
           </div>
-          <div className="d-none col-lg-4 col-xl-4 d-xl-flex">
-            <ul className="filterUL">
-              <li className="active">All</li>
-              <li>Men</li>
-              <li>Women</li>
-              <li>Kids</li>
-              <li>Accesories</li>
-            </ul>
-          </div>
+          <div className="d-none col-lg-4 col-xl-4 d-xl-flex"></div>
           <div className="col-sm-6 col-xl-4">
             <div className="shopAccessBar">
-              <div className="filterNav">
-                <a href="javascript:void(0);">
-                  Filter
-                  <i className="fa-solid fa-sliders" />
-                </a>
-              </div>
+              <div className="filterNav"></div>
               <div className="sortNav">
                 <div>
-                  <label>Sort By</label>
+                  <label>Sắp xếp: </label>
                   <select
                     name="productFilter"
                     style={{ display: "none" }}
                     onChange={(e) => handleChange(e)}
                   >
-                    <option value={`?page=${currentPage}`}>Default</option>
-                    <option value={`?sort_by=high_to_low`}>High to low</option>
-                    <option value={`?sort_by=low_to_high`}>Low to high</option>
-                    <option value={`?sort_by=top_rated`}>Top rated</option>
+                    <option value={`?page=${currentPage}`}>Mặc định</option>
+                    <option value={`?sort_by=high_to_low`}>
+                      Giá cao đến thấp
+                    </option>
+                    <option value={`?sort_by=low_to_high`}>
+                      Giá thấp đến cao
+                    </option>
+                    <option value={`?sort_by=top_rated`}>
+                      Đánh giá cao nhất
+                    </option>
                   </select>
                   <div
                     className={`nice-select ${openOption ? "open" : ""}`}

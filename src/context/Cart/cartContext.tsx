@@ -46,7 +46,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     },
   });
   useEffect(() => {
-    console.log("Cart Local:", cartLocal);
   }, [cartLocal]);
 
   useEffect(() => {
@@ -55,7 +54,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   }, []);
   useEffect(() => {
     if (cartUser && token_) {
-      console.log("abc");
       setCartLocal(cartUser);
     }
   }, [cartUser]);
