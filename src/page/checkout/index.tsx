@@ -14,8 +14,16 @@ import AddCode from "./components/addCode";
 import { useCheckout } from "../../context/checkout";
 import CheckoutForm from "./components/form";
 import TableCheckout from "./components/tableCheckout";
-import { paymentOrder } from "../../sevices/client/orders";
+import {
+  getAddressList,
+  getAdreesDefault,
+  paymentOrder,
+} from "../../sevices/client/orders";
 import { useNavigate } from "react-router-dom";
+
+import { token_auth } from "../../common/auth/getToken";
+import FormModal from "./components/modal";
+import AddressDisplay from "./components/addressDisplay";
 const schema = z.object({
   o_name: z.string().min(1, "Vui lòng nhập Họ và tên"),
   o_mail: z.string().email("Email không hợp lệ."),
@@ -27,6 +35,13 @@ const schema = z.object({
   }),
 });
 const Checkout = () => {
+  const [selectedValuesAddr, setSelectedValuesAddr] = useState({
+    o_name: "",
+    o_email: "",
+    o_address: "",
+    o_phone: "",
+  });
+  const token_ = token_auth();
   const { checkoutItems } = useCheckout() || {};
   const [optionsShip, setOptionsShip]: any = useState({});
   const [total_amount, settotal_amount]: any = useState(0);
@@ -34,6 +49,7 @@ const Checkout = () => {
   const [shippingFee, setShippingFee]: any = useState(0);
   const [discountAmount, setDiscountAmount]: any = useState(0);
   const [voucherData, setDataVoucher] = useState<any | null>(null);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const [selectedValues, setSelectedValues] = useState<any>({
     select1: { value: null, label: "" },
@@ -56,10 +72,11 @@ const Checkout = () => {
     register,
     handleSubmit,
     formState: { errors },
-    trigger,
+    setValue,
   } = useForm({
     resolver: zodResolver(schema),
   });
+
   useEffect(() => {
     const totalAmount = checkoutItems.reduce(
       (sum: number, item: any) =>
@@ -72,6 +89,26 @@ const Checkout = () => {
     setFn_amount(voucherData ? voucherData.final_total : totalAmount);
     setDiscountAmount(voucherData ? voucherData.discount : 0);
   }, [checkoutItems, voucherData, fn_amount]);
+
+  const { data: addList = [], refetch: refetchAddrList } = useQuery({
+    queryKey: ["addressList"],
+    queryFn: async () => {
+      return (await getAddressList())?.data?.data || [];
+    },
+  });
+
+  const { data: getAdressDefault } = useQuery({
+    queryKey: ["addressDefault"],
+    queryFn: async () => (await getAdreesDefault()).data?.data,
+    enabled: !!token_,
+  });
+
+  useEffect(() => {
+    if (getAdressDefault === undefined) return;
+    if (!getAdressDefault) {
+      setOpen(true);
+    }
+  }, [getAdressDefault]);
 
   const { mutate: MutateShipping } = useMutation({
     mutationFn: async (data: any) => {
@@ -93,7 +130,7 @@ const Checkout = () => {
     }));
   };
 
-  const { data: orderGetProvince, isLoading } = useQuery(
+  const { data: orderGetProvince } = useQuery(
     ["orderGetAdress"],
     async () => await getApiOrderAdress()
   );
@@ -247,46 +284,86 @@ const Checkout = () => {
       },
     });
   };
+
+  const openModal = () => setOpen(true);
+  const closeModal = () => setOpen(false);
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <section className="checkoutPage">
-        <div className="container">
-          <div className="row">
-            <CheckoutForm
-              register={register}
-              errors={errors}
-              openDropdown={openDropdown}
-              selectedValues={selectedValues}
-              handleClickOption={handleClickOption}
-              optionsSelectProvince={optionsSelectProvince}
-              handleChange={handleChange}
-              errorsState={errorsState}
-              optionsDistrict={optionsDistrict}
-              optionsWard={optionsWard}
-            />
-            <div className="col-lg-6">
-              <AddCode
-                setDataVoucher={setDataVoucher}
-                total_amount={total_amount}
-              />
-              <TableCheckout
-                voucher={voucherData}
+    <>
+      {/* <Button variant="contained" onClick={() => setOpen(true)}>
+        Mở Modal
+      </Button> */}
+      <AddressDisplay
+        openModalAddress={openModal}
+        closeModalAddress={closeModal}
+        getAdressDefault={getAdressDefault}
+        addList={addList}
+        MutateShipping={MutateShipping}
+        refetchAddrList={refetchAddrList}
+      />
+      <FormModal
+        orderGetProvince={orderGetProvince}
+        optionsDistrict={optionsDistrict}
+        selectedValues={selectedValues}
+        setOptionsDistrict={setOptionsDistrict}
+        optionsWard={optionsWard}
+        setOptionsWard={setOptionsWard}
+        MutateDistrict={MutateDistrict}
+        MutateWard={MutateWard}
+        optionsSelectProvince={optionsSelectProvince}
+        setSelectedValues={setSelectedValues}
+        open={open}
+        handleClose={() => setOpen(false)}
+        MutateShipping={MutateShipping}
+        checkoutItems={checkoutItems}
+        setValue={setValue}
+        selectedValuesAddr={selectedValuesAddr}
+        setSelectedValuesAddr={setSelectedValuesAddr}
+        refetchAddrList={refetchAddrList}
+      />
+      <FormModal />
+      {/* <TailwindComponent>
+        <AddressCheckout />
+      </TailwindComponent> */}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <section className="checkoutPage">
+          <div className="container">
+            <div className="row">
+              <CheckoutForm
                 register={register}
                 errors={errors}
-                checkoutItems={checkoutItems}
-                discount_amount={discountAmount}
-                shippingFee={shippingFee}
-                totalAmount={total_amount}
-                handleValidate={handleValidate}
-                optionsShip={optionsShip}
-                loadingPayment={loadingPayment}
-                fn_amount={fn_amount}
+                openDropdown={openDropdown}
+                selectedValues={selectedValues}
+                handleClickOption={handleClickOption}
+                optionsSelectProvince={optionsSelectProvince}
+                handleChange={handleChange}
+                errorsState={errorsState}
+                optionsDistrict={optionsDistrict}
+                optionsWard={optionsWard}
               />
+              <div className="col-lg-6">
+                <AddCode
+                  setDataVoucher={setDataVoucher}
+                  total_amount={total_amount}
+                />
+                <TableCheckout
+                  voucher={voucherData}
+                  register={register}
+                  errors={errors}
+                  checkoutItems={checkoutItems}
+                  discount_amount={discountAmount}
+                  shippingFee={shippingFee}
+                  totalAmount={total_amount}
+                  handleValidate={handleValidate}
+                  optionsShip={optionsShip}
+                  loadingPayment={loadingPayment}
+                  fn_amount={fn_amount}
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-    </form>
+        </section>
+      </form>
+    </>
   );
 };
 
