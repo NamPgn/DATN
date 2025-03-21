@@ -8,6 +8,8 @@ export default function AddressDisplay({
   closeModalAddress,
   getAdressDefault,
   addList,
+  MutateShipping,
+  refetchAddrList
 }: any) {
   const [open, setOpen] = useState(false);
   const [defaultAddress, setDefaultAddress] = useState({
@@ -25,7 +27,7 @@ export default function AddressDisplay({
     <div className="container mt-5">
       <Box
         sx={{
-          border: "2px dashed #e57373",
+          border: "2px dashed #ddd",
           padding: 2,
           borderRadius: 2,
           display: "flex",
@@ -44,11 +46,9 @@ export default function AddressDisplay({
         <Box sx={{ display: "flex", alignItems: "center" }}>
           <Box
             sx={{
-              border: "1px solid red",
               color: "red",
               fontSize: 12,
               padding: "2px 5px",
-              borderRadius: 1,
               mr: 2,
             }}
           >
@@ -63,6 +63,7 @@ export default function AddressDisplay({
         </Box>
 
         <AddressList
+        refetchAddrList={refetchAddrList}
           getAdressDefault={getAdressDefault}
           closeModalAddress={closeModalAddress}
           openModalAddress={openModalAddress}
@@ -70,6 +71,7 @@ export default function AddressDisplay({
           onClose={() => setOpen(false)}
           setDefaultAddress={setDefaultAddress}
           addList={addList}
+          MutateShipping={MutateShipping}
         />
       </Box>
     </div>

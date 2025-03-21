@@ -32,7 +32,7 @@ const FormModal = ({
   setValue,
   selectedValuesAddr,
   setSelectedValuesAddr,
-	refetchAddrList
+  refetchAddrList,
 }: any) => {
   const { userId }: any = useContext(UsersContext) || {};
   const { mutate: mutate, isLoading } = useMutation({
@@ -41,6 +41,7 @@ const FormModal = ({
     },
     onSuccess: () => {
       toast.success("Thêm địa chỉ thành công");
+      refetchAddrList();
       handleClose();
     },
     onError: () => {
@@ -64,7 +65,6 @@ const FormModal = ({
     setValue("o_mail", selectedValuesAddr.o_email);
     setValue("address", selectedValuesAddr.o_address);
     setValue("o_phone", selectedValuesAddr.o_phone);
-		refetchAddrList();
     mutate(data);
   };
   const handleChange = (key: any, value: any) => {

@@ -297,6 +297,8 @@ const Checkout = () => {
         closeModalAddress={closeModal}
         getAdressDefault={getAdressDefault}
         addList={addList}
+        MutateShipping={MutateShipping}
+        refetchAddrList={refetchAddrList}
       />
       <FormModal
         orderGetProvince={orderGetProvince}

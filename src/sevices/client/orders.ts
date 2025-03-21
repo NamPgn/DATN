@@ -92,3 +92,25 @@ export const getAddressList = async () => {
   }
   return intancesLocal.get(`/addresses`, { headers });
 };
+
+export const setAddressDefault = async (id: any) => {
+  const token_ = token_auth();
+
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.put(`/addresses/${id}/set-default`, null, { headers });
+};
+
+export const deleteAddress = async (id: any) => {
+  const token_ = token_auth();
+
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.delete(`/addresses/${id}`, { headers });
+};
