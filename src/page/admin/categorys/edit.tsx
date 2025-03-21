@@ -6,12 +6,13 @@ import {
   getCategorysFather,
   updateCategory,
 } from "../../../sevices/category";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 
 const EditCategory = () => {
   const [form] = Form.useForm();
   const { id } = useParams();
+  const navigate = useNavigate();
   const [findById, setFindById]: any = useState({});
   useEffect(() => {
     (async () => {
@@ -27,6 +28,9 @@ const EditCategory = () => {
     },
     onSuccess: () => {
       message.success("Category created successfully!");
+      setTimeout(() => {
+        navigate("/dashboard/category");
+      }, 800);
     },
     onError: () => {
       message.error("Category created failure!");

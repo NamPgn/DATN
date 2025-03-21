@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import intances, { intancesLocal } from "../instances";
 import { token_auth } from "../../common/auth/getToken";

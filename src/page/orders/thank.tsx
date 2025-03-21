@@ -3,7 +3,6 @@ import TailwindComponent from "../../components/Tailwind/TailwinComponent";
 
 const ThankYou = () => {
   return (
-    <TailwindComponent>
       <div
         style={{ backgroundColor: "#fff" }}
         className="flex flex-col items-center justify-center min-h-screen"
@@ -39,7 +38,6 @@ const ThankYou = () => {
           Trở về trang chủ
         </Link>
       </div>
-    </TailwindComponent>
   );
 };
 

@@ -97,7 +97,7 @@ const Checkout = () => {
     },
   });
 
-  const { data: getAdressDefault } = useQuery({
+  const { data: getAdressDefault, isLoading: loadingDefault } = useQuery({
     queryKey: ["addressDefault"],
     queryFn: async () => (await getAdreesDefault()).data?.data,
     enabled: !!token_,
@@ -288,82 +288,95 @@ const Checkout = () => {
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
   return (
-    <>
+    <div
+      className={`${
+        token_ ? "d-flex justify-content-center align-items-center " : ""
+      }`}
+    >
       {/* <Button variant="contained" onClick={() => setOpen(true)}>
         Mở Modal
       </Button> */}
-      <AddressDisplay
-        openModalAddress={openModal}
-        closeModalAddress={closeModal}
-        getAdressDefault={getAdressDefault}
-        addList={addList}
-        MutateShipping={MutateShipping}
-        refetchAddrList={refetchAddrList}
-      />
-      <FormModal
-        orderGetProvince={orderGetProvince}
-        optionsDistrict={optionsDistrict}
-        selectedValues={selectedValues}
-        setOptionsDistrict={setOptionsDistrict}
-        optionsWard={optionsWard}
-        setOptionsWard={setOptionsWard}
-        MutateDistrict={MutateDistrict}
-        MutateWard={MutateWard}
-        optionsSelectProvince={optionsSelectProvince}
-        setSelectedValues={setSelectedValues}
-        open={open}
-        handleClose={() => setOpen(false)}
-        MutateShipping={MutateShipping}
-        checkoutItems={checkoutItems}
-        setValue={setValue}
-        selectedValuesAddr={selectedValuesAddr}
-        setSelectedValuesAddr={setSelectedValuesAddr}
-        refetchAddrList={refetchAddrList}
-      />
-      <FormModal />
-      {/* <TailwindComponent>
+      <div>
+        {token_ && (
+          <>
+            <AddressDisplay
+              openModalAddress={openModal}
+              closeModalAddress={closeModal}
+              getAdressDefault={getAdressDefault}
+              addList={addList}
+              MutateShipping={MutateShipping}
+              refetchAddrList={refetchAddrList}
+              loadingDefault={loadingDefault}
+            />
+            <FormModal
+              orderGetProvince={orderGetProvince}
+              optionsDistrict={optionsDistrict}
+              selectedValues={selectedValues}
+              setOptionsDistrict={setOptionsDistrict}
+              optionsWard={optionsWard}
+              setOptionsWard={setOptionsWard}
+              MutateDistrict={MutateDistrict}
+              MutateWard={MutateWard}
+              optionsSelectProvince={optionsSelectProvince}
+              setSelectedValues={setSelectedValues}
+              open={open}
+              handleClose={() => setOpen(false)}
+              MutateShipping={MutateShipping}
+              checkoutItems={checkoutItems}
+              setValue={setValue}
+              selectedValuesAddr={selectedValuesAddr}
+              setSelectedValuesAddr={setSelectedValuesAddr}
+              refetchAddrList={refetchAddrList}
+            />
+          </>
+        )}
+        {/* <FormModal /> */}
+        {/* <TailwindComponent>
         <AddressCheckout />
       </TailwindComponent> */}
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <section className="checkoutPage">
-          <div className="container">
-            <div className="row">
-              <CheckoutForm
-                register={register}
-                errors={errors}
-                openDropdown={openDropdown}
-                selectedValues={selectedValues}
-                handleClickOption={handleClickOption}
-                optionsSelectProvince={optionsSelectProvince}
-                handleChange={handleChange}
-                errorsState={errorsState}
-                optionsDistrict={optionsDistrict}
-                optionsWard={optionsWard}
-              />
-              <div className="col-lg-6">
-                <AddCode
-                  setDataVoucher={setDataVoucher}
-                  total_amount={total_amount}
-                />
-                <TableCheckout
-                  voucher={voucherData}
-                  register={register}
-                  errors={errors}
-                  checkoutItems={checkoutItems}
-                  discount_amount={discountAmount}
-                  shippingFee={shippingFee}
-                  totalAmount={total_amount}
-                  handleValidate={handleValidate}
-                  optionsShip={optionsShip}
-                  loadingPayment={loadingPayment}
-                  fn_amount={fn_amount}
-                />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <section className="checkoutPage">
+            <div className="container">
+              <div className={`${token_ ? "row " : "row w-100"}`}>
+                {!token_ && (
+                  <CheckoutForm
+                    register={register}
+                    errors={errors}
+                    openDropdown={openDropdown}
+                    selectedValues={selectedValues}
+                    handleClickOption={handleClickOption}
+                    optionsSelectProvince={optionsSelectProvince}
+                    handleChange={handleChange}
+                    errorsState={errorsState}
+                    optionsDistrict={optionsDistrict}
+                    optionsWard={optionsWard}
+                  />
+                )}
+                <div className={`${token_ ? "" : "col-lg-6"}`}>
+                  <AddCode
+                    setDataVoucher={setDataVoucher}
+                    total_amount={total_amount}
+                  />
+                  <TableCheckout
+                    voucher={voucherData}
+                    register={register}
+                    errors={errors}
+                    checkoutItems={checkoutItems}
+                    discount_amount={discountAmount}
+                    shippingFee={shippingFee}
+                    totalAmount={total_amount}
+                    handleValidate={handleValidate}
+                    optionsShip={optionsShip}
+                    loadingPayment={loadingPayment}
+                    fn_amount={fn_amount}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        </section>
-      </form>
-    </>
+          </section>
+        </form>
+      </div>
+    </div>
   );
 };
 

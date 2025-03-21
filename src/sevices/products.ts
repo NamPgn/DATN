@@ -17,8 +17,18 @@ export const updateProduct = async (id: any, data: any) => {
   return intances.put("/products/" + id, data);
 };
 
-export const delProduct = async (data: any) => {
-  return intances.delete("/products/", data);
+export const delProduct = async (id: string) => {
+  return intances.delete("/products", {
+    data: { ids: [id] },
+    headers: { "Content-Type": "application/json" },
+  });
+};
+
+export const delMultipleProduct = async (ids: string[]) => {
+  return intances.delete("/products", {
+    data: { ids },
+    headers: { "Content-Type": "application/json" },
+  });
 };
 
 export const addProduct = async (data: any) => {

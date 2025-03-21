@@ -22,6 +22,7 @@ import {
   Typography,
 } from "@mui/material";
 import { toast } from "react-toastify";
+import ModalEdit from "./modalEdit";
 
 export default function AddressList({
   open,
@@ -34,6 +35,8 @@ export default function AddressList({
   MutateShipping,
   refetchAddrList,
 }: any) {
+  const [openModalEditState, setOpenModal] = useState(false);
+  const [editData, setEditData] = useState(null);
   const [openConfirm, setOpenConfirm] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
     null
@@ -99,7 +102,18 @@ export default function AddressList({
   };
 
   const handleEdit = (address: any) => {
-    mutateDelete(address?.id);
+    // mutateDelete(address?.id);
+    const data:any = {
+      o_name: "Phạm Giang Nam",
+      o_email: "123",
+      o_address: "213",
+      o_phone: "123",
+      select1: { value: null, label: "123" },
+      select2: { value: null, label: "123" },
+      select3: { value: null, label: "123" },
+    };
+    setEditData(data);
+    setOpenModal(true);
   };
 
   const handleDelete = () => {
@@ -110,6 +124,8 @@ export default function AddressList({
       setOpenConfirm(false);
     }
   };
+  const openModalEdit = () => setOpenModal(true);
+  const closeModalEdit = () => setOpenModal(false);
   return (
     <>
       <Modal open={open} onClose={onClose}>
@@ -203,6 +219,7 @@ export default function AddressList({
           </Button>
         </DialogActions>
       </Dialog>
+      <ModalEdit open={openModalEditState} handleClose={closeModalEdit} data={editData}/>
     </>
   );
 }

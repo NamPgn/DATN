@@ -10,7 +10,6 @@ import {
   FormControl,
   TextField,
 } from "@mui/material";
-import AddressSelect from "./addressList";
 import { useContext, useState } from "react";
 import { useMutation } from "react-query";
 import { addAddress } from "../../../sevices/client/orders";
@@ -42,6 +41,7 @@ const FormModal = ({
     onSuccess: () => {
       toast.success("Thêm địa chỉ thành công");
       refetchAddrList();
+
       handleClose();
     },
     onError: () => {

@@ -66,15 +66,15 @@ import ResetPassword from "../page/auth/resetPassword";
 import AccountSetting from "../page/auth/account";
 import AddOrder from "../page/admin/orders/components/add";
 import SendOrder from "../page/admin/orders/components/send";
+import HiddenComment from "../page/admin/comments/hidden";
+import DeletedProducts from "../page/admin/products/component/deleted";
+import OrderHistory from "../page/orders/orderHistory";
+import ThankYou from "../page/orders/thank";
+import PaymentResult from "../page/checkout/components/paymentResult";
 import Shop from "../page/shop";
 import ProductAll from "../page/shop/productAll";
 import ProductSearch from "../page/shop/productSearch";
-import OrderHistory from "../page/orders/orderHistory";
-import ThankYou from "../page/orders/thank";
 import Layout from "../layouts/Layout";
-import PaymentResult from "../page/checkout/components/paymentResult";
-import HiddenComment from "../page/admin/comments/hidden";
-import DeletedProducts from "../page/admin/products/component/deleted";
 
 export const routerClient = [
   {
