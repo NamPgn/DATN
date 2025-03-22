@@ -115,3 +115,14 @@ export const deleteAddress = async (id: any) => {
   }
   return intancesLocal.delete(`/addresses/${id}`, { headers });
 };
+
+export const updateAddress = async ( data: any) => {
+  const token_ = token_auth();
+
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.put(`/addresses/${data?.id}`, data, { headers });
+};

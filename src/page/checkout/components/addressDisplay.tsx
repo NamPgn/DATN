@@ -11,6 +11,7 @@ export default function AddressDisplay({
   MutateShipping,
   refetchAddrList,
   loadingDefault,
+  refetchDefault
 }: any) {
   const [open, setOpen] = useState(false);
   const [defaultAddress, setDefaultAddress] = useState({
@@ -74,6 +75,7 @@ export default function AddressDisplay({
             setDefaultAddress={setDefaultAddress}
             addList={addList}
             MutateShipping={MutateShipping}
+            refetchDefault={refetchDefault}
           />
         </Box>
       ) : (

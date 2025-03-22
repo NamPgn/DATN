@@ -32,6 +32,8 @@ const FormModal = ({
   selectedValuesAddr,
   setSelectedValuesAddr,
   refetchAddrList,
+  RefetchDefault,
+  addList,
 }: any) => {
   const { userId }: any = useContext(UsersContext) || {};
   const { mutate: mutate, isLoading } = useMutation({
@@ -41,7 +43,7 @@ const FormModal = ({
     onSuccess: () => {
       toast.success("Thêm địa chỉ thành công");
       refetchAddrList();
-
+      RefetchDefault();
       handleClose();
     },
     onError: () => {
@@ -58,7 +60,7 @@ const FormModal = ({
       address: selectedValuesAddr.o_address,
       province: selectedValues?.select1?.value,
       district: selectedValues?.select2?.value,
-      ward: selectedValues?.select1?.label,
+      ward: selectedValues?.select1?.value?.toString(),
       is_active: 1,
     };
     setValue("o_name", selectedValuesAddr.o_name);
@@ -115,7 +117,20 @@ const FormModal = ({
     setSelectedValuesAddr((prev: any) => ({ ...prev, [field]: value }));
   };
   return (
-    <Dialog fullWidth open={open} onClose={handleClose}>
+    <Dialog
+      fullWidth
+      open={open}
+      disableEscapeKeyDown
+      onClose={(event, reason) => {
+        if (
+          (!addList && reason === "backdropClick") ||
+          reason === "escapeKeyDown"
+        ) {
+          return;
+        }
+        handleClose();
+      }}
+    >
       <DialogTitle>Nhập Địa Chỉ Mới</DialogTitle>
       <DialogContent>
         <TextField
@@ -204,7 +219,7 @@ const FormModal = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Hủy</Button>
+        {/* <Button onClick={handleClose}>Hủy</Button> */}
         <Button
           onClick={() => handleConfirm()}
           variant="contained"

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import {
   getApiOrderAdress,
@@ -24,6 +24,18 @@ import { useNavigate } from "react-router-dom";
 import { token_auth } from "../../common/auth/getToken";
 import FormModal from "./components/modal";
 import AddressDisplay from "./components/addressDisplay";
+import { UsersContext } from "../../context/usersContext";
+import {
+  Card,
+  CardContent,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography,
+} from "@mui/material";
 const schema = z.object({
   o_name: z.string().min(1, "Vui lòng nhập Họ và tên"),
   o_mail: z.string().email("Email không hợp lệ."),
@@ -50,6 +62,7 @@ const Checkout = () => {
   const [discountAmount, setDiscountAmount]: any = useState(0);
   const [voucherData, setDataVoucher] = useState<any | null>(null);
   const [open, setOpen] = useState(false);
+  const { userId }: any = useContext(UsersContext) || {};
   const navigate = useNavigate();
   const [selectedValues, setSelectedValues] = useState<any>({
     select1: { value: null, label: "" },
@@ -66,8 +79,8 @@ const Checkout = () => {
     select2: "",
     select3: "",
   });
-  const [optionsDistrict, setOptionsDistrict] = useState([]);
-  const [optionsWard, setOptionsWard] = useState([]);
+  const [optionsDistrict, setOptionsDistrict] = useState<any>([]);
+  const [optionsWard, setOptionsWard] = useState<any>([]);
   const {
     register,
     handleSubmit,
@@ -97,7 +110,11 @@ const Checkout = () => {
     },
   });
 
-  const { data: getAdressDefault, isLoading: loadingDefault } = useQuery({
+  const {
+    data: getAdressDefault,
+    isLoading: loadingDefault,
+    refetch: RefetchDefault,
+  } = useQuery({
     queryKey: ["addressDefault"],
     queryFn: async () => (await getAdreesDefault()).data?.data,
     enabled: !!token_,
@@ -129,6 +146,50 @@ const Checkout = () => {
       [key]: !prev[key],
     }));
   };
+
+  useEffect(() => {
+    if (token_ && getAdressDefault && checkoutItems?.length) {
+      MutateShipping({
+        to_district_id: getAdressDefault?.district,
+        to_ward_code: getAdressDefault?.ward,
+        weight: checkoutItems.reduce(
+          (sum: number, item: any) => sum + item.weight * item.quantity,
+          0
+        ),
+      });
+    }
+  }, [token_, getAdressDefault, checkoutItems]);
+  useEffect(() => {
+    if (token_ && getAdressDefault) {
+      setValue("o_name", getAdressDefault.name || "");
+      setValue("o_phone", getAdressDefault.phone || "");
+      setValue("address", getAdressDefault.address || "");
+      setValue("o_mail", userId?.email || "");
+      // Nếu có thông tin tỉnh/quận/xã, đặt giá trị vào selectedValues
+      setSelectedValues({
+        select1: {
+          value: getAdressDefault.province,
+          label:
+            optionsSelectProvince.find(
+              (p: any) => p.value === getAdressDefault.province
+            )?.label || "",
+        },
+        select2: {
+          value: getAdressDefault.district,
+          label:
+            optionsDistrict.find(
+              (d: any) => d.value === getAdressDefault.district
+            )?.label || "",
+        },
+        select3: {
+          value: getAdressDefault.ward,
+          label:
+            optionsWard.find((w: any) => w.value === getAdressDefault.ward)
+              ?.label || "",
+        },
+      });
+    }
+  }, [token_, getAdressDefault, setValue, optionsDistrict, optionsWard]);
 
   const { data: orderGetProvince } = useQuery(
     ["orderGetAdress"],
@@ -177,7 +238,7 @@ const Checkout = () => {
       return await paymentOrder(data);
     },
   });
-  const optionsSelectProvince =
+  const optionsSelectProvince: any =
     orderGetProvince?.data?.data?.map((item: any) => ({
       label: item.ProvinceName,
       value: item.ProvinceID,
@@ -252,7 +313,6 @@ const Checkout = () => {
       return;
     }
   };
-
   const onSubmit = async (values: any) => {
     setShippingFee(optionsShip.fee);
     //final tổng tiền + phí ship - discount
@@ -288,11 +348,7 @@ const Checkout = () => {
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
   return (
-    <div
-      className={`${
-        token_ ? "d-flex justify-content-center align-items-center " : ""
-      }`}
-    >
+    <div>
       {/* <Button variant="contained" onClick={() => setOpen(true)}>
         Mở Modal
       </Button> */}
@@ -307,6 +363,7 @@ const Checkout = () => {
               MutateShipping={MutateShipping}
               refetchAddrList={refetchAddrList}
               loadingDefault={loadingDefault}
+              refetchDefault={RefetchDefault}
             />
             <FormModal
               orderGetProvince={orderGetProvince}
@@ -327,6 +384,8 @@ const Checkout = () => {
               selectedValuesAddr={selectedValuesAddr}
               setSelectedValuesAddr={setSelectedValuesAddr}
               refetchAddrList={refetchAddrList}
+              RefetchDefault={RefetchDefault}
+              addList={addList}
             />
           </>
         )}
@@ -337,8 +396,8 @@ const Checkout = () => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <section className="checkoutPage">
             <div className="container">
-              <div className={`${token_ ? "row " : "row w-100"}`}>
-                {!token_ && (
+              <div className="row">
+                {!token_ ? (
                   <CheckoutForm
                     register={register}
                     errors={errors}
@@ -351,8 +410,52 @@ const Checkout = () => {
                     optionsDistrict={optionsDistrict}
                     optionsWard={optionsWard}
                   />
+                ) : (
+                  <div className={`col-lg-6`}>
+                    <TableContainer
+                      component={Paper}
+                    >
+                      <Typography variant="h6" sx={{ p: 2 }}>
+                        Địa chỉ nhận hàng
+                      </Typography>
+                      <Table>
+                        <TableBody>
+                          {loadingDefault ? (
+                            <TableRow>
+                              <TableCell colSpan={2} align="center">
+                                Đang tải...
+                              </TableCell>
+                            </TableRow>
+                          ) : (
+                            <>
+                              <TableRow>
+                                <TableCell>
+                                  <strong>Họ tên</strong>
+                                </TableCell>
+                                <TableCell>{getAdressDefault?.name}</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <strong>Số điện thoại</strong>
+                                </TableCell>
+                                <TableCell>{getAdressDefault?.phone}</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <strong>Địa chỉ</strong>
+                                </TableCell>
+                                <TableCell>
+                                  {getAdressDefault?.address}
+                                </TableCell>
+                              </TableRow>
+                            </>
+                          )}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </div>
                 )}
-                <div className={`${token_ ? "" : "col-lg-6"}`}>
+                <div className={`col-lg-6`}>
                   <AddCode
                     setDataVoucher={setDataVoucher}
                     total_amount={total_amount}

@@ -4,6 +4,7 @@ import {
   deleteAddress,
   getAddressList,
   setAddressDefault,
+  updateAddress,
 } from "../../../sevices/client/orders";
 import {
   Box,
@@ -23,6 +24,7 @@ import {
 } from "@mui/material";
 import { toast } from "react-toastify";
 import ModalEdit from "./modalEdit";
+import { useCheckout } from "../../../context/checkout";
 
 export default function AddressList({
   open,
@@ -34,9 +36,12 @@ export default function AddressList({
   addList,
   MutateShipping,
   refetchAddrList,
+  refetchDefault,
 }: any) {
   const [openModalEditState, setOpenModal] = useState(false);
   const [editData, setEditData] = useState(null);
+  const { checkoutItems } = useCheckout() || {};
+
   const [openConfirm, setOpenConfirm] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(
     null
@@ -48,6 +53,7 @@ export default function AddressList({
     },
     onSuccess: () => {
       toast.success("Đã thêm địa chỉ mặc định");
+      refetchDefault();
       onClose();
     },
     onError: () => {
@@ -81,12 +87,12 @@ export default function AddressList({
       setDefaultAddress(selectedAddress);
       mutate(selectedAddress?.id);
       MutateShipping({
-        // to_district_id: selectedValues.select2.value,
-        // to_ward_code: selectedOption?.value,
-        // weight: checkoutItems.reduce(
-        //   (sum: number, item: any) => sum + item.weight * item.quantity,
-        //   0
-        // ),
+        to_district_id: getAdressDefault.district,
+        to_ward_code: getAdressDefault?.ward,
+        weight: checkoutItems.reduce(
+          (sum: number, item: any) => sum + item.weight * item.quantity,
+          0
+        ),
       });
     }
   };
@@ -96,23 +102,16 @@ export default function AddressList({
     setOpenConfirm(true);
   };
 
+  const openModalEdit = () => setOpenModal(true);
+  const closeModalEdit = () => setOpenModal(false);
+
   const handleCloseConfirm = () => {
     setOpenConfirm(false);
     setSelectedAddressId(null);
   };
 
   const handleEdit = (address: any) => {
-    // mutateDelete(address?.id);
-    const data:any = {
-      o_name: "Phạm Giang Nam",
-      o_email: "123",
-      o_address: "213",
-      o_phone: "123",
-      select1: { value: null, label: "123" },
-      select2: { value: null, label: "123" },
-      select3: { value: null, label: "123" },
-    };
-    setEditData(data);
+    setEditData(address);
     setOpenModal(true);
   };
 
@@ -124,8 +123,7 @@ export default function AddressList({
       setOpenConfirm(false);
     }
   };
-  const openModalEdit = () => setOpenModal(true);
-  const closeModalEdit = () => setOpenModal(false);
+
   return (
     <>
       <Modal open={open} onClose={onClose}>
@@ -219,7 +217,12 @@ export default function AddressList({
           </Button>
         </DialogActions>
       </Dialog>
-      <ModalEdit open={openModalEditState} handleClose={closeModalEdit} data={editData}/>
+      <ModalEdit
+        open={openModalEditState}
+        handleClose={closeModalEdit}
+        data={editData}
+        refetchAddrList={refetchAddrList}
+      />
     </>
   );
 }

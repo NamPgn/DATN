@@ -13,15 +13,15 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import {
-  addAddress,
   getApiOrderAdress,
   postApiOrderDistrict,
+  updateAddress,
 } from "../../../sevices/client/orders";
 import { toast } from "react-toastify";
 import { UsersContext } from "../../../context/usersContext";
 import { postApiOrderWard } from "../../../sevices/orders";
 
-const ModalEdit = ({ open, handleClose, data }: any) => {
+const ModalEdit = ({ open, handleClose, data, refetchAddrList }: any) => {
   const [selectedValuesAddr, setSelectedValuesAddr] = useState({
     o_name: "",
     o_email: "",
@@ -39,31 +39,13 @@ const ModalEdit = ({ open, handleClose, data }: any) => {
   useEffect(() => {
     if (data) {
       setSelectedValuesAddr({
-        o_name: data?.o_name,
-        o_email: data?.o_email,
-        o_address: data?.o_address,
-        o_phone: data?.o_phone,
-      });
-
-      setSelectedValues({
-        select1: data?.select1,
-        select2: data?.select2,
-        select3: data?.select3,
+        o_name: data?.name,
+        o_email: data?.email,
+        o_address: data?.address,
+        o_phone: data?.phone,
       });
     }
   }, [data]);
-  const { mutate: mutate, isLoading } = useMutation({
-    mutationFn: async (data: any) => {
-      return await addAddress(data);
-    },
-    onSuccess: () => {
-      toast.success("Thêm địa chỉ thành công");
-      handleClose();
-    },
-    onError: () => {
-      toast.error("Thêm địa chỉ thất bại");
-    },
-  });
 
   const { data: orderGetProvince } = useQuery(
     ["orderGetAdress"],
@@ -112,8 +94,23 @@ const ModalEdit = ({ open, handleClose, data }: any) => {
     },
   });
 
+  const { mutate: mutateEdit, isLoading: loadingEdit } = useMutation({
+    mutationFn: async (data: any) => {
+      return await updateAddress(data);
+    },
+    onSuccess: () => {
+      toast.success("Thêm địa chỉ thành công");
+      refetchAddrList();
+      handleClose();
+    },
+    onError: () => {
+      toast.error("Thêm địa chỉ thất bại");
+    },
+  });
+
   const handleConfirm = () => {
-    const data = {
+    const datas = {
+      id: data?.id,
       user_id: userId?.id,
       name: selectedValuesAddr.o_name,
       email: selectedValuesAddr.o_email,
@@ -121,11 +118,12 @@ const ModalEdit = ({ open, handleClose, data }: any) => {
       address: selectedValuesAddr.o_address,
       province: selectedValues?.select1?.value,
       district: selectedValues?.select2?.value,
-      ward: selectedValues?.select1?.label,
+      ward: selectedValues?.select3.value.toString(),
       is_active: 1,
     };
-    mutate(data);
+    mutateEdit(datas);
   };
+
   const handleChange = (key: any, value: any) => {
     setSelectedValues((prev: any) => {
       let updatedValues = { ...prev };
@@ -264,7 +262,7 @@ const ModalEdit = ({ open, handleClose, data }: any) => {
           variant="contained"
           color="primary"
         >
-          {isLoading ? "Chờ..." : "Xác nhận"}
+          {loadingEdit ? "Chờ..." : "Xác nhận"}
         </Button>
       </DialogActions>
     </Dialog>
