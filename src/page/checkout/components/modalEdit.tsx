@@ -116,6 +116,35 @@ const ModalEdit = ({
   });
 
   const handleConfirm = () => {
+    if (!selectedValuesAddr.o_name) {
+      toast.error("Vui lòng nhập Họ và Tên");
+      return;
+    }
+    if (!selectedValuesAddr.o_email) {
+      toast.error("Vui lòng nhập Email");
+      return;
+    }
+    if (!selectedValuesAddr.o_phone) {
+      toast.error("Vui lòng nhập Số điện thoại");
+      return;
+    }
+    if (!selectedValuesAddr.o_address) {
+      toast.error("Vui lòng nhập Địa chỉ cụ thể");
+      return;
+    }
+    if (!selectedValues?.select1?.value) {
+      toast.error("Vui lòng chọn Tỉnh/Thành");
+      return;
+    }
+    if (!selectedValues?.select2?.value) {
+      toast.error("Vui lòng chọn Quận/Huyện");
+      return;
+    }
+    if (!selectedValues?.select3?.value) {
+      toast.error("Vui lòng chọn Phường/Xã");
+      return;
+    }
+
     const datas = {
       id: data?.id,
       user_id: userId?.id,
@@ -127,9 +156,10 @@ const ModalEdit = ({
       }, ${selectedValues?.select2?.label}, ${selectedValues?.select1?.label}`,
       province: selectedValues?.select1?.value,
       district: selectedValues?.select2?.value,
-      ward: selectedValues?.select3.value.toString(),
+      ward: selectedValues?.select3?.value?.toString(),
       is_active: 1,
     };
+
     mutateEdit(datas);
   };
 

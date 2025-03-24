@@ -32,7 +32,7 @@ export default function AddressDisplay({
       {!loadingDefault ? (
         <Box
           sx={{
-            border: "2px dashed #ddd",
+            border: "1px dashed #ddd",
             padding: 2,
             borderRadius: 2,
             display: "flex",

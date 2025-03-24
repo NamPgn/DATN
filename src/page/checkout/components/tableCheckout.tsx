@@ -32,8 +32,8 @@ const TableCheckout = ({
                   <div className="pi01Price">
                     <ins>
                       {(item?.sale_price
-                        ? item?.regular_price
-                        : item?.sale_price
+                        ? item?.sale_price * item?.quantity
+                        : item?.regular_price * item?.quantity
                       )?.toLocaleString("vi", {
                         style: "currency",
                         currency: "VND",
