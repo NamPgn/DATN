@@ -32,9 +32,9 @@ const Shop = () => {
 
   const options = [
     { label: "Default", value: "" },
-    { label: "High to low", value: "&sort_by=high_to_low" },
-    { label: "Low to high", value: "&sort_by=low_to_high" },
-    { label: "Top rated", value: "&sort_by=top_rated" },
+    { label: "High to low", value: "?sort_by=high_to_low" },
+    { label: "Low to high", value: "?sort_by=low_to_high" },
+    { label: "Top rated", value: "?sort_by=top_rated" },
   ];
   const handleChange = (e: any) => {
     console.log(e);
@@ -409,10 +409,10 @@ const Shop = () => {
                                             </Link>
                                           </h3>
                                           <div className="pi01Price">
-                                            <ins>
+                                            <ins>{product.sale_price}VND</ins>
+                                            <del>
                                               {product.regular_price}VND
-                                            </ins>
-                                            <del>{product.sale_price}VND</del>
+                                            </del>
                                           </div>
                                         </div>
                                       </div>

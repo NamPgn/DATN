@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { token_auth } from "../../common/auth/getToken";
 import { intancesLocal } from "../instances";
 export const applyVoucher = async (data: any) => {

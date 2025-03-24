@@ -71,10 +71,10 @@ import Shop from "../page/Shop";
 import ProductAll from "../page/Shop/productAll";
 import ProductSearch from "../page/Shop/productSearch";
 import OrderHistory from "../page/orders/orderHistory";
-import { Layout } from "antd";
 import ThankYou from "../page/orders/thank";
 import PaymentResult from "../page/checkout/components/paymentResult";
 import DeletedProducts from "../page/admin/products/component/deleted";
+import { Layout } from "antd";
 
 export const routerClient = [
   {

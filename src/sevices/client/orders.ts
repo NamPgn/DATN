@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import intances, { intancesLocal } from "../instances";
 import { token_auth } from "../../common/auth/getToken";
@@ -113,4 +114,15 @@ export const deleteAddress = async (id: any) => {
     headers.Authorization = `Bearer ${token_}`;
   }
   return intancesLocal.delete(`/addresses/${id}`, { headers });
+};
+
+export const updateAddress = async ( data: any) => {
+  const token_ = token_auth();
+
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.put(`/addresses/${data?.id}`, data, { headers });
 };

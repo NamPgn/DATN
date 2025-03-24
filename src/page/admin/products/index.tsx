@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { Button, Image } from "antd";
+import { Button, Image, Popconfirm } from "antd";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
@@ -7,8 +8,12 @@ import { ButtonAdd, MyButton } from "../../../components/UI/Core/Button";
 import MVConfirm from "../../../components/UI/Core/Confirm";
 import MVTable from "../../../components/UI/Core/MV/Table";
 import { columnsProducts } from "../../../constant";
-import { delProduct, getProducts } from "../../../sevices/products";
-import { DeleteOutlined } from "@ant-design/icons";
+import {
+  delMultipleProduct,
+  delProduct,
+  getProducts,
+} from "../../../sevices/products";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 
 const ProductsAdmin = () => {
   const [page, setPage] = useState(1);
@@ -28,7 +33,8 @@ const ProductsAdmin = () => {
       toast.success("Sản phẩm đã được chuyển vào thùng rác");
       refetch();
     },
-    onError: () => {
+    onError: (error) => {
+      console.error("Lỗi khi xóa:", error);
       toast.error("Xóa không thành công");
     },
   });
@@ -41,18 +47,30 @@ const ProductsAdmin = () => {
     setPage(page);
   };
 
-  const handleDeleteSelectedData = async () => {
-    console.log(selectedRowKeys);
-    // const response: any = await deleteMultipleProduct(selectedRowKeys);
-    // if (response.data.success == true) {
-    //   setInit(!init);
-    //   toast.success("Delete products successfully");
-    // } else {
-    //   toast.error("Error deleting products");
-    // }
+  const { mutate: deleteMultiple } = useMutation({
+    mutationFn: async (ids: string[]) => {
+      return await delMultipleProduct(ids);
+    },
+    onSuccess: () => {
+      toast.success("Xóa nhiều sản phẩm thành công");
+      setSelectedRowKeys([]);
+      refetch();
+    },
+    onError: (error) => {
+      console.error("Lỗi khi xóa nhiều sản phẩm:", error);
+      toast.error("Xóa không thành công");
+    },
+  });
+
+  const handleDeleteSelectedData = () => {
+    if (selectedRowKeys.length === 0) {
+      toast.warning("Vui lòng chọn ít nhất một sản phẩm để xóa");
+      return;
+    }
+    deleteMultiple(selectedRowKeys);
   };
   const handleDelete = () => {
-    const form:any = new FormData();
+    const form: any = new FormData();
 
     form.append("ids", selectedRowKeys);
     const data: any = {
@@ -109,13 +127,18 @@ const ProductsAdmin = () => {
   return (
     <React.Fragment>
       <ButtonAdd path={`/dashboard/product/add`} />
-      <Button
-        style={{ marginLeft: "10px" }}
-        variant="filled"
-        color="danger"
-        icon={<DeleteOutlined />}
-        onClick={handleDelete}
-      ></Button>
+      <div className="mb-3">
+        <Popconfirm
+          title="Bạn có chắc chắn muốn xóa ?"
+          onConfirm={handleDeleteSelectedData}
+          okText="Yes"
+          cancelText="No"
+        >
+          <MyButton type="primary" danger icon={<DeleteOutlined />}>
+            Delete Selected
+          </MyButton>
+        </Popconfirm>
+      </div>
       <MVTable
         columns={columnsProducts}
         rowSelection={rowSelection}

@@ -13,8 +13,18 @@ export const getCategorysFather = async () => {
   return intances.get("/categories/get-all-categories");
 };
 
-export const delCategorys = async (id: string) => {
-  return intances.delete("/categories/delete/" + id);
+export const delCategories = async (id: string) => {
+  return intances.delete("/categories/delete", {
+    data: { ids: [id] },
+    headers: { "Content-Type": "application/json" },
+  });
+};
+
+export const delMultipleCategories = async (ids: string[]) => {
+  return intances.delete("/categories/delete", {
+    data: { ids },
+    headers: { "Content-Type": "application/json" },
+  });
 };
 
 export const addCategory = async (data: any) => {
@@ -34,9 +44,27 @@ export const getsCategoryDeleted = async () => {
 };
 
 export const retoreCategoryDeleted = async (id: string) => {
-  return intances.put("/categories/restore/" + id);
+  return intances.patch("/categories/restore", {
+    ids: [id],
+  });
+};
+
+export const retoreMultipleCategoryDeleted = async (ids: string[]) => {
+  return intances.patch("/categories/restore", {
+    ids,
+  });
 };
 
 export const deleteHardCategorys = async (id: string) => {
-  return intances.delete("/categories/hard-delete/" + id);
+  return intances.delete("/categories/hard-delete", {
+    data: { ids: [id] },
+    headers: { "Content-Type": "application/json" },
+  });
+};
+
+export const deleteMultipleHardCategorys = async (ids: string[]) => {
+  return intances.delete("/categories/hard-delete", {
+    data: { ids },
+    headers: { "Content-Type": "application/json" },
+  });
 };

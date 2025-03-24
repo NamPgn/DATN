@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import "./style.css";
 import { Button, message } from "antd";
@@ -34,7 +35,6 @@ const FeatureSection: React.FC<FeatureSectionProps> = ({ vouchers }) => {
     month: new Date(item.start_date).toLocaleDateString("default", {
       month: "short",
     }),
-    name: item.code,
     code: item.code,
     for_logged_in_users: item.for_logged_in_users,
     startDate: new Date(item.start_date).toLocaleDateString(),
@@ -57,6 +57,8 @@ const FeatureSection: React.FC<FeatureSectionProps> = ({ vouchers }) => {
                 </time>
               </section>
               <section className="card-cont">
+                <small>Voucher Event</small>
+                <h3>{item.code}</h3>
                 <h3>{item.name}</h3>
                 <div className="even-date">
                   <i className="fa fa-calendar" />
@@ -80,9 +82,9 @@ const FeatureSection: React.FC<FeatureSectionProps> = ({ vouchers }) => {
                   type="primary"
                   danger
                   onClick={() => {
-                    navigator.clipboard.writeText(item.name);
+                    navigator.clipboard.writeText(item.code);
                     message.success(
-                      `Mã Voucher "${item.name}" Bạn đã thành công sao chép`
+                      `Mã Voucher "${item.code}" Bạn đã thành công sao chép`
                     );
                   }}
                 >
