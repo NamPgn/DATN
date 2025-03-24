@@ -37,6 +37,7 @@ export default function AddressList({
   MutateShipping,
   refetchAddrList,
   refetchDefault,
+  setIsEdit,
 }: any) {
   const [openModalEditState, setOpenModal] = useState(false);
   const [editData, setEditData] = useState(null);
@@ -100,6 +101,7 @@ export default function AddressList({
   const handleOpenConfirm = (id: string) => {
     setSelectedAddressId(id);
     setOpenConfirm(true);
+    setIsEdit(true);
   };
 
   const openModalEdit = () => setOpenModal(true);

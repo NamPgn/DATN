@@ -90,8 +90,18 @@ const ProductSale = () => {
                               </Link>
                             </h3>
                             <div className="pi01Price">
-                              <ins>{product?.sale_price}VND</ins>
-                              <del>{product?.regular_price}VND </del>
+                              <ins>
+                                {product?.sale_price
+                                  ? product?.sale_price
+                                  : product?.regular_price}
+                                VND
+                              </ins>
+                              <del>
+                                {product?.sale_price
+                                  ? product?.regular_price 
+                                  : ""}
+                                {"0"}VND
+                              </del>
                             </div>
                           </div>
                         </div>

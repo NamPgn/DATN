@@ -10,7 +10,7 @@ import {
   FormControl,
   TextField,
 } from "@mui/material";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { addAddress } from "../../../sevices/client/orders";
 import { toast } from "react-toastify";
@@ -34,8 +34,10 @@ const FormModal = ({
   refetchAddrList,
   RefetchDefault,
   addList,
+  setIsEdit,
 }: any) => {
   const { userId }: any = useContext(UsersContext) || {};
+
   const { mutate: mutate, isLoading } = useMutation({
     mutationFn: async (data: any) => {
       return await addAddress(data);
@@ -114,6 +116,7 @@ const FormModal = ({
 
   const handleSetValue = (field: any, value: any) => {
     setValue(field, value);
+
     setSelectedValuesAddr((prev: any) => ({ ...prev, [field]: value }));
   };
   return (
@@ -123,7 +126,7 @@ const FormModal = ({
       disableEscapeKeyDown
       onClose={(event, reason) => {
         if (
-          (!addList && reason === "backdropClick") ||
+          (addList?.length === 0 && reason === "backdropClick") ||
           reason === "escapeKeyDown"
         ) {
           return;

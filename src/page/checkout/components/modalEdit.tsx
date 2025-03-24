@@ -163,7 +163,7 @@ const ModalEdit = ({ open, handleClose, data, refetchAddrList }: any) => {
   };
   return (
     <Dialog fullWidth open={open} onClose={handleClose}>
-      <DialogTitle>Nhập Địa Chỉ Mới</DialogTitle>
+      <DialogTitle>Sửa địa chỉ</DialogTitle>
       <DialogContent>
         <TextField
           label="Họ và Tên"

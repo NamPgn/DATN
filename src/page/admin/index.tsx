@@ -11,6 +11,7 @@ import {
 import TailwindComponent from "../../components/Tailwind/TailwinComponent";
 import { useQuery } from "react-query";
 import { dashboard } from "../../sevices";
+import OrdersNotify from "../../components/UI/Notification";
 
 ChartJS.register(
   ArcElement,
@@ -28,6 +29,8 @@ const Dashboard = () => {
       return (await dashboard()).data?.data;
     },
   });
+
+ 
 
   const categoryByProductData = {
     labels: data?.productByCategory.map((c: any) => c.name),
@@ -131,6 +134,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      <OrdersNotify/>
     </TailwindComponent>
   );
 };

@@ -11,7 +11,8 @@ export default function AddressDisplay({
   MutateShipping,
   refetchAddrList,
   loadingDefault,
-  refetchDefault
+  refetchDefault,
+  setIsEdit
 }: any) {
   const [open, setOpen] = useState(false);
   const [defaultAddress, setDefaultAddress] = useState({
@@ -26,7 +27,7 @@ export default function AddressDisplay({
     }
   }, [getAdressDefault]);
   return (
-    <div className="container mt-5">
+    <div className="my-5">
       {!loadingDefault ? (
         <Box
           sx={{
@@ -35,7 +36,6 @@ export default function AddressDisplay({
             borderRadius: 2,
             display: "flex",
             alignItems: "center",
-            width: 800,
           }}
         >
           <LocationOnIcon sx={{ mr: 1 }} />
@@ -49,7 +49,7 @@ export default function AddressDisplay({
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Box
               sx={{
-                color: "red",
+                color: "#9ebbbd",
                 fontSize: 12,
                 padding: "2px 5px",
                 mr: 2,
@@ -59,7 +59,7 @@ export default function AddressDisplay({
             </Box>
             <Button
               onClick={() => setOpen(true)}
-              sx={{ color: "blue", textTransform: "none" }}
+              sx={{ color: "red", textTransform: "none" }}
             >
               Thay Đổi
             </Button>
@@ -76,6 +76,7 @@ export default function AddressDisplay({
             addList={addList}
             MutateShipping={MutateShipping}
             refetchDefault={refetchDefault}
+            setIsEdit={setIsEdit}
           />
         </Box>
       ) : (
