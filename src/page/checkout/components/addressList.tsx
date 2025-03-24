@@ -224,6 +224,7 @@ export default function AddressList({
         handleClose={closeModalEdit}
         data={editData}
         refetchAddrList={refetchAddrList}
+        refetchDefault={refetchDefault}
       />
     </>
   );

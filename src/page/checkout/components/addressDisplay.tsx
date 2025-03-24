@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Typography, Box } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import AddressList from "./addressList";
+import { EditOutlined } from "@ant-design/icons";
 
 export default function AddressDisplay({
   openModalAddress,
@@ -12,7 +13,7 @@ export default function AddressDisplay({
   refetchAddrList,
   loadingDefault,
   refetchDefault,
-  setIsEdit
+  setIsEdit,
 }: any) {
   const [open, setOpen] = useState(false);
   const [defaultAddress, setDefaultAddress] = useState({
@@ -51,8 +52,7 @@ export default function AddressDisplay({
               sx={{
                 color: "#9ebbbd",
                 fontSize: 12,
-                padding: "2px 5px",
-                mr: 2,
+                width:'60px'
               }}
             >
               Mặc Định
@@ -61,7 +61,7 @@ export default function AddressDisplay({
               onClick={() => setOpen(true)}
               sx={{ color: "red", textTransform: "none" }}
             >
-              Thay Đổi
+              <EditOutlined />
             </Button>
           </Box>
 

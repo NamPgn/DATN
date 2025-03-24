@@ -52,25 +52,6 @@ const FormModal = ({
       toast.error("Thêm địa chỉ thất bại");
     },
   });
-
-  const handleConfirm = () => {
-    const data = {
-      user_id: userId?.id,
-      name: selectedValuesAddr.o_name,
-      email: selectedValuesAddr.o_email,
-      phone: selectedValuesAddr.o_phone,
-      address: selectedValuesAddr.o_address,
-      province: selectedValues?.select1?.value,
-      district: selectedValues?.select2?.value,
-      ward: selectedValues?.select1?.value?.toString(),
-      is_active: 1,
-    };
-    setValue("o_name", selectedValuesAddr.o_name);
-    setValue("o_mail", selectedValuesAddr.o_email);
-    setValue("address", selectedValuesAddr.o_address);
-    setValue("o_phone", selectedValuesAddr.o_phone);
-    mutate(data);
-  };
   const handleChange = (key: any, value: any) => {
     setSelectedValues((prev: any) => {
       let updatedValues = { ...prev };
@@ -99,6 +80,8 @@ const FormModal = ({
         const selectedOption = optionsWard.find(
           (opt: any) => opt.value === value
         );
+        updatedValues = { ...prev, select3: selectedOption };
+
         MutateShipping({
           to_district_id: selectedValues.select2.value,
           to_ward_code: selectedOption?.value,
@@ -107,11 +90,36 @@ const FormModal = ({
             0
           ),
         });
-        updatedValues = { ...prev, select3: selectedOption };
       }
 
       return updatedValues;
     });
+  };  
+  const handleConfirm = () => {
+    const data = {
+      user_id: userId?.id,
+      name: selectedValuesAddr.o_name,
+      email: selectedValuesAddr.o_email,
+      phone: selectedValuesAddr.o_phone,
+      address:
+        selectedValuesAddr.o_address +
+        "," +
+        ` ${selectedValues?.select3?.label}, ${selectedValues?.select2?.label}, ${selectedValues?.select1?.label}`,
+      province: selectedValues?.select1?.value,
+      district: selectedValues?.select2?.value,
+      ward: selectedValues?.select3?.value?.toString(),
+      is_active: 1,
+    };
+    setValue("o_name", selectedValuesAddr.o_name);
+    setValue("o_mail", selectedValuesAddr.o_email);
+    setValue(
+      "address",
+      selectedValuesAddr.o_address +
+        "," +
+        ` ${selectedValues?.select3?.label}, ${selectedValues?.select2?.label}, ${selectedValues?.select1?.label}`
+    );
+    setValue("o_phone", selectedValuesAddr.o_phone);
+    mutate(data);
   };
 
   const handleSetValue = (field: any, value: any) => {

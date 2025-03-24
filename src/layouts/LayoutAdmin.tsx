@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { Badge, Button, Drawer, Input, Layout, Menu } from "antd";
+import { Badge, Button, Drawer, Input, Layout, Menu, Spin } from "antd";
 import {
   BellOutlined,
   MenuFoldOutlined,
@@ -66,7 +66,6 @@ const LayoutAdmin = () => {
       return (await getNotify()).data?.data;
     },
   });
-  console.log(data);
   return (
     <>
       <Layout
@@ -138,7 +137,7 @@ const LayoutAdmin = () => {
                 <AuthHeader />
               </MVCol>
 
-              <SettingOutlined style={{ fontSize: "20px" }} />
+              {/* <SettingOutlined style={{ fontSize: "20px" }} /> */}
 
               <Badge count={4}>
                 <BellOutlined
@@ -161,9 +160,20 @@ const LayoutAdmin = () => {
         </Layout>
       </Layout>
       <Drawer title="Thông báo" onClose={onClose} open={open}>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
+        {isLoading ? (
+          <div className="flex justify-center">
+            <Spin size="large" />
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {data?.map((item: any) => (
+              <div key={item.id} className="p-3 border-b border-gray-200">
+                <h3 className="font-semibold">{item.title}</h3>
+                <p className="text-gray-600">{item.message}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </Drawer>
     </>
   );

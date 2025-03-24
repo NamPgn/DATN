@@ -171,7 +171,7 @@ const Checkout = () => {
         select3: { value: null, label: "" },
       });
     }
-  }, [token_, getAdressDefault, setValue, optionsDistrict, optionsWard]);
+  }, [token_, getAdressDefault, setValue]);
 
   const { data: orderGetProvince } = useQuery(
     ["orderGetAdress"],
