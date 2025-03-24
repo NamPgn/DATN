@@ -13,12 +13,10 @@ import {
   delProduct,
   getProducts,
 } from "../../../sevices/products";
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 
 const ProductsAdmin = () => {
   const [page, setPage] = useState(1);
-
-  const [valueId, setValue] = useState();
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -28,11 +26,11 @@ const ProductsAdmin = () => {
     queryFn: async () => await getProducts(page),
   });
   const { mutate } = useMutation({
-    mutationFn: async (id: string) => {
-      return await delProduct(id);
+    mutationFn: async (data: string) => {
+      return await delProduct(data);
     },
     onSuccess: () => {
-      toast.success("Xóa thành công");
+      toast.success("Sản phẩm đã được chuyển vào thùng rác");
       refetch();
     },
     onError: (error) => {
@@ -43,9 +41,6 @@ const ProductsAdmin = () => {
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
-  };
-  const onChange = (newValue: any) => {
-    setValue(newValue);
   };
 
   const handlePageChangePage = (page: number) => {
@@ -74,7 +69,15 @@ const ProductsAdmin = () => {
     }
     deleteMultiple(selectedRowKeys);
   };
+  const handleDelete = () => {
+    const form: any = new FormData();
 
+    form.append("ids", selectedRowKeys);
+    const data: any = {
+      ids: selectedRowKeys,
+    };
+    mutate(form);
+  };
   const data =
     products &&
     products?.data?.data?.map((item: any, index: number) => {
@@ -137,6 +140,13 @@ const ProductsAdmin = () => {
         </Popconfirm>
         /
       </div>
+      <Button
+        style={{ marginLeft: "10px" }}
+        variant="filled"
+        color="danger"
+        icon={<DeleteOutlined />}
+        onClick={handleDelete}
+      ></Button>
       <MVTable
         columns={columnsProducts}
         rowSelection={rowSelection}

@@ -4,9 +4,6 @@ export const schemaUserInfo = z.object({
   name: z.string().min(1, "First Name is required"),
   username: z.string().min(1, "Last Name is required"),
   email: z.string().email("Invalid email format"),
-  avatar: z
-    .instanceof(FileList)
-    .refine((files: any) => files.length > 0, "Profile photo is required"),
 });
 
 export const schemaChangePassWord = z
