@@ -4,10 +4,7 @@ import "./account.css";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UsersContext } from "../../../context/usersContext";
-import {
-  schemaChangePassWord,
-  schemaUserInfo,
-} from "../../../schema/userSchema";
+import { schemaUserInfo } from "../../../schema/userSchema";
 import OrderHistory from "../../orders/orderHistory";
 import Loading from "../../../components/Loading/Loading";
 import { useMutation } from "react-query";
@@ -165,10 +162,10 @@ const AccountSetting = () => {
                       </div>
                     </div>
                     <div className="gap-3 d-md-flex text-center mb-3 px-4">
-                  <button type="submit" className="btn btn-primary mt-5">
-                    Lưu
-                  </button>
-                </div>
+                      <button type="submit" className="btn btn-primary mt-5">
+                        Lưu
+                      </button>
+                    </div>
                   </div>
 
                   {/* Upload Avatar */}
@@ -207,8 +204,6 @@ const AccountSetting = () => {
                     </div>
                   </div>
                 </div>
-
-               
               </form>
             )}
 

@@ -9,7 +9,11 @@ export const UserContextProvider = (props: any) => {
   const isAuth = !!token;
 
   const [isLogin, setIslogin] = useState(!!localStorage.getItem("isLogin"));
-  const { data: userId,isLoading,refetch } = useQuery({
+  const {
+    data: userId,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["userId", token?.user?.id],
     queryFn: async () => {
       return (await getUserInfo()).data?.data;
@@ -27,7 +31,7 @@ export const UserContextProvider = (props: any) => {
     token,
     userId,
     isLoading,
-    refetch
+    refetch,
   };
   return (
     <UsersContext.Provider value={value}>
