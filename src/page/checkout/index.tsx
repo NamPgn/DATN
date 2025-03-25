@@ -61,6 +61,7 @@ const Checkout = () => {
   const [shippingFee, setShippingFee]: any = useState(0);
   const [discountAmount, setDiscountAmount]: any = useState(0);
   const [voucherData, setDataVoucher] = useState<any | null>(null);
+  const [voucherCode, setVoucherCode] = useState<any | null>(null);
   const [open, setOpen] = useState(false);
   const { userId }: any = useContext(UsersContext) || {};
   const navigate = useNavigate();
@@ -109,6 +110,7 @@ const Checkout = () => {
     queryFn: async () => {
       return (await getAddressList())?.data?.data || [];
     },
+    enabled: !!token_,
   });
 
   const {
@@ -311,6 +313,7 @@ const Checkout = () => {
       shipping: optionsShip.fee,
       time: optionsShip.time,
       total_amount: total_amount,
+      voucher_code: voucherCode,
     };
     payment(data, {
       onSuccess: (order: any) => {
@@ -441,6 +444,7 @@ const Checkout = () => {
                   <AddCode
                     setDataVoucher={setDataVoucher}
                     total_amount={total_amount}
+                    setVoucherCode={setVoucherCode}
                   />
                   <TableCheckout
                     voucher={voucherData}
