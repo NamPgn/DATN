@@ -135,7 +135,6 @@ const ProductsAdmin = () => {
             Delete Selected
           </MyButton>
         </Popconfirm>
-        /
       </div>
       <MVTable
         columns={columnsProducts}
