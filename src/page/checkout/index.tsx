@@ -61,6 +61,7 @@ const Checkout = () => {
   const [shippingFee, setShippingFee]: any = useState(0);
   const [discountAmount, setDiscountAmount]: any = useState(0);
   const [voucherData, setDataVoucher] = useState<any | null>(null);
+  const [voucherCode, setVoucherCode] = useState<any | null>(null);
   const [open, setOpen] = useState(false);
   const { userId }: any = useContext(UsersContext) || {};
   const navigate = useNavigate();
@@ -81,6 +82,7 @@ const Checkout = () => {
   });
   const [optionsDistrict, setOptionsDistrict] = useState<any>([]);
   const [optionsWard, setOptionsWard] = useState<any>([]);
+  const [isEdit, setIsEdit] = useState<any>(false);
   const {
     register,
     handleSubmit,
@@ -108,6 +110,7 @@ const Checkout = () => {
     queryFn: async () => {
       return (await getAddressList())?.data?.data || [];
     },
+    enabled: !!token_,
   });
 
   const {
@@ -119,7 +122,6 @@ const Checkout = () => {
     queryFn: async () => (await getAdreesDefault()).data?.data,
     enabled: !!token_,
   });
-
   useEffect(() => {
     if (getAdressDefault === undefined) return;
     if (!getAdressDefault) {
@@ -160,36 +162,18 @@ const Checkout = () => {
     }
   }, [token_, getAdressDefault, checkoutItems]);
   useEffect(() => {
-    if (token_ && getAdressDefault) {
+    if (token_ && getAdressDefault && userId) {
       setValue("o_name", getAdressDefault.name || "");
       setValue("o_phone", getAdressDefault.phone || "");
       setValue("address", getAdressDefault.address || "");
       setValue("o_mail", userId?.email || "");
-      // Nếu có thông tin tỉnh/quận/xã, đặt giá trị vào selectedValues
       setSelectedValues({
-        select1: {
-          value: getAdressDefault.province,
-          label:
-            optionsSelectProvince.find(
-              (p: any) => p.value === getAdressDefault.province
-            )?.label || "",
-        },
-        select2: {
-          value: getAdressDefault.district,
-          label:
-            optionsDistrict.find(
-              (d: any) => d.value === getAdressDefault.district
-            )?.label || "",
-        },
-        select3: {
-          value: getAdressDefault.ward,
-          label:
-            optionsWard.find((w: any) => w.value === getAdressDefault.ward)
-              ?.label || "",
-        },
+        select1: { value: null, label: "" },
+        select2: { value: null, label: "" },
+        select3: { value: null, label: "" },
       });
     }
-  }, [token_, getAdressDefault, setValue, optionsDistrict, optionsWard]);
+  }, [token_, getAdressDefault, setValue]);
 
   const { data: orderGetProvince } = useQuery(
     ["orderGetAdress"],
@@ -313,10 +297,10 @@ const Checkout = () => {
       return;
     }
   };
+
   const onSubmit = async (values: any) => {
     setShippingFee(optionsShip.fee);
     //final tổng tiền + phí ship - discount
-
     const data = {
       ...values,
       o_address:
@@ -329,6 +313,7 @@ const Checkout = () => {
       shipping: optionsShip.fee,
       time: optionsShip.time,
       total_amount: total_amount,
+      voucher_code: voucherCode,
     };
     payment(data, {
       onSuccess: (order: any) => {
@@ -355,16 +340,6 @@ const Checkout = () => {
       <div>
         {token_ && (
           <>
-            <AddressDisplay
-              openModalAddress={openModal}
-              closeModalAddress={closeModal}
-              getAdressDefault={getAdressDefault}
-              addList={addList}
-              MutateShipping={MutateShipping}
-              refetchAddrList={refetchAddrList}
-              loadingDefault={loadingDefault}
-              refetchDefault={RefetchDefault}
-            />
             <FormModal
               orderGetProvince={orderGetProvince}
               optionsDistrict={optionsDistrict}
@@ -386,6 +361,7 @@ const Checkout = () => {
               refetchAddrList={refetchAddrList}
               RefetchDefault={RefetchDefault}
               addList={addList}
+              setIsEdit={setIsEdit}
             />
           </>
         )}
@@ -412,9 +388,18 @@ const Checkout = () => {
                   />
                 ) : (
                   <div className={`col-lg-6`}>
-                    <TableContainer
-                      component={Paper}
-                    >
+                    <AddressDisplay
+                      openModalAddress={openModal}
+                      closeModalAddress={closeModal}
+                      getAdressDefault={getAdressDefault}
+                      addList={addList}
+                      MutateShipping={MutateShipping}
+                      refetchAddrList={refetchAddrList}
+                      loadingDefault={loadingDefault}
+                      refetchDefault={RefetchDefault}
+                      setIsEdit={setIsEdit}
+                    />
+                    <TableContainer component={Paper}>
                       <Typography variant="h6" sx={{ p: 2 }}>
                         Địa chỉ nhận hàng
                       </Typography>
@@ -459,6 +444,7 @@ const Checkout = () => {
                   <AddCode
                     setDataVoucher={setDataVoucher}
                     total_amount={total_amount}
+                    setVoucherCode={setVoucherCode}
                   />
                   <TableCheckout
                     voucher={voucherData}

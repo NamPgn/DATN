@@ -1,3 +1,4 @@
+import DOMPurify from "dompurify";
 const reviews = [
   {
     id: 1,
@@ -43,7 +44,12 @@ const Description = ({
         <div className="productDescContentArea">
           <div className="row">
             <div className="col-lg-6">
-              <div className="descriptionContent">{product?.description}</div>
+              <div
+                className="descriptionContent"
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(product?.description),
+                }}
+              ></div>
             </div>
           </div>
         </div>
