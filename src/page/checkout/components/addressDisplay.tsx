@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Typography, Box } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import AddressList from "./addressList";
+import { EditOutlined } from "@ant-design/icons";
 
 export default function AddressDisplay({
   openModalAddress,
@@ -11,7 +12,8 @@ export default function AddressDisplay({
   MutateShipping,
   refetchAddrList,
   loadingDefault,
-  refetchDefault
+  refetchDefault,
+  setIsEdit,
 }: any) {
   const [open, setOpen] = useState(false);
   const [defaultAddress, setDefaultAddress] = useState({
@@ -26,16 +28,15 @@ export default function AddressDisplay({
     }
   }, [getAdressDefault]);
   return (
-    <div className="container mt-5">
+    <div className="my-5">
       {!loadingDefault ? (
         <Box
           sx={{
-            border: "2px dashed #ddd",
+            border: "1px dashed #ddd",
             padding: 2,
             borderRadius: 2,
             display: "flex",
             alignItems: "center",
-            width: 800,
           }}
         >
           <LocationOnIcon sx={{ mr: 1 }} />
@@ -49,19 +50,18 @@ export default function AddressDisplay({
           <Box sx={{ display: "flex", alignItems: "center" }}>
             <Box
               sx={{
-                color: "red",
+                color: "#9ebbbd",
                 fontSize: 12,
-                padding: "2px 5px",
-                mr: 2,
+                width:'60px'
               }}
             >
               Mặc Định
             </Box>
             <Button
               onClick={() => setOpen(true)}
-              sx={{ color: "blue", textTransform: "none" }}
+              sx={{ color: "red", textTransform: "none" }}
             >
-              Thay Đổi
+              <EditOutlined />
             </Button>
           </Box>
 
@@ -76,6 +76,7 @@ export default function AddressDisplay({
             addList={addList}
             MutateShipping={MutateShipping}
             refetchDefault={refetchDefault}
+            setIsEdit={setIsEdit}
           />
         </Box>
       ) : (

@@ -8,7 +8,7 @@ declare global {
   }
 }
 window.Pusher = Pusher;
-const OrdersAdmin = () => {
+const OrdersNotify = () => {
   const [order, setOrder] = useState<any | null>(null);
   useEffect(() => {
     const echo = new Echo({
@@ -27,13 +27,7 @@ const OrdersAdmin = () => {
       echo.disconnect();
     };
   }, []);
-  console.log(order)
-
-  return (
-    <React.Fragment>
-    
-    </React.Fragment>
-  );
+  return <React.Fragment>{JSON.stringify(order)}</React.Fragment>;
 };
 
-export default OrdersAdmin;
+export default OrdersNotify;

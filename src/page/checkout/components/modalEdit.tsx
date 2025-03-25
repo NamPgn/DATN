@@ -21,7 +21,13 @@ import { toast } from "react-toastify";
 import { UsersContext } from "../../../context/usersContext";
 import { postApiOrderWard } from "../../../sevices/orders";
 
-const ModalEdit = ({ open, handleClose, data, refetchAddrList }: any) => {
+const ModalEdit = ({
+  open,
+  handleClose,
+  data,
+  refetchAddrList,
+  refetchDefault,
+}: any) => {
   const [selectedValuesAddr, setSelectedValuesAddr] = useState({
     o_name: "",
     o_email: "",
@@ -101,6 +107,7 @@ const ModalEdit = ({ open, handleClose, data, refetchAddrList }: any) => {
     onSuccess: () => {
       toast.success("Thêm địa chỉ thành công");
       refetchAddrList();
+      refetchDefault();
       handleClose();
     },
     onError: () => {
@@ -109,18 +116,50 @@ const ModalEdit = ({ open, handleClose, data, refetchAddrList }: any) => {
   });
 
   const handleConfirm = () => {
+    if (!selectedValuesAddr.o_name) {
+      toast.error("Vui lòng nhập Họ và Tên");
+      return;
+    }
+    if (!selectedValuesAddr.o_email) {
+      toast.error("Vui lòng nhập Email");
+      return;
+    }
+    if (!selectedValuesAddr.o_phone) {
+      toast.error("Vui lòng nhập Số điện thoại");
+      return;
+    }
+    if (!selectedValuesAddr.o_address) {
+      toast.error("Vui lòng nhập Địa chỉ cụ thể");
+      return;
+    }
+    if (!selectedValues?.select1?.value) {
+      toast.error("Vui lòng chọn Tỉnh/Thành");
+      return;
+    }
+    if (!selectedValues?.select2?.value) {
+      toast.error("Vui lòng chọn Quận/Huyện");
+      return;
+    }
+    if (!selectedValues?.select3?.value) {
+      toast.error("Vui lòng chọn Phường/Xã");
+      return;
+    }
+
     const datas = {
       id: data?.id,
       user_id: userId?.id,
       name: selectedValuesAddr.o_name,
       email: selectedValuesAddr.o_email,
       phone: selectedValuesAddr.o_phone,
-      address: selectedValuesAddr.o_address,
+      address: `${selectedValuesAddr.o_address.split(",")[0].trim()}, ${
+        selectedValues?.select3?.label
+      }, ${selectedValues?.select2?.label}, ${selectedValues?.select1?.label}`,
       province: selectedValues?.select1?.value,
       district: selectedValues?.select2?.value,
-      ward: selectedValues?.select3.value.toString(),
+      ward: selectedValues?.select3?.value?.toString(),
       is_active: 1,
     };
+
     mutateEdit(datas);
   };
 
@@ -163,7 +202,7 @@ const ModalEdit = ({ open, handleClose, data, refetchAddrList }: any) => {
   };
   return (
     <Dialog fullWidth open={open} onClose={handleClose}>
-      <DialogTitle>Nhập Địa Chỉ Mới</DialogTitle>
+      <DialogTitle>Sửa địa chỉ</DialogTitle>
       <DialogContent>
         <TextField
           label="Họ và Tên"
