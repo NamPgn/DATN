@@ -1,27 +1,181 @@
-import React, { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import {
   getApiOrderAdress,
   postApiOrderDistrict,
+  postApiOrderGetShip,
   postApiOrderWard,
 } from "../../sevices/orders";
 import { toast } from "react-toastify";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import AddCode from "./components/addCode";
+import { useCheckout } from "../../context/checkout";
+import CheckoutForm from "./components/form";
+import TableCheckout from "./components/tableCheckout";
+import {
+  getAddressList,
+  getAdreesDefault,
+  paymentOrder,
+} from "../../sevices/client/orders";
+import { useNavigate } from "react-router-dom";
 
+import { token_auth } from "../../common/auth/getToken";
+import FormModal from "./components/modal";
+import AddressDisplay from "./components/addressDisplay";
+import { UsersContext } from "../../context/usersContext";
+import {
+  Card,
+  CardContent,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography,
+} from "@mui/material";
+const schema = z.object({
+  o_name: z.string().min(1, "Vui lòng nhập Họ và tên"),
+  o_mail: z.string().email("Email không hợp lệ."),
+  o_phone: z.string().min(1, "Vui lòng nhập số điện thoại."),
+  address: z.string().min(1, "Vui lòng nhập Địa chỉ."),
+  note: z.string().optional(),
+  payment_method: z.enum(["vnpay", "ship_cod"], {
+    message: "Vui lòng chọn phương thức thanh toán.",
+  }),
+});
 const Checkout = () => {
+  const [selectedValuesAddr, setSelectedValuesAddr] = useState({
+    o_name: "",
+    o_email: "",
+    o_address: "",
+    o_phone: "",
+  });
+  const token_ = token_auth();
+  const { checkoutItems } = useCheckout() || {};
+  const [optionsShip, setOptionsShip]: any = useState({});
+  const [total_amount, settotal_amount]: any = useState(0);
+  const [fn_amount, setFn_amount]: any = useState(0);
+  const [shippingFee, setShippingFee]: any = useState(0);
+  const [discountAmount, setDiscountAmount]: any = useState(0);
+  const [voucherData, setDataVoucher] = useState<any | null>(null);
+  const [voucherCode, setVoucherCode] = useState<any | null>(null);
+  const [open, setOpen] = useState(false);
+  const { userId }: any = useContext(UsersContext) || {};
+  const navigate = useNavigate();
   const [selectedValues, setSelectedValues] = useState<any>({
     select1: { value: null, label: "" },
     select2: { value: null, label: "" },
     select3: { value: null, label: "" },
   });
-  const [optionsDistrict, setOptionsDistrict] = useState([]);
-  const [optionsWard, setOptionsWard] = useState([]);
-  const [optionsShip, setOptionsShip]: any = useState({});
-  const [openOption, setopenOption] = useState(false);
-  const handleClickOption = () => {
-    setopenOption((open) => !open);
+  const [openDropdown, setOpenDropdown] = useState({
+    select1: false,
+    select2: false,
+    select3: false,
+  });
+  const [errorsState, setErrorsState] = useState({
+    select1: "",
+    select2: "",
+    select3: "",
+  });
+  const [optionsDistrict, setOptionsDistrict] = useState<any>([]);
+  const [optionsWard, setOptionsWard] = useState<any>([]);
+  const [isEdit, setIsEdit] = useState<any>(false);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+  } = useForm({
+    resolver: zodResolver(schema),
+  });
+
+  useEffect(() => {
+    const totalAmount = checkoutItems.reduce(
+      (sum: number, item: any) =>
+        sum +
+        (item.sale_price ? item.sale_price : item.regular_price || 0) *
+          item.quantity,
+      0
+    );
+    settotal_amount(totalAmount);
+    setFn_amount(voucherData ? voucherData.final_total : totalAmount);
+    setDiscountAmount(voucherData ? voucherData.discount : 0);
+  }, [checkoutItems, voucherData, fn_amount]);
+
+  const { data: addList = [], refetch: refetchAddrList } = useQuery({
+    queryKey: ["addressList"],
+    queryFn: async () => {
+      return (await getAddressList())?.data?.data || [];
+    },
+    enabled: !!token_,
+  });
+
+  const {
+    data: getAdressDefault,
+    isLoading: loadingDefault,
+    refetch: RefetchDefault,
+  } = useQuery({
+    queryKey: ["addressDefault"],
+    queryFn: async () => (await getAdreesDefault()).data?.data,
+    enabled: !!token_,
+  });
+  useEffect(() => {
+    if (getAdressDefault === undefined) return;
+    if (!getAdressDefault) {
+      setOpen(true);
+    }
+  }, [getAdressDefault]);
+
+  const { mutate: MutateShipping } = useMutation({
+    mutationFn: async (data: any) => {
+      return (await postApiOrderGetShip(data)).data;
+    },
+    onSuccess: (data) => {
+      setOptionsShip(data);
+    },
+    onError: () => {
+      toast.error("Lỗi tải danh sách giao hàng");
+    },
+  });
+  const handleClickOption = (key: "select1" | "select2" | "select3") => {
+    setOpenDropdown((prev) => ({
+      select1: false,
+      select2: false,
+      select3: false,
+      [key]: !prev[key],
+    }));
   };
 
-  const { data: orderGetProvince, isLoading } = useQuery(
+  useEffect(() => {
+    if (token_ && getAdressDefault && checkoutItems?.length) {
+      MutateShipping({
+        to_district_id: getAdressDefault?.district,
+        to_ward_code: getAdressDefault?.ward,
+        weight: checkoutItems.reduce(
+          (sum: number, item: any) => sum + item.weight * item.quantity,
+          0
+        ),
+      });
+    }
+  }, [token_, getAdressDefault, checkoutItems]);
+  useEffect(() => {
+    if (token_ && getAdressDefault && userId) {
+      setValue("o_name", getAdressDefault.name || "");
+      setValue("o_phone", getAdressDefault.phone || "");
+      setValue("address", getAdressDefault.address || "");
+      setValue("o_mail", userId?.email || "");
+      setSelectedValues({
+        select1: { value: null, label: "" },
+        select2: { value: null, label: "" },
+        select3: { value: null, label: "" },
+      });
+    }
+  }, [token_, getAdressDefault, setValue]);
+
+  const { data: orderGetProvince } = useQuery(
     ["orderGetAdress"],
     async () => await getApiOrderAdress()
   );
@@ -50,7 +204,6 @@ const Checkout = () => {
       return (await postApiOrderWard(data)).data;
     },
     onSuccess: (data) => {
-      console.log(data);
       setOptionsWard(
         data?.data?.map((item: any) => ({
           key: `ward-${item.WardCode}`,
@@ -64,364 +217,255 @@ const Checkout = () => {
       toast.error("Lỗi tải danh sách phường");
     },
   });
-  const optionsSelectProvince =
+  const { mutate: payment, isLoading: loadingPayment } = useMutation({
+    mutationFn: async (data: any) => {
+      return await paymentOrder(data);
+    },
+  });
+  const optionsSelectProvince: any =
     orderGetProvince?.data?.data?.map((item: any) => ({
       label: item.ProvinceName,
       value: item.ProvinceID,
     })) || [];
   const handleChange = (key: "select1" | "select2" | "select3", value: any) => {
-    let selectedOption: any = {};
+    setSelectedValues((prev: any) => {
+      let updatedValues = { ...prev };
 
-    if (key === "select1") {
-      selectedOption = optionsSelectProvince.find(
-        (opt: any) => opt.value === value
-      );
-      setSelectedValues({
-        select1: selectedOption,
-        select2: null,
-        select3: null,
-      });
-      MutateDistrict({ province_id: value });
-    } else if (key === "select2") {
-      selectedOption = optionsDistrict.find((opt: any) => opt.value === value);
-      setSelectedValues((prev: any) => ({
-        ...prev,
-        select2: selectedOption,
-        select3: null,
-      }));
-      MutateWard({ district_id: value });
-    } else if (key === "select3") {
-      selectedOption = optionsWard.find((opt: any) => opt.value === value);
-      setSelectedValues((prev: any) => ({
-        ...prev,
-        select3: selectedOption,
-      }));
-      setSelectedValues((prev: any) => ({ ...prev, select3: null }));
-      // MutateShipping({
-      //   to_district_id: selectedValues.select2.value,
-      //   to_ward_code: selectedOption.value,
-      // });
+      if (key === "select1") {
+        const selectedOption = optionsSelectProvince.find(
+          (opt: any) => opt.value === value
+        );
+        updatedValues = {
+          select1: selectedOption,
+          select2: { value: null, label: "" },
+          select3: { value: null, label: "" },
+        };
+
+        MutateDistrict({ province_id: value });
+      } else if (key === "select2") {
+        const selectedOption = optionsDistrict.find(
+          (opt: any) => opt.value === value
+        );
+        updatedValues = {
+          ...prev,
+          select2: selectedOption,
+          select3: { value: null, label: "" },
+        };
+
+        MutateWard({ district_id: value });
+      } else if (key === "select3") {
+        const selectedOption: any = optionsWard.find(
+          (opt: any) => opt.value === value
+        );
+        updatedValues = { ...prev, select3: selectedOption };
+        MutateShipping({
+          to_district_id: selectedValues.select2.value,
+          to_ward_code: selectedOption?.value,
+          weight: checkoutItems.reduce(
+            (sum: number, item: any) => sum + item.weight * item.quantity,
+            0
+          ),
+        });
+      }
+
+      setOpenDropdown({ select1: false, select2: false, select3: false });
+      setErrorsState((prevErrors) => ({ ...prevErrors, [key]: "" }));
+      return updatedValues;
+    });
+  };
+  const validateForm = () => {
+    let newErrors = {
+      select1:
+        selectedValues.select1?.value === null
+          ? "Vui lòng chọn tỉnh/thành phố."
+          : "",
+      select2:
+        selectedValues.select2?.value === null
+          ? "Vui lòng chọn quận/huyện."
+          : "",
+      select3:
+        selectedValues.select3?.value === null
+          ? "Vui lòng chọn phường/xã."
+          : "",
+    };
+    setErrorsState(newErrors);
+    return Object.values(newErrors).every((error) => error === "");
+  };
+  const handleValidate = () => {
+    const isFormValid = validateForm();
+    if (!isFormValid) {
+      return;
     }
   };
+
+  const onSubmit = async (values: any) => {
+    setShippingFee(optionsShip.fee);
+    //final tổng tiền + phí ship - discount
+    const data = {
+      ...values,
+      o_address:
+        values.address +
+        "," +
+        ` ${selectedValues.select3.label}, ${selectedValues.select2.label}, ${selectedValues.select1.label}`,
+      discount_amount: voucherData ? voucherData.discount : 0,
+      final_amount: total_amount + optionsShip.fee - discountAmount,
+      products: checkoutItems,
+      shipping: optionsShip.fee,
+      time: optionsShip.time,
+      total_amount: total_amount,
+      voucher_code: voucherCode,
+    };
+    payment(data, {
+      onSuccess: (order: any) => {
+        if (values.payment_method === "vnpay") {
+          window.location.href = order?.data?.url;
+        } else {
+          toast.success(order?.data?.message);
+          navigate("/o/thanks");
+        }
+      },
+      onError: (error: any) => {
+        toast.error(error?.response?.data?.message);
+      },
+    });
+  };
+
+  const openModal = () => setOpen(true);
+  const closeModal = () => setOpen(false);
   return (
-    <section className="checkoutPage">
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-6">
-            <div className="loginLinks">
-              <p>
-                Already have an account?{" "}
-                <a href="javascript:void(0);">Click Here to Login</a>
-              </p>
-            </div>
-            <div className="checkoutForm">
-              <h3>Your Billing Address</h3>
+    <div>
+      {/* <Button variant="contained" onClick={() => setOpen(true)}>
+        Mở Modal
+      </Button> */}
+      <div>
+        {token_ && (
+          <>
+            <FormModal
+              orderGetProvince={orderGetProvince}
+              optionsDistrict={optionsDistrict}
+              selectedValues={selectedValues}
+              setOptionsDistrict={setOptionsDistrict}
+              optionsWard={optionsWard}
+              setOptionsWard={setOptionsWard}
+              MutateDistrict={MutateDistrict}
+              MutateWard={MutateWard}
+              optionsSelectProvince={optionsSelectProvince}
+              setSelectedValues={setSelectedValues}
+              open={open}
+              handleClose={() => setOpen(false)}
+              MutateShipping={MutateShipping}
+              checkoutItems={checkoutItems}
+              setValue={setValue}
+              selectedValuesAddr={selectedValuesAddr}
+              setSelectedValuesAddr={setSelectedValuesAddr}
+              refetchAddrList={refetchAddrList}
+              RefetchDefault={RefetchDefault}
+              addList={addList}
+              setIsEdit={setIsEdit}
+            />
+          </>
+        )}
+        {/* <FormModal /> */}
+        {/* <TailwindComponent>
+        <AddressCheckout />
+      </TailwindComponent> */}
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <section className="checkoutPage">
+            <div className="container">
               <div className="row">
-                <div className="col-md-6">
-                  <input type="text" name="field1" placeholder="First Name *" />
-                </div>
-                <div className="col-md-6">
-                  <input type="text" name="field2" placeholder="Last Name *" />
-                </div>
-                <div className="col-lg-12">
-                  <input type="text" name="field3" placeholder="Company Name" />
-                </div>
-                <div className="col-md-6">
-                  <input
-                    type="text"
-                    name="field4"
-                    placeholder="Email address *"
+                {!token_ ? (
+                  <CheckoutForm
+                    register={register}
+                    errors={errors}
+                    openDropdown={openDropdown}
+                    selectedValues={selectedValues}
+                    handleClickOption={handleClickOption}
+                    optionsSelectProvince={optionsSelectProvince}
+                    handleChange={handleChange}
+                    errorsState={errorsState}
+                    optionsDistrict={optionsDistrict}
+                    optionsWard={optionsWard}
                   />
-                </div>
-                <div className="col-md-6">
-                  <input type="text" name="field5" placeholder="Phone *" />
-                </div>
-                <div className="col-lg-12">
-                  <div
-                    className={`nice-select ${openOption ? "open" : ""}`}
-                    onClick={handleClickOption}
-                  >
-                    <span className="current">
-                      {selectedValues.select1?.label || "Chọn tỉnh/thành phố"}
-                    </span>
-                    <ul className="list">
-                      {optionsSelectProvince.map((option: any) => (
-                        <li
-                          key={option.value}
-                          data-value={option.value}
-                          className="option"
-                          onClick={() => handleChange("select1", option.value)}
-                        >
-                          {option.label}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                {/* Select quận/huyện */}
-                <div className="col-lg-12">
-                  <div
-                    className={`nice-select ${openOption ? "open" : ""}`}
-                    onClick={handleClickOption}
-                  >
-                    <span className="current">
-                      {selectedValues.select2?.label || "Chọn quận/huyện"}
-                    </span>
-                    <ul className="list">
-                      {optionsDistrict.map((option: any) => (
-                        <li
-                          key={option.value}
-                          data-value={option.value}
-                          className="option"
-                          onClick={() => handleChange("select2", option.value)}
-                        >
-                          {option.label}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                {/* Select phường/xã */}
-                <div className="col-lg-12">
-                  <div
-                    className={`nice-select ${openOption ? "open" : ""}`}
-                    onClick={handleClickOption}
-                  >
-                    <span className="current">
-                      {selectedValues.select3?.label || "Chọn phường/xã"}
-                    </span>
-                    <ul className="list">
-                      {optionsWard.map((option: any) => (
-                        <li
-                          key={option.value}
-                          data-value={option.value}
-                          className="option"
-                          onClick={() => handleChange("select3", option.value)}
-                        >
-                          {option.label}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-                <div className="col-lg-12">
-                  <input type="text" name="field7" placeholder="Address *" />
-                </div>
-                <div className="col-lg-12">
-                  <input type="text" name="field8" placeholder="City/Town *" />
-                </div>
-                <div className="col-md-6">
-                  <input type="text" name="field9" placeholder="State *" />
-                </div>
-                <div className="col-md-6">
-                  <input type="text" name="field10" placeholder="Zip Code *" />
-                </div>
-                <div className="col-lg-12">
-                  <div className="checkoutRegister">
-                    <input
-                      type="checkbox"
-                      defaultValue={1}
-                      name="field11"
-                      id="is_register"
+                ) : (
+                  <div className={`col-lg-6`}>
+                    <AddressDisplay
+                      openModalAddress={openModal}
+                      closeModalAddress={closeModal}
+                      getAdressDefault={getAdressDefault}
+                      addList={addList}
+                      MutateShipping={MutateShipping}
+                      refetchAddrList={refetchAddrList}
+                      loadingDefault={loadingDefault}
+                      refetchDefault={RefetchDefault}
+                      setIsEdit={setIsEdit}
                     />
-                    <label htmlFor="is_register">Create Account?</label>
+                    <TableContainer component={Paper}>
+                      <Typography variant="h6" sx={{ p: 2 }}>
+                        Địa chỉ nhận hàng
+                      </Typography>
+                      <Table>
+                        <TableBody>
+                          {loadingDefault ? (
+                            <TableRow>
+                              <TableCell colSpan={2} align="center">
+                                Đang tải...
+                              </TableCell>
+                            </TableRow>
+                          ) : (
+                            <>
+                              <TableRow>
+                                <TableCell>
+                                  <strong>Họ tên</strong>
+                                </TableCell>
+                                <TableCell>{getAdressDefault?.name}</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <strong>Số điện thoại</strong>
+                                </TableCell>
+                                <TableCell>{getAdressDefault?.phone}</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
+                                  <strong>Địa chỉ</strong>
+                                </TableCell>
+                                <TableCell>
+                                  {getAdressDefault?.address}
+                                </TableCell>
+                              </TableRow>
+                            </>
+                          )}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
                   </div>
-                  <div className="checkoutPassword">
-                    <p>
-                      Mod tempor incididunt ut labore et dolore magna aliq mpor
-                      incididunt ut labore et dolore magna aliqu ostrud
-                      exercitation ullamco
-                    </p>
-                    <input
-                      type="password"
-                      name="field12"
-                      placeholder="Account Password *"
-                    />
-                  </div>
-                </div>
-                <div className="col-lg-12">
-                  <div className="shippingAddress">
-                    <input
-                      type="checkbox"
-                      defaultValue={1}
-                      name="field13"
-                      id="shipDifferentAddress"
-                    />
-                    <label htmlFor="shipDifferentAddress">
-                      Ship to Different Address ?
-                    </label>
-                  </div>
-                </div>
-                <div className="col-lg-12">
-                  <textarea
-                    name="field14"
-                    placeholder="Order Note"
-                    defaultValue={""}
+                )}
+                <div className={`col-lg-6`}>
+                  <AddCode
+                    setDataVoucher={setDataVoucher}
+                    total_amount={total_amount}
+                    setVoucherCode={setVoucherCode}
+                  />
+                  <TableCheckout
+                    voucher={voucherData}
+                    register={register}
+                    errors={errors}
+                    checkoutItems={checkoutItems}
+                    discount_amount={discountAmount}
+                    shippingFee={shippingFee}
+                    totalAmount={total_amount}
+                    handleValidate={handleValidate}
+                    optionsShip={optionsShip}
+                    loadingPayment={loadingPayment}
+                    fn_amount={fn_amount}
                   />
                 </div>
               </div>
             </div>
-          </div>
-          <div className="col-lg-6">
-            <div className="shippingCoupons">
-              <h3>Coupon Code</h3>
-              <div className="couponFormWrap clearfix">
-                <input
-                  type="text"
-                  name="coupon_code"
-                  className="input-text"
-                  id="coupon_code"
-                  defaultValue=""
-                  placeholder="Write your Coupon Code"
-                />
-                <button
-                  type="submit"
-                  className="ulinaBTN"
-                  name="apply_coupon"
-                  value="Apply Code"
-                >
-                  <span>Apply Code</span>
-                </button>
-              </div>
-            </div>
-            <div className="orderReviewWrap">
-              <h3>Your Order</h3>
-              <div className="orderReview">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Item</th>
-                      <th>Price</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <a href="javascript:void(0);">
-                          Ulina casual shirt for men
-                        </a>
-                      </td>
-                      <td>
-                        <div className="pi01Price">
-                          <ins>$99.00</ins>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="javascript:void(0);">Korra UVR sunglass</a>
-                      </td>
-                      <td>
-                        <div className="pi01Price">
-                          <ins>$59.00</ins>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <a href="javascript:void(0);">Marjo fashionable bag</a>
-                      </td>
-                      <td>
-                        <div className="pi01Price">
-                          <ins>$39.00</ins>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                  <tfoot>
-                    <tr>
-                      <th>Sub Total</th>
-                      <td>
-                        <div className="pi01Price">
-                          <ins>$183.00</ins>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr className="shippingRow">
-                      <th>Shipping (Standard)</th>
-                      <td>
-                        <div className="pi01Price">
-                          <ins>$20.00</ins>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Total</th>
-                      <td>
-                        <div className="pi01Price">
-                          <ins>$203.00</ins>
-                        </div>
-                      </td>
-                    </tr>
-                  </tfoot>
-                </table>
-                <ul className="wc_payment_methods">
-                  <li className="active">
-                    <input
-                      type="radio"
-                      defaultValue={1}
-                      name="paymentMethod"
-                      id="paymentMethod01"
-                    />
-                    <label htmlFor="paymentMethod01">
-                      Direct bank transfer
-                    </label>
-                    <div className="paymentDesc shows">
-                      Arkono ridoy venge tumi met, consectetur adipisicing elit,
-                      sed do eiusmod tempor incidid gna aliqua.
-                    </div>
-                  </li>
-                  <li>
-                    <input
-                      type="radio"
-                      defaultValue={4}
-                      name="paymentMethod"
-                      id="paymentMethod04"
-                    />
-                    <label htmlFor="paymentMethod04">Payment by cheque</label>
-                    <div className="paymentDesc">
-                      Arkono ridoy venge tumi met, consectetur adipisicing elit,
-                      sed do eiusmod tempor incidid gna aliqua.
-                    </div>
-                  </li>
-                  <li>
-                    <input
-                      type="radio"
-                      defaultValue={2}
-                      name="paymentMethod"
-                      id="paymentMethod02"
-                    />
-                    <label htmlFor="paymentMethod02">Cash on delivery</label>
-                    <div className="paymentDesc">
-                      Arkono ridoy venge tumi met, consectetur adipisicing elit,
-                      sed do eiusmod tempor incidid gna aliqua.
-                    </div>
-                  </li>
-                  <li>
-                    <input
-                      type="radio"
-                      defaultValue={3}
-                      name="paymentMethod"
-                      id="paymentMethod03"
-                    />
-                    <label htmlFor="paymentMethod03">Paypal</label>
-                    <div className="paymentDesc">
-                      Arkono ridoy venge tumi met, consectetur adipisicing elit,
-                      sed do eiusmod tempor incidid gna aliqua.
-                    </div>
-                  </li>
-                </ul>
-                <button type="button" className="placeOrderBTN ulinaBTN">
-                  <span>Place Order</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+          </section>
+        </form>
       </div>
-    </section>
+    </div>
   );
 };
 

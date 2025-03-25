@@ -56,7 +56,7 @@ const OrdersAdmin = () => {
           <div className="d-flex gap-2">
             <Link to={`/dashboard/orders/${item.id}`} className="text-blue-500">
               <MyButton icon={<EyeOutlined />} type="dashed">
-                Detail
+                Chi tiết
               </MyButton>
             </Link>
             {/* <Link to={`/dashboard/orders/edit/${item.id}`}>
@@ -67,7 +67,7 @@ const OrdersAdmin = () => {
 
             <Link to={`/dashboard/orders/send/${item.id}`}>
               <Button icon={<PlusOutlined />} color="green" variant="text">
-                Send
+                Gửi đơn hàng
               </Button>
             </Link>
           </div>

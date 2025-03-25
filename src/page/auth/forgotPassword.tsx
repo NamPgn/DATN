@@ -3,7 +3,7 @@ import { Button, Form, Grid, Input, theme, Typography } from "antd";
 import { MailOutlined, UserOutlined } from "@ant-design/icons";
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { sendEmailForgotPass } from "../../sevices/users";
 
 const { useToken } = theme;
@@ -13,28 +13,42 @@ const { Text, Title, Link } = Typography;
 export default function ForgotPassword() {
   const { token } = useToken();
   const screens = useBreakpoint();
-  //   const navigate = useNavigate();
+  const navigate = useNavigate();
   const styles: any = {
+    logo: {
+      width: "100px",
+      objectFit: "cover",
+    },
     section: {
       display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
       height: "100vh",
-      backgroundColor: "#F5F5F5",
-      //   background: "url('/assets/images/bg/login.jpg') center/cover no-repeat",
+      backgroundColor: token.colorBgContainer,
+    },
+    imageContainer: {
+      flex: "60%",
+      background: "url('/assets/images/slider/3.jpg') center/cover no-repeat",
     },
     formContainer: {
-      margin: token.marginLG,
+      flex: "40%",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
       padding: screens.md ? `${token.sizeXXL}px` : `${token.padding}px`,
-      backgroundColor: "#FFF",
-      borderRadius: "8px", // Tuỳ chỉnh bo góc nếu cần
-      boxShadow: "0 4px 50px rgba(0,0,0,.15)", // Tạo bóng cho container
-      width: "100%",
-      maxWidth: "500px", // Đảm bảo form không quá rộng
     },
-    title: {
+    formContent: {
+      width: "100%",
+      maxWidth: "380px",
+    },
+    header: {
       textAlign: "center",
       marginBottom: token.marginXL,
+    },
+    iconText: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: "8px",
     },
     text: {
       color: token.colorTextSecondary,
@@ -68,15 +82,19 @@ export default function ForgotPassword() {
 
   return (
     <section style={styles.section}>
-      <div className="animation" style={styles.formContainer}>
+      <div style={styles.formContainer}>
         <div style={styles.formContent}>
-          <div style={styles.title}>
-            <Title
-              level={2}
-              style={{ marginBottom: 0, fontSize: "40px" }}
-            >
-              ĐẶT LẠI MẬT KHẨU
-            </Title>
+          <div style={styles.header}>
+            <div style={styles.iconText}>
+              <img style={styles.logo} src="/assets/images/logo.png" alt="" />
+              <Title level={2} style={{ margin: 0 }}>
+                Forgot Password
+              </Title>
+            </div>
+            <Text style={styles.text}>
+              Welcome back to AntBlocks UI! Please enter your details below to
+              Forgot Password.
+            </Text>
           </div>
           <Form
             name="normal_login"
@@ -84,52 +102,26 @@ export default function ForgotPassword() {
             layout="vertical"
             requiredMark="optional"
           >
-            <p style={{marginBottom: "10px"}}>
-            Chúng tôi sẽ gửi cho bạn một email để giúp bạn đặt lại mật khẩu
-            </p>
             <Form.Item
               name="email"
               rules={[
                 {
                   type: "email",
                   required: true,
-                  message: "E-mail chưa chính xác!",
+                  message: "Xin vui lòng nhập Email!",
                 },
               ]}
             >
-              <Input
-                prefix={<MailOutlined />}
-                placeholder="Email"
-                style={{ fontSize: "16px" }} // Ghi đè kích thước font tại đây
-              />
+              <Input prefix={<MailOutlined />} placeholder="Email" />
             </Form.Item>
 
             <Form.Item>
-              <Button
-                block
-                type="primary"
-                htmlType="submit"
-                style={{
-                  paddingTop: "20px",
-                  paddingBottom: "22px",
-                  fontSize: "16px",
-                  fontWeight: "bold",
-                }}
-              >
-                Gửi email
+              <Button block type="primary" htmlType="submit">
+                Send Email
               </Button>
               <div style={styles.footer}>
-                <Link
-                  className="hover-underline"
-                  style={{
-                    color: "red",
-                    fontWeight: "bold",
-                    marginLeft: "6px",
-                  }}
-                  href="/auth/login"
-                >
-                  Hủy bỏ
-                </Link>
+                <Text style={styles.text}>Do have an account?</Text>{" "}
+                <Link href="/auth/login">Login now</Link>
               </div>
             </Form.Item>
           </Form>

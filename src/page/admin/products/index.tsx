@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { Image } from "antd";
+import { Button, Image, Popconfirm } from "antd";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
@@ -7,13 +8,15 @@ import { ButtonAdd, MyButton } from "../../../components/UI/Core/Button";
 import MVConfirm from "../../../components/UI/Core/Confirm";
 import MVTable from "../../../components/UI/Core/MV/Table";
 import { columnsProducts } from "../../../constant";
-import { delProduct, getProducts } from "../../../sevices/products";
-import { PlusOutlined } from "@ant-design/icons";
+import {
+  delMultipleProduct,
+  delProduct,
+  getProducts,
+} from "../../../sevices/products";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 
 const ProductsAdmin = () => {
   const [page, setPage] = useState(1);
-
-  const [valueId, setValue] = useState();
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -23,14 +26,15 @@ const ProductsAdmin = () => {
     queryFn: async () => await getProducts(page),
   });
   const { mutate } = useMutation({
-    mutationFn: async (id: string) => {
-      return await delProduct(id);
+    mutationFn: async (data: string) => {
+      return await delProduct(data);
     },
     onSuccess: () => {
-      toast.success("Xóa thành công");
+      toast.success("Sản phẩm đã được chuyển vào thùng rác");
       refetch();
     },
-    onError: () => {
+    onError: (error) => {
+      console.error("Lỗi khi xóa:", error);
       toast.error("Xóa không thành công");
     },
   });
@@ -38,25 +42,42 @@ const ProductsAdmin = () => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  const onChange = (newValue: any) => {
-    setValue(newValue);
-  };
 
   const handlePageChangePage = (page: number) => {
     setPage(page);
   };
 
-  const handleDeleteSelectedData = async () => {
-    console.log(selectedRowKeys);
-    // const response: any = await deleteMultipleProduct(selectedRowKeys);
-    // if (response.data.success == true) {
-    //   setInit(!init);
-    //   toast.success("Delete products successfully");
-    // } else {
-    //   toast.error("Error deleting products");
-    // }
-  };
+  const { mutate: deleteMultiple } = useMutation({
+    mutationFn: async (ids: string[]) => {
+      return await delMultipleProduct(ids);
+    },
+    onSuccess: () => {
+      toast.success("Xóa nhiều sản phẩm thành công");
+      setSelectedRowKeys([]);
+      refetch();
+    },
+    onError: (error) => {
+      console.error("Lỗi khi xóa nhiều sản phẩm:", error);
+      toast.error("Xóa không thành công");
+    },
+  });
 
+  const handleDeleteSelectedData = () => {
+    if (selectedRowKeys.length === 0) {
+      toast.warning("Vui lòng chọn ít nhất một sản phẩm để xóa");
+      return;
+    }
+    deleteMultiple(selectedRowKeys);
+  };
+  const handleDelete = () => {
+    const form: any = new FormData();
+
+    form.append("ids", selectedRowKeys);
+    const data: any = {
+      ids: selectedRowKeys,
+    };
+    mutate(form);
+  };
   const data =
     products &&
     products?.data?.data?.map((item: any, index: number) => {
@@ -81,11 +102,13 @@ const ProductsAdmin = () => {
         action: (
           <div className="d-flex gap-1">
             <Link to={`/dashboard/products/edit/${item.id}`}>
-              <MyButton type="primary">Edit</MyButton>
+              <Button variant="filled" color="geekblue">
+                Sửa
+              </Button>
             </Link>
             <MVConfirm title="Có xóa không" onConfirm={() => mutate(item.id)}>
-              <MyButton danger className="ml-2">
-                Delete
+              <MyButton variant="filled" color="danger" className="ml-2">
+                Xóa
               </MyButton>
             </MVConfirm>
             {item.type == "0" ? (
@@ -104,6 +127,18 @@ const ProductsAdmin = () => {
   return (
     <React.Fragment>
       <ButtonAdd path={`/dashboard/product/add`} />
+      <div className="mb-3">
+        <Popconfirm
+          title="Bạn có chắc chắn muốn xóa ?"
+          onConfirm={handleDeleteSelectedData}
+          okText="Yes"
+          cancelText="No"
+        >
+          <MyButton type="primary" danger icon={<DeleteOutlined />}>
+            Delete Selected
+          </MyButton>
+        </Popconfirm>
+      </div>
       <MVTable
         columns={columnsProducts}
         rowSelection={rowSelection}

@@ -12,10 +12,10 @@ const AddImageProducts = () => {
       return await addImageList(values);
     },
     onSuccess: () => {
-      message.success("AttributeValue created successfully!");
+      message.success("Tạo giá trị thuộc tính thành công!");
     },
     onError: () => {
-      message.error("AttributeValue created failure!");
+      message.error("Tạo giá trị thuộc tính thất bại!");
     },
   });
   const handleFileChange = ({ fileList }: any) => {
@@ -24,7 +24,7 @@ const AddImageProducts = () => {
 
   const handleSubmit = (values: any) => {
     if (fileList.length === 0) {
-      message.error("Please upload at least one file!");
+      message.error("Vui lòng tải lên ít nhất một tệp!");
       return;
     }
     const formData: any = new FormData();
@@ -35,7 +35,7 @@ const AddImageProducts = () => {
   };
   return (
     <Form form={form} layout="vertical" onFinish={handleSubmit}>
-      <Form.Item label="Upload Files">
+      <Form.Item label="Tải lên file">
         <Upload
           name="images"
           multiple

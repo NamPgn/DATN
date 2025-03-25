@@ -18,8 +18,10 @@ const ProductSale = () => {
       <div className="container">
         <div className="row">
           <div className="col-lg-12">
-            <h2 className="secTitle">Latest Arrival</h2>
-            <p className="secDesc">Showing our latest arrival on this summer</p>
+            <h2 className="secTitle">SẢN PHẨM MỚI</h2>
+            <p className="secDesc">
+              Hiển thị sản phẩm mới nhất của chúng tôi trong mùa hè này
+            </p>
           </div>
         </div>
         <div className="row">
@@ -87,14 +89,20 @@ const ProductSale = () => {
                                 {product.name}
                               </Link>
                             </h3>
-                            {product?.variants?.map((item: any) => {
-                              return (
-                                <div className="pi01Price">
-                                  <ins>{item.regular_price}VND</ins>
-                                  <del>{item.sale_price}VND</del>
-                                </div>
-                              );
-                            })}
+                            <div className="pi01Price">
+                              <ins>
+                                {product?.sale_price
+                                  ? product?.sale_price
+                                  : product?.regular_price}
+                                VND
+                              </ins>
+                              <del>
+                                {product?.sale_price
+                                  ? product?.regular_price 
+                                  : ""}
+                                {"0"}VND
+                              </del>
+                            </div>
                           </div>
                         </div>
                       </div>

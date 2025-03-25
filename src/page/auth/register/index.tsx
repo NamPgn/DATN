@@ -5,7 +5,6 @@ import { useMutation } from "react-query";
 import { register } from "../../../sevices/users";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import 'ionicons';
 
 const { useToken } = theme;
 const { useBreakpoint } = Grid;
@@ -16,25 +15,40 @@ export default function Register() {
   const screens = useBreakpoint();
   const navigate = useNavigate();
   const styles: any = {
+    logo: {
+      width: "100px",
+      objectFit: "cover",
+    },
     section: {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-        backgroundColor: '#F5F5F5',
+      display: "flex",
+      height: "100vh",
+      backgroundColor: token.colorBgContainer,
+    },
+    imageContainer: {
+      flex: "60%",
+      background: "url('/assets/images/slider/3.jpg') center/cover no-repeat",
     },
     formContainer: {
-        margin: token.marginLG,
-        padding: screens.md ? `${token.sizeXXL}px` : `${token.padding}px`,
-        backgroundColor: '#FFF',
-        borderRadius: '8px', // Tuỳ chỉnh bo góc nếu cần
-        boxShadow: '0 4px 50px rgba(0,0,0,.15)', // Tạo bóng cho container
-        width: '100%',
-        maxWidth: '500px',
+      flex: "40%",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: screens.md ? `${token.sizeXXL}px` : `${token.padding}px`,
     },
-    title: {
+    formContent: {
+      width: "100%",
+      maxWidth: "380px",
+    },
+    header: {
       textAlign: "center",
       marginBottom: token.marginXL,
+    },
+    iconText: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: "8px",
     },
     text: {
       color: token.colorTextSecondary,
@@ -56,7 +70,7 @@ export default function Register() {
       toast.success(data?.message, {
         position: "top-center",
       });
-      navigate("/auth/login");
+      navigate("/");
     },
     onError: ({ response }) => {
       toast.error(response?.data?.message);
@@ -69,14 +83,19 @@ export default function Register() {
 
   return (
     <section style={styles.section}>
-      <div className="animation" style={styles.formContainer}>
+      <div style={styles.formContainer}>
         <div style={styles.formContent}>
-          <div style={styles.title}>
+          <div style={styles.header}>
             <div style={styles.iconText}>
-              <Title level={2} style={{ margin: 0, fontSize: "40px" }}>
-                ĐĂNG KÝ
+              <img style={styles.logo} src="/assets/images/logo.png" alt="" />
+              <Title level={2} style={{ margin: 0 }}>
+                Sign in
               </Title>
             </div>
+            <Text style={styles.text}>
+              Welcome back to AntBlocks UI! Please enter your details below to
+              sign in.
+            </Text>
           </div>
           <Form
             name="normal_login"
@@ -86,17 +105,17 @@ export default function Register() {
           >
             <Form.Item
               name="name"
-              rules={[{ required: true, message: "Hãy nhập tên đầy đủ!" }]}
+              rules={[{ required: true, message: "Xin vui lòng nhập Name!" }]}
             >
-              <Input prefix={<UserOutlined />} placeholder="Họ và tên" style={{ fontSize: '16px' }} />
+              <Input prefix={<UserOutlined />} placeholder="Name" />
             </Form.Item>
             <Form.Item
               name="username"
               rules={[
-                { required: true, message: "Tên đăng nhập không được bỏ trống!" },
+                { required: true, message: "Xin vui lòng nhập Username!" },
               ]}
             >
-              <Input prefix={<UserOutlined />} placeholder="Tên đăng nhập" style={{ fontSize: '16px' }} />
+              <Input prefix={<UserOutlined />} placeholder="Username" />
             </Form.Item>
             <Form.Item
               name="email"
@@ -104,29 +123,28 @@ export default function Register() {
                 {
                   type: "email",
                   required: true,
-                  message: "Hãy nhập email của bạn!",
+                  message: "Xin vui lòng nhập Email!",
                 },
               ]}
             >
-              <Input prefix={<MailOutlined />} placeholder="E-mail" style={{ fontSize: '16px' }} />
+              <Input prefix={<MailOutlined />} placeholder="Email" />
             </Form.Item>
             <Form.Item
               name="password"
               rules={[
                 {
                   required: true,
-                  message: "Hãy nhập mật khẩu!",
+                  message: "Xin vui lòng nhập Password!",
                 },
                 {
                   min: 8,
-                  message: "Mật khẩu tối thiểu 8 ký tự",
+                  message: "Password tối thiểu 8 ký tự",
                 },
               ]}
             >
               <Input.Password
                 prefix={<LockOutlined />}
-                placeholder="Mật khẩu"
-                style={{ fontSize: '16px' }}
+                placeholder="Password"
               />
             </Form.Item>
             <Form.Item
@@ -137,18 +155,18 @@ export default function Register() {
                 {
                   required: true,
 
-                  message: "Vui lòng xác nhận mật khẩu!",
+                  message: "Xin vui lòng nhập Password!",
                 },
                 {
                   min: 8,
-                  message: "Mật khẩu tối thiểu 8 ký tự",
+                  message: "Password tối thiểu 8 ký tự",
                 },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
                     if (!value || getFieldValue("password") === value) {
                       return Promise.resolve();
                     } else {
-                      return Promise.reject(new Error("Mật khẩu không trùng khớp!"));
+                      return Promise.reject(new Error("Mật Khẩu Không Khớp!"));
                     }
                   },
                 }),
@@ -156,18 +174,22 @@ export default function Register() {
             >
               <Input.Password
                 prefix={<LockOutlined />}
-                placeholder="Xác nhận mật khẩu"
-                style={{ fontSize: '16px' }}
+                placeholder="Password"
               />
             </Form.Item>
-            <Form.Item style={{marginTop: '40px'}}>
-              <Button block type="primary" htmlType="submit"
-                style={{ paddingTop: '20px', paddingBottom: '22px', fontSize: '16px', fontWeight: 'bold'}}>
-                Đăng ký
+
+            <Form.Item>
+              <Link style={styles.forgotPassword} href="/auth/forgot-password">
+                Forgot password?
+              </Link>
+            </Form.Item>
+            <Form.Item>
+              <Button block type="primary" htmlType="submit">
+                Register
               </Button>
               <div style={styles.footer}>
-                <Text style={styles.text}>Bạn đã có tài khoản?</Text>
-                <Link className="hover-underline" style={{ color: 'red', fontWeight: 'bold', marginLeft: '6px' }} href="/auth/login">Đăng nhập</Link>
+                <Text style={styles.text}>Do have an account?</Text>{" "}
+                <Link href="/auth/login">Login now</Link>
               </div>
             </Form.Item>
           </Form>

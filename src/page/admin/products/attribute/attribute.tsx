@@ -65,26 +65,18 @@ const Attribute = () => {
         child: item.children,
         stt: item.id,
         name: <Link to={"/q/" + item.id}>{item.name}</Link>,
-        slug: item.slug,
-        createAt: item.createdAt,
-        isActive:
-          item.isActive == 0 ? (
-            <Tag color="warning">isPending</Tag>
-          ) : (
-            <Tag color="success">Done</Tag>
-          ),
         action: (
           <div className="d-flex gap-1">
             <Link to={`/dashboard/attribute/edit/${item.id}`}>
-              <MyButton type="primary">Edit</MyButton>
+              <MyButton type="primary">Sửa</MyButton>
             </Link>
             <MVConfirm title="Có xóa không" onConfirm={() => mutate(item.id)}>
               <MyButton danger className="ml-2">
-                Delete
+                Xóa
               </MyButton>
             </MVConfirm>
             <Link to={`/dashboard/attributeValue/${item.id}`}>
-              <MyButton>Attribute Value</MyButton>
+              <MyButton>Giá trị thuộc tính</MyButton>
             </Link>
           </div>
         ),

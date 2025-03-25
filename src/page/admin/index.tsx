@@ -1,75 +1,142 @@
-import { Bar, Line } from "react-chartjs-2";
+import { Bar, Doughnut, Pie } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale,
+} from "chart.js";
+import TailwindComponent from "../../components/Tailwind/TailwinComponent";
+import { useQuery } from "react-query";
+import { dashboard } from "../../sevices";
+import OrdersNotify from "../../components/UI/Notification";
 
-const Admin = () => {
-  const barData = {
-    labels: [
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-    ],
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale
+);
+
+const Dashboard = () => {
+  const { data, isLoading }: any = useQuery({
+    queryKey: ["Orders"],
+    queryFn: async () => {
+      return (await dashboard()).data?.data;
+    },
+  });
+
+ 
+
+  const categoryByProductData = {
+    labels: data?.productByCategory.map((c: any) => c.name),
     datasets: [
       {
-        label: "Sales",
-        backgroundColor: "rgba(75,192,192,0.4)",
-        borderColor: "rgba(75,192,192,1)",
-        borderWidth: 1,
-        hoverBackgroundColor: "rgba(75,192,192,0.6)",
-        hoverBorderColor: "rgba(75,192,192,1)",
-        data: [65, 59, 80, 81, 56, 55, 40, 70, 45],
+        label: "Total Products",
+        data: data?.productByCategory.map((c: any) => c.total_products),
+        backgroundColor: ["#ff6384", "#36a2eb", "#ffcd56", "#4bc0c0"],
       },
     ],
   };
+
+  const topSellingData = {
+    labels: data?.topSellingProducts.map((p: any) =>
+      p.product ? p.product.name : `Product ${p.product_id}`
+    ),
+    datasets: [
+      {
+        label: "Total Sold",
+        data: data?.topSellingProducts.map((p: any) => p.total_sold),
+        backgroundColor: "#36a2eb",
+      },
+    ],
+  };
+
+  const ratingData = {
+    labels: data?.ratingStatistics.map((r: any) => `Rating ${r.rating}`),
+    datasets: [
+      {
+        data: data?.ratingStatistics.map((r: any) => r.total_reviews),
+        backgroundColor: ["#ff6384", "#36a2eb", "#ffcd56", "#4bc0c0"],
+      },
+    ],
+  };
+
+  if (isLoading) {
+    return <>Đang tải</>;
+  }
   return (
-    <div className="dashboard">
-      <div className="stats">
-        <div className="stat">
-          <h3>Today's Sales</h3>
-          <p>
-            $53,000 <span className="increase">+30%</span>
-          </p>
+    <TailwindComponent>
+      <div className="p-6 bg-gray-100 min-h-screen">
+        <h1 className="text-3xl font-bold mb-6 text-gray-700">Dashboard</h1>
+        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-6">
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-lg font-semibold text-gray-700">
+              Total Categories
+            </h2>
+            <p className="text-2xl font-bold text-blue-500">
+              {data?.totalCategories}
+            </p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-lg font-semibold text-gray-700">
+              Total Products
+            </h2>
+            <p className="text-2xl font-bold text-green-500">
+              {data?.totalProducts}
+            </p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-lg font-semibold text-gray-700">Total Users</h2>
+            <p className="text-2xl font-bold text-red-500">
+              {data?.totalUsers}
+            </p>
+          </div>
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-lg font-semibold text-gray-700">Total Order</h2>
+            <p className="text-2xl font-bold text-yellow-400">
+              {data?.totalOrders}
+            </p>
+          </div>
+
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <h2 className="text-lg font-semibold text-gray-700">
+              Total Revenue
+            </h2>
+            <p className="text-2xl font-bold text-green-500">
+              {Number(data?.totalRevenue).toLocaleString("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              })}
+            </p>
+          </div>
         </div>
-        <div className="stat">
-          <h3>Today's Users</h3>
-          <p>
-            3,200 <span className="increase">+20%</span>
-          </p>
-        </div>
-        <div className="stat">
-          <h3>New Clients</h3>
-          <p>
-            +1,200 <span className="decrease">-20%</span>
-          </p>
-        </div>
-        <div className="stat">
-          <h3>New Orders</h3>
-          <p>
-            $13,200 <span className="increase">+10%</span>
-          </p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-white p-6 shadow rounded-lg">
+            <h2 className="text-xl font-bold mb-4 text-gray-700">Overview</h2>
+            <Doughnut data={categoryByProductData} />
+          </div>
+          <div className="bg-white p-6 shadow rounded-lg">
+            <h2 className="text-xl font-bold mb-4 text-gray-700">
+              Top Selling Products
+            </h2>
+            <Bar data={topSellingData} />
+          </div>
+          <div className="bg-white p-6 shadow rounded-lg">
+            <h2 className="text-xl font-bold mb-4 text-gray-700">
+              Rating Distribution
+            </h2>
+            <Pie data={ratingData} />
+          </div>
         </div>
       </div>
-      <div className="additional-stats">
-        <p>
-          Active Users than last week <span className="increase">+30%</span>
-        </p>
-        <p>
-          We have created multiple options for you to put together and customize
-          into pixel perfect pages.
-        </p>
-        <ul>
-          <li>3.6K Users</li>
-          <li>2m Clicks</li>
-          <li>$772 Sales</li>
-          <li>82 Items</li>
-        </ul>
-      </div>
-    </div>
+      <OrdersNotify/>
+    </TailwindComponent>
   );
 };
 
-export default Admin;
+export default Dashboard;

@@ -1,23 +1,52 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery } from "react-query";
 import { getProductsByCategory } from "../../sevices/client";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useCallback, useState } from "react";
 import "rc-slider/assets/index.css";
-import PriceRange from "./productAll/changeRange";
 import debounce from "lodash.debounce";
 import Loading from "../../components/Loading/Loading";
 import Paginations from "./components/pagination";
+import {
+  getCategory,
+  getProductByCategory,
+} from "../../sevices/client/category";
+import PriceRange from "./productAll/changeRange";
 
 const Shop = () => {
+  const { id }: any = useParams();
   const [currentPage, setCurrentPage] = useState("?page=1");
   const [openOption, setopenOption] = useState(false);
-
+  const [active, setActive] = useState(false);
+  const [selectedValue, setSelectedValue] = useState(`${currentPage}`);
   const handleClickOption = () => {
     setopenOption((open) => !open);
   };
+  const { data: products, isLoading }: any = useQuery({
+    queryKey: ["products", currentPage, selectedValue],
+    queryFn: async () => {
+      return (await getProductsByCategory(`${selectedValue}`)).data;
+    },
+  });
+
+  const options = [
+    { label: "Default", value: "" },
+    { label: "High to low", value: "?sort_by=high_to_low" },
+    { label: "Low to high", value: "?sort_by=low_to_high" },
+    { label: "Top rated", value: "?sort_by=top_rated" },
+  ];
+  const handleChange = (e: any) => {
+    console.log(e);
+  };
+
+  const handleSelect = (value: string) => {
+    setSelectedValue(value);
+    console.log(`?page=1${value}`);
+  };
 
   const debouncedSetPrice = useCallback(
-    debounce((value) => {
+    debounce((value: any) => {
       const [min, max] = value;
       setCurrentPage(`?min_price=${min}&max_price=${max}`);
     }, 1000),
@@ -28,17 +57,26 @@ const Shop = () => {
     debouncedSetPrice(value);
   };
 
-  const { data: products, isLoading }: any = useQuery({
-    queryKey: ["products", currentPage],
+  const { data: categoriesByProduct }: any = useQuery({
+    queryKey: ["categories", id],
     queryFn: async () => {
-      return (await getProductsByCategory(currentPage)).data;
+      return (await getProductByCategory(id)).data;
     },
   });
 
-  const totalItems = products?.total; // Tổng số sản phẩm
-  const itemsPerPage = 9; // Số sản phẩm trên mỗi trang
+  const { data: category }: any = useQuery({
+    queryKey: ["c"],
+    queryFn: async () => {
+      return (await getCategory()).data;
+    },
+  });
+  const totalItems = products?.total;
+  const itemsPerPage = 9;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
-
+  const handleActive = () => {
+    setActive((active) => !active);
+  };
+  console.log(category);
   return (
     <>
       <section className="shopPageSection shopPageHasSidebar">
@@ -49,79 +87,32 @@ const Shop = () => {
                 <aside className="widget">
                   <h3 className="widgetTitle">Item Categories</h3>
                   <ul>
-                    <li className="menu-item-has-children">
-                      <a href="javascript:void(0);">Accessories</a>
-                      <ul>
-                        <li>
-                          <a href="shop_full_width.html">Bag</a>
+                    {category?.map((item: any) => {
+                      return (
+                        <li
+                          className={
+                            "menu-item-has-children " +
+                            `${active ? "active" : ""}`
+                          }
+                          onClick={handleActive}
+                        >
+                          <a href="javascript:void(0);">{item?.name}</a>
+                          <ul
+                            style={{ display: `${active ? "block" : "none"}` }}
+                          >
+                            {item?.children.map((item: any) => {
+                              return (
+                                <li>
+                                  <Link to={`/shop/${item?.id}`}>
+                                    {item?.name}
+                                  </Link>
+                                </li>
+                              );
+                            })}
+                          </ul>
                         </li>
-                        <li>
-                          <a href="shop_left_sidebar.html">wallet</a>
-                        </li>
-                        <li>
-                          <a href="shop_right_sidebar.html">Hat</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li className="menu-item-has-children">
-                      <a href="javascript:void(0);">Fashions</a>
-                      <ul>
-                        <li>
-                          <a href="shop_full_width.html">Men</a>
-                        </li>
-                        <li>
-                          <a href="shop_left_sidebar.html">Women</a>
-                        </li>
-                        <li>
-                          <a href="shop_right_sidebar.html">Kids</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">Electronics</a>
-                    </li>
-                    <li className="menu-item-has-children">
-                      <a href="javascript:void(0);">Furniture</a>
-                      <ul>
-                        <li>
-                          <a href="shop_full_width.html">Living</a>
-                        </li>
-                        <li>
-                          <a href="shop_left_sidebar.html">Kitchen</a>
-                        </li>
-                        <li>
-                          <a href="shop_right_sidebar.html">Office</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">Shoes</a>
-                    </li>
-                    <li className="menu-item-has-children">
-                      <a href="javascript:void(0);">Jewellary</a>
-                      <ul>
-                        <li>
-                          <a href="shop_full_width.html">Gold</a>
-                        </li>
-                        <li>
-                          <a href="shop_left_sidebar.html">Diamond</a>
-                        </li>
-                        <li>
-                          <a href="shop_right_sidebar.html">Imitation</a>
-                        </li>
-                      </ul>
-                    </li>
-                    <li className="menu-item-has-children">
-                      <a href="javascript:void(0);">Others</a>
-                      <ul>
-                        <li>
-                          <a href="shop_full_width.html">Electronics</a>
-                        </li>
-                        <li>
-                          <a href="shop_left_sidebar.html">Phone</a>
-                        </li>
-                      </ul>
-                    </li>
+                      );
+                    })}
                   </ul>
                 </aside>
                 <PriceRange
@@ -257,46 +248,68 @@ const Shop = () => {
                     <strong>{products?.total}</strong> items
                   </div>
                 </div>
-                <div className="col-sm-6">
+                <div className="col-sm-6 col-xl-4">
                   <div className="shopAccessBar">
+                    <div className="filterNav">
+                      <a href="javascript:void(0);">
+                        Filter
+                        <i className="fa-solid fa-sliders" />
+                      </a>
+                    </div>
                     <div className="sortNav">
-                      <form method="post" action="#">
+                      <div>
                         <label>Sort By</label>
                         <select
                           name="productFilter"
                           style={{ display: "none" }}
+                          onChange={(e) => handleChange(e.target.value)}
                         >
-                          <option value="">Default</option>
-                          <option value={1}>High to low</option>
-                          <option value={2}>Low to high</option>
-                          <option value={3}>Top rated</option>
-                          <option value={4}>Recently viewed</option>
+                          <option value={`?page=${currentPage}`}>
+                            Default
+                          </option>
+                          <option value={`?sort_by=high_to_low`}>
+                            High to low
+                          </option>
+                          <option value={`?sort_by=low_to_high`}>
+                            Low to high
+                          </option>
+                          <option value={`?sort_by=top_rated`}>
+                            Top rated
+                          </option>
                         </select>
                         <div
                           className={`nice-select ${openOption ? "open" : ""}`}
                           onClick={handleClickOption}
                           tabIndex={0}
                         >
-                          <span className="current">Default</span>
-                          <ul className="list">
-                            <li data-value="" className="option selected">
-                              Default
-                            </li>
-                            <li data-value={1} className="option">
-                              High to low
-                            </li>
-                            <li data-value={2} className="option">
-                              Low to high
-                            </li>
-                            <li data-value={3} className="option">
-                              Top rated
-                            </li>
-                            <li data-value={4} className="option">
-                              Recently viewed
-                            </li>
+                          <span className="current">
+                            {
+                              options.find((opt) => opt.value === selectedValue)
+                                ?.label
+                            }
+                          </span>
+                          <ul
+                            className={`list ${
+                              openOption ? "block" : "hidden"
+                            }`}
+                          >
+                            {options.map((option) => (
+                              <li
+                                key={option.value}
+                                data-value={option.value}
+                                className={`option ${
+                                  selectedValue === option.value
+                                    ? "selected"
+                                    : ""
+                                }`}
+                                onClick={() => handleSelect(option.value)}
+                              >
+                                {option.label}
+                              </li>
+                            ))}
                           </ul>
                         </div>
-                      </form>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -395,20 +408,12 @@ const Shop = () => {
                                               {product.name}
                                             </Link>
                                           </h3>
-                                          {product?.variants?.map(
-                                            (item: any) => {
-                                              return (
-                                                <div className="pi01Price">
-                                                  <ins>
-                                                    {item.regular_price}VND
-                                                  </ins>
-                                                  <del>
-                                                    {item.sale_price}VND
-                                                  </del>
-                                                </div>
-                                              );
-                                            }
-                                          )}
+                                          <div className="pi01Price">
+                                            <ins>{product.sale_price}VND</ins>
+                                            <del>
+                                              {product.regular_price}VND
+                                            </del>
+                                          </div>
                                         </div>
                                       </div>
                                     </div>

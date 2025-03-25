@@ -7,75 +7,79 @@ import {
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
+export const socialLinks = [
+  { platform: "facebook", icon: "fa-facebook-f", color: "#3b5998" },
+  { platform: "twitter", icon: "fa-twitter", color: "#00acee" },
+  { platform: "linkedin", icon: "fa-linkedin-in", color: "#0077b5" },
+  { platform: "instagram", icon: "fa-instagram", color: "#e4405f" },
+];
+
 export const URLSECTION = [
   {
-    PATH: "/team",
-    SECTTIONTITLE: "Team Members",
-  },
-  {
     PATH: "/about",
-    SECTTIONTITLE: "About Ulina",
+    SECTTIONTITLE: "Giới Thiệu",
   },
   {
     PATH: "/team",
-    SECTTIONTITLE: "ABOUT",
+    SECTTIONTITLE: "Đội Ngũ",
   },
   {
     PATH: "/shop",
-    SECTTIONTITLE: "Shop",
+    SECTTIONTITLE: "Cửa Hàng",
   },
   {
     PATH: "/products",
-    SECTTIONTITLE: "Products",
+    SECTTIONTITLE: "Sản Phẩm",
   },
   {
     PATH: "/cart",
-    SECTTIONTITLE: "Shopping Cart",
+    SECTTIONTITLE: "Giỏ Hàng",
   },
   {
     PATH: "/product/detail",
-    SECTTIONTITLE: "Product Detail",
+    SECTTIONTITLE: "Chi Tiết Sản Phẩm",
   },
   {
     PATH: "/contact",
-    SECTTIONTITLE: "Contact",
+    SECTTIONTITLE: "Liên Hệ",
   },
   {
     PATH: "/checkout",
-    SECTTIONTITLE: "Checkout",
+    SECTTIONTITLE: "Thanh Toán",
   },
   {
     PATH: "/profile",
-    SECTTIONTITLE: "Account Setting",
+    SECTTIONTITLE: "Thông Tin",
   },
 ];
 
 export const BreadcrumbRouterAdminPage = [
   {
-    title: <Link to="/dashboard">Home</Link>,
+    title: <Link to="/dashboard">Trang chủ</Link>,
     icon: <DashboardOutlined />,
     href: "/dashboard",
     name: "Admin",
   },
   {
-    title: <Link to="/dashboard/products">Products</Link>,
+    title: <Link to="/dashboard/products">Sản phẩm</Link>,
     icon: <NotificationOutlined />,
     href: "/dashboard/products",
     name: "Products",
   },
   {
-    title: <Link to="/dashboard/products">Category</Link>,
+    title: <Link to="/dashboard/category">Danh mục</Link>,
     icon: <SlidersOutlined />,
     href: "/dashboard/category",
     name: "Category",
   },
   {
     href: "category/deleted",
-    title: <Link to="category/deleted">Category</Link>,
+    title: <Link to="category/deleted">Đã xoá</Link>,
     icon: <ControlOutlined />,
     name: "Deleted",
   },
 ];
+
 export const columnsCategory = [
   {
     title: "Stt",
@@ -123,13 +127,13 @@ export const columnsCategory = [
 
 export const columnsProducts = [
   {
-    title: "Name",
+    title: "Tên sản phẩm",
     dataIndex: "name",
     key: "name",
     width: 300,
   },
   {
-    title: "Main Image",
+    title: "Ảnh chính",
     dataIndex: "main_image",
     key: "main_image",
     width: 100,
@@ -141,18 +145,18 @@ export const columnsProducts = [
     width: 300,
   },
   {
-    title: "Url",
+    title: "URL",
     dataIndex: "url",
     key: "url",
     width: 250,
   },
   {
-    title: "Categories Name",
+    title: "Danh mục",
     dataIndex: "categoryName",
     key: "categoryName",
   },
   {
-    title: "Action",
+    title: "Hành động",
     dataIndex: "action",
     key: "action",
     fixed: "right",
@@ -207,7 +211,7 @@ export const columnsProductVariant = [
 
 export const columnsATTR = [
   {
-    title: "Stt",
+    title: "STT",
     dataIndex: "stt",
     key: "stt",
     width: 100,
@@ -217,13 +221,13 @@ export const columnsATTR = [
     sortDirections: ["descend"],
   },
   {
-    title: "Name",
+    title: "Tên",
     dataIndex: "name",
     key: "name",
     width: 100,
   },
   {
-    title: "Action",
+    title: "Hành động",
     dataIndex: "action",
     key: "action",
     width: 100,
@@ -242,37 +246,37 @@ export const columnsComments = [
     sortDirections: ["descend"],
   },
   {
-    title: "Content",
+    title: "Nội dung",
     dataIndex: "content",
     key: "content",
     width: 100,
   },
   {
-    title: "User id",
+    title: "Mã người dùng",
     dataIndex: "user_id",
     key: "user_id",
     width: 100,
   },
   {
-    title: "Product id",
+    title: "ID Sản phẩm",
     dataIndex: "product_id",
     key: "product_id",
     width: 100,
   },
   {
-    title: "Active",
+    title: "Trạng thái",
     dataIndex: "is_active",
     key: "is_active",
     width: 100,
   },
   {
-    title: "Rating",
+    title: "Đánh giá",
     dataIndex: "rating",
     key: "rating",
     width: 100,
   },
   {
-    title: "Action",
+    title: "Hành động",
     dataIndex: "action",
     key: "action",
     width: 150,
@@ -291,49 +295,61 @@ export const columnsVouchers = [
     sortDirections: ["descend"],
   },
   {
-    title: "Code",
+    title: "Mã Voucher",
     dataIndex: "code",
     key: "code",
     width: 100,
   },
   {
-    title: "Name",
+    title: "Tên Voucher",
     dataIndex: "name",
     key: "name",
     width: 100,
   },
   {
-    title: "Description",
+    title: "Mô tả",
     dataIndex: "description",
     key: "description",
     width: 100,
   },
   {
-    title: "Type",
+    title: "Loại Giảm Giá",
     dataIndex: "type",
     key: "type",
     width: 100,
+    render: (type: number) =>
+      type === 0 ? "Giảm theo số tiền" : "Giảm theo phần trăm",
   },
   {
-    title: "Usage Limit",
+    title: "Loại Voucher",
+    dataIndex: "for_logged_in_users",
+    key: "for_logged_in_users",
+    width: 150,
+    render: (userType: number | string) =>
+      Number(userType) === 1
+        ? "Chỉ dành cho người dùng đã đăng nhập"
+        : "Mọi người đều có thể sử dụng",
+  },
+  {
+    title: "Số Lượng",
     dataIndex: "usage_limit",
     key: "usage_limit",
     width: 100,
   },
   {
-    title: "Start Date",
+    title: "Ngày Tạo",
     dataIndex: "start_date",
     key: "start_date",
     width: 100,
   },
   {
-    title: "Expiry Date",
+    title: "Ngày Hết Hạn",
     dataIndex: "expiry_date",
     key: "expiry_date",
     width: 100,
   },
   {
-    title: "Action",
+    title: "Hoạt Động",
     dataIndex: "action",
     key: "action",
     width: 150,
@@ -351,13 +367,13 @@ export const columnsImageList = [
     sortDirections: ["descend"],
   },
   {
-    title: "Image",
+    title: "Ảnh",
     dataIndex: "image",
     key: "image",
     width: 100,
   },
   {
-    title: "Action",
+    title: "Hành động",
     dataIndex: "action",
     key: "action",
     width: 100,
@@ -366,42 +382,42 @@ export const columnsImageList = [
 
 export const columnsOrders = [
   {
-    title: "Code",
+    title: "Mã đơn hàng",
     dataIndex: "code",
     key: "code",
   },
   {
-    title: "Name",
+    title: "Tên khách hàng",
     dataIndex: "o_name",
     key: "o_name",
   },
   {
-    title: "Phone",
+    title: "Số điện thoại",
     dataIndex: "o_phone",
     key: "o_phone",
   },
   {
-    title: "Final Amount",
+    title: "Tổng tiền",
     dataIndex: "final_amount",
     key: "final_amount",
   },
   {
-    title: "Payment Method",
+    title: "Phương thức thanh toán",
     dataIndex: "payment_method",
     key: "payment_method",
   },
   {
-    title: "Payment Status",
+    title: "Trạng thái thanh toán",
     dataIndex: "stt_payment",
     key: "stt_payment",
   },
   {
-    title: " Status Track",
+    title: "Trạng thái vận chuyển",
     dataIndex: "stt_track",
     key: "stt_track",
   },
   {
-    title: "Action",
+    title: "Hành động",
     dataIndex: "action",
     key: "action",
     fixed: "right",
@@ -421,12 +437,12 @@ export const STATUSOPTIONS = [
 
 export const COLUMN_TABLE_USERS = [
   {
-    title: "Name",
+    title: "Tên",
     dataIndex: "name",
     key: "name",
   },
   {
-    title: "User Name",
+    title: "Tên người dùng",
     dataIndex: "username",
     key: "username",
   },
@@ -436,22 +452,22 @@ export const COLUMN_TABLE_USERS = [
     key: "email",
   },
   {
-    title: "Customer",
+    title: "Khách hàng",
     dataIndex: "customer",
     key: "customer",
   },
   {
-    title: "Role",
+    title: "Vai trò",
     dataIndex: "role",
     key: "role",
   },
   {
-    title: "Active",
+    title: "Trạng thái",
     dataIndex: "is_active",
     key: "is_active",
   },
   {
-    title: "Action",
+    title: "Hành động",
     key: "action",
     dataIndex: "action",
     width: 100,
@@ -471,3 +487,10 @@ export interface Product {
     stock_quantity?: number;
   }[];
 }
+
+export const REASONS = [
+  "Vi phạm điều khoản sử dụng",
+  "Spam hoặc gửi tin rác",
+  "Hành vi gian lận",
+  "Báo cáo từ người dùng khác",
+];

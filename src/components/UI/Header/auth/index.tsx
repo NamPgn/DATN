@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useContext } from "react";
+import { useContext } from "react";
 import {
-  LikeOutlined,
+  LineChartOutlined,
   LogoutOutlined,
+  SettingOutlined,
   SmileOutlined,
   UserOutlined,
-  UsergroupAddOutlined,
 } from "@ant-design/icons";
 import { Popover } from "antd";
 import { Link, useNavigate } from "react-router-dom";
@@ -16,63 +16,41 @@ import MVTitle from "../../Core/MV/Title";
 import { MVAvatar } from "../../Core/Avatar";
 import { toast } from "react-toastify";
 import { UsersContext } from "../../../../context/usersContext";
+import { useCart } from "../../../../context/Cart/cartContext";
 const AuthHeader = () => {
   const { isLogin, setIslogin, token }: any = useContext(UsersContext) || {};
-  const handleCheckCart = () => {
-    // if (!user) {
-    //   MVError("Bạn cần đăng nhập!");
-    // } else {
-    //   navigate("/cart/user");
-    // }
-  };
+  const { mutate }: any = useCart();
   const nav = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("isLogin");
+    localStorage.removeItem("checkId");
+    localStorage.removeItem("cart");
+    mutate();
     toast.success("Đăng xuất thành công");
     setIslogin(false);
     nav("/");
   };
 
   return (
-    <React.Fragment>
+    <>
       {token?.user || isLogin == true ? (
         <Popover
-          placement="bottomRight"
+          placement="bottom"
           content={
             <>
               <Link to={"/profile"}>
                 <MVRow style={{ lineHeight: "0" }} align={"middle"} gutter={12}>
                   <MVCol>
-                    <UsergroupAddOutlined />
+                    <SettingOutlined />
                   </MVCol>
                   <MVCol>
                     <MVText level={6} className="auth">
-                      Your profile
+                      Cài đặt
                     </MVText>
                   </MVCol>
                 </MVRow>
               </Link>
-              <MVRow
-                style={{ lineHeight: "0" }}
-                align={"middle"}
-                gutter={[12, 12]}
-              >
-                <MVCol>
-                  <LikeOutlined />
-                </MVCol>
-                <MVCol>
-                  <MVText
-                    style={{
-                      cursor: "pointer",
-                    }}
-                    onClick={handleCheckCart}
-                    className="auth"
-                  >
-                    Saved
-                  </MVText>
-                </MVCol>
-              </MVRow>
               {token?.user && token?.user?.role == "admin" && (
                 <Link to={"/dashboard"}>
                   <MVRow
@@ -81,10 +59,10 @@ const AuthHeader = () => {
                     gutter={[12, 12]}
                   >
                     <MVCol>
-                      <UserOutlined />
+                    <LineChartOutlined />
                     </MVCol>
                     <MVCol>
-                      <MVText className="auth">Admin</MVText>
+                      <MVText className="auth">Quản trị</MVText>
                     </MVCol>
                   </MVRow>
                 </Link>
@@ -104,7 +82,7 @@ const AuthHeader = () => {
                     }}
                     onClick={handleLogout}
                   >
-                    Logout
+                    Đăng xuất
                   </MVText>
                 </MVCol>
               </MVRow>
@@ -127,7 +105,7 @@ const AuthHeader = () => {
             className="text-center"
             title={token?.user?.name}
             size={"sm"}
-            src={token?.user?.library?.url}
+            src={token?.user?.avatar}
           />
         </Popover>
       ) : (
@@ -167,7 +145,7 @@ const AuthHeader = () => {
           />
         </Popover>
       )}
-    </React.Fragment>
+    </>
   );
 };
 

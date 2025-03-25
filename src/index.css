@@ -1,3 +1,5 @@
+
+
 .slick-list {
   margin-top: 100px !important;
 }
@@ -67,4 +69,8 @@ a {
 
 .variant-btn:hover {
   background-color: #e0e0e0;
+}
+
+:where(.css-dev-only-do-not-override-mzhxf2).ant-row-middle{
+  padding: 3px 0;
 }

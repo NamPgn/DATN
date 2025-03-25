@@ -42,7 +42,7 @@ const ImageList = () => {
 
   const data =
     imageList &&
-    imageList?.map((item: any, index: number) => {
+    imageList?.map((item: any) => {
       return {
         key: item.id,
         child: item.children,
@@ -52,7 +52,7 @@ const ImageList = () => {
           <div className="d-flex gap-1">
             <MVConfirm title="Có xóa không" onConfirm={() => mutate(item.id)}>
               <MyButton danger className="ml-2">
-                Delete
+                Xóa
               </MyButton>
             </MVConfirm>
           </div>

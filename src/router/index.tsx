@@ -3,6 +3,7 @@ import {
   CommentOutlined,
   ControlOutlined,
   DashboardOutlined,
+  DeleteOutlined,
   FileImageOutlined,
   GiftOutlined,
   LaptopOutlined,
@@ -65,9 +66,15 @@ import ResetPassword from "../page/auth/resetPassword";
 import AccountSetting from "../page/auth/account";
 import AddOrder from "../page/admin/orders/components/add";
 import SendOrder from "../page/admin/orders/components/send";
+import HiddenComment from "../page/admin/comments/hidden";
+import DeletedProducts from "../page/admin/products/component/deleted";
+import OrderHistory from "../page/orders/orderHistory";
+import ThankYou from "../page/orders/thank";
+import PaymentResult from "../page/checkout/components/paymentResult";
 import Shop from "../page/shop";
 import ProductAll from "../page/shop/productAll";
 import ProductSearch from "../page/shop/productSearch";
+import Layout from "../layouts/Layout";
 
 export const routerClient = [
   {
@@ -76,7 +83,11 @@ export const routerClient = [
     children: [
       {
         path: "/",
-        element: <HomePage />,
+        element: (
+          <LazyComponent>
+            <HomePage />
+          </LazyComponent>
+        ),
       },
       {
         path: "/about",
@@ -143,6 +154,24 @@ export const routerClient = [
       {
         path: "reset-password",
         element: <ResetPassword />,
+      },
+    ],
+  },
+  {
+    path: "o",
+    element: <Layout />,
+    children: [
+      {
+        path: "orders-history",
+        element: <OrderHistory />,
+      },
+      {
+        path: "thanks",
+        element: <ThankYou />,
+      },
+      {
+        path: "payment",
+        element: <PaymentResult />,
       },
     ],
   },
@@ -236,6 +265,10 @@ export const routerClient = [
         element: <CommentDetail />,
       },
       {
+        path: "comments/hidden",
+        element: <HiddenComment />,
+      },
+      {
         path: "product/:id/variants",
         element: <ProductVariant />,
         exact: true,
@@ -265,6 +298,7 @@ export const routerClient = [
         path: "orders/add",
         element: <AddOrder />,
       },
+
       {
         path: "orders/edit/:id",
         element: <EditOrder />,
@@ -301,6 +335,10 @@ export const routerClient = [
         path: "users/edit/:id",
         element: <EditUser />,
       },
+      {
+        path: "deleted",
+        element: <DeletedProducts />,
+      },
     ],
   },
   {
@@ -312,82 +350,87 @@ export const routerClient = [
 export const TableRouterAdminPage = [
   {
     path: "/dashboard",
-    name: "Admin",
+    name: "Trang chủ",
     icon: <DashboardOutlined />,
   },
   {
     path: "/dashboard/products",
-    name: "Products",
+    name: "Sản phẩm",
     icon: <NotificationOutlined />,
     children: [
       {
         path: "/dashboard/attribute",
-        name: "Attribute",
+        name: "Thuộc tính",
         icon: <UserOutlined />,
+      },
+      {
+        path: "/dashboard/deleted",
+        name: "Thùng rác",
+        icon: <DeleteOutlined />,
       },
     ],
   },
   {
-    name: "User",
+    name: "Người dùng",
     path: "/dashboard/users",
     icon: <PicLeftOutlined />,
     children: [
       {
         path: "/dashboard/users",
-        name: "Users",
+        name: "Danh sách người dùng",
         icon: <UserOutlined />,
       },
       {
         path: "/dashboard/adminUer",
-        name: "Admin",
+        name: "Quản trị viên",
         icon: <LaptopOutlined />,
       },
     ],
   },
   {
-    name: "Category",
+    name: "Danh mục",
     icon: <SlidersOutlined />,
     path: "/dashboard/category",
     children: [
       {
         path: "/dashboard/category/deleted",
         icon: <ControlOutlined />,
-        name: "Deleted",
+        name: "Đã xóa",
       },
     ],
   },
   {
-    name: "Comment",
+    name: "Bình luận",
     icon: <CommentOutlined />,
     path: "/dashboard/comments",
     children: [
       {
         path: "/dashboard/category/deleted",
         icon: <ControlOutlined />,
-        name: "Deleted",
+        name: "Đã xóa",
       },
     ],
   },
   {
-    name: "Voucher",
+    name: "Mã giảm giá",
     icon: <GiftOutlined />,
     path: "/dashboard/vouchers",
     children: [
       {
         path: "/dashboard/category/deleted",
         icon: <ControlOutlined />,
-        name: "Deleted",
+        name: "Đã xóa",
       },
     ],
   },
   {
-    name: "Orders",
+    name: "Đơn hàng",
     icon: <BorderBottomOutlined />,
     path: "/dashboard/orders",
   },
   {
     path: "/dashboard/product/image",
-    name: "Image List",
+    name: "Danh sách ảnh",
     icon: <FileImageOutlined />,
   },
 ];

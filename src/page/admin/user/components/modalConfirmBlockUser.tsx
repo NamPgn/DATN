@@ -1,15 +1,11 @@
 import { Modal, Checkbox, Input, Button } from "antd";
 import { useState } from "react";
+import { REASONS } from "../../../../constant";
 
 const { TextArea } = Input;
 
 const BlockAccountModal = ({ visible, onCancel, onSubmit }:any) => {
-  const reasons = [
-    "Vi phạm điều khoản sử dụng",
-    "Spam hoặc gửi tin rác",
-    "Hành vi gian lận",
-    "Báo cáo từ người dùng khác",
-  ];
+
 
   const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
   const [otherReason, setOtherReason] = useState("");
@@ -41,7 +37,7 @@ const BlockAccountModal = ({ visible, onCancel, onSubmit }:any) => {
       ]}
     >
       <Checkbox.Group value={selectedReasons} onChange={handleChange}>
-        {reasons.map((reason) => (
+        {REASONS?.map((reason) => (
           <Checkbox
             key={reason}
             value={reason}

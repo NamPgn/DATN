@@ -1,4 +1,5 @@
-/* @import url('https://fonts.googleapis.com/css?family=Oswald');
+@import url('https://fonts.googleapis.com/css?family=Oswald');
+
 * {
     margin: 0;
     padding: 0;
@@ -26,13 +27,13 @@ h1 {
     margin-bottom: 30px
 }
 
-.row {
+/* .row {
     overflow: hidden
-}
+} */
 
 .card {
     display: table-row;
-    width: 49%;
+    width: 31%;
     background-color: #fff;
     color: #989898;
     margin-bottom: 10px;
@@ -40,10 +41,6 @@ h1 {
     text-transform: uppercase;
     border-radius: 4px;
     position: relative
-}
-
-.card+.card {
-    margin-left: 2%
 }
 
 .date {
@@ -127,9 +124,6 @@ h1 {
     padding: 5% 5% 0 0
 }
 
-.card-cont .even-info p {
-    padding: 30px 50px 0 0
-}
 
 .card-cont .even-date time span {
     display: block
@@ -165,11 +159,13 @@ h1 {
         width: 100%;
         margin-bottom: 10px
     }
+
     .card+.card {
         margin-left: 0
     }
+
     .card-cont .even-date,
     .card-cont .even-info {
         font-size: 75%
     }
-} */
+}

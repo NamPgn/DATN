@@ -1,96 +1,19 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo, useState } from "react";
 import Description from "./description";
 import { Link, useParams } from "react-router-dom";
 import Quantity from "../Quantity";
 import { useCart } from "../../../context/Cart/cartContext";
 import { toast } from "react-toastify";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { getProductsDetailClient } from "../../../sevices/products";
-const socialLinks = [
-  { platform: "facebook", icon: "fa-facebook-f", color: "#3b5998" },
-  { platform: "twitter", icon: "fa-twitter", color: "#00acee" },
-  { platform: "linkedin", icon: "fa-linkedin-in", color: "#0077b5" },
-  { platform: "instagram", icon: "fa-instagram", color: "#e4405f" },
-];
-const products = {
-  id: 1,
-  name: "Áo Thun Nam Họa Tiết In Excursion Mighty Bear Form Regular",
-  description: "<p>Áo thun xịn của mình</p>",
-  short_description: "Áo thun xịn của mình",
-  url_main_image:
-    "https://res.cloudinary.com/dkrn3fe2o/image/upload/w_800,h_800,c_thumb/v1739066961/fwuyeublz9dda716tfpi.webp",
-  type: "0",
-  slug: "ao-thun-nam-hoa-tiet-in-excursion-mighty-bear-form-regular",
-  variants: [
-    {
-      id: 1,
-      sku: "PRD2",
-      regular_price: 300000,
-      sale_price: 199000,
-      weight: 120,
-      stock_quantity: 230,
-      values: [
-        {
-          attribute_id: 1,
-          attribute_name: "Màu sắc",
-          attribute_value_id: 1,
-          value: "Màu đỏ",
-        },
-        {
-          attribute_id: 2,
-          attribute_name: "Kích thước",
-          attribute_value_id: 7,
-          value: "36",
-        },
-      ],
-    },
-    {
-      id: 2,
-      sku: "PRD2",
-      regular_price: 300000,
-      sale_price: 189000,
-      weight: 200,
-      stock_quantity: 90,
-      values: [
-        {
-          attribute_id: 1,
-          attribute_name: "Màu sắc",
-          attribute_value_id: 1,
-          value: "Màu đỏ",
-        },
-        {
-          attribute_id: 2,
-          attribute_name: "Kích thước",
-          attribute_value_id: 8,
-          value: "37",
-        },
-        {
-          attribute_id: 3,
-          attribute_name: "Chất Liệu",
-          attribute_value_id: 1,
-          value: "Cotton",
-        },
-      ],
-    },
-  ],
+import { userCartAdd } from "../../../sevices/client/cart";
+import { token_auth } from "../../../common/auth/getToken";
+import { socialLinks } from "../../../constant";
+import Loading from "../../Loading/Loading";
 
-  categories: ["Áo", "Áo thun"],
-  product_images: [
-    {
-      url: "https://res.cloudinary.com/dkrn3fe2o/image/upload/w_800,h_800,c_thumb/v1739066958/ovmdtlu6ihcldyx9jckg.jpg",
-    },
-    {
-      url: "https://res.cloudinary.com/dkrn3fe2o/image/upload/w_800,h_800,c_thumb/v1739066964/wjhxgmfpytbtvbfne5yu.webp",
-    },
-    {
-      url: "https://res.cloudinary.com/dkrn3fe2o/image/upload/w_800,h_800,c_thumb/v1739066967/yq6mviubta0ujkpngjyr.jpg",
-    },
-    {
-      url: "https://res.cloudinary.com/dkrn3fe2o/image/upload/w_800,h_800,c_thumb/v1739066970/qjzs2nnqfcj2dqns4mx9.jpg",
-    },
-  ],
-};
 const ProductDetail = () => {
+  const token_ = token_auth();
   const { id } = useParams();
   const { data: products, isLoading } = useQuery({
     queryKey: ["products", id],
@@ -112,8 +35,13 @@ const ProductDetail = () => {
     email: "",
     rating: 0,
   });
-  const { addToCart }: any = useCart();
+  const { addToCart, refetchCart }: any = useCart();
   const [quantity, setQuantity] = useState(1);
+  const { mutate: addCartApi } = useMutation({
+    mutationFn: async (data: any) => {
+      return await userCartAdd(data);
+    },
+  });
 
   useEffect(() => {
     if (products?.product_images?.length) {
@@ -179,7 +107,6 @@ const ProductDetail = () => {
 
     setFilteredVariantGroups(newVariantGroups);
   }, [selectedVariants, products?.variants]);
-
   const handleSelect = (groupName: string, item: any) => {
     setSelectedVariants((prev: any) => {
       const isAlreadySelected = prev[groupName]?.id === item.id; //tìm thằng đã có trong cái mảng đấy
@@ -201,8 +128,7 @@ const ProductDetail = () => {
         )
       )
     );
-  }, [selectedVariants]);
-
+  }, [selectedVariants, products]);
   const handleImageClick = (fullImage: any) => {
     setCurrentImage(fullImage);
   };
@@ -245,21 +171,76 @@ const ProductDetail = () => {
     });
   });
   const handleSubmit = () => {
-    const length = Object.keys(selectedVariants).length;
-    const find = selectedVariantss?.values?.length === length;
-    const data = {
-      quantity,
-      variant_id: selectedVariantss?.id,
-      product_id: id,
-    };
-    if (find) {
-      addToCart(data);
-      toast.success("Thêm giỏ hàng thành công");
+    if (token_) {
+      const dataProduct0 = {
+        quantity,
+        variant_id: selectedVariantss?.id,
+        product_id: id,
+        stock_quantity: selectedVariantss?.stock_quantity,
+      };
+      const dataProduct1 = {
+        quantity,
+        variant_id: products?.variants[0]?.id,
+        product_id: id,
+        stock_quantity: products?.variants[0]?.stock_quantity,
+      };
+      if (products?.type == "1") {
+        addCartApi(dataProduct1, {
+          onSuccess: () => {
+            toast.success("Thêm giỏ hàng thành công");
+            refetchCart();
+          },
+          onError: () => {
+            toast.error("Thêm giỏ hàng thất bại");
+          },
+        });
+      } else {
+        if (selectedVariantss !== undefined) {
+          addCartApi(dataProduct0, {
+            onSuccess: () => {
+              toast.success("Thêm giỏ hàng thành công");
+              refetchCart();
+            },
+            onError: () => {
+              toast.error("Thêm giỏ hàng thất bại");
+            },
+          });
+        } else {
+          toast.error("Thêm đầy đủ thông tin");
+        }
+      }
     } else {
-      toast.error("Thêm đầy đủ thông tin");
+      const dataProduct0 = {
+        quantity,
+        variant_id: selectedVariantss?.id,
+        product_id: id,
+        stock_quantity: selectedVariantss?.stock_quantity,
+      };
+      const dataProduct1 = {
+        quantity,
+        variant_id: products?.variants[0]?.id,
+        stock_quantity: products?.variants[0]?.stock_quantity,
+      };
+
+      let success;
+      if (products?.type == "1") {
+        success = addToCart(dataProduct1);
+      } else {
+        if (selectedVariantss !== undefined) {
+          success = addToCart(dataProduct0);
+        } else {
+          toast.error("Thêm đầy đủ thông tin");
+          return;
+        }
+      }
+
+      if (success) {
+        toast.success("Thêm giỏ hàng thành công");
+      }
     }
   };
-  // if (isLoading) return "Sản phẩm đang tải";
+
+  if (isLoading) return <Loading />;
   return (
     <section className="shopDetailsPageSection">
       <div className="container">
@@ -334,9 +315,19 @@ const ProductDetail = () => {
                 <>
                   <div className="pi01Price">
                     <ins>
-                      {selectedVariantss.regular_price.toLocaleString()} đ
+                      {(
+                        selectedVariantss.sale_price ??
+                        selectedVariantss.regular_price
+                      ).toLocaleString()}{" "}
+                      đ
                     </ins>
+                    {selectedVariantss.sale_price && (
+                      <del>
+                        {selectedVariantss.regular_price.toLocaleString()} đ
+                      </del>
+                    )}
                   </div>
+
                   <div className="productRadingsStock clearfix">
                     <div className="productRatings float-start">
                       {/* <div className="productRatingWrap">
@@ -353,8 +344,9 @@ const ProductDetail = () => {
                       </div> */}
                     </div>
                     <div className="productStock float-end">
+                      <span>Số lượng: </span> {selectedVariantss.stock_quantity}
                       <span>Available: </span>{" "}
-                      {selectedVariantss.stock_quantity}
+                      {selectedVariantss?.stock_quantity}
                     </div>
                   </div>
                 </>
@@ -393,18 +385,18 @@ const ProductDetail = () => {
               )}
 
               <div className="pcBtns">
-                <Quantity quantity={quantity} setQuantity={setQuantity} />
-                {selectedVariantss ? (
-                  <button onClick={handleSubmit} className="ulinaBTN">
-                    <span>Add to Cart</span>
-                  </button>
-                ) : (
-                  ""
-                )}
+                <Quantity
+                  quantity={quantity}
+                  stock={selectedVariantss?.stock_quantity}
+                  setQuantity={setQuantity}
+                />
+                <button onClick={handleSubmit} className="ulinaBTN">
+                  <span>Thêm vào giỏ hàng</span>
+                </button>
               </div>
 
               <div className="pcMeta">
-                <span>Sku: {selectedVariantss?.sku}</span>
+                <span>Mã sản phẩm: {selectedVariantss?.sku}</span>
                 <div className="pcCategory my-4">
                   {products?.categories?.map((cat: any, index: any) => (
                     <span key={index}>
@@ -416,8 +408,8 @@ const ProductDetail = () => {
                   ))}
                 </div>
                 <p className="pcmSocial">
-                  <span>Share</span>
-                  {socialLinks.map((link, index) => (
+                  <span>Chia sẻ</span>
+                  {socialLinks?.map((link, index) => (
                     <a
                       key={index}
                       style={{ color: link.color }}

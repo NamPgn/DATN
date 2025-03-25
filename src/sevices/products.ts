@@ -18,7 +18,17 @@ export const updateProduct = async (id: any, data: any) => {
 };
 
 export const delProduct = async (id: string) => {
-  return intances.delete("/products/" + id);
+  return intances.delete("/products", {
+    data: { ids: [id] },
+    headers: { "Content-Type": "application/json" },
+  });
+};
+
+export const delMultipleProduct = async (ids: string[]) => {
+  return intances.delete("/products", {
+    data: { ids },
+    headers: { "Content-Type": "application/json" },
+  });
 };
 
 export const addProduct = async (data: any) => {
@@ -66,4 +76,17 @@ export const getProductsClient = async () => {
 
 export const getProductsDetailClient = async (id: any) => {
   return intancesLocal.get("/product_detail/" + id);
+};
+
+export const getsProductsDeleted = async () => {
+  return intances.get("/products/trash");
+};
+
+export const productsHardDeleted = async (data: any) => {
+  return intances.delete("/products/hard-delete", data);
+};
+
+
+export const productsRetoreDeleted = async (data: any) => {
+  return intances.delete("/products/retore-delete", data);
 };

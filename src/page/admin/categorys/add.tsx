@@ -2,9 +2,11 @@ import { Form, Input, Button, message, Select } from "antd";
 import { addCategory, getCategorysFather } from "../../../sevices/category";
 import { useMutation, useQuery } from "react-query";
 import { SyncOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 const AddCategory = () => {
   const [form] = Form.useForm();
+  const navigate = useNavigate();
 
   const { isLoading, mutate } = useMutation({
     mutationFn: async (values) => {
@@ -12,6 +14,9 @@ const AddCategory = () => {
     },
     onSuccess: () => {
       message.success("Category created successfully!");
+      setTimeout(() => {
+        navigate("/dashboard/category");
+      }, 800);
     },
     onError: () => {
       message.error("Category created failure!");

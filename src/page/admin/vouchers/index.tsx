@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MVTable from "../../../components/UI/Core/MV/Table";
 import { columnsVouchers } from "../../../constant";
 import { delMultipleVouchers, getVouchers } from "../../../sevices/voucher";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { MyButton } from "../../../components/UI/Core/Button";
 import { Link } from "react-router-dom";
 import { Button, Modal, Popconfirm } from "antd";
@@ -13,13 +13,18 @@ import EditVoucher from "./edit";
 import { DeleteOutlined } from "@ant-design/icons";
 
 const VoucherAdmin = () => {
-  const [page, setPage] = useState(1);
+  const queryClient = useQueryClient();
+  const savedPage = sessionStorage.getItem("voucherPage");
+  const [page, setPage] = useState<number>(savedPage ? Number(savedPage) : 1);
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [editingVoucher, setEditingVoucher] = useState<any>(null);
 
+  useEffect(() => {
+    sessionStorage.setItem("voucherPage", String(page));
+  }, [page]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
@@ -38,6 +43,7 @@ const VoucherAdmin = () => {
     onSuccess: () => {
       toast.success("Xóa nhiều voucher thành công");
       setSelectedRowKeys([]);
+      queryClient.invalidateQueries(["VOUCHERCL"]);
       refetch();
     },
     onError: (error) => {
@@ -56,6 +62,7 @@ const VoucherAdmin = () => {
 
   const showAddVoucherModal = () => {
     setIsModalVisible(true);
+    queryClient.invalidateQueries(["VOUCHERCL"]);
   };
 
   const showEditVoucherModal = (voucher: any) => {
@@ -92,6 +99,7 @@ const VoucherAdmin = () => {
         description: item.description,
         discount_percent: item.discount_percent,
         max_discount_amount: item.max_discount_amount,
+        for_logged_in_users: item.type,
         type: item.type,
         min_product_price: item.min_product_price,
         amount: item.amount,
@@ -103,12 +111,15 @@ const VoucherAdmin = () => {
           <div className="d-flex gap-2">
             <Link
               to={`/dashboard/vouchers/${item.id}`}
+              onClick={() =>
+                sessionStorage.setItem("voucherPage", String(page))
+              }
               className="text-blue-500"
             >
-              <MyButton type="dashed">Detail</MyButton>
+              <MyButton type="dashed">Chi Tiết</MyButton>
             </Link>
             <MyButton type="primary" onClick={() => showEditVoucherModal(item)}>
-              Edit
+              Sửa
             </MyButton>
           </div>
         ),
@@ -117,22 +128,23 @@ const VoucherAdmin = () => {
 
   return (
     <React.Fragment>
-      <div className="flex">
+      <div className="d-flex gap-2">
         <Button type="primary" onClick={showAddVoucherModal} className="mb-3">
-          Add Voucher
+          Thêm Voucher
         </Button>
-      </div>
 
-      <Popconfirm
-        title="Bạn có chắc chắn muốn xóa ?"
-        onConfirm={handleDeleteSelectedData}
-        okText="Yes"
-        cancelText="No"
-      >
-        <MyButton type="primary" danger icon={<DeleteOutlined />}>
-          Delete Selected
-        </MyButton>
-      </Popconfirm>
+        <Popconfirm
+          title="Bạn có chắc chắn muốn xóa ?"
+          onConfirm={handleDeleteSelectedData}
+          okText="Yes"
+          cancelText="No"
+          className="mb-3"
+        >
+          <MyButton type="primary" danger icon={<DeleteOutlined />}>
+            Xóa Voucher
+          </MyButton>
+        </Popconfirm>
+      </div>
 
       <MVTable
         columns={columnsVouchers}
@@ -150,7 +162,7 @@ const VoucherAdmin = () => {
       ></MVTable>
 
       <Modal
-        title="Add New Voucher"
+        title="Thêm Mới Voucher"
         open={isModalVisible}
         onCancel={handleCancel}
         footer={null}
