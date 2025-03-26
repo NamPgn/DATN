@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+        <title>Thanh toán</title>
+        <style>
+            .qty::after {
+                position: absolute;
+                top: -12px;
+                right: -12px;
+                content: attr(qty);
+                display: block;
+                width: 1.8rem;
+                height: 1.8rem;
+                line-height: 1.8rem;
+                background-color: rgba(0, 0, 0, 0.7);
+                border-radius: 50%;
+                text-align: center;
+                font-weight: 500;
+                color: #eeeeee;
+            }
+
+            .scroll-bar::-webkit-scrollbar {
+                width: 0.3rem;
+                border-radius: 0.5rem;
+                background-color: transparent;
+            }
+
+            .scroll-bar::-webkit-scrollbar-thumb {
+                background-color: #b1b1b1;
+                border-radius: 0.5rem;
+                transition: all ease 0.3s;
+            }
+
+            .scroll-bar::-webkit-scrollbar-thumb:hover {
+                background-color: #777;
+            }
+        </style>
+    </head>
+    <body>
+        <section class="flex max-w-screen-xl mx-auto flex-col flex-col-reverse md:flex-row">
+            <!-- left -->
+            <div class="w-full md:w-1/2 pb-10 md:pt-10 px-5 sm:px-10">
+                <nav class="hidden md:block mt-4">
+                    <div class="flex flex-wrap items-center justify-between relative">
+                        <a href="" class="flex items-center space-x-3 rtl:space-x-reverse">
+                            <img src="images/logo.png" class="h-18 absolute" alt="Logo"/>
+                        </a>
+
+                        <a href="" class="py-2.5 px-5 text-sm font-semibold bg-white rounded border border-gray-200 hover:bg-gray-100 hover:text-blue-700">
+                            Giỏ hàng
+                        </a>
+                    </div>
+                </nav>
+
+                <div class="py-5 my-10 border-b-2 border-gray-300">
+                    <h2 class="mb-2 text-lg sm:text-xl font-semibold text-gray-900">Địa chỉ nhận hàng</h2>
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="text-sm sm:text-base mb-0.5 font-semibold">
+                                Trần Văn Tèo
+                                <span class="text-sm text-gray-500">(+84)</span>
+                                <span class="text-sm text-gray-500">123 456 789</span>
+                            </p>
+                            <p class="text-xs sm:text-sm font-semibold text-gray-500">
+                                Số 44 Yết Kiêu, Hoàn Kiếm, Hà Nội
+                            </p>
+                        </div>
+                        <a href="" class="hover:bg-blue-200 text-blue-800 text-sm px-2.5 py-0.5 rounded border border-blue-400">
+                            Chỉnh sửa
+                        </a>
+                    </div>
+                </div>
+                
+                <form>
+                    <textarea id="message" rows="4" class="w-full bg-gray-50 text-sm block px-5 py-2.5 outline outline-gray-300 focus:outline-blue-500" placeholder="Để lại lời nhắn cho người bán..."></textarea>
+                    <span class="text-sm text-gray-500" id="charCount">0/200</span>
+                </form>
+
+                <div class="my-10">
+                    <h2 class="mb-4 text-lg sm:text-xl font-semibold text-gray-900">Phương thức thanh toán</h2>
+
+                    <ul class="space-y-4 mb-4">
+                        <li>
+                            <input type="radio" id="payment-1" name="payment" value="cod" class="hidden peer" required />
+                            <label for="payment-1" class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 dark:peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500">
+                                <div class="block">
+                                    <div class="w-full text-base font-semibold">Thanh toán khi nhận hàng (COD)</div>
+                                    <div class="w-full text-sm text-gray-500 dark:text-gray-400">Thanh toán trực tiếp khi nhận hàng</div>
+                                </div>
+                                <svg class="w-4 h-4 ms-3 rtl:rotate-180 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/></svg>
+                            </label>
+                        </li>
+                        <li>
+                            <input type="radio" id="payment-2" name="payment" value="momo" class="hidden peer" />
+                            <label for="payment-2" class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 dark:peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500">
+                                <div class="block">
+                                    <div class="w-full text-base font-semibold">MOMO</div>
+                                    <div class="w-full text-sm text-gray-500 dark:text-gray-400">Thanh toán qua ví điện tử MoMo</div>
+                                </div>
+                                <svg class="w-4 h-4 ms-3 rtl:rotate-180 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/></svg>
+                            </label>
+                        </li>
+                        <li>
+                            <input type="radio" id="payment-3" name="payment" value="bank" class="hidden peer" />
+                            <label for="payment-3" class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 dark:peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500">
+                                <div class="block">
+                                    <div class="w-full text-base font-semibold">Ngân hàng</div>
+                                    <div class="w-full text-sm text-gray-500 dark:text-gray-400">Thanh toán qua chuyển khoản ngân hàng</div>
+                                </div>
+                                <svg class="w-4 h-4 ms-3 rtl:rotate-180 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/></svg>
+                            </label>
+                        </li>
+                    </ul>
+                    
+                    <button class="cursor-pointer my-5 text-white w-full bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded text-sm py-3 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                        Thanh toán
+                    </button>
+                </div>
+            </div>
+
+            <!-- right -->
+            <div class="md:h-screen w-full md:w-1/2 pt-10 px-5 sm:px-10 md:bg-gray-100 md:sticky md:top-0">
+                <nav class="md:hidden mb-15">
+                    <div class="flex flex-wrap items-center justify-between relative">
+                        <a href="" class="flex items-center space-x-3 rtl:space-x-reverse">
+                            <img src="images/logo.png" class="h-18 absolute" alt="Logo"/>
+                        </a>
+
+                        <a href="" class="py-2.5 px-5 text-sm font-semibold bg-white rounded border border-gray-200 hover:bg-gray-100 hover:text-blue-700">
+                            Giỏ hàng
+                        </a>
+                    </div>
+                </nav>
+
+                <div class="overflow-auto scroll-bar relative" style="max-height: 300px;">
+                    <button id="scrollButton" class="absolute cursor-pointer bottom-0 left-1/2 -translate-x-1/2 bg-gray-600 hover:bg-gray-500 text-white p-3 rounded-full hidden">
+                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1v12m0 0L1 9m4 4l4-4"/>
+                        </svg>
+                    </button>
+                    <!-- item -->
+                    <div class="flex gap-4 pt-4">
+                        <div class="flex gap-4">
+                            <div class="bg-white w-17 h-17 shrink-0 border-2 border-gray-200 rounded-lg relative py-2">
+                                <img src='https://readymadeui.com/images/watch1.webp' class="w-full h-full object-contain" />
+                                <span class="qty" qty="1"></span>
+                            </div>
+                            <div class="flex flex-col gap-2 ms-2">
+                                <h3 class="text-sm sm:text-base font-semibold">Tên sản phẩm 1</h3>
+                                <p class="text-sm font-semibold text-gray-600">
+                                    <span>Vàng</span>
+                                    <span>/</span>
+                                    <span>Size</span>
+                                    <span>S</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="ml-auto flex flex-col">
+                            <h3 class="text-sm sm:text-base font-semibold">giá * 1</h3>
+                        </div>
+                    </div>
+                    <!-- item -->
+                    <div class="flex gap-4 pt-4">
+                        <div class="flex gap-4">
+                            <div class="bg-white w-17 h-17 shrink-0 border-2 border-gray-200 rounded-lg relative py-2">
+                                <img src='https://readymadeui.com/images/watch2.webp' class="w-full h-full object-contain" />
+                                <span class="qty" qty="2"></span>
+                            </div>
+                            <div class="flex flex-col gap-2 ms-2">
+                                <h3 class="text-sm sm:text-base font-semibold">Tên sản phẩm 2</h3>
+                                <p class="text-sm font-semibold text-gray-600">
+                                    <span>Hồng</span>
+                                    <span>/</span>
+                                    <span>Size</span>
+                                    <span>M</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="ml-auto flex flex-col">
+                            <h3 class="text-sm sm:text-base font-semibold">giá * 2</h3>
+                        </div>
+                    </div>
+                    <!-- item -->
+                    <div class="flex gap-4 pt-4">
+                        <div class="flex gap-4">
+                            <div class="bg-white w-17 h-17 shrink-0 border-2 border-gray-200 rounded-lg relative py-2">
+                                <img src='https://readymadeui.com/images/watch3.webp' class="w-full h-full object-contain" />
+                                <span class="qty" qty="3"></span>
+                            </div>
+                            <div class="flex flex-col gap-2 ms-2">
+                                <h3 class="text-sm sm:text-base font-semibold">Tên sản phẩm 3</h3>
+                                <p class="text-sm font-semibold text-gray-600">
+                                    <span>Đen</span>
+                                    <span>/</span>
+                                    <span>Size</span>
+                                    <span>L</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="ml-auto flex flex-col">
+                            <h3 class="text-sm sm:text-base font-semibold">giá * 3</h3>
+                        </div>
+                    </div>
+                    <!-- item -->
+                    <div class="flex gap-4 pt-4">
+                        <div class="flex gap-4">
+                            <div class="bg-white w-17 h-17 shrink-0 border-2 border-gray-200 rounded-lg relative py-2">
+                                <img src='https://readymadeui.com/images/watch1.webp' class="w-full h-full object-contain" />
+                                <span class="qty" qty="1"></span>
+                            </div>
+                            <div class="flex flex-col gap-2 ms-2">
+                                <h3 class="text-sm sm:text-base font-semibold">Tên sản phẩm 1</h3>
+                                <p class="text-sm font-semibold text-gray-600">
+                                    <span>Vàng</span>
+                                    <span>/</span>
+                                    <span>Size</span>
+                                    <span>S</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="ml-auto flex flex-col">
+                            <h3 class="text-sm sm:text-base font-semibold">giá * 1</h3>
+                        </div>
+                    </div>
+                    <!-- item -->
+                    <div class="flex gap-4 pt-4">
+                        <div class="flex gap-4">
+                            <div class="bg-white w-17 h-17 shrink-0 border-2 border-gray-200 rounded-lg relative py-2">
+                                <img src='https://readymadeui.com/images/watch2.webp' class="w-full h-full object-contain" />
+                                <span class="qty" qty="2"></span>
+                            </div>
+                            <div class="flex flex-col gap-2 ms-2">
+                                <h3 class="text-sm sm:text-base font-semibold">Tên sản phẩm 2</h3>
+                                <p class="text-sm font-semibold text-gray-600">
+                                    <span>Hồng</span>
+                                    <span>/</span>
+                                    <span>Size</span>
+                                    <span>M</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="ml-auto flex flex-col">
+                            <h3 class="text-sm sm:text-base font-semibold">giá * 2</h3>
+                        </div>
+                    </div>
+                    <!-- item -->
+                    <div class="flex gap-4 pt-4">
+                        <div class="flex gap-4">
+                            <div class="bg-white w-17 h-17 shrink-0 border-2 border-gray-200 rounded-lg relative py-2">
+                                <img src='https://readymadeui.com/images/watch3.webp' class="w-full h-full object-contain" />
+                                <span class="qty" qty="3"></span>
+                            </div>
+                            <div class="flex flex-col gap-2 ms-2">
+                                <h3 class="text-sm sm:text-base font-semibold">Tên sản phẩm 3</h3>
+                                <p class="text-sm font-semibold text-gray-600">
+                                    <span>Đen</span>
+                                    <span>/</span>
+                                    <span>Size</span>
+                                    <span>L</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="ml-auto flex flex-col">
+                            <h3 class="text-sm sm:text-base font-semibold">giá * 3</h3>
+                        </div>
+                    </div>
+                    <!-- item -->
+                    <div class="flex gap-4 pt-4">
+                        <div class="flex gap-4">
+                            <div class="bg-white w-17 h-17 shrink-0 border-2 border-gray-200 rounded-lg relative py-2">
+                                <img src='https://readymadeui.com/images/watch1.webp' class="w-full h-full object-contain" />
+                                <span class="qty" qty="1"></span>
+                            </div>
+                            <div class="flex flex-col gap-2 ms-2">
+                                <h3 class="text-sm sm:text-base font-semibold">Tên sản phẩm 1</h3>
+                                <p class="text-sm font-semibold text-gray-600">
+                                    <span>Vàng</span>
+                                    <span>/</span>
+                                    <span>Size</span>
+                                    <span>S</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="ml-auto flex flex-col">
+                            <h3 class="text-sm sm:text-base font-semibold">giá * 1</h3>
+                        </div>
+                    </div>
+                    <!-- item -->
+                    <div class="flex gap-4 pt-4">
+                        <div class="flex gap-4">
+                            <div class="bg-white w-17 h-17 shrink-0 border-2 border-gray-200 rounded-lg relative py-2">
+                                <img src='https://readymadeui.com/images/watch2.webp' class="w-full h-full object-contain" />
+                                <span class="qty" qty="2"></span>
+                            </div>
+                            <div class="flex flex-col gap-2 ms-2">
+                                <h3 class="text-sm sm:text-base font-semibold">Tên sản phẩm 2</h3>
+                                <p class="text-sm font-semibold text-gray-600">
+                                    <span>Hồng</span>
+                                    <span>/</span>
+                                    <span>Size</span>
+                                    <span>M</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="ml-auto flex flex-col">
+                            <h3 class="text-sm sm:text-base font-semibold">giá * 2</h3>
+                        </div>
+                    </div>
+                    <!-- item -->
+                    <div class="flex gap-4 pt-4">
+                        <div class="flex gap-4">
+                            <div class="bg-white w-17 h-17 shrink-0 border-2 border-gray-200 rounded-lg relative py-2">
+                                <img src='https://readymadeui.com/images/watch3.webp' class="w-full h-full object-contain" />
+                                <span class="qty" qty="3"></span>
+                            </div>
+                            <div class="flex flex-col gap-2 ms-2">
+                                <h3 class="text-sm sm:text-base font-semibold">Tên sản phẩm 3</h3>
+                                <p class="text-sm font-semibold text-gray-600">
+                                    <span>Đen</span>
+                                    <span>/</span>
+                                    <span>Size</span>
+                                    <span>L</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="ml-auto flex flex-col">
+                            <h3 class="text-sm sm:text-base font-semibold">giá * 3</h3>
+                        </div>
+                    </div>
+                    <!-- item -->
+                    <div class="flex gap-4 pt-4">
+                        <div class="flex gap-4">
+                            <div class="bg-white w-17 h-17 shrink-0 border-2 border-gray-200 rounded-lg relative py-2">
+                                <img src='https://readymadeui.com/images/watch1.webp' class="w-full h-full object-contain" />
+                                <span class="qty" qty="1"></span>
+                            </div>
+                            <div class="flex flex-col gap-2 ms-2">
+                                <h3 class="text-sm sm:text-base font-semibold">Tên sản phẩm 1</h3>
+                                <p class="text-sm font-semibold text-gray-600">
+                                    <span>Vàng</span>
+                                    <span>/</span>
+                                    <span>Size</span>
+                                    <span>S</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="ml-auto flex flex-col">
+                            <h3 class="text-sm sm:text-base font-semibold">giá * 1</h3>
+                        </div>
+                    </div>
+                    <!-- item -->
+                    <div class="flex gap-4 pt-4">
+                        <div class="flex gap-4">
+                            <div class="bg-white w-17 h-17 shrink-0 border-2 border-gray-200 rounded-lg relative py-2">
+                                <img src='https://readymadeui.com/images/watch2.webp' class="w-full h-full object-contain" />
+                                <span class="qty" qty="2"></span>
+                            </div>
+                            <div class="flex flex-col gap-2 ms-2">
+                                <h3 class="text-sm sm:text-base font-semibold">Tên sản phẩm 2</h3>
+                                <p class="text-sm font-semibold text-gray-600">
+                                    <span>Hồng</span>
+                                    <span>/</span>
+                                    <span>Size</span>
+                                    <span>M</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="ml-auto flex flex-col">
+                            <h3 class="text-sm sm:text-base font-semibold">giá * 2</h3>
+                        </div>
+                    </div>
+                    <!-- item -->
+                    <div class="flex gap-4 pt-4">
+                        <div class="flex gap-4">
+                            <div class="bg-white w-17 h-17 shrink-0 border-2 border-gray-200 rounded-lg relative py-2">
+                                <img src='https://readymadeui.com/images/watch3.webp' class="w-full h-full object-contain" />
+                                <span class="qty" qty="3"></span>
+                            </div>
+                            <div class="flex flex-col gap-2 ms-2">
+                                <h3 class="text-sm sm:text-base font-semibold">Tên sản phẩm 3</h3>
+                                <p class="text-sm font-semibold text-gray-600">
+                                    <span>Đen</span>
+                                    <span>/</span>
+                                    <span>Size</span>
+                                    <span>L</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="ml-auto flex flex-col">
+                            <h3 class="text-sm sm:text-base font-semibold">giá * 3</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-8">
+                    <!-- Voucher -->
+                    <div class="flex flex-col sm:flex-row">
+                        <div class="flex gap-2 w-full">
+                            <input type="text" name="voucher" class="bg-gray-50 text-sm font-semibold rounded block px-4 py-2.5 outline outline-gray-300 focus:outline-blue-500 flex-grow max-w-full" placeholder="Nhập mã voucher" required />
+                            <button type="button" class="cursor-pointer font-semibold rounded text-sm px-2 py-2.5 text-center text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800">Kiểm tra</button>
+                        </div>
+                        <button type="button" class="sm:w-auto sm:ms-2 mt-2 sm:mt-0 cursor-pointer font-semibold rounded text-sm px-4 py-2.5 text-center text-white bg-blue-700 hover:bg-blue-800">Chọn</button>
+                    </div>
+                    <!-- Nếu thành công -->
+                    <div class="flex items-center mt-2 px-4 py-2.5 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50" role="alert">
+                        <span class="font-semibold">✔️ Áp dụng thành công!</span>
+                        <span class="ms-2">tên của voucher</span>
+                    </div>
+    
+                    <ul class="font-semibold space-y-3 pt-5">
+                        <li class="flex flex-wrap gap-4 text-sm sm:text-base text-gray-700">
+                            Tổng tiền hàng
+                            <span class="ml-auto">200.000</span>
+                        </li>
+                        <li class="flex flex-wrap gap-4 text-sm sm:text-base text-gray-700">
+                            Phí vận chuyển
+                            <span class="ml-auto">20.000</span>
+                        </li>
+                        <li class="flex flex-wrap gap-4 text-sm sm:text-base text-gray-700">
+                            Voucher giảm giá
+                            <span class="ml-auto bg-green-100 text-green-800 font-semibold px-2 rounded border border-green-400">
+                                <span>–</span>
+                                <span>40.000</span>
+                            </span>
+                        </li>
+                        <hr class="border-gray-300" />
+                        <li class="flex flex-wrap gap-4 text-base sm:text-lg font-bold">
+                            Tổng thanh toán
+                            <span class="ml-auto">200.000đ</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <script>
+            const textarea = document.getElementById('message');
+            const charCount = document.getElementById('charCount');
+        
+            textarea.addEventListener('input', function() {
+                const currentLength = textarea.value.length;
+                charCount.textContent = `${currentLength}/200`;
+        
+                // Nếu quá 200 ký tự, không cho nhập thêm
+                if (currentLength >= 200) {
+                    textarea.value = textarea.value.substring(0, 200);
+                }
+            });
+
+            const scrollContainer = document.querySelector(".scroll-bar");
+            const scrollButton = document.getElementById("scrollButton");
+
+            let lastScrollTop = 0; // Lưu vị trí cuộn trước đó
+
+            function checkScroll() {
+                const currentScroll = scrollContainer.scrollTop; // Lấy vị trí hiện tại
+                const isOverflowing = scrollContainer.scrollHeight > scrollContainer.clientHeight; // Kiểm tra có overflow không
+
+                if (!isOverflowing) {
+                    // Nếu không có overflow -> Ẩn nút
+                    scrollButton.classList.add("hidden");
+                    return;
+                }
+
+                if (currentScroll === 0) {
+                    // Nếu ở đầu trang -> Hiện nút
+                    scrollButton.classList.remove("hidden");
+                } else if (currentScroll > lastScrollTop) {
+                    // Nếu cuộn xuống -> Ẩn nút
+                    scrollButton.classList.add("hidden");
+                }
+
+                lastScrollTop = currentScroll; // Cập nhật vị trí cuộn
+            }
+
+            // Kiểm tra overflow khi load trang
+            window.addEventListener("load", checkScroll);
+                scrollContainer.addEventListener("scroll", checkScroll);
+
+                scrollButton.addEventListener("click", function () {
+                scrollContainer.scrollTo({
+                    top: scrollContainer.scrollHeight, // Cuộn đến cuối cùng
+                    behavior: "smooth"
+                });
+            });
+        </script>
+    </body>
+</html>

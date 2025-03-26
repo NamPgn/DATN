@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Bình luận</title>
+</head>
+
+<body>
+    <section class="max-w-screen-xl mx-auto px-5 sm:px-10 bg-gray-10">
+        <h2 class="text-xl mb-4 font-semibold">Khách hàng nói về sản phẩm</h2>
+
+        <div class="flex gap-7 sm:gap-10 justify-between sm:justify-start">
+            <div class="flex flex-col sm:w-1/4 gap-3 sm:gap-4 text-center items-center">
+                <span class="text-gray-700 text-sm md:hidden">Điểm đánh giá</span>
+                <div class="text-2xl sm:text-4xl font-bold">
+                    4.4
+                    <span class="text-gray-500 text-base md:hidden">
+                        <span>/</span>
+                        <span>5</span>
+                    </span>
+                </div>
+                <span class="text-gray-700 text-xs sm:text-sm">12 lượt đánh giá</span>
+
+                <div class="flex items-center">
+                    <svg class="w-4 h-4 text-yellow-400 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor" viewBox="0 0 22 20">
+                        <path
+                            d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                    </svg>
+                    <svg class="w-4 h-4 text-yellow-400 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor" viewBox="0 0 22 20">
+                        <path
+                            d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                    </svg>
+                    <svg class="w-4 h-4 text-yellow-400 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor" viewBox="0 0 22 20">
+                        <path
+                            d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                    </svg>
+                    <svg class="w-4 h-4 text-yellow-400 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                        fill="currentColor" viewBox="0 0 22 20">
+                        <path
+                            d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                    </svg>
+                    <svg class="w-4 h-4 ms-1 text-gray-400 dark:text-gray-500" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                        <path
+                            d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                    </svg>
+                </div>
+
+                <button class="hidden sm:block cursor-pointer w-full text-base text-black font-semibold border-2 border-black bg-yellow-400 hover:bg-yellow-500 rounded-lg py-2">
+                    Đánh giá sản phẩm
+                </button>
+            </div>
+            
+            <div class="flex w-full sm:w-3/4 flex-col gap-1.5 sm:gap-4">
+                <div class="flex items-center">
+                    <div class="flex items-center">
+                        <span class="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-400">5</span>
+                        <svg class="w-4 h-4 text-yellow-400 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor" viewBox="0 0 22 20">
+                            <path
+                                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                        </svg>
+                    </div>
+                    <div class="flex flex-grow items-center gap-2">
+                        <div class="w-3/4 h-3 ms-3 bg-gray-200 rounded-full dark:bg-gray-700">
+                            <div class="h-3 bg-yellow-400 rounded-full" style="width: 70%"></div>
+                        </div>
+                        <span class="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-400">100</span>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="flex items-center">
+                        <span class="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-400">4</span>
+                        <svg class="w-4 h-4 text-yellow-400 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor" viewBox="0 0 22 20">
+                            <path
+                                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                        </svg>
+                    </div>
+                    <div class="flex flex-grow items-center gap-2">
+                        <div class="w-3/4 h-3 ms-3 bg-gray-200 rounded-full dark:bg-gray-700">
+                            <div class="h-3 bg-yellow-400 rounded-full" style="width: 50%"></div>
+                        </div>
+                        <span class="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-400">7</span>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="flex items-center">
+                        <span class="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-400">3</span>
+                        <svg class="w-4 h-4 text-yellow-400 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor" viewBox="0 0 22 20">
+                            <path
+                                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                        </svg>
+                    </div>
+                    <div class="flex flex-grow items-center gap-2">
+                        <div class="w-3/4 h-3 ms-3 bg-gray-200 rounded-full dark:bg-gray-700">
+                            <div class="h-3 bg-yellow-400 rounded-full" style="width: 40%"></div>
+                        </div>
+                        <span class="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-400">12</span>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="flex items-center">
+                        <span class="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-400">2</span>
+                        <svg class="w-4 h-4 text-yellow-400 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor" viewBox="0 0 22 20">
+                            <path
+                                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                        </svg>
+                    </div>
+                    <div class="flex flex-grow items-center gap-2">
+                        <div class="w-3/4 h-3 ms-3 bg-gray-200 rounded-full dark:bg-gray-700">
+                            <div class="h-3 bg-yellow-400 rounded-full" style="width: 20%"></div>
+                        </div>
+                        <span class="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-400">1</span>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="flex items-center">
+                        <span class="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-400">1</span>
+                        <svg class="w-4 h-4 text-yellow-400 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor" viewBox="0 0 22 20">
+                            <path
+                                d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
+                        </svg>
+                    </div>
+                    <div class="flex flex-grow items-center gap-2">
+                        <div class="w-3/4 h-3 ms-3 bg-gray-200 rounded-full dark:bg-gray-700">
+                            <div class="h-3 bg-yellow-400 rounded-full" style="width: 10%"></div>
+                        </div>
+                        <span class="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-400">1</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button class="block sm:hidden cursor-pointer w-full text-base text-black font-semibold border-2 border-black bg-yellow-400 hover:bg-yellow-500 rounded-lg py-2 mt-5">
+            Đánh giá sản phẩm
+        </button>
+
+        <div class="flex gap-2 sm:gap-10 justify-between sm:justify-start items-start sm:items-center flex-col sm:flex-row py-4 mb-4">
+            <h2 class="text-base font-semibold sm:w-1/4">
+                <span>300</span>
+                Bình luận
+            </h2>
+
+            <div class="flex flex-wrap items-center gap-2 sm:w-3/4">
+                <button type="button" class="w-18 cursor-pointer flex items-center justify-center text-gray-900 bg-white border-2 border-yellow-400 hover:border-yellow-400 focus:outline-none hover:bg-yellow-50 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                    Tất cả
+                </button>
+                <button type="button" class="cursor-pointer flex items-center text-gray-900 bg-white border border-gray-300 hover:border-yellow-400 focus:outline-none hover:bg-yellow-50 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                    <span>5</span>
+                    <svg class="w-4 h-4 ms-1 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                    </svg>
+                </button>
+                <button type="button" class="cursor-pointer flex items-center text-gray-900 bg-white border border-gray-300 hover:border-yellow-400 focus:outline-none hover:bg-yellow-50 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                    <span>4</span>
+                    <svg class="w-4 h-4 ms-1 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                    </svg>
+                </button>
+                <button type="button" class="cursor-pointer flex items-center text-gray-900 bg-white border border-gray-300 hover:border-yellow-400 focus:outline-none hover:bg-yellow-50 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                    <span>3</span>
+                    <svg class="w-4 h-4 ms-1 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                    </svg>
+                </button>
+                <button type="button" class="cursor-pointer flex items-center text-gray-900 bg-white border border-gray-300 hover:border-yellow-400 focus:outline-none hover:bg-yellow-50 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                    <span>2</span>
+                    <svg class="w-4 h-4 ms-1 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                    </svg>
+                </button>
+                <button type="button" class="cursor-pointer flex items-center text-gray-900 bg-white border border-gray-300 hover:border-yellow-400 focus:outline-none hover:bg-yellow-50 focus:ring-4 focus:ring-gray-100 font-medium rounded-full text-sm px-3 py-1.5 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
+                    <span>1</span>
+                    <svg class="w-4 h-4 ms-1 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <hr class="text-gray-300 max-w-[1005px]">
+
+        <div class="flex flex-col max-w-[1005px]">
+            <!-- item -->
+            <div class="py-5 border-b-1 border-gray-300">
+                <div class="flex w-full items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <!-- Avatar -->
+                        <img class="w-10 h-10 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-1.jpg" alt="">
+
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <span class="font-semibold text-gray-900">Trương Văn Lâm</span>
+                                <span class="text-gray-500 text-sm">
+                                    <span>•</span>
+                                    <span>4 tháng trước</span>
+                                </span>
+                            </div>
+                            <!-- Sao -->
+                            <div class="flex space-x-2 mt-1">
+                                <svg class="w-4 h-4 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                </svg>
+                                <svg class="w-4 h-4 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                </svg>
+                                <svg class="w-4 h-4 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                </svg>
+                                <svg class="w-4 h-4 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                </svg>
+                                <svg class="w-4 h-4 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Thao tác -->
+                    <div class="relative">
+                        <button class="btn-reply cursor-pointer inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button">
+                            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
+                                <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
+                            </svg>
+                        </button>
+
+                        <div class="dropdown-menu absolute right-0 mt-2 w-36 bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 hidden">
+                            <ul class="py-1 text-sm text-gray-700 dark:text-gray-200">
+                                <li>
+                                    <button class="cursor-pointer w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <span>🚫</span>
+                                        <span>Báo cáo</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="cursor-pointer w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <span>💬</span>
+                                        <span>Trả lời</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nội dung bình luận -->
+                <p class="text-gray-700 text-base mt-2 text-justify">
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nostrum sunt blanditiis nam, deleniti voluptate temporibus illo id tempora dolorum esse odio saepe ut reprehenderit itaque amet odit facere qui inventore.
+                </p>     
+
+                <!-- Ảnh -->
+                <div class="mt-2 flex gap-2 flex-wrap">
+                    <img src="https://readymadeui.com/images/fashion-img-1.webp" alt="" class="w-18 h-18 rounded object-cover">
+                    <img src="https://readymadeui.com/images/fashion-img-2.webp" alt="" class="w-18 h-18 rounded object-cover">
+                    <img src="https://readymadeui.com/images/fashion-img-3.webp" alt="" class="w-18 h-18 rounded object-cover">
+                    <img src="https://readymadeui.com/images/fashion-img-4.webp" alt="" class="w-18 h-18 rounded object-cover">
+                    <img src="https://readymadeui.com/images/fashion-img-5.webp" alt="" class="w-18 h-18 rounded object-cover">
+                    <img src="https://readymadeui.com/images/fashion-img-6.webp" alt="" class="w-18 h-18 rounded object-cover">
+                </div>
+
+                <!-- Nội dung trả lời -->
+                <p class="text-gray-700 text-base mt-2 text-justify bg-gray-200 rounded p-2">
+                    <span class="font-semibold">Người bán:</span>
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nostrum sunt blanditiis nam, deleniti voluptate temporibus illo id tempora dolorum esse odio saepe ut reprehenderit itaque amet odit facere qui inventore.
+                </p>
+            </div>
+            <!-- item -->
+            <div class="py-5 border-b-1 border-gray-300">
+                <div class="flex w-full items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <!-- Avatar -->
+                        <img class="w-10 h-10 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-1.jpg" alt="">
+
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <span class="font-semibold text-gray-900">Trương Văn Lâm</span>
+                                <span class="text-gray-500 text-sm">
+                                    <span>•</span>
+                                    <span>4 tháng trước</span>
+                                </span>
+                            </div>
+                            <!-- Sao -->
+                            <div class="flex space-x-2 mt-1">
+                                <svg class="w-4 h-4 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                </svg>
+                                <svg class="w-4 h-4 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                </svg>
+                                <svg class="w-4 h-4 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                </svg>
+                                <svg class="w-4 h-4 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                </svg>
+                                <svg class="w-4 h-4 text-yellow-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                                    <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Thao tác -->
+                    <div class="relative">
+                        <button class="btn-reply cursor-pointer inline-flex items-center p-2 text-sm font-medium text-center text-gray-900 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" type="button">
+                            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 4 15">
+                                <path d="M3.5 1.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 6.041a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Zm0 5.959a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"/>
+                            </svg>
+                        </button>
+
+                        <div class="dropdown-menu absolute right-0 mt-2 w-36 bg-white border border-gray-200 rounded-lg shadow-lg dark:bg-gray-800 hidden">
+                            <ul class="py-1 text-sm text-gray-700 dark:text-gray-200">
+                                <li>
+                                    <button class="cursor-pointer w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <span>🚫</span>
+                                        <span>Báo cáo</span>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button class="cursor-pointer w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                        <span>💬</span>
+                                        <span>Trả lời</span>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Nội dung bình luận -->
+                <p class="text-gray-700 text-base mt-2 text-justify">
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nostrum sunt blanditiis nam, deleniti voluptate temporibus illo id tempora dolorum esse odio saepe ut reprehenderit itaque amet odit facere qui inventore.
+                </p>     
+
+                <!-- Ảnh -->
+                <div class="mt-2 flex gap-2 flex-wrap">
+                    <img src="https://readymadeui.com/images/fashion-img-1.webp" alt="" class="w-18 h-18 rounded object-cover">
+                    <img src="https://readymadeui.com/images/fashion-img-2.webp" alt="" class="w-18 h-18 rounded object-cover">
+                    <img src="https://readymadeui.com/images/fashion-img-3.webp" alt="" class="w-18 h-18 rounded object-cover">
+                    <img src="https://readymadeui.com/images/fashion-img-4.webp" alt="" class="w-18 h-18 rounded object-cover">
+                    <img src="https://readymadeui.com/images/fashion-img-5.webp" alt="" class="w-18 h-18 rounded object-cover">
+                    <img src="https://readymadeui.com/images/fashion-img-6.webp" alt="" class="w-18 h-18 rounded object-cover">
+                </div>
+
+                <!-- Nội dung trả lời -->
+                <p class="text-gray-700 text-base mt-2 text-justify bg-gray-200 rounded p-2">
+                    <span class="font-semibold">Người bán:</span>
+                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nostrum sunt blanditiis nam, deleniti voluptate temporibus illo id tempora dolorum esse odio saepe ut reprehenderit itaque amet odit facere qui inventore.
+                </p>
+            </div>
+        </div>
+        
+        <div class="h-50"></div>
+
+        <div class="max-w-[330px] mx-auto bg-white p-6 rounded-lg border border-gray-200 shadow-lg text-center relative">
+            <button type="button" class="cursor-pointer absolute top-3 right-3 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="static-modal">
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                </svg>
+            </button>
+            <img src="https://fptshop.com.vn/img/reject-rating.png?w=640&q=100" alt="" class="mx-auto w-65 object-contain">
+            <h2 class="text-lg font-bold mt-2">Gửi đánh giá không thành công!</h2>
+            <p class="text-sm text-gray-600 mt-1">
+                Quý khách vui lòng mua hàng để tham gia đánh giá sản phẩm.
+            </p>
+            <button class="cursor-pointer w-full text-base text-black font-semibold border-2 border-black bg-yellow-400 hover:bg-yellow-500 rounded-lg py-2 mt-4">
+                Đã hiểu
+            </button>
+        </div>
+
+        <div class="h-50"></div>
+
+        <div class="max-w-lg mx-auto bg-white p-6 rounded-lg border border-gray-200 shadow-lg relative">
+            <h2 class="text-lg font-semibold text-gray-800 text-center mb-4">Đánh giá sản phẩm</h2>
+            <button type="button" class="cursor-pointer absolute top-3 right-3 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="static-modal">
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                </svg>
+            </button>
+            <!-- Chọn sao -->
+            <div class="flex justify-center space-x-4 mb-6">
+                <button class="star cursor-pointer" data-rating="1">
+                    <svg class="w-8 h-8 text-gray-300 hover:text-yellow-400 hover:scale-[1.2] duration-300 ease-in-out dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                    </svg>
+                </button>
+                <button class="star cursor-pointer" data-rating="2">
+                    <svg class="w-8 h-8 text-gray-300 hover:text-yellow-400 hover:scale-[1.2] duration-300 ease-in-out dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                    </svg>
+                </button>
+                <button class="star cursor-pointer" data-rating="3">
+                    <svg class="w-8 h-8 text-gray-300 hover:text-yellow-400 hover:scale-[1.2] duration-300 ease-in-out dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                    </svg>
+                </button>
+                <button class="star cursor-pointer" data-rating="4">
+                    <svg class="w-8 h-8 text-gray-300 hover:text-yellow-400 hover:scale-[1.2] duration-300 ease-in-out dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                    </svg>
+                </button>
+                <button class="star cursor-pointer" data-rating="5">
+                    <svg class="w-8 h-8 text-gray-300 hover:text-yellow-400 hover:scale-[1.2] duration-300 ease-in-out dark:text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
+                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Tải ảnh -->
+             <label for="image-upload" class="cursor-pointer mb-2 block text-center w-full border-2 border-gray-200 hover:border-yellow-400 p-2 rounded-lg text-sm">Thêm ảnh (tối đa 6 ảnh)</label>
+            <input type="file" id="image-upload" accept="image/*" class="hidden" multiple>
+            <div id="image-preview" class="flex flex-wrap gap-2 mb-2"></div>       
+        
+            <!-- Nội dung đánh giá -->
+            <textarea id="review-text" rows="4" class="w-full p-2 text-sm rounded-lg outline-2 outline-gray-300 hover:outline-yellow-400 focus:outline-yellow-400" placeholder="Chia sẻ suy nghĩ của bạn"></textarea>
+        
+            <!-- Nút gửi đánh giá -->
+            <button id="submit" class="cursor-pointer w-full text-base text-black font-semibold border-2 border-black bg-yellow-400 hover:bg-yellow-500 rounded-lg py-2 mt-4">
+                Gửi đánh giá
+            </button>
+        </div>
+        
+        <div class="h-50"></div>
+
+        <div class="max-w-lg mx-auto bg-white p-6 rounded-lg border border-gray-200 shadow-lg relative">
+            <h2 class="text-lg font-semibold text-gray-800 text-center mb-6">Trả lời khách hàng</h2>
+            <button type="button" class="cursor-pointer absolute top-3 right-3 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="static-modal">
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                </svg>
+            </button>
+
+            <!-- Nội dung trả lời-->
+            <textarea id="review-text" rows="4" class="w-full p-2 rounded-lg outline-2 outline-gray-300 hover:outline-yellow-400 focus:outline-yellow-400 text-sm" placeholder="Cảm ơn bạn!"></textarea>
+        
+            <!-- Nút gửi đánh giá -->
+            <button id="submit" class="cursor-pointer w-full text-base text-black font-semibold border-2 border-black bg-yellow-400 hover:bg-yellow-500 rounded-lg py-2 mt-4">
+                Trả lời
+            </button>
+        </div>
+
+        <div class="h-50"></div>
+
+    </section>
+
+    <script>
+        document.addEventListener('click', function (event) {
+            let btn = event.target.closest('.btn-reply');
+            let dropdowns = document.querySelectorAll('.dropdown-menu');
+
+            if (btn) {
+                let dropdown = btn.nextElementSibling;
+                let isHidden = dropdown.classList.contains('hidden');
+
+                dropdowns.forEach(menu => menu.classList.add('hidden')); // Đóng tất cả
+                if (isHidden) dropdown.classList.remove('hidden'); // Mở nếu đang ẩn
+            } else {
+                dropdowns.forEach(menu => menu.classList.add('hidden')); // Click ra ngoài thì đóng
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const stars = document.querySelectorAll(".star");
+
+            stars.forEach(star => {
+                star.addEventListener("click", function () {
+                    const rating = this.getAttribute("data-rating");
+                    highlightStars(rating);
+                });
+            });
+
+            function highlightStars(rating) {
+                stars.forEach(star => {
+                    const starSvg = star.querySelector("svg");
+                    if (star.getAttribute("data-rating") <= rating) {
+                        starSvg.classList.add("text-yellow-400");
+                        starSvg.classList.remove("text-gray-300", "dark:text-gray-500");
+                    } else {
+                        starSvg.classList.add("text-gray-300", "dark:text-gray-500");
+                        starSvg.classList.remove("text-yellow-400");
+                    }
+                });
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const imageUpload = document.getElementById("image-upload");
+            const imagePreview = document.getElementById("image-preview");
+            let imageList = [];
+
+            imageUpload.addEventListener("change", function (event) {
+                const files = Array.from(event.target.files);
+                
+                // Kiểm tra tổng số ảnh không vượt quá 6
+                if (imageList.length + files.length > 6) {
+                    alert("Bạn chỉ có thể tải lên tối đa 6 ảnh.");
+                    return;
+                }
+
+                files.forEach(file => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = function (e) {
+                        if (imageList.length < 6) {
+                            const imgDiv = document.createElement("div");
+                            imgDiv.classList.add("relative", "w-24", "h-24");
+
+                            const img = document.createElement("img");
+                            img.src = e.target.result;
+                            img.classList.add("w-full", "h-full", "rounded", "border", "border-gray-200");
+
+                            const removeBtn = document.createElement("button");
+                            removeBtn.innerHTML = "✖";
+                            removeBtn.classList.add("absolute", "cursor-pointer", "top-0", "right-0", "bg-white", "text-red-500", "text-xs", "p-1", "rounded-full");
+                            removeBtn.addEventListener("click", function () {
+                                imgDiv.remove();
+                                imageList = imageList.filter(item => item !== file);
+                            });
+
+                            imgDiv.appendChild(img);
+                            imgDiv.appendChild(removeBtn);
+                            imagePreview.appendChild(imgDiv);
+                            imageList.push(file);
+                        }
+                    };
+                });
+
+                // Xóa input file để có thể chọn lại file cũ nếu cần
+                imageUpload.value = "";
+            });
+        });
+
+    </script>
+</body>
+
+</html>
