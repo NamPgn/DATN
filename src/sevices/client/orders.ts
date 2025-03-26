@@ -39,7 +39,14 @@ export const postApiOrderWard = async (data: any) => {
 };
 
 export const paymentOrder = async (data: any) => {
-  return intancesLocal.post("/checkout", data);
+  const token_ = token_auth();
+
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.post("/checkout", data, { headers });
 };
 
 export const paymentReusult = async (queryString: any) => {
@@ -116,7 +123,7 @@ export const deleteAddress = async (id: any) => {
   return intancesLocal.delete(`/addresses/${id}`, { headers });
 };
 
-export const updateAddress = async ( data: any) => {
+export const updateAddress = async (data: any) => {
   const token_ = token_auth();
 
   const headers: any = {};

@@ -15,6 +15,7 @@ import { useMutation } from "react-query";
 import { addAddress } from "../../../sevices/client/orders";
 import { toast } from "react-toastify";
 import { UsersContext } from "../../../context/usersContext";
+import { isValidStreetAddress } from "../../../common/isAddr";
 
 const FormModal = ({
   open,
@@ -108,8 +109,11 @@ const FormModal = ({
       toast.error("Vui lòng nhập Số điện thoại");
       return;
     }
-    if (!selectedValuesAddr.o_address) {
-      toast.error("Vui lòng nhập Địa chỉ cụ thể");
+    if (
+      !selectedValuesAddr.o_address ||
+      !isValidStreetAddress(selectedValuesAddr.o_address)
+    ) {
+      toast.error("Vui lòng nhập Địa chỉ cụ thể, phải có tên đường hoặc số nhà!");
       return;
     }
     if (!selectedValues?.select1?.value) {

@@ -169,7 +169,6 @@ export const columnsProductVariant = [
   //   title: "Ảnh",
   //   dataIndex: "image",
   //   key: "image",
-  //   render: (text:any) => <Image width={50} src={text} />,
   // },
   {
     title: "Tên Sản Phẩm",

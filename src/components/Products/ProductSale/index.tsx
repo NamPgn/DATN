@@ -96,12 +96,9 @@ const ProductSale = () => {
                                   : product?.regular_price}
                                 VND
                               </ins>
-                              <del>
-                                {product?.sale_price
-                                  ? product?.regular_price 
-                                  : ""}
-                                {"0"}VND
-                              </del>
+                              {product?.sale_price && (
+                                <del>{product?.regular_price + "VND"}</del>
+                              )}
                             </div>
                           </div>
                         </div>

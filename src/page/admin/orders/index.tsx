@@ -38,10 +38,10 @@ const OrdersAdmin = () => {
   const handlePageChangePage = (page: number) => {
     setPage(page);
   };
-
   const data =
     Orders &&
-    Orders?.data?.data?.data.map((item: any) => {
+    Orders?.data?.data.map((item: any) => {
+      console.log(item)
       return {
         key: item.id,
         stt: item.id,
@@ -50,8 +50,8 @@ const OrdersAdmin = () => {
         o_phone: item.o_phone,
         final_amount: item.final_amount,
         payment_method: item.payment_method,
-        stt_payment: item.stt_payment.name,
-        stt_track: item.stt_track.name,
+        // stt_payment: item.stt_payment.name,
+        // stt_track: item.stt_track.name,
         action: (
           <div className="d-flex gap-2">
             <Link to={`/dashboard/orders/${item.id}`} className="text-blue-500">

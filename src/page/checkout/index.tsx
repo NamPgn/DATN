@@ -421,6 +421,12 @@ const Checkout = () => {
                               </TableRow>
                               <TableRow>
                                 <TableCell>
+                                  <strong>Email</strong>
+                                </TableCell>
+                                <TableCell>{getAdressDefault?.email}</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
                                   <strong>Số điện thoại</strong>
                                 </TableCell>
                                 <TableCell>{getAdressDefault?.phone}</TableCell>
