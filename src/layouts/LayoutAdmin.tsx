@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { Badge, Button, Drawer, Input, Layout, Menu, Spin } from "antd";
@@ -5,7 +6,6 @@ import {
   BellOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  SettingOutlined,
 } from "@ant-design/icons";
 import MVCol from "../components/UI/Core/MV/Grid/Col";
 import { Header } from "antd/es/layout/layout";

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Bar, Doughnut, Pie } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -29,8 +30,6 @@ const Dashboard = () => {
       return (await dashboard()).data?.data;
     },
   });
-
- 
 
   const categoryByProductData = {
     labels: data?.productByCategory.map((c: any) => c.name),
@@ -134,7 +133,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <OrdersNotify/>
+      <OrdersNotify />
     </TailwindComponent>
   );
 };
