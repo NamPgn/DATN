@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Header</title>
+    <style>
+        .mega-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .mega-menu.active {
+            max-height: 500px; /* Điều chỉnh theo nội dung thực tế */
+            transition: max-height 0.5s ease-in;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="fixed top-0 start-0 w-full z-20 bg-white relative">
+        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-5">
+
+            <!-- Menu -->
+            <div class="flex items-center justify-between">
+                <ul class="flex items-center justify-between gap-8 text-base font-semibold">
+                    <li>
+                        <a href="#" class="store block py-1 text-gray-900 border-b-3 border-transparent hover:border-yellow-400">Cửa hàng</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block py-1 text-gray-900 border-b-3 border-transparent hover:border-yellow-400">Khuyến mãi</a>
+                    </li>
+                    <li>
+                        <a href="#" class="block py-1 text-gray-900 border-b-3 border-transparent hover:border-yellow-400">Liên hệ</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Mega menu -->
+            <div class="mega-menu absolute top-15 start-0 w-full z-20 bg-white shadow-lg">
+                <div class="grid grid-cols-4 p-6 gap-6 max-w-screen-xl mx-auto text-sm">
+                    <div>
+                        <h3 class="text-base font-semibold mb-2">Áo Nam</h3>
+                        <ul>
+                            <li class="relative group">
+                                <a href="#" class="block py-2 text-gray-700 hover:text-yellow-500">Áo thun</a>
+                                <img src="images/logo.png" class="h-7 absolute start-[-35px] top-0.5 hidden group-hover:block" alt="Flowbite Logo">
+                                
+                            </li>
+                            <li class="relative group">
+                                <a href="#" class="block py-2 text-gray-700 hover:text-yellow-500">Áo sơ mi</a>
+                                <img src="images/logo.png" class="h-7 absolute start-[-35px] top-0.5 hidden group-hover:block" alt="Flowbite Logo">
+                                
+                            </li>
+                            <li class="relative group">
+                                <a href="#" class="block py-2 text-gray-700 hover:text-yellow-500">Áo khoác</a>
+                                <img src="images/logo.png" class="h-7 absolute start-[-35px] top-0.5 hidden group-hover:block" alt="Flowbite Logo">
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-semibold mb-2">Quần Nam</h3>
+                        <ul>
+                            <li class="relative group">
+                                <a href="#" class="block py-2 text-gray-700 hover:text-yellow-500">Quần jeans</a>
+                                <img src="images/logo.png" class="h-7 absolute start-[-35px] top-0.5 hidden group-hover:block" alt="Flowbite Logo">
+                            </li>
+                            <li class="relative group">
+                                <a href="#" class="block py-2 text-gray-700 hover:text-yellow-500">Quần short</a>
+                                <img src="images/logo.png" class="h-7 absolute start-[-35px] top-0.5 hidden group-hover:block" alt="Flowbite Logo">
+                                
+                            </li>
+                            <li class="relative group">
+                                <a href="#" class="block py-2 text-gray-700 hover:text-yellow-500">Quần kaki</a>
+                                <img src="images/logo.png" class="h-7 absolute start-[-35px] top-0.5 hidden group-hover:block" alt="Flowbite Logo">
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-semibold mb-2">Phụ kiện</h3>
+                        <ul>
+                            <li class="relative group">
+                                <a href="#" class="block py-2 text-gray-700 hover:text-yellow-500">Mũ</a>
+                                <img src="images/logo.png" class="h-7 absolute start-[-35px] top-0.5 hidden group-hover:block" alt="Flowbite Logo">
+                                
+                            </li>
+                            <li class="relative group">
+                                <a href="#" class="block py-2 text-gray-700 hover:text-yellow-500">Balo</a>
+                                <img src="images/logo.png" class="h-7 absolute start-[-35px] top-0.5 hidden group-hover:block" alt="Flowbite Logo">
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-semibold mb-2">Giày dép</h3>
+                        <ul>
+                            <li class="relative group">
+                                <a href="#" class="block py-2 text-gray-700 hover:text-yellow-500">Giày sneaker</a>
+                                <img src="images/logo.png" class="h-7 absolute start-[-35px] top-0.5 hidden group-hover:block" alt="Flowbite Logo">
+                            </li>
+                                
+                            <li class="relative group">
+                                <a href="#" class="block py-2 text-gray-700 hover:text-yellow-500">Dép sandal</a>
+                                <img src="images/logo.png" class="h-7 absolute start-[-35px] top-0.5 hidden group-hover:block" alt="Flowbite Logo">
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Logo -->
+            <a href="">
+                <img src="images/sevenstyle.png" class="h-10 sm:me-40" alt="Flowbite Logo">
+            </a>
+
+            <div class="flex gap-2">
+                <button type="button" class="w-25 py-2 cursor-pointer text-sm font-semibold text-black bg-yellow-400 hover:bg-yellow-500 border-2 border-black rounded-lg">
+                    Đăng nhập
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const storeLink = document.querySelector('.store');
+            const megaMenu = document.querySelector('.mega-menu');
+            
+            // Hiển thị mega menu khi hover vào "Cửa hàng"
+            storeLink.addEventListener('mouseenter', function() {
+                megaMenu.classList.add('active');
+            });
+            
+            // Ẩn mega menu khi rời khỏi
+            storeLink.addEventListener('mouseleave', function() {
+                // Kiểm tra nếu chuột không nằm trong mega menu
+                megaMenu.addEventListener('mouseleave', function() {
+                    megaMenu.classList.remove('active');
+                });
+                
+                // Nếu chuột di chuyển vào mega menu thì không ẩn
+                megaMenu.addEventListener('mouseenter', function() {
+                    megaMenu.classList.add('active');
+                });
+            });
+            
+            // Ẩn khi rời khỏi mega menu
+            megaMenu.addEventListener('mouseleave', function() {
+                megaMenu.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+
+</html>
