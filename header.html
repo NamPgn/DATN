@@ -14,7 +14,7 @@
         }
 
         .mega-menu.active {
-            max-height: 500px; /* Điều chỉnh theo nội dung thực tế */
+            max-height: 500px;
             transition: max-height 0.5s ease-in;
         }
     </style>
@@ -128,27 +128,19 @@
             const storeLink = document.querySelector('.store');
             const megaMenu = document.querySelector('.mega-menu');
             
-            // Hiển thị mega menu khi hover vào "Cửa hàng"
-            storeLink.addEventListener('mouseenter', function() {
-                megaMenu.classList.add('active');
-            });
+            // Hiển thị/ẩn mega menu khi hover vào "Cửa hàng" hoặc menu
+            storeLink.addEventListener('mouseenter', () => megaMenu.classList.add('active'));
+            megaMenu.addEventListener('mouseleave', () => megaMenu.classList.remove('active'));
             
-            // Ẩn mega menu khi rời khỏi
-            storeLink.addEventListener('mouseleave', function() {
-                // Kiểm tra nếu chuột không nằm trong mega menu
-                megaMenu.addEventListener('mouseleave', function() {
-                    megaMenu.classList.remove('active');
-                });
-                
-                // Nếu chuột di chuyển vào mega menu thì không ẩn
-                megaMenu.addEventListener('mouseenter', function() {
-                    megaMenu.classList.add('active');
-                });
-            });
-            
-            // Ẩn khi rời khỏi mega menu
-            megaMenu.addEventListener('mouseleave', function() {
-                megaMenu.classList.remove('active');
+            // Giữ menu hiển thị nếu di chuyển từ storeLink sang megaMenu
+            megaMenu.addEventListener('mouseenter', () => megaMenu.classList.add('active'));
+            storeLink.addEventListener('mouseleave', () => {
+                // Thêm delay nhỏ để tránh ẩn menu khi di chuyển qua
+                setTimeout(() => {
+                    if (!megaMenu.matches(':hover')) {
+                        megaMenu.classList.remove('active');
+                    }
+                }, 100);
             });
         });
     </script>
