@@ -133,12 +133,6 @@ export const columnsProducts = [
     width: 300,
   },
   {
-    title: "Ảnh chính",
-    dataIndex: "main_image",
-    key: "main_image",
-    width: 100,
-  },
-  {
     title: "Slug",
     dataIndex: "slug",
     key: "slug",

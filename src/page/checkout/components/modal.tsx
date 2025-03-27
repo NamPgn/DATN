@@ -49,8 +49,8 @@ const FormModal = ({
       RefetchDefault();
       handleClose();
     },
-    onError: () => {
-      toast.error("Thêm địa chỉ thất bại");
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
     },
   });
   const handleChange = (key: any, value: any) => {
@@ -109,11 +109,10 @@ const FormModal = ({
       toast.error("Vui lòng nhập Số điện thoại");
       return;
     }
-    if (
-      !selectedValuesAddr.o_address ||
-      !isValidStreetAddress(selectedValuesAddr.o_address)
-    ) {
-      toast.error("Vui lòng nhập Địa chỉ cụ thể, phải có tên đường hoặc số nhà!");
+    if (!selectedValuesAddr.o_address) {
+      toast.error(
+        "Vui lòng nhập Địa chỉ cụ thể, phải có tên đường hoặc số nhà!"
+      );
       return;
     }
     if (!selectedValues?.select1?.value) {
@@ -263,6 +262,7 @@ const FormModal = ({
           margin="dense"
           onChange={(e) => handleSetValue("o_address", e.target.value)}
         />
+
       </DialogContent>
       <DialogActions>
         {/* <Button onClick={handleClose}>Hủy</Button> */}

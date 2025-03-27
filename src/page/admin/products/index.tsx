@@ -85,7 +85,6 @@ const ProductsAdmin = () => {
         key: item.id,
         name: <Link to={"/q/" + item.id}>{item.name}</Link>,
         slug: item.slug,
-        main_image: item.main_image,
         url: (
           <Image
             src={

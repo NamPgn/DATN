@@ -133,3 +133,50 @@ export const updateAddress = async (data: any) => {
   }
   return intancesLocal.put(`/addresses/${data?.id}`, data, { headers });
 };
+
+export const getOrderUser = async (currentPage: number | string) => {
+  const token_ = token_auth();
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.get(`/orders_for_user?page=${currentPage}`, { headers });
+};
+
+export const getOrderCodeUser = async (code: any) => {
+  const token_ = token_auth();
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.get(`/order_detail/${code !== null ? code : ""}`, {
+    headers,
+  });
+};
+
+export const getOrderStatusUser = async () => {
+  const token_ = token_auth();
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.get(`/order_statuses`, { headers });
+};
+
+export const getOrderPaymentUser = async (currentPage: any, query: any) => {
+  const token_ = token_auth();
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.get(
+    `/orders_for_user?page=${currentPage}&status=${
+      query !== null ? query : ""
+    }`,
+    { headers }
+  );
+};

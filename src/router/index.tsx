@@ -75,6 +75,7 @@ import Shop from "../page/shop";
 import ProductAll from "../page/shop/productAll";
 import ProductSearch from "../page/shop/productSearch";
 import Layout from "../layouts/Layout";
+import OrderDetailUser from "../page/orders/orderDetail";
 
 export const routerClient = [
   {
@@ -128,6 +129,10 @@ export const routerClient = [
       {
         path: "/profile",
         element: <AccountSetting />,
+      },
+      {
+        path: "/order/detail/:code",
+        element: <OrderDetailUser />,
       },
     ],
   },
