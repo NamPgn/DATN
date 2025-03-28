@@ -155,26 +155,27 @@ const OrderHistory: React.FC = () => {
           <div className="text-gray-600 text-sm mt-1">
             Thanh toán: {order.payment_status}
           </div>
-
-          {(order.status_code === "pending" ||
-            order.status_code === "confirmed") && (
-            <div className="mt-4 space-x-2">
-              {(order.status_code === "pending" ||
-                order.status_code === "confirmed") && (
-                <button
-                  onClick={() => handleCancelOrder(order.code)}
-                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-                >
-                  Hủy đơn hàng
-                </button>
-              )}
-              <Link to={"/order/detail/" + order.code}>
-                <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
-                  Chi tiết đơn hàng
-                </button>
-              </Link>
-            </div>
-          )}
+          <div className="flex  gap-3 mt-4 items-center">
+            {(order.status_code === "pending" ||
+              order.status_code === "confirmed") && (
+              <div className=" space-x-2">
+                {(order.status_code === "pending" ||
+                  order.status_code === "confirmed") && (
+                  <button
+                    onClick={() => handleCancelOrder(order.code)}
+                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                  >
+                    Hủy đơn hàng
+                  </button>
+                )}
+              </div>
+            )}
+            <Link to={"/order/detail/" + order.code}>
+              <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                Chi tiết đơn hàng
+              </button>
+            </Link>
+          </div>
         </div>
       ))
     ) : (

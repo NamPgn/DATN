@@ -2,9 +2,17 @@ import { useQuery } from "react-query";
 import { getOrderCodeUser } from "../../sevices/client/orders";
 import { useParams } from "react-router-dom";
 import TailwindComponent from "../../components/Tailwind/TailwinComponent";
+import { useState } from "react";
+import ModalConfirm from "./modalConfirm";
+import ModalConfirmCancel from "./modalConfirmCancle";
+import RefundModal from "./modalConfirmRefund";
+import { ACTIONS_INDEX, SHIPPING_ICONS, STATUSICONS } from "../../constant";
 
 const OrderDetailUser = () => {
   const { code } = useParams();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpenCancle, setIsModalCancle] = useState(false);
+  const [isModalOpenRefund, setIsModalRefund] = useState(false);
   const { data: order, isLoading } = useQuery({
     queryKey: ["orderCode", code],
     queryFn: async () => {
@@ -42,21 +50,24 @@ const OrderDetailUser = () => {
     });
   };
 
-  const statusIcons: any = {
-    "Chờ xác nhận": "📝",
-    "Đang xử lý": "🔄",
-    "Đang giao": "🚚",
-    "Đã giao": "✅",
-    "Đã hủy": "❌",
-  };
-
-  const shippingIcons: any = {
-    "Tạo đơn": "📦",
-    "Đang lấy hàng": "🤲",
-    "Đang vận chuyển": "🚚",
-    "Đã giao hàng": "✅",
-    "Hoàn hàng": "🔄",
-    "Đã nhận hàng hoàn": "🏠",
+  const handleAction = (action: string) => {
+    const actionData = ACTIONS_INDEX[action];
+    switch (actionData?.action) {
+      case "return":
+        setIsModalOpen(true);
+        break;
+      case "cancel":
+        setIsModalCancle(true);
+        break;
+      case "refund":
+        setIsModalRefund(true);
+        break;
+      case "retryPayment":
+        setIsModalRefund(true);
+        break;
+      default:
+        break;
+    }
   };
   return (
     <TailwindComponent>
@@ -72,7 +83,7 @@ const OrderDetailUser = () => {
               </p>
             </div>
             <span className="px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm">
-              {order?.status}
+              {order?.status?.name}
             </span>
           </div>
 
@@ -80,7 +91,7 @@ const OrderDetailUser = () => {
             {/* Sản phẩm */}
             <div>
               <h3 className="font-semibold text-lg mb-4">Sản phẩm</h3>
-              {order?.items.map((item, index) => (
+              {order?.items.map((item: any, index: any) => (
                 <div key={index} className="flex items-center mb-4 space-x-4">
                   <img
                     src={item.image}
@@ -152,7 +163,11 @@ const OrderDetailUser = () => {
               </div>
               <div>
                 <p className="text-sm text-gray-600">Địa chỉ:</p>
-                <p>{order?.o_address}</p>
+                <p>
+                  {order?.o_address
+                    .replace(/,\s*,*/g, ",")
+                    .replace(/,\s*$/, "")}
+                </p>
               </div>
             </div>
           </div>
@@ -166,7 +181,7 @@ const OrderDetailUser = () => {
                   className="relative mb-4 pl-6 pb-4 border-b border-gray-200 last:border-b-0"
                 >
                   <div className="absolute left-[13px] top-0 w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white">
-                    {statusIcons[timeline.to] || "📦"}
+                    {STATUSICONS[timeline.to] || "📦"}
                   </div>
                   <div className="flex justify-between items-center">
                     <div>
@@ -194,13 +209,13 @@ const OrderDetailUser = () => {
                 Thông tin vận chuyển
               </h3>
               <div className="relative pl-4 border-l-2 border-gray-200">
-                {order?.shipping_logs.map((log:any, index:any) => (
+                {order?.shipping_logs.map((log: any, index: any) => (
                   <div
                     key={index}
                     className="relative mb-4 pl-6 pb-4 border-b border-gray-200 last:border-b-0"
                   >
                     <div className="absolute left-[-13px] top-0 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-white">
-                      {shippingIcons[log.status] || "🚚"}
+                      {SHIPPING_ICONS[log.status] || "🚚"}
                     </div>
                     <div className="flex justify-between items-center">
                       <div>
@@ -225,22 +240,40 @@ const OrderDetailUser = () => {
 
           {order?.actions && order?.actions.length > 0 && (
             <div className="p-4 border-t flex space-x-3">
-              {order?.actions.map((action: any) => (
-                <button
-                  key={action}
-                  className={`
-                  px-4 py-2 rounded-md text-sm font-medium 
-                  ${
-                    action === "cancel"
-                      ? "bg-red-500 text-white hover:bg-red-600"
-                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                  }
-                `}
-                >
-                  {action === "cancel" ? "Hủy đơn hàng" : action}
-                </button>
-              ))}
+              {order.actions.map((action: any) => {
+                const actionData = ACTIONS_INDEX[action] || {
+                  label: action,
+                  color: "bg-gray-200 text-gray-700 hover:bg-gray-300",
+                };
+                return (
+                  <button
+                    key={action}
+                    className={`px-4 py-2 rounded-md text-sm font-medium ${actionData.color}`}
+                    onClick={() => handleAction(action)}
+                  >
+                    {actionData.label}
+                  </button>
+                );
+              })}
             </div>
+          )}
+
+          {isModalOpen && (
+            <ModalConfirm
+              setIsModalOpen={setIsModalOpen}
+              actionIndex={ACTIONS_INDEX}
+            />
+          )}
+
+          {isModalOpenCancle && (
+            <ModalConfirmCancel
+              setIsModalOpen={setIsModalCancle}
+              order={order}
+            />
+          )}
+
+          {isModalOpenRefund && (
+            <RefundModal setIsModalOpen={setIsModalCancle} />
           )}
         </div>
       </div>

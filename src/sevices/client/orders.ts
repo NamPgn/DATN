@@ -180,3 +180,23 @@ export const getOrderPaymentUser = async (currentPage: any, query: any) => {
     { headers }
   );
 };
+
+export const cancleOrderUser = async (data: any) => {
+  const token_ = token_auth();
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.post(`/orders/${data?.code}/cancel`, data, { headers });
+};
+
+export const refundOrderUser = async (data: any) => {
+  const token_ = token_auth();
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.post(`/orders/${data?.code}/cancel`, data, { headers });
+};

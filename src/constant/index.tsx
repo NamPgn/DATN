@@ -487,3 +487,44 @@ export const REASONS = [
   "Hành vi gian lận",
   "Báo cáo từ người dùng khác",
 ];
+
+
+export const STATUSICONS: any = {
+  "Chờ xác nhận": "📝",
+  "Đang xử lý": "🔄",
+  "Đang giao": "🚚",
+  "Đã giao": "✅",
+  "Đã hủy": "❌",
+};
+
+export const SHIPPING_ICONS: any = {
+  "Tạo đơn": "📦",
+  "Đang lấy hàng": "🤲",
+  "Đang vận chuyển": "🚚",
+  "Đã giao hàng": "✅",
+  "Hoàn hàng": "🔄",
+  "Đã nhận hàng hoàn": "🏠",
+};
+
+export const ACTIONS_INDEX: any = {
+  cancel: {
+    label: "Hủy",
+    color: "bg-red-500 text-white hover:bg-red-600",
+    action: "cancel",
+  },
+  return: {
+    label: "Hoàn hàng trả tiền",
+    color: "bg-yellow-500 text-white hover:bg-yellow-600",
+    action: "return",
+  },
+  close: {
+    label: "Hoàn tất đơn hàng",
+    color: "bg-green-500 text-white hover:bg-green-600",
+    action: "close",
+  },
+  pay: {
+    label: "Thanh toán",
+    color: "bg-blue-500 text-white hover:bg-blue-600",
+    action: "retryPayment",
+  },
+};
