@@ -82,20 +82,22 @@ const EditVoucher = ({ voucher, refetch }: any) => {
                 <InputNumber />
               </Form.Item>
             ) : type === 1 ? (
-              <Form.Item name="discount_percent" label="Phần trăm giảm">
-                <InputNumber />
-              </Form.Item>
+              <>
+                <Form.Item name="discount_percent" label="Phần trăm giảm">
+                  <InputNumber />
+                </Form.Item>
+                <Form.Item
+                  name="max_discount_amount"
+                  label="Số tiền giảm tối đa của đơn hàng"
+                >
+                  <InputNumber />
+                </Form.Item>
+              </>
             ) : null;
           }}
         </Form.Item>
 
         <Form.Item name="min_product_price" label="Giá tối thiểu của đơn hàng">
-          <InputNumber />
-        </Form.Item>
-        <Form.Item
-          name="max_discount_amount"
-          label="Số tiền giảm tối đa của đơn hàng"
-        >
           <InputNumber />
         </Form.Item>
 
