@@ -4,11 +4,9 @@ import TailwindComponent from "../../components/Tailwind/TailwinComponent";
 import {
   getOrderPaymentUser,
   getOrderStatusUser,
-  payOrderUser,
 } from "../../sevices/client/orders";
 import { useMutation, useQuery } from "react-query";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 
 const OrderHistory: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
