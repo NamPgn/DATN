@@ -488,7 +488,6 @@ export const REASONS = [
   "Báo cáo từ người dùng khác",
 ];
 
-
 export const STATUSICONS: any = {
   "Chờ xác nhận": "📝",
   "Đang xử lý": "🔄",
@@ -525,6 +524,12 @@ export const ACTIONS_INDEX: any = {
   pay: {
     label: "Thanh toán",
     color: "bg-blue-500 text-white hover:bg-blue-600",
-    action: "retryPayment",
+    action: "pay",
+  },
+
+  refund: {
+    label: "Hoàn Hàng/Trả Tiền",
+    color: "bg-blue-500 text-white hover:bg-blue-600",
+    action: "refund",
   },
 };

@@ -4,9 +4,11 @@ import TailwindComponent from "../../components/Tailwind/TailwinComponent";
 import {
   getOrderPaymentUser,
   getOrderStatusUser,
+  payOrderUser,
 } from "../../sevices/client/orders";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const OrderHistory: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
@@ -19,6 +21,9 @@ const OrderHistory: React.FC = () => {
       return (await getOrderStatusUser()).data?.data || [];
     },
   });
+
+  
+
   const { data: orderPayment, isLoading: loadingPayment } = useQuery({
     queryKey: ["orderPayment", activeTab, currentPage],
     queryFn: async () => {

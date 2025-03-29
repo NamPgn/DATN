@@ -350,31 +350,29 @@ const Checkout = () => {
       </Button> */}
       <div>
         {token_ && (
-          <>
-            <FormModal
-              orderGetProvince={orderGetProvince}
-              optionsDistrict={optionsDistrict}
-              selectedValues={selectedValues}
-              setOptionsDistrict={setOptionsDistrict}
-              optionsWard={optionsWard}
-              setOptionsWard={setOptionsWard}
-              MutateDistrict={MutateDistrict}
-              MutateWard={MutateWard}
-              optionsSelectProvince={optionsSelectProvince}
-              setSelectedValues={setSelectedValues}
-              open={open}
-              handleClose={() => setOpen(false)}
-              MutateShipping={MutateShipping}
-              checkoutItems={checkoutItems}
-              setValue={setValue}
-              selectedValuesAddr={selectedValuesAddr}
-              setSelectedValuesAddr={setSelectedValuesAddr}
-              refetchAddrList={refetchAddrList}
-              RefetchDefault={RefetchDefault}
-              addList={addList}
-              setIsEdit={setIsEdit}
-            />
-          </>
+          <FormModal
+            orderGetProvince={orderGetProvince}
+            optionsDistrict={optionsDistrict}
+            selectedValues={selectedValues}
+            setOptionsDistrict={setOptionsDistrict}
+            optionsWard={optionsWard}
+            setOptionsWard={setOptionsWard}
+            MutateDistrict={MutateDistrict}
+            MutateWard={MutateWard}
+            optionsSelectProvince={optionsSelectProvince}
+            setSelectedValues={setSelectedValues}
+            open={open}
+            handleClose={() => setOpen(false)}
+            MutateShipping={MutateShipping}
+            checkoutItems={checkoutItems}
+            setValue={setValue}
+            selectedValuesAddr={selectedValuesAddr}
+            setSelectedValuesAddr={setSelectedValuesAddr}
+            refetchAddrList={refetchAddrList}
+            RefetchDefault={RefetchDefault}
+            addList={addList}
+            setIsEdit={setIsEdit}
+          />
         )}
         {/* <FormModal /> */}
         {/* <TailwindComponent>

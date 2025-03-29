@@ -1,22 +1,60 @@
-import { useQuery } from "react-query";
-import { getOrderCodeUser } from "../../sevices/client/orders";
-import { useParams } from "react-router-dom";
+import { useMutation, useQuery } from "react-query";
+import {
+  closeOrderUser,
+  getOrderCodeUser,
+  payOrderUser,
+} from "../../sevices/client/orders";
+import { useNavigate, useParams } from "react-router-dom";
 import TailwindComponent from "../../components/Tailwind/TailwinComponent";
 import { useState } from "react";
 import ModalConfirm from "./modalConfirm";
 import ModalConfirmCancel from "./modalConfirmCancle";
-import RefundModal from "./modalConfirmRefund";
 import { ACTIONS_INDEX, SHIPPING_ICONS, STATUSICONS } from "../../constant";
+import { toast } from "react-toastify";
+import ReturnModal from "./modalConfirmReturn";
 
 const OrderDetailUser = () => {
   const { code } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenCancle, setIsModalCancle] = useState(false);
-  const [isModalOpenRefund, setIsModalRefund] = useState(false);
-  const { data: order, isLoading } = useQuery({
+  const [isModalOpenturn, setIsModalReturn] = useState(false);
+  const nav = useNavigate();
+  const {
+    data: order,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["orderCode", code],
     queryFn: async () => {
       return (await getOrderCodeUser(code)).data?.data || null;
+    },
+  });
+
+  const { mutate, isLoading: loadingRePay } = useMutation({
+    mutationFn: async () => {
+      return await payOrderUser({
+        code: order?.order_code,
+      });
+    },
+    onSuccess: (data: any) => {
+      window.location.href = data?.data?.url;
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
+    },
+  });
+
+  const { mutate: close, isLoading: loadingClose } = useMutation({
+    mutationFn: async () => {
+      return await closeOrderUser({
+        code: order?.order_code,
+      });
+    },
+    onSuccess: (data: any) => {
+      toast.success(data?.data?.message);
+    },
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
     },
   });
 
@@ -54,16 +92,16 @@ const OrderDetailUser = () => {
     const actionData = ACTIONS_INDEX[action];
     switch (actionData?.action) {
       case "return":
-        setIsModalOpen(true);
+        setIsModalReturn(true);
         break;
       case "cancel":
         setIsModalCancle(true);
         break;
-      case "refund":
-        setIsModalRefund(true);
+      case "pay":
+        mutate();
         break;
-      case "retryPayment":
-        setIsModalRefund(true);
+      case "close":
+        close();
         break;
       default:
         break;
@@ -251,7 +289,11 @@ const OrderDetailUser = () => {
                     className={`px-4 py-2 rounded-md text-sm font-medium ${actionData.color}`}
                     onClick={() => handleAction(action)}
                   >
-                    {actionData.label}
+                    {action === "pay" && loadingRePay
+                      ? "Chờ..."
+                      : action === "close" && loadingClose
+                      ? "Chờ..."
+                      : actionData.label}
                   </button>
                 );
               })}
@@ -267,13 +309,15 @@ const OrderDetailUser = () => {
 
           {isModalOpenCancle && (
             <ModalConfirmCancel
+              refetch={refetch}
               setIsModalOpen={setIsModalCancle}
               order={order}
+              nav={nav}
             />
           )}
 
-          {isModalOpenRefund && (
-            <RefundModal setIsModalOpen={setIsModalCancle} />
+          {isModalOpenturn && (
+            <ReturnModal order={order} setIsModalReturn={setIsModalReturn} />
           )}
         </div>
       </div>

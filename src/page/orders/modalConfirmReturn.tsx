@@ -1,11 +1,18 @@
 import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
+import { returnOrderUser } from "../../sevices/client/orders";
 
-const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/upload";
-const CLOUDINARY_UPLOAD_PRESET = "YOUR_UPLOAD_PRESET";
+const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dkrn3fe2o/upload";
+const CLOUDINARY_UPLOAD_PRESET = "sevenstyle";
 
-const RefundModal = ({ setIsModalOpen }: { setIsModalOpen: (val: boolean) => void }) => {
+const ReturnModal = ({
+  setIsModalReturn,
+  order,
+}: {
+  setIsModalReturn: (val: boolean) => void;
+  order: any;
+}) => {
   const [reason, setReason] = useState("");
   const [bankList, setBankList] = useState<any[]>([]);
   const [selectedBank, setSelectedBank] = useState("");
@@ -53,28 +60,38 @@ const RefundModal = ({ setIsModalOpen }: { setIsModalOpen: (val: boolean) => voi
     return Promise.all(uploadPromises);
   });
 
-  const refundMutation = useMutation(async () => {
-    const uploadedImages = await uploadImagesMutation.mutateAsync();
+  const refundMutation = useMutation({
+    mutationFn: async () => {
+      const uploadedImages = await uploadImagesMutation.mutateAsync();
 
-    const requestData = {
-      reason,
-      images: uploadedImages,
-      bank_name: selectedBank,
-      bank_account_name: accountName,
-      bank_account_number: accountNumber,
-    };
+      const requestData = {
+        code: order?.order_code,
+        reason,
+        images: uploadedImages,
+        bank_name: selectedBank,
+        bank_account_name: accountName,
+        bank_account_number: accountNumber,
+      };
 
-    console.log("Dữ liệu gửi đi:", requestData);
-
-    setTimeout(() => {
+      return await returnOrderUser(requestData);
+    },
+    onSuccess: () => {
       toast.success("Gửi yêu cầu hoàn hàng thành công!");
-      setIsModalOpen(false);
-    }, 1000);
+      setTimeout(() => setIsModalReturn(false), 1000);
+    },
+    onError: (error: any) => {
+      toast.error(
+        error?.response?.data?.message || "Có lỗi xảy ra, vui lòng thử lại!"
+      );
+    },
   });
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg w-[400px]"  style={{ marginBottom:"200px" }}>
+      <div
+        className="bg-white p-6 rounded-lg w-[400px]"
+        style={{ marginBottom: "200px" }}
+      >
         <h2 className="text-lg font-bold mb-3">Lý do hoàn hàng</h2>
 
         <textarea
@@ -117,18 +134,32 @@ const RefundModal = ({ setIsModalOpen }: { setIsModalOpen: (val: boolean) => voi
         />
 
         {/* Upload ảnh */}
-        <input type="file" multiple accept="image/*" onChange={handleFileChange} className="mb-3" />
+        <input
+          type="file"
+          multiple
+          accept="image/*"
+          onChange={handleFileChange}
+          className="mb-3"
+        />
 
         {/* Hiển thị ảnh xem trước */}
         <div className="flex flex-wrap gap-2">
           {previewImages.map((src, index) => (
-            <img key={index} src={src} alt="preview" className="w-16 h-16 object-cover rounded-md" />
+            <img
+              key={index}
+              src={src}
+              alt="preview"
+              className="w-16 h-16 object-cover rounded-md"
+            />
           ))}
         </div>
 
         {/* Nút gửi */}
         <div className="mt-4 flex justify-end space-x-2">
-          <button className="px-4 py-2 bg-gray-300 rounded-md" onClick={() => setIsModalOpen(false)}>
+          <button
+            className="px-4 py-2 bg-gray-300 rounded-md"
+            onClick={() => setIsModalReturn(false)}
+          >
             Hủy
           </button>
           <button
@@ -144,4 +175,4 @@ const RefundModal = ({ setIsModalOpen }: { setIsModalOpen: (val: boolean) => voi
   );
 };
 
-export default RefundModal;
+export default ReturnModal;

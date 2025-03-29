@@ -3,7 +3,7 @@ import { useMutation } from "react-query";
 import { toast } from "react-toastify";
 import { cancleOrderUser } from "../../sevices/client/orders";
 
-const ModalConfirmCancel = ({ setIsModalOpen, order }: any) => {
+const ModalConfirmCancel = ({ setIsModalOpen, order, refetch, nav }: any) => {
   const [reason, setReason] = useState("");
 
   const { mutate, isLoading } = useMutation({
@@ -15,6 +15,8 @@ const ModalConfirmCancel = ({ setIsModalOpen, order }: any) => {
     },
     onSuccess: () => {
       setIsModalOpen(false);
+      refetch();
+      nav("/profile");
       toast.success("Gửi yêu cầu hủy đơn hàng thành công!");
     },
     onError: () => {

@@ -188,7 +188,7 @@ export const cancleOrderUser = async (data: any) => {
   if (token_) {
     headers.Authorization = `Bearer ${token_}`;
   }
-  return intancesLocal.post(`/orders/${data?.code}/cancel`, data, { headers });
+  return intancesLocal.post(`/cancel_order/${data?.code}`, data, { headers });
 };
 
 export const refundOrderUser = async (data: any) => {
@@ -198,5 +198,39 @@ export const refundOrderUser = async (data: any) => {
   if (token_) {
     headers.Authorization = `Bearer ${token_}`;
   }
-  return intancesLocal.post(`/orders/${data?.code}/cancel`, data, { headers });
+  return intancesLocal.post(`/cancel_order/${data?.code}`, data, { headers });
+};
+
+export const payOrderUser = async (data: any) => {
+  const token_ = token_auth();
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.post(`/retry_payment_order/${data?.code}`, null, {
+    headers,
+  });
+};
+
+export const closeOrderUser = async (data: any) => {
+  const token_ = token_auth();
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.post(`/close_order/${data?.code}`, null, { headers });
+};
+
+export const returnOrderUser = async (data: any) => {
+  const token_ = token_auth();
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.post(`/request_refun_order/${data?.code}`, data, {
+    headers,
+  });
 };
