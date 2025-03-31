@@ -102,7 +102,7 @@ const Dashboard = () => {
             onClick={() => setIsLast7Days(!isLast7Days)}
             className={`px-4 py-2 rounded-md text-white transition ${
               isLast7Days
-                ? "bg-blue-600 hover:bg-blue-500"
+                ? "bg-blue-500 hover:bg-blue-600"
                 : "bg-gray-500 hover:bg-gray-600"
             }`}
           >
