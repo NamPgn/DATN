@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Table, Button, message } from "antd";
+import { Table, Button, message, Image } from "antd";
 import { Link, useParams } from "react-router-dom";
 import { columnsProductVariant } from "../../../../constant";
 import { useMutation, useQuery } from "react-query";
@@ -36,10 +36,10 @@ const ProductVariant = () => {
   });
 
   const data = productsVariants?.variants?.map((items: any) => {
-    
     return {
       ...items,
-    values:items.values,
+      // image: <Image width={50} src={items?.url} />,
+      values: items.values,
       pr_name: productsVariants?.name,
       action: (
         <div className="d-flex gap-1">

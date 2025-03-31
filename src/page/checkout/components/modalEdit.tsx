@@ -110,8 +110,8 @@ const ModalEdit = ({
       refetchDefault();
       handleClose();
     },
-    onError: () => {
-      toast.error("Thêm địa chỉ thất bại");
+    onError: (error:any) => {
+      toast.error(error?.response?.data?.message);
     },
   });
 

@@ -87,3 +87,34 @@ export const postApiOrderGetShip = async (data: any) => {
   );
 };
 
+export const confirmOrder = async (data: any) => {
+  return intances.post(`/orders/${data?.code}/confirm`, null);
+};
+
+export const cancelOrder = async (data: any) => {
+  return intances.post(`/orders/${data?.code}/cancel`, data);
+};
+
+export const approveOrderUser = async (data: any) => {
+  return intances.post(`/orders/${data?.code}/approve_return`, null);
+};
+
+export const rejectReturnOrderUser = async (data: any) => {
+  return intances.post(`/orders/${data?.code}/reject_return`, data);
+};
+
+export const refunAutoOrderUser = async (data: any) => {
+  return intances.post(`/orders/${data?.code}/refun_auto`, null);
+};
+
+export const refundManualOrderUser = async (data: any) => {
+  return intances.post(`/orders/${data?.code}/refund_manual`, data);
+};
+
+export const refundPartialOrderUser = async (data: any) => {
+  return intances.post(`/orders/${data?.code}/reject_return`, data);
+};
+
+export const confirmReturnReceivedOrderUser = async (data: any) => {
+  return intances.post(`/orders/${data?.code}/reject_return`, null);
+};

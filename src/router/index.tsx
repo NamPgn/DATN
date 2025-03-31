@@ -75,6 +75,7 @@ import ThankYou from "../page/orders/thank";
 import PaymentResult from "../page/checkout/components/paymentResult";
 import DeletedProducts from "../page/admin/products/component/deleted";
 import { Layout } from "antd";
+import OrderDetailUser from "../page/orders/orderDetail";
 
 export const routerClient = [
   {
@@ -128,6 +129,10 @@ export const routerClient = [
       {
         path: "/profile",
         element: <AccountSetting />,
+      },
+      {
+        path: "/order/detail/:code",
+        element: <OrderDetailUser />,
       },
     ],
   },
