@@ -277,7 +277,7 @@ const ProductForm = ({
           <Input className="w-50" placeholder="Mô tả ngắn" />
         </Form.Item>
 
-        <Form.Item label="Category Id" name="categories">
+        <Form.Item label="Danh mục" name="categories">
           <Select
             className="w-50"
             mode="multiple"

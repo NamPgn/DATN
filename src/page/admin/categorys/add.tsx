@@ -51,7 +51,7 @@ const AddCategory = () => {
       >
         <Input placeholder="Enter category name" />
       </Form.Item>
-      <Form.Item label="Category Id" name="parent_id">
+      <Form.Item label="Danh mục" name="parent_id">
         <Select
           style={{ width: "200px" }}
           placeholder="Vui lòng chọn"

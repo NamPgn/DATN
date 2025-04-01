@@ -131,6 +131,10 @@ export const routerClient = [
         element: <AccountSetting />,
       },
       {
+        path: "/orders",
+        element: <OrderHistory />,
+      },
+      {
         path: "/order/detail/:code",
         element: <OrderDetailUser />,
       },

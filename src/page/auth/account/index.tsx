@@ -103,111 +103,92 @@ const AccountSetting = () => {
                 Chỉnh sửa thông tin
               </button>
             </li>
-            <li className="nav-item">
-              <button
-                className={`nav-link ${
-                  activeTab === "history" ? "active" : ""
-                }`}
-                onClick={() => setActiveTab("history")}
-              >
-                Lịch sử đơn hàng
-              </button>
-            </li>
           </ul>
           <div className="file-upload mt-5">
-            {activeTab === "profile" && (
-              <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="row mb-5 gx-5">
-                  <div className="col-xxl-8 mb-5 mb-xxl-0">
-                    <div className="bg-secondary-soft px-4 rounded">
-                      <div className="row g-3">
-                        <h4 className="mb-4 mt-0">Contact Detail</h4>
-                        <div className="col-md-6">
-                          <label className="form-label">Tên</label>
-                          <input
-                            {...register("name")}
-                            className="form-control"
-                          />
-                          {errors.name && (
-                            <p className="text-danger">{errors.name.message}</p>
-                          )}
-                        </div>
-                        <div className="col-md-6">
-                          <label className="form-label">Tên đăng nhập</label>
-                          <input
-                            disabled
-                            {...register("username")}
-                            className="form-control"
-                          />
-                          {errors.username && (
-                            <p className="text-danger">
-                              {errors.username.message}
-                            </p>
-                          )}
-                        </div>
-                        <div className="col-md-6">
-                          <label className="form-label">Email *</label>
-                          <input
-                            disabled
-                            {...register("email")}
-                            type="email"
-                            className="form-control"
-                          />
-                          {errors.email && (
-                            <p className="text-danger">
-                              {errors.email.message}
-                            </p>
-                          )}
-                        </div>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="row mb-5 gx-5">
+                <div className="col-xxl-8 mb-5 mb-xxl-0">
+                  <div className="bg-secondary-soft px-4 rounded">
+                    <div className="row g-3">
+                      <h4 className="mb-4 mt-0">Contact Detail</h4>
+                      <div className="col-md-6">
+                        <label className="form-label">Tên</label>
+                        <input {...register("name")} className="form-control" />
+                        {errors.name && (
+                          <p className="text-danger">{errors.name.message}</p>
+                        )}
                       </div>
-                    </div>
-                    <div className="gap-3 d-md-flex text-center mb-3 px-4">
-                      <button type="submit" className="btn btn-primary mt-5">
-                        Lưu
-                      </button>
+                      <div className="col-md-6">
+                        <label className="form-label">Tên đăng nhập</label>
+                        <input
+                          disabled
+                          {...register("username")}
+                          className="form-control"
+                        />
+                        {errors.username && (
+                          <p className="text-danger">
+                            {errors.username.message}
+                          </p>
+                        )}
+                      </div>
+                      <div className="col-md-6">
+                        <label className="form-label">Email *</label>
+                        <input
+                          disabled
+                          {...register("email")}
+                          type="email"
+                          className="form-control"
+                        />
+                        {errors.email && (
+                          <p className="text-danger">{errors.email.message}</p>
+                        )}
+                      </div>
                     </div>
                   </div>
+                  <div className="gap-3 d-md-flex text-center mb-3 px-4">
+                    <button type="submit" className="btn btn-primary mt-5">
+                      Lưu
+                    </button>
+                  </div>
+                </div>
 
-                  {/* Upload Avatar */}
-                  <div className="col-xxl-4">
-                    <div className="bg-secondary-soft px-4 rounded">
-                      <h4 className="mb-4 mt-0 text-center">
-                        Tải lên ảnh của bạn
-                      </h4>
-                      <div className="text-center">
-                        <div className="square position-relative display-2 mb-3">
-                          {avatar ? (
-                            <img
-                              className="w-100 h-100 rounded"
-                              src={avatar}
-                              alt="Profile"
-                            />
-                          ) : (
-                            <i className="fas fa-fw fa-user position-absolute top-50 start-50 translate-middle text-secondary"></i>
-                          )}
-                        </div>
-                        <input
-                          type="file"
-                          id="customFile"
-                          multiple
-                          className="d-none"
-                          accept="image/*"
-                          onChange={handleFileChange}
-                        />
-                        <label
-                          className="btn btn-success-soft"
-                          htmlFor="customFile"
-                        >
-                          {uploading ? "Đâng tải..." : "Tải ảnh lên"}
-                        </label>
+                {/* Upload Avatar */}
+                <div className="col-xxl-4">
+                  <div className="bg-secondary-soft px-4 rounded">
+                    <h4 className="mb-4 mt-0 text-center">
+                      Tải lên ảnh của bạn
+                    </h4>
+                    <div className="text-center">
+                      <div className="square position-relative display-2 mb-3">
+                        {avatar ? (
+                          <img
+                            className="w-100 h-100 rounded"
+                            src={avatar}
+                            alt="Profile"
+                          />
+                        ) : (
+                          <i className="fas fa-fw fa-user position-absolute top-50 start-50 translate-middle text-secondary"></i>
+                        )}
                       </div>
+                      <input
+                        type="file"
+                        id="customFile"
+                        multiple
+                        className="d-none"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                      />
+                      <label
+                        className="btn btn-success-soft"
+                        htmlFor="customFile"
+                      >
+                        {uploading ? "Đâng tải..." : "Tải ảnh lên"}
+                      </label>
                     </div>
                   </div>
                 </div>
-              </form>
-            )}
-
-            {activeTab === "history" && <OrderHistory />}
+              </div>
+            </form>
           </div>
         </div>
       </div>

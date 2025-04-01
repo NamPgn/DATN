@@ -56,7 +56,7 @@ const PaymentResult = () => {
             </button>
             {orderResult === "success" && (
               <button
-                onClick={() => navigate("/o/orders-history")}
+                onClick={() => navigate("/orders")}
                 className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition"
               >
                 Xem đơn hàng

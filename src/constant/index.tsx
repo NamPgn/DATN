@@ -51,6 +51,10 @@ export const URLSECTION = [
     PATH: "/profile",
     SECTTIONTITLE: "Thông Tin",
   },
+  {
+    PATH: "/orders",
+    SECTTIONTITLE: "Đơn hàng",
+  },
 ];
 
 export const BreadcrumbRouterAdminPage = [

@@ -54,7 +54,7 @@ const TableCheckout = ({
               </td>
             </tr>
             <tr className="shippingRow">
-              <th>Phí vận chuyển (Cố định)</th>
+              <th>Phí vận chuyển</th>
               <td>
                 <div className="pi01Price">
                   <ins>
