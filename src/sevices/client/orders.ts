@@ -39,7 +39,14 @@ export const postApiOrderWard = async (data: any) => {
 };
 
 export const paymentOrder = async (data: any) => {
-  return intancesLocal.post("/checkout", data);
+  const token_ = token_auth();
+
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.post("/checkout", data, { headers });
 };
 
 export const paymentReusult = async (queryString: any) => {
@@ -116,7 +123,7 @@ export const deleteAddress = async (id: any) => {
   return intancesLocal.delete(`/addresses/${id}`, { headers });
 };
 
-export const updateAddress = async ( data: any) => {
+export const updateAddress = async (data: any) => {
   const token_ = token_auth();
 
   const headers: any = {};
@@ -126,3 +133,106 @@ export const updateAddress = async ( data: any) => {
   }
   return intancesLocal.put(`/addresses/${data?.id}`, data, { headers });
 };
+
+export const getOrderUser = async (currentPage: number | string) => {
+  const token_ = token_auth();
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.get(`/orders_for_user?page=${currentPage}`, { headers });
+};
+
+export const getOrderCodeUser = async (code: any) => {
+  const token_ = token_auth();
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.get(`/order_detail/${code !== null ? code : ""}`, {
+    headers,
+  });
+};
+
+export const getOrderStatusUser = async () => {
+  const token_ = token_auth();
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.get(`/order_statuses`, { headers });
+};
+
+export const getOrderPaymentUser = async (currentPage: any, query: any) => {
+  const token_ = token_auth();
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.get(
+    `/orders_for_user?page=${currentPage}&status=${
+      query !== null ? query : ""
+    }`,
+    { headers }
+  );
+};
+
+export const cancleOrderUser = async (data: any) => {
+  const token_ = token_auth();
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.post(`/cancel_order/${data?.code}`, data, { headers });
+};
+
+export const refundOrderUser = async (data: any) => {
+  const token_ = token_auth();
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.post(`/cancel_order/${data?.code}`, data, { headers });
+};
+
+export const payOrderUser = async (data: any) => {
+  const token_ = token_auth();
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.post(`/retry_payment_order/${data?.code}`, null, {
+    headers,
+  });
+};
+
+export const closeOrderUser = async (data: any) => {
+  const token_ = token_auth();
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.post(`/close_order/${data?.code}`, null, { headers });
+};
+
+export const returnOrderUser = async (data: any) => {
+  const token_ = token_auth();
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intancesLocal.post(`/request_refun_order/${data?.code}`, data, {
+    headers,
+  });
+};
+
+

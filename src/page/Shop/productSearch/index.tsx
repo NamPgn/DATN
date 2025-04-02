@@ -84,24 +84,22 @@ const ProductSearch = () => {
                           </div>
                         </Link>
                         <div className="pi01Details">
-                          {product.reviews !== null && (
-                            <div className="productRatings">
-                              <div className="ratingCounts">
-                                {product.reviews} Reviews
-                              </div>
-                            </div>
-                          )}
                           <h3>
                             <Link to={`/product/detail/${product.id}`}>
                               {product.name}
                             </Link>
                           </h3>
-                          {product?.variants?.map((item: any) => (
-                            <div key={item.id} className="pi01Price">
-                              <ins>{item.regular_price}VND</ins>
-                              <del>{item.sale_price}VND</del>
-                            </div>
-                          ))}
+                          <div className="pi01Price">
+                            <ins>
+                              {product?.sale_price
+                                ? product?.sale_price
+                                : product?.regular_price}
+                              VND
+                            </ins>
+                            {product?.sale_price && (
+                              <del>{product?.regular_price + "VND"}</del>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>

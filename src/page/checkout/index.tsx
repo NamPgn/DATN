@@ -34,6 +34,7 @@ import {
   TableCell,
   TableContainer,
   TableRow,
+  TextField,
   Typography,
 } from "@mui/material";
 const schema = z.object({
@@ -52,6 +53,7 @@ const Checkout = () => {
     o_email: "",
     o_address: "",
     o_phone: "",
+    note: "",
   });
   const token_ = token_auth();
   const { checkoutItems } = useCheckout() || {};
@@ -59,6 +61,7 @@ const Checkout = () => {
   const [total_amount, settotal_amount]: any = useState(0);
   const [fn_amount, setFn_amount]: any = useState(0);
   const [shippingFee, setShippingFee]: any = useState(0);
+  const [final_amount, setFinal_amount]: any = useState(0);
   const [discountAmount, setDiscountAmount]: any = useState(0);
   const [voucherData, setDataVoucher] = useState<any | null>(null);
   const [voucherCode, setVoucherCode] = useState<any | null>(null);
@@ -103,7 +106,12 @@ const Checkout = () => {
     settotal_amount(totalAmount);
     setFn_amount(voucherData ? voucherData.final_total : totalAmount);
     setDiscountAmount(voucherData ? voucherData.discount : 0);
-  }, [checkoutItems, voucherData, fn_amount]);
+    if (total_amount && optionsShip.fee) {
+      setFinal_amount(
+        total_amount + optionsShip.fee - (voucherData?.discount || 0)
+      );
+    }
+  }, [checkoutItems, voucherData, fn_amount, final_amount, optionsShip]);
 
   const { data: addList = [], refetch: refetchAddrList } = useQuery({
     queryKey: ["addressList"],
@@ -173,7 +181,7 @@ const Checkout = () => {
         select3: { value: null, label: "" },
       });
     }
-  }, [token_, getAdressDefault, setValue]);
+  }, [token_, getAdressDefault, setValue, userId]);
 
   const { data: orderGetProvince } = useQuery(
     ["orderGetAdress"],
@@ -297,37 +305,40 @@ const Checkout = () => {
       return;
     }
   };
-
   const onSubmit = async (values: any) => {
-    setShippingFee(optionsShip.fee);
-    //final tổng tiền + phí ship - discount
-    const data = {
-      ...values,
-      o_address:
-        values.address +
-        "," +
-        ` ${selectedValues.select3.label}, ${selectedValues.select2.label}, ${selectedValues.select1.label}`,
-      discount_amount: voucherData ? voucherData.discount : 0,
-      final_amount: total_amount + optionsShip.fee - discountAmount,
-      products: checkoutItems,
-      shipping: optionsShip.fee,
-      time: optionsShip.time,
-      total_amount: total_amount,
-      voucher_code: voucherCode,
-    };
-    payment(data, {
-      onSuccess: (order: any) => {
-        if (values.payment_method === "vnpay") {
-          window.location.href = order?.data?.url;
-        } else {
-          toast.success(order?.data?.message);
-          navigate("/o/thanks");
-        }
-      },
-      onError: (error: any) => {
-        toast.error(error?.response?.data?.message);
-      },
-    });
+    if (checkoutItems.length > 0) {
+      setShippingFee(optionsShip.fee);
+      //final tổng tiền + phí ship - discount
+      const data = {
+        ...values,
+        o_address:
+          values.address +
+          "," +
+          ` ${selectedValues.select3.label}, ${selectedValues.select2.label}, ${selectedValues.select1.label}`,
+        discount_amount: voucherData ? voucherData.discount : 0,
+        final_amount: final_amount,
+        products: checkoutItems,
+        shipping: optionsShip.fee,
+        time: optionsShip.time,
+        total_amount: total_amount,
+        voucher_code: voucherCode,
+      };
+      payment(data, {
+        onSuccess: (order: any) => {
+          if (values.payment_method === "vnpay") {
+            window.location.href = order?.data?.url;
+          } else {
+            toast.success(order?.data?.message);
+            navigate("/o/thanks");
+          }
+        },
+        onError: (error: any) => {
+          toast.error(error?.response?.data?.message);
+        },
+      });
+    } else {
+      toast.error("Chưa có sản phẩm để thanh toán");
+    }
   };
 
   const openModal = () => setOpen(true);
@@ -339,31 +350,29 @@ const Checkout = () => {
       </Button> */}
       <div>
         {token_ && (
-          <>
-            <FormModal
-              orderGetProvince={orderGetProvince}
-              optionsDistrict={optionsDistrict}
-              selectedValues={selectedValues}
-              setOptionsDistrict={setOptionsDistrict}
-              optionsWard={optionsWard}
-              setOptionsWard={setOptionsWard}
-              MutateDistrict={MutateDistrict}
-              MutateWard={MutateWard}
-              optionsSelectProvince={optionsSelectProvince}
-              setSelectedValues={setSelectedValues}
-              open={open}
-              handleClose={() => setOpen(false)}
-              MutateShipping={MutateShipping}
-              checkoutItems={checkoutItems}
-              setValue={setValue}
-              selectedValuesAddr={selectedValuesAddr}
-              setSelectedValuesAddr={setSelectedValuesAddr}
-              refetchAddrList={refetchAddrList}
-              RefetchDefault={RefetchDefault}
-              addList={addList}
-              setIsEdit={setIsEdit}
-            />
-          </>
+          <FormModal
+            orderGetProvince={orderGetProvince}
+            optionsDistrict={optionsDistrict}
+            selectedValues={selectedValues}
+            setOptionsDistrict={setOptionsDistrict}
+            optionsWard={optionsWard}
+            setOptionsWard={setOptionsWard}
+            MutateDistrict={MutateDistrict}
+            MutateWard={MutateWard}
+            optionsSelectProvince={optionsSelectProvince}
+            setSelectedValues={setSelectedValues}
+            open={open}
+            handleClose={() => setOpen(false)}
+            MutateShipping={MutateShipping}
+            checkoutItems={checkoutItems}
+            setValue={setValue}
+            selectedValuesAddr={selectedValuesAddr}
+            setSelectedValuesAddr={setSelectedValuesAddr}
+            refetchAddrList={refetchAddrList}
+            RefetchDefault={RefetchDefault}
+            addList={addList}
+            setIsEdit={setIsEdit}
+          />
         )}
         {/* <FormModal /> */}
         {/* <TailwindComponent>
@@ -388,6 +397,9 @@ const Checkout = () => {
                   />
                 ) : (
                   <div className={`col-lg-6`}>
+                    <Typography variant="h6" sx={{ py: 2 }}>
+                      Thông tin đơn hàng
+                    </Typography>
                     <AddressDisplay
                       openModalAddress={openModal}
                       closeModalAddress={closeModal}
@@ -421,6 +433,12 @@ const Checkout = () => {
                               </TableRow>
                               <TableRow>
                                 <TableCell>
+                                  <strong>Email</strong>
+                                </TableCell>
+                                <TableCell>{getAdressDefault?.email}</TableCell>
+                              </TableRow>
+                              <TableRow>
+                                <TableCell>
                                   <strong>Số điện thoại</strong>
                                 </TableCell>
                                 <TableCell>{getAdressDefault?.phone}</TableCell>
@@ -438,6 +456,16 @@ const Checkout = () => {
                         </TableBody>
                       </Table>
                     </TableContainer>
+                    <TextField
+                      className="mt-3"
+                      label="Ghi chú đơn hàng"
+                      fullWidth
+                      margin="dense"
+                      multiline
+                      minRows={7}
+                      maxRows={8}
+                      onChange={(e) => setValue("note", e.target.value)}
+                    />
                   </div>
                 )}
                 <div className={`col-lg-6`}>

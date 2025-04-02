@@ -117,7 +117,7 @@
 }
 
 .mainMenu {
-    font-family: 'Jost', sans-serif;
+    
     position: relative;
     display: inline-flex;
     justify-content: flex-start;
@@ -726,7 +726,7 @@
 }
 
 .cartWidgetProduct a {
-    font-family: 'Jost', sans-serif;
+    
     display: block;
     font-size: 16px;
     line-height: 20px;
@@ -742,7 +742,7 @@
 }
 
 .cartWidgetProduct .cartProductPrice {
-    font-family: 'Jost', sans-serif;
+    
     font-size: 14px;
     font-weight: 500;
     color: #7b9496;
@@ -772,7 +772,7 @@
 }
 
 .totalPrice {
-    font-family: 'Jost', sans-serif;
+    
     position: relative;
     display: inline-block;
     font-size: 18px;
@@ -798,7 +798,7 @@
 }
 
 .cartWidgetBTN a {
-    font-family: 'Jost', sans-serif;
+    
     display: inline-block;
     position: relative;
     height: 35px;
@@ -920,7 +920,7 @@
 }
 
 .popup_search_form input[type="search"] {
-    font-family: 'Jost', sans-serif;
+    
     width: 100%;
     height: 70px;
     border: none;
@@ -1623,7 +1623,7 @@
 }
 
 .pi01Price {
-    font-family: 'Jost', sans-serif;
+    
     display: flex;
     justify-content: flex-start;
     align-items: center;
@@ -2382,7 +2382,7 @@
 
 .ulinaCountDown {
     position: relative;
-    font-family: 'Jost', sans-serif;
+    
 }
 
 .ulinaCountDown .countdown-row {
@@ -2492,7 +2492,7 @@
 }
 
 .productTabs ul.productTabsNav {
-    font-family: 'Jost', sans-serif;
+    
     margin: 0 0 46px;
     padding: 0;
     display: flex;
@@ -3826,7 +3826,7 @@
 }
 
 .filterUL li {
-    font-family: 'Jost', sans-serif;
+    
     font-size: 16px;
     line-height: 24px;
     color: #aeb3c3;
@@ -4495,7 +4495,7 @@
 }
 
 .pcCategory {
-    font-family: 'Jost', sans-serif;
+    
     font-size: 18px;
     line-height: 1;
     font-weight: 500;
@@ -4550,7 +4550,7 @@
 }
 
 .productStock {
-    font-family: 'Jost', sans-serif;
+    
     position: relative;
     font-size: 16px;
     line-height: 1;
@@ -4579,7 +4579,7 @@
 }
 
 .pcVariation>span {
-    font-family: 'Jost', sans-serif;
+    
     font-size: 16px;
     font-weight: 500;
     color: #52586d;
@@ -4612,7 +4612,7 @@
     line-height: 1;
     color: #52586d;
     font-weight: 400;
-    font-family: 'Jost', sans-serif;
+    
     width: 56px;
     margin: 17px 0 0;
 }
@@ -4816,7 +4816,7 @@
 }
 
 .pcMeta p span {
-    font-family: 'Jost', sans-serif;
+    
     font-size: 16px;
     color: #52586d;
     min-width: 67px;
@@ -4868,7 +4868,7 @@
     justify-content: center;
     margin: 0;
     padding: 0;
-    font-family: 'Jost', sans-serif;
+    
     border-bottom: 1px solid #dbdfe3;
 }
 
@@ -4990,7 +4990,7 @@
     font-size: 16px;
     line-height: 24px;
     color: #52586d;
-    font-family: 'Jost', sans-serif;
+    
     font-weight: 500;
     width: 132px;
     padding: 0 0 6px;
@@ -5103,7 +5103,7 @@
 }
 
 .reviewStar label {
-    font-family: 'Jost', sans-serif;
+    
     font-size: 16px;
     line-height: 24px;
     color: #52586d;
@@ -5280,7 +5280,7 @@
 }
 
 .woocommerce .shop_table.cart_table thead tr th {
-    font-family: 'Jost', sans-serif;
+    
     font-size: 21px;
     line-height: 30px;
     font-weight: 400;
@@ -5316,7 +5316,7 @@
 }
 
 .woocommerce .shop_table.cart_table tbody tr td.product-name a {
-    font-family: 'Jost', sans-serif;
+    
     font-size: 18px;
     line-height: 30px;
     color: #52586d;
@@ -5515,7 +5515,7 @@
     color: #52586d;
     margin: 0;
     line-height: 1;
-    font-family: 'Jost', sans-serif;
+    
     width: 88px;
 }
 
@@ -5639,7 +5639,7 @@
 }
 
 .cart_totals table tr th {
-    font-family: 'Jost', sans-serif;
+    
     font-size: 16px;
     line-height: 28px;
     color: #52586d;
@@ -5706,7 +5706,7 @@
 }
 
 .loginLinks p {
-    font-family: 'Jost', sans-serif;
+    
     margin: 0;
     font-size: 16px;
     line-height: 24px;
@@ -5855,7 +5855,7 @@
 }
 
 .checkoutRegister label {
-    font-family: 'Jost', sans-serif;
+    
     font-size: 16px;
     color: #52586d;
     font-weight: 400;
@@ -5914,7 +5914,7 @@
 }
 
 .shippingAddress label {
-    font-family: 'Jost', sans-serif;
+    
     font-size: 16px;
     color: #52586d;
     font-weight: 400;
@@ -6024,7 +6024,7 @@
 }
 
 .orderReview table thead tr th {
-    font-family: 'Jost', sans-serif;
+    
     font-size: 16px;
     line-height: 1;
     color: #52586d;
@@ -6043,7 +6043,7 @@
     font-size: 18px;
     line-height: 26px;
     color: #52586d;
-    font-family: 'Jost', sans-serif;
+    
 }
 
 .orderReview table tbody tr:first-child td {
@@ -6075,20 +6075,20 @@
     font-size: 16px;
     line-height: 26px;
     color: #52586d;
-    font-family: 'Jost', sans-serif;
+    
     font-weight: 500;
     padding: 0 0 4px;
 }
 
 .orderReview table tfoot tr td {
-    font-family: 'Jost', sans-serif;
+    
     font-size: 16px;
     line-height: 25px;
     padding: 0 0 4px;
 }
 
 .orderReview table tfoot tr td .pi01Price {
-    font-family: 'Jost', sans-serif;
+    
     color: #7b9496;
     font-size: 16px;
     line-height: 26px;
@@ -6143,7 +6143,7 @@
 }
 
 .wc_payment_methods li label {
-    font-family: 'Jost', sans-serif;
+    
     font-size: 16px;
     line-height: 1;
     color: #52586d;
@@ -6325,7 +6325,7 @@
     font-size: 18px;
     line-height: 18px;
     color: #52586d;
-    font-family: 'Jost', sans-serif;
+    
     margin: 0 17px 0 0;
 }
 
@@ -6463,7 +6463,7 @@
 }
 
 .rpCats {
-    font-family: 'Jost', sans-serif;
+    
     font-size: 14px;
     line-height: 1;
     color: #7b9496;
@@ -6518,7 +6518,7 @@
 }
 
 .sidebar .widget ul li a {
-    font-family: 'Jost', sans-serif;
+    
     display: inline-block;
     font-size: 16px;
     color: #52586d;
@@ -6730,7 +6730,7 @@
     font-size: 18px;
     line-height: 18px;
     color: #52586d;
-    font-family: 'Jost', sans-serif;
+    
     position: relative;
     display: block;
     font-style: normal;
@@ -7034,7 +7034,7 @@
     font-size: 16px;
     color: #52586d;
     line-height: 48px;
-    font-family: 'Jost', sans-serif;
+    
     text-transform: uppercase;
     font-weight: 500;
     border-radius: 48px;
@@ -7226,7 +7226,7 @@
     font-weight: 400;
     color: #FFF;
     background: #9ebbbd;
-    font-family: 'Jost', sans-serif;
+    
     text-align: left;
     padding: 0 30px;
     height: 60px;

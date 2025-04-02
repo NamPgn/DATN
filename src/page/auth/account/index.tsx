@@ -88,8 +88,8 @@ const AccountSetting = () => {
     <div className="container">
       <div className="row">
         <div className="col-12">
-          <div className="my-5">
-            <h3>My Profile</h3>
+          <div className="my-5 ">
+            <h3 className="mb-2">Thông tin</h3>
             <hr />
           </div>
           <ul className="nav nav-tabs">
