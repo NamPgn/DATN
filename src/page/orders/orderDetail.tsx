@@ -6,7 +6,7 @@ import {
 } from "../../sevices/client/orders";
 import { useNavigate, useParams } from "react-router-dom";
 import TailwindComponent from "../../components/Tailwind/TailwinComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModalConfirm from "./modalConfirm";
 import ModalConfirmCancel from "./modalConfirmCancle";
 import { ACTIONS_INDEX, SHIPPING_ICONS, STATUSICONS } from "../../constant";
@@ -19,7 +19,15 @@ const OrderDetailUser = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenCancle, setIsModalCancle] = useState(false);
   const [isModalOpenturn, setIsModalReturn] = useState(false);
+  const tokenOtp: any = localStorage.getItem("tokenOtp");
+  const tkOtp = JSON.parse(tokenOtp);
   const nav = useNavigate();
+
+  useEffect(() => {
+    if (!tkOtp) {
+      nav("/o/tracking");
+    }
+  }, [tkOtp]);
 
   const {
     data: order,
@@ -29,6 +37,12 @@ const OrderDetailUser = () => {
     queryKey: ["orderCode", code],
     queryFn: async () => {
       return (await getOrderCodeUser(code)).data?.data || null;
+    },
+    onSuccess: (data: any) => {
+      if (!data?.is_verified) {
+        toast.info("Đơn hàng của bạn chưa được xác thực");
+        nav("/o/tracking");
+      }
     },
     enabled: !!code,
   });

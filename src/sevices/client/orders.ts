@@ -153,7 +153,7 @@ export const getOrderCodeUser = async (code: any) => {
     headers.Authorization = `Bearer ${token_}`;
   }
   if (tkOtp) {
-    headers.Authorization = `X-Order-Access-Token ${tkOtp}`;
+    headers["X-Order-Access-Token"] = ` ${tkOtp}`;
   }
   return intancesLocal.get(`/order_detail/${code !== null ? code : ""}`, {
     headers,
@@ -188,9 +188,13 @@ export const getOrderPaymentUser = async (currentPage: any, query: any) => {
 export const cancleOrderUser = async (data: any) => {
   const token_ = token_auth();
   const headers: any = {};
-
+  const tokenOtp: any = localStorage.getItem("tokenOtp");
+  const tkOtp = JSON.parse(tokenOtp);
   if (token_) {
     headers.Authorization = `Bearer ${token_}`;
+  }
+  if (tkOtp) {
+    headers["X-Order-Access-Token"] = ` ${tkOtp}`;
   }
   return intancesLocal.post(`/cancel_order/${data?.code}`, data, { headers });
 };
@@ -198,9 +202,13 @@ export const cancleOrderUser = async (data: any) => {
 export const refundOrderUser = async (data: any) => {
   const token_ = token_auth();
   const headers: any = {};
-
+  const tokenOtp: any = localStorage.getItem("tokenOtp");
+  const tkOtp = JSON.parse(tokenOtp);
   if (token_) {
     headers.Authorization = `Bearer ${token_}`;
+  }
+  if (tkOtp) {
+    headers["X-Order-Access-Token"] = ` ${tkOtp}`;
   }
   return intancesLocal.post(`/cancel_order/${data?.code}`, data, { headers });
 };
@@ -208,9 +216,13 @@ export const refundOrderUser = async (data: any) => {
 export const payOrderUser = async (data: any) => {
   const token_ = token_auth();
   const headers: any = {};
-
+  const tokenOtp: any = localStorage.getItem("tokenOtp");
+  const tkOtp = JSON.parse(tokenOtp);
   if (token_) {
     headers.Authorization = `Bearer ${token_}`;
+  }
+  if (tkOtp) {
+    headers["X-Order-Access-Token"] = ` ${tkOtp}`;
   }
   return intancesLocal.post(`/retry_payment_order/${data?.code}`, null, {
     headers,
@@ -220,9 +232,13 @@ export const payOrderUser = async (data: any) => {
 export const closeOrderUser = async (data: any) => {
   const token_ = token_auth();
   const headers: any = {};
-
+  const tokenOtp: any = localStorage.getItem("tokenOtp");
+  const tkOtp = JSON.parse(tokenOtp);
   if (token_) {
     headers.Authorization = `Bearer ${token_}`;
+  }
+  if (tkOtp) {
+    headers["X-Order-Access-Token"] = ` ${tkOtp}`;
   }
   return intancesLocal.post(`/close_order/${data?.code}`, null, { headers });
 };
@@ -230,9 +246,13 @@ export const closeOrderUser = async (data: any) => {
 export const returnOrderUser = async (data: any) => {
   const token_ = token_auth();
   const headers: any = {};
-
+  const tokenOtp: any = localStorage.getItem("tokenOtp");
+  const tkOtp = JSON.parse(tokenOtp);
   if (token_) {
     headers.Authorization = `Bearer ${token_}`;
+  }
+  if (tkOtp) {
+    headers["X-Order-Access-Token"] = ` ${tkOtp}`;
   }
   return intancesLocal.post(`/request_refun_order/${data?.code}`, data, {
     headers,

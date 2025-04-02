@@ -1,15 +1,18 @@
 import { useMutation } from "react-query";
 import TailwindComponent from "../../components/Tailwind/TailwinComponent";
-import { verifyOrder, verifyOrderOtp } from "../../sevices/client/orders";
+import {
+  getOrderCodeUser,
+  verifyOrder,
+  verifyOrderOtp,
+} from "../../sevices/client/orders";
 import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useState } from "react";
-import { token_auth } from "../../common/auth/getToken";
 import { useNavigate } from "react-router-dom";
 
-const OrdersVerify = ({ orderResponse }: any) => {
+const OrdersVerify = ({ orderResponse, setOrderData }: any) => {
   const [otp, setOtp] = useState<string | null>(null);
   const nav = useNavigate();
   const emailSchema = z.object({
@@ -49,10 +52,25 @@ const OrdersVerify = ({ orderResponse }: any) => {
 
   const { mutate: verifyOtp, isLoading: loadingOtp } = useMutation({
     mutationFn: async (val) => await verifyOrderOtp(val),
-    onSuccess: (data: any) => {
+    onSuccess: async (data: any) => {
       toast.success(data?.data?.message);
       localStorage.setItem("tokenOtp", JSON.stringify(data?.data?.token));
       nav("/order/detail/" + orderResponse?.order_code);
+      try {
+        const res = await getOrderCodeUser(orderResponse?.order_code);
+        const updatedOrder = res?.data?.data;
+        setOrderData(updatedOrder);
+
+        if (updatedOrder?.is_verified) {
+          window.location.href = "/order/detail/" + updatedOrder.order_code;
+        } else {
+          toast.info(
+            "Xác thực thành công, nhưng đơn hàng vẫn chưa được cập nhật."
+          );
+        }
+      } catch (err) {
+        toast.error("Lỗi khi kiểm tra lại trạng thái xác thực.");
+      }
     },
     onError: (error: any) => {
       toast.error(error?.response?.data?.message);
