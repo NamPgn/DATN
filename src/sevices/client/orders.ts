@@ -147,9 +147,13 @@ export const getOrderUser = async (currentPage: number | string) => {
 export const getOrderCodeUser = async (code: any) => {
   const token_ = token_auth();
   const headers: any = {};
-
+  const tokenOtp: any = localStorage.getItem("tokenOtp");
+  const tkOtp = JSON.parse(tokenOtp);
   if (token_) {
     headers.Authorization = `Bearer ${token_}`;
+  }
+  if (tkOtp) {
+    headers.Authorization = `X-Order-Access-Token ${tkOtp}`;
   }
   return intancesLocal.get(`/order_detail/${code !== null ? code : ""}`, {
     headers,
@@ -235,4 +239,10 @@ export const returnOrderUser = async (data: any) => {
   });
 };
 
+export const verifyOrder = async (data: any) => {
+  return intancesLocal.post(`/send_verify_order`, data);
+};
 
+export const verifyOrderOtp = async (data: any) => {
+  return intancesLocal.post(`/verify_order_code`, data);
+};

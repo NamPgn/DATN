@@ -16,6 +16,7 @@ const menuItems = [
   },
   { name: "Sản phẩm", path: "/products" },
   { name: "Liên hệ", path: "/contact" },
+  { name: "Tra cứu đơn hàng", path: "/o/tracking" },
 ];
 
 const socialIcons = [

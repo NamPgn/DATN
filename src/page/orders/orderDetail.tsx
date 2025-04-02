@@ -12,6 +12,7 @@ import ModalConfirmCancel from "./modalConfirmCancle";
 import { ACTIONS_INDEX, SHIPPING_ICONS, STATUSICONS } from "../../constant";
 import { toast } from "react-toastify";
 import ReturnModal from "./modalConfirmReturn";
+import CountdownTimer from "./countdownTimer";
 
 const OrderDetailUser = () => {
   const { code } = useParams();
@@ -19,7 +20,7 @@ const OrderDetailUser = () => {
   const [isModalOpenCancle, setIsModalCancle] = useState(false);
   const [isModalOpenturn, setIsModalReturn] = useState(false);
   const nav = useNavigate();
-  
+
   const {
     data: order,
     isLoading,
@@ -29,8 +30,8 @@ const OrderDetailUser = () => {
     queryFn: async () => {
       return (await getOrderCodeUser(code)).data?.data || null;
     },
+    enabled: !!code,
   });
-
   const { mutate, isLoading: loadingRePay } = useMutation({
     mutationFn: async () => {
       return await payOrderUser({
@@ -120,6 +121,17 @@ const OrderDetailUser = () => {
               <p className="text-sm text-gray-500">
                 Mã đơn: {order.order_code}
               </p>
+              {order.subtitle && (
+                <p className="text-sm text-gray-500 font-bold">
+                  {order.subtitle}
+                </p>
+              )}
+
+              {order?.expiried_at !== null ? (
+                <CountdownTimer expiredAt={order?.expiried_at} />
+              ) : (
+                ""
+              )}
             </div>
             <span className="px-3 py-1 bg-gray-200 text-gray-700 rounded-full text-sm">
               {order?.status?.name}
@@ -130,7 +142,7 @@ const OrderDetailUser = () => {
             {/* Sản phẩm */}
             <div>
               <h3 className="font-semibold text-lg mb-4">Sản phẩm</h3>
-              {order?.items.map((item: any, index: any) => (
+              {order?.items?.map((item: any, index: any) => (
                 <div key={index} className="flex items-center mb-4 space-x-4">
                   <img
                     src={item.image}
@@ -140,9 +152,23 @@ const OrderDetailUser = () => {
                   <div>
                     <p className="font-medium">{item.product_name}</p>
                     <p className="text-sm text-gray-500">
-                      {Object.entries(JSON.parse(item.variation))
-                        .map(([key, value]) => `${key}: ${value}`)
-                        .join(", ")}
+                      {Object.keys(
+                        item.variation && item.variation !== "null"
+                          ? JSON.parse(item.variation)
+                          : {}
+                      ).length > 0 ? (
+                        Object.entries(
+                          item.variation && item.variation !== "null"
+                            ? JSON.parse(item.variation)
+                            : {}
+                        ).map(([key, value]: any) => (
+                          <div key={key} className="text-gray-500">
+                            {key}: {value}
+                          </div>
+                        ))
+                      ) : (
+                        <div className="text-gray-500">Không có biến thể</div>
+                      )}
                     </p>
                     <p className="text-sm">
                       {item.quantity} x {formatCurrency(item.price)}
@@ -259,8 +285,23 @@ const OrderDetailUser = () => {
                     <div className="flex justify-between items-center">
                       <div>
                         <p className="font-medium text-gray-800">
-                          <span className="text-green-600">{log.status}</span>
+                          <span
+                            className="text-green-600 "
+                            style={{ marginLeft: "30px" }}
+                          >
+                            {log.status}
+                          </span>
                         </p>
+                        {log?.location && (
+                          <p className="font-medium text-gray-800">
+                            <span
+                              className="text-green-600 "
+                              style={{ marginLeft: "30px" }}
+                            >
+                              {log.location}
+                            </span>
+                          </p>
+                        )}
                         {log.note && (
                           <p className="text-sm text-gray-600 mt-1">
                             Ghi chú: {log.note}

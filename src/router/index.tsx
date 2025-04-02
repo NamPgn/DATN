@@ -76,6 +76,7 @@ import ProductAll from "../page/shop/productAll";
 import ProductSearch from "../page/shop/productSearch";
 import Layout from "../layouts/Layout";
 import OrderDetailUser from "../page/orders/orderDetail";
+import TrackingOrder from "../page/orders/tracking";
 
 export const routerClient = [
   {
@@ -181,6 +182,10 @@ export const routerClient = [
       {
         path: "payment",
         element: <PaymentResult />,
+      },
+      {
+        path: "tracking",
+        element: <TrackingOrder />,
       },
     ],
   },

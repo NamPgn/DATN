@@ -54,22 +54,6 @@ const SendOrder = () => {
             />
           </Form.Item>
 
-          <Form.Item
-            label="Người thanh toán dịch vụ"
-            name="payment_type_id"
-            rules={[
-              { required: true, message: "Vui lòng chọn người thanh toán!" },
-            ]}
-          >
-            <Select
-              placeholder="Chọn người thanh toán"
-              options={[
-                { value: 1, label: "Người Bán/Người Gửi" },
-                { value: 2, label: "Người Mua/Người Nhận" },
-              ]}
-            />
-          </Form.Item>
-
           <Form.Item label="Ghi chú" name="note">
             <Input placeholder="Nhập ghi chú" />
           </Form.Item>

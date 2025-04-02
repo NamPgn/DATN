@@ -66,6 +66,10 @@ const LayoutAdmin = () => {
       return (await getNotify()).data?.data;
     },
   });
+  const unreadCount = data?.filter(
+    (notification: any) => notification.is_read !== 0
+  ).length;
+
   return (
     <>
       <Layout
@@ -139,7 +143,7 @@ const LayoutAdmin = () => {
 
               {/* <SettingOutlined style={{ fontSize: "20px" }} /> */}
 
-              <Badge count={4}>
+              <Badge count={unreadCount}>
                 <BellOutlined
                   onClick={showDrawer}
                   style={{ fontSize: "20px" }}

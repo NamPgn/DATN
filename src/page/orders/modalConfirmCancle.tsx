@@ -16,7 +16,7 @@ const ModalConfirmCancel = ({ setIsModalOpen, order, refetch, nav }: any) => {
     onSuccess: () => {
       setIsModalOpen(false);
       refetch();
-      nav("/profile");
+      nav("/orders");
       toast.success("Gửi yêu cầu hủy đơn hàng thành công!");
     },
     onError: () => {

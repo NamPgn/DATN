@@ -59,12 +59,6 @@ const OrdersAdmin = () => {
                 Edit
               </Button>
             </Link> */}
-
-            <Link to={`/dashboard/orders/send/${item.id}`}>
-              <Button icon={<PlusOutlined />} color="green" variant="text">
-                Gửi đơn hàng
-              </Button>
-            </Link>
           </div>
         ),
       };
