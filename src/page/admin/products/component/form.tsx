@@ -30,6 +30,7 @@ const ProductForm = ({
       form.resetFields();
     }
   }, [id]);
+
   // useEffect(() => {
   //   if (dataEdit) {
   //     if (typeProduct !== dataEdit.type) {
@@ -144,7 +145,6 @@ const ProductForm = ({
         attributesValues[attribute.name] = selectedNames;
       }
     });
-    console.log(val.variants);
     const data = {
       attributes: attributesValues,
       main_image: selectOneImage?.id,
@@ -413,7 +413,12 @@ const ProductForm = ({
 
                           <Button
                             icon={<MinusCircleOutlined />}
-                            onClick={() => remove(name)}
+                            onClick={() => {
+                              setVariants((prev) =>
+                                prev.filter((_, i) => i !== index)
+                              );
+                              remove(name);
+                            }}
                           />
                         </Space>
                       );

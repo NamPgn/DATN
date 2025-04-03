@@ -27,7 +27,7 @@ const OrdersNotify = () => {
       echo.disconnect();
     };
   }, []);
-  return <React.Fragment>{JSON.stringify(order)}</React.Fragment>;
+  return null;
 };
 
 export default OrdersNotify;

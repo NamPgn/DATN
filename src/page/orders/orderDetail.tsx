@@ -13,6 +13,7 @@ import { ACTIONS_INDEX, SHIPPING_ICONS, STATUSICONS } from "../../constant";
 import { toast } from "react-toastify";
 import ReturnModal from "./modalConfirmReturn";
 import CountdownTimer from "./countdownTimer";
+import { token_auth } from "../../common/auth/getToken";
 
 const OrderDetailUser = () => {
   const { code } = useParams();
@@ -24,10 +25,11 @@ const OrderDetailUser = () => {
   const nav = useNavigate();
 
   useEffect(() => {
-    if (!tkOtp) {
+    if (!tkOtp && !token_auth()) {
+      //chưa đăng nhập + chưa có otp token thì ko cho vào tracking mà đăng nhập thì ko cho vào
       nav("/o/tracking");
     }
-  }, [tkOtp]);
+  }, [tkOtp, token_auth]);
 
   const {
     data: order,

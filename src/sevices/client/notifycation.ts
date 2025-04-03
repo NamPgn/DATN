@@ -11,3 +11,14 @@ export const getNotify = async () => {
   }
   return intances.get(`/notifications`, { headers });
 };
+
+export const changeNotify = async (data:any) => {
+  const token_ = token_auth();
+
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
+  return intances.patch(`/notifications/${data?.id}`, data, { headers });
+};
