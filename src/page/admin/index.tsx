@@ -110,7 +110,7 @@ const Dashboard = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-6 w-full">
           {[
             {
               label: "Tổng danh mục",
@@ -155,7 +155,7 @@ const Dashboard = () => {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6  w-full">
           <div className="bg-white p-6 shadow rounded-lg">
             <h2 className="text-xl font-bold mb-4 text-gray-700">
               Phân bố sản phẩm theo danh mục
