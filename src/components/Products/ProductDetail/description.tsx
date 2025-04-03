@@ -138,25 +138,6 @@ const Description = ({ product }: any) => {
                 <h3>Thêm đánh giá</h3>
                 <div className="reviewFrom">
                   <form onSubmit={handleSubmitComment} className="row">
-                    <div className="col-lg-6">
-                      <input
-                        type="text"
-                        name="name"
-                        placeholder="Tên của bạn"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                      />
-                    </div>
-                    <div className="col-lg-6">
-                      <input
-                        type="email"
-                        name="email"
-                        placeholder="Email của bạn"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                      />
-                    </div>
-
                     <div className="col-lg-12">
                       <textarea
                         name="comment"

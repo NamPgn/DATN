@@ -88,7 +88,7 @@ const Dashboard = () => {
             onChange={(e) => setYear(Number(e.target.value))}
             className="px-4 py-2 rounded-md border border-gray-300"
           >
-            {[...Array(5)].map((_, i) => {
+            {[...Array(3)].map((_, i) => {
               const currentYear = new Date().getFullYear() - i;
               return (
                 <option key={currentYear} value={currentYear}>
@@ -106,7 +106,7 @@ const Dashboard = () => {
                 : "bg-gray-500 hover:bg-gray-600"
             }`}
           >
-            {isLast7Days ? "Xem tất cả" : "Xem 7 ngày gần nhất"}
+            {isLast7Days ? "Thống kê tất cả" : "Thống kê 7 ngày gần nhất"}
           </button>
         </div>
 
@@ -127,7 +127,11 @@ const Dashboard = () => {
               value: data?.totalUsers,
               color: "text-red-500",
             },
-            { label: "Tổng đơn hàng", color: "text-yellow-400" },
+            {
+              label: "Tổng đơn hàng",
+              value: data?.totalOrders,
+              color: "text-yellow-400",
+            },
             {
               label: "Tổng doanh thu",
               value: Number(data?.totalRevenue).toLocaleString("Vi-VN", {
