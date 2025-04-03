@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createContext, useState } from "react";
 import { isAuthentication } from "../../common/auth/getToken";
 import { useQuery } from "react-query";
-import { getUserId, getUserInfo } from "../../sevices/users";
+import { getUserInfo } from "../../sevices/users";
 
 export const UsersContext: any = createContext(null);
 export const UserContextProvider = (props: any) => {

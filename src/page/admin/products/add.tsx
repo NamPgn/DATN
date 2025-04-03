@@ -47,12 +47,12 @@ const ProductAdd = () => {
         icon={<UploadOutlined />}
         onClick={showModal}
       >
-        Upload Image
+        Tải ảnh lên
       </Button>
 
       <Modal
         width={800}
-        title="Upload Image"
+        title="Tải ảnh lên"
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}

@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Form, Grid, Input, theme, Typography } from "antd";
-import { MailOutlined, UserOutlined } from "@ant-design/icons";
+import { MailOutlined } from "@ant-design/icons";
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import { sendEmailForgotPass } from "../../sevices/users";
 
 const { useToken } = theme;
@@ -13,7 +12,6 @@ const { Text, Title, Link } = Typography;
 export default function ForgotPassword() {
   const { token } = useToken();
   const screens = useBreakpoint();
-  const navigate = useNavigate();
   const styles: any = {
     logo: {
       width: "100px",

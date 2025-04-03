@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Select, Input, List, Card, Form, Button, message } from "antd";
 import { useParams } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
@@ -8,10 +7,11 @@ import {
   getVariantsProductList,
 } from "../../../../sevices/products";
 
-const { Option } = Select;
 
 const AddProductVariantEdit = () => {
-  const [page, setPage] = useState(1);
+  // const [selectImage, setSelectImage] = useState<any>([]);
+  // const [selectOneImage, setSelectOneImage]: any = useState(null);
+  // const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const { id } = useParams();
   const { data: productsVariants, refetch }: any = useQuery({
@@ -48,6 +48,7 @@ const AddProductVariantEdit = () => {
   const handleSubmit = (val: any) => {
     const data = {
       ...val,
+      // variant_image: selectImage[0]?.id,
       values: productsVariants?.attributes?.reduce(
         (acc: any, attribute: any) => {
           const selectedValue = val[attribute.name];
@@ -64,8 +65,33 @@ const AddProductVariantEdit = () => {
     };
     mutate(data);
   };
+  // const showModal = () => {
+  //   setIsModalVisible(true);
+  // };
+
+  // const handleOk = () => {
+  //   setIsModalVisible(false);
+  // };
+
+  // const handleCancel = () => {
+  //   setIsModalVisible(false);
+  // };
   return (
     <div style={{ display: "flex", justifyContent: "space-between" }}>
+      {/* <Modal
+        width={800}
+        title="Tải ảnh lên"
+        visible={isModalVisible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <UploadImage
+          setSelectImage={setSelectImage}
+          selectImage={selectImage}
+          setSelectOneImage={setSelectOneImage}
+          selectOneImage={selectOneImage}
+        />
+      </Modal> */}
       <List
         header={<div>List biến thể đã có</div>}
         bordered
@@ -141,16 +167,15 @@ const AddProductVariantEdit = () => {
           <Form.Item label="Weight" name="weight" labelCol={{ span: 24 }}>
             <Input placeholder="Weight" style={{ marginBottom: "10px" }} />
           </Form.Item>
-          <Form.Item
-            label="Variant_image"
-            name="variant_image"
-            labelCol={{ span: 24 }}
+          {/* <Button
+            type="dashed"
+            variant="solid"
+            className="mb-3"
+            icon={<UploadOutlined />}
+            onClick={showModal}
           >
-            <Input
-              placeholder="Variant_image"
-              style={{ marginBottom: "10px" }}
-            />
-          </Form.Item>
+            Tải ảnh lên
+          </Button> */}
         </div>
         <Form.Item>
           <Button type="primary" htmlType="submit">

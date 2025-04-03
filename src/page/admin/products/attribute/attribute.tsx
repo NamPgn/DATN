@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { Tag } from "antd";
 import { Link } from "react-router-dom";
 import { ButtonAdd, MyButton } from "../../../../components/UI/Core/Button";
 import MVTable from "../../../../components/UI/Core/MV/Table";
-import { columnsATTR, columnsCategory } from "../../../../constant";
+import { columnsATTR } from "../../../../constant";
 import { useMutation, useQuery } from "react-query";
-import { delCategorys } from "../../../../sevices/category";
 import MVConfirm from "../../../../components/UI/Core/Confirm";
 import { toast } from "react-toastify";
 import { delAttributes, getAttributes } from "../../../../sevices/attribute";
@@ -13,7 +11,6 @@ import { delAttributes, getAttributes } from "../../../../sevices/attribute";
 const Attribute = () => {
   const [page, setPage] = useState(1);
 
-  const [valueId, setValue] = useState();
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -38,28 +35,28 @@ const Attribute = () => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  const onChange = (newValue: any) => {
-    setValue(newValue);
-  };
+  // const onChange = (newValue: any) => {
+  //   setValue(newValue);
+  // };
 
   const handlePageChangePage = (page: number) => {
     setPage(page);
   };
 
-  const handleDeleteSelectedData = async () => {
-    console.log(selectedRowKeys);
-    // const response: any = await deleteMultipleProduct(selectedRowKeys);
-    // if (response.data.success == true) {
-    //   setInit(!init);
-    //   toast.success("Delete products successfully");
-    // } else {
-    //   toast.error("Error deleting products");
-    // }
-  };
+  // const handleDeleteSelectedData = async () => {
+  //   console.log(selectedRowKeys);
+  //   // const response: any = await deleteMultipleProduct(selectedRowKeys);
+  //   // if (response.data.success == true) {
+  //   //   setInit(!init);
+  //   //   toast.success("Delete products successfully");
+  //   // } else {
+  //   //   toast.error("Error deleting products");
+  //   // }
+  // };
 
   const data =
     attribute &&
-    attribute?.data?.data?.map((item: any, index: number) => {
+    attribute?.data?.data?.map((item: any, _index: number) => {
       return {
         key: item.id,
         child: item.children,

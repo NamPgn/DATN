@@ -26,7 +26,7 @@ const AddVoucher = ({ refetch }: any) => {
       message.success("Thêm Voucher thành công");
       form.resetFields();
       refetch();
-    } catch (error:any) {
+    } catch (error: any) {
       message.error(error?.response?.data?.message);
     }
   };
@@ -88,15 +88,32 @@ const AddVoucher = ({ refetch }: any) => {
             <InputNumber />
           </Form.Item>
         ) : type === 1 ? (
-          <Form.Item
-            name="discount_percent"
-            label="Phần trăm giảm"
-            rules={[
-              { required: false, message: "Vui lòng nhập phần trăm giảm giá" },
-            ]}
-          >
-            <InputNumber />
-          </Form.Item>
+          <>
+            <Form.Item
+              name="discount_percent"
+              label="Phần trăm giảm"
+              rules={[
+                {
+                  required: false,
+                  message: "Vui lòng nhập phần trăm giảm giá",
+                },
+              ]}
+            >
+              <InputNumber />
+            </Form.Item>
+            <Form.Item
+              name="max_discount_amount"
+              label="Số tiền giảm tối đa của đơn hàng"
+              rules={[
+                {
+                  required: false,
+                  message: "Số tiền tối đa được giảm giá",
+                },
+              ]}
+            >
+              <InputNumber />
+            </Form.Item>
+          </>
         ) : null}
 
         <Form.Item
@@ -106,19 +123,6 @@ const AddVoucher = ({ refetch }: any) => {
             {
               required: false,
               message: "Giá sản phẩm tối thiểu có thể sử dụng mã",
-            },
-          ]}
-        >
-          <InputNumber />
-        </Form.Item>
-
-        <Form.Item
-          name="max_discount_amount"
-          label="Số tiền giảm tối đa của đơn hàng"
-          rules={[
-            {
-              required: false,
-              message: "Số tiền tối đa được giảm giá",
             },
           ]}
         >

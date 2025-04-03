@@ -15,7 +15,7 @@ const ThankYou = () => {
           Chúng tôi sẽ xử lý đơn hàng của bạn sớm nhất có thể.
         </p>
         <Link
-          to="/profile/order-history"
+          to="/orders"
           style={{
             backgroundColor: "#249687",
             color: "white",

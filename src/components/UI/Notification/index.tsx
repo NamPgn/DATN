@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Echo from "laravel-echo";
 import Pusher from "pusher-js";
 
@@ -9,7 +9,7 @@ declare global {
 }
 window.Pusher = Pusher;
 const OrdersNotify = () => {
-  const [order, setOrder] = useState<any | null>(null);
+  const [_order, setOrder] = useState<any | null>(null);
   useEffect(() => {
     const echo = new Echo({
       broadcaster: "pusher",
@@ -27,7 +27,7 @@ const OrdersNotify = () => {
       echo.disconnect();
     };
   }, []);
-  return <React.Fragment>{JSON.stringify(order)}</React.Fragment>;
+  return null;
 };
 
 export default OrdersNotify;

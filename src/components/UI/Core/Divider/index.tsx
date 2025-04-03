@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 import { Divider } from 'antd';
 const Dividers = memo(({ textColor, orientation, children, ...rest }: any) => {
   return (

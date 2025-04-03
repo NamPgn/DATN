@@ -5,6 +5,7 @@ import {
   LogoutOutlined,
   SettingOutlined,
   SmileOutlined,
+  UnorderedListOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { Popover } from "antd";
@@ -18,7 +19,8 @@ import { toast } from "react-toastify";
 import { UsersContext } from "../../../../context/usersContext";
 import { useCart } from "../../../../context/Cart/cartContext";
 const AuthHeader = () => {
-  const { isLogin, setIslogin, token }: any = useContext(UsersContext) || {};
+  const { isLogin, setIslogin, token, userId }: any =
+    useContext(UsersContext) || {};
   const { mutate }: any = useCart();
   const nav = useNavigate();
   const handleLogout = () => {
@@ -39,6 +41,18 @@ const AuthHeader = () => {
           placement="bottom"
           content={
             <>
+              <Link to={"/orders"}>
+                <MVRow style={{ lineHeight: "0" }} align={"middle"} gutter={12}>
+                  <MVCol>
+                    <UnorderedListOutlined />
+                  </MVCol>
+                  <MVCol>
+                    <MVText level={6} className="auth">
+                      Đơn hàng
+                    </MVText>
+                  </MVCol>
+                </MVRow>
+              </Link>
               <Link to={"/profile"}>
                 <MVRow style={{ lineHeight: "0" }} align={"middle"} gutter={12}>
                   <MVCol>
@@ -46,7 +60,7 @@ const AuthHeader = () => {
                   </MVCol>
                   <MVCol>
                     <MVText level={6} className="auth">
-                      Cài đặt
+                      Thông tin
                     </MVText>
                   </MVCol>
                 </MVRow>
@@ -59,7 +73,7 @@ const AuthHeader = () => {
                     gutter={[12, 12]}
                   >
                     <MVCol>
-                    <LineChartOutlined />
+                      <LineChartOutlined />
                     </MVCol>
                     <MVCol>
                       <MVText className="auth">Quản trị</MVText>
@@ -105,7 +119,7 @@ const AuthHeader = () => {
             className="text-center"
             title={token?.user?.name}
             size={"sm"}
-            src={token?.user?.avatar}
+            src={userId ? userId.avatar : <UserOutlined />}
           />
         </Popover>
       ) : (

@@ -16,6 +16,7 @@ const menuItems = [
   },
   { name: "Sản phẩm", path: "/products" },
   { name: "Liên hệ", path: "/contact" },
+  { name: "Tra cứu đơn hàng", path: "/o/tracking" },
 ];
 
 const socialIcons = [
@@ -54,7 +55,7 @@ const Header = () => {
       setData(res.data);
     })();
   }, []);
-  const { isLogin, cart }: any = useContext(UsersContext) || {};
+  const { isLogin }: any = useContext(UsersContext) || {};
   const handleClickOpenPopupSearch = () => {
     setOpenSearch((val) => !val);
   };
@@ -154,7 +155,10 @@ const Header = () => {
                       style={{ cursor: "pointer" }}
                       onClick={handleClickOpenPopupSearch}
                     >
-                      <i className="fa-solid fa-search" />
+                      <i
+                        className="fa-solid fa-search"
+                        style={{ color: "black" }}
+                      />
                     </div>
                     <div className="anUser">
                       <div className="anUser">

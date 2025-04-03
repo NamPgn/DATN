@@ -1,5 +1,3 @@
-import React from 'react'
-
 const ProductSaleTime = () => {
   return (
     <section className="dealProductSection">

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Tag } from "antd";
 import { Link, useParams } from "react-router-dom";
 import { MyButton } from "../../../../components/UI/Core/Button";
 import MVTable from "../../../../components/UI/Core/MV/Table";
@@ -15,7 +14,6 @@ import {
 const AttributeValue = () => {
   const [page, setPage] = useState(1);
   const { id }:any = useParams();
-  const [valueId, setValue] = useState();
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -40,28 +38,28 @@ const AttributeValue = () => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  const onChange = (newValue: any) => {
-    setValue(newValue);
-  };
+  // const onChange = (newValue: any) => {
+  //   setValue(newValue);
+  // };
 
   const handlePageChangePage = (page: number) => {
     setPage(page);
   };
 
-  const handleDeleteSelectedData = async () => {
-    console.log(selectedRowKeys);
-    // const response: any = await deleteMultipleProduct(selectedRowKeys);
-    // if (response.data.success == true) {
-    //   setInit(!init);
-    //   toast.success("Delete products successfully");
-    // } else {
-    //   toast.error("Error deleting products");
-    // }
-  };
+  // const handleDeleteSelectedData = async () => {
+  //   console.log(selectedRowKeys);
+  //   // const response: any = await deleteMultipleProduct(selectedRowKeys);
+  //   // if (response.data.success == true) {
+  //   //   setInit(!init);
+  //   //   toast.success("Delete products successfully");
+  //   // } else {
+  //   //   toast.error("Error deleting products");
+  //   // }
+  // };
 
   const data =
     attributeVal &&
-    attributeVal?.data?.values?.map((item: any, index: number) => {
+    attributeVal?.data?.values?.map((item: any, _index: number) => {
       return {
         key: item.id,
         child: item.children,

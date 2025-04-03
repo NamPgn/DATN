@@ -1,11 +1,11 @@
 import { Upload } from "antd";
-import React, { memo } from "react";
+import { memo } from "react";
 import { Controller } from "react-hook-form";
-import { MyButton } from "../Button";
 import { UploadOutlined } from "@ant-design/icons";
 import MVText from "../Text";
+import { MyButton } from "../../Button";
 
-export const MVUpload = memo(({ label, name, control, ...rest }: any) => {
+export const MVUpload = memo(({ label, name, control }: any) => {
   return (
     <div className="mt-2">
       <div>

@@ -20,7 +20,6 @@ import { DeleteOutlined, ReloadOutlined } from "@ant-design/icons";
 const CategoryDeleted = () => {
   const [page, setPage] = useState(1);
 
-  const [valueId, setValue] = useState();
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -60,9 +59,9 @@ const CategoryDeleted = () => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  const onChange = (newValue: any) => {
-    setValue(newValue);
-  };
+  // const onChange = (newValue: any) => {
+  //   setValue(newValue);
+  // };
 
   const handlePageChangePage = (page: number) => {
     setPage(page);
@@ -113,7 +112,7 @@ const CategoryDeleted = () => {
     restoreCategories(selectedRowKeys);
   };
 
-  const data = categoryDeleted?.data?.map((item: any, index: number) => {
+  const data = categoryDeleted?.data?.map((item: any, _index: number) => {
     return {
       key: item.id,
       child: item.children,

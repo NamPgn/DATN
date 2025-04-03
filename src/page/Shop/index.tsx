@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery } from "react-query";
 import { getProductsByCategory } from "../../sevices/client";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useCallback, useState } from "react";
 import "rc-slider/assets/index.css";
 import debounce from "lodash.debounce";
@@ -10,12 +10,10 @@ import Loading from "../../components/Loading/Loading";
 import Paginations from "./components/pagination";
 import {
   getCategory,
-  getProductByCategory,
 } from "../../sevices/client/category";
 import PriceRange from "./productAll/changeRange";
 
 const Shop = () => {
-  const { id }: any = useParams();
   const [currentPage, setCurrentPage] = useState("?page=1");
   const [openOption, setopenOption] = useState(false);
   const [active, setActive] = useState(false);
@@ -31,10 +29,10 @@ const Shop = () => {
   });
 
   const options = [
-    { label: "Default", value: "" },
-    { label: "High to low", value: "?sort_by=high_to_low" },
-    { label: "Low to high", value: "?sort_by=low_to_high" },
-    { label: "Top rated", value: "?sort_by=top_rated" },
+    { label: "Mặc định", value: "" },
+    { label: "Cao tới thấp", value: "?sort_by=high_to_low" },
+    { label: "Thấp tới cao", value: "?sort_by=low_to_high" },
+    { label: "Đánh giá", value: "?sort_by=top_rated" },
   ];
   const handleChange = (e: any) => {
     console.log(e);
@@ -57,12 +55,12 @@ const Shop = () => {
     debouncedSetPrice(value);
   };
 
-  const { data: categoriesByProduct }: any = useQuery({
-    queryKey: ["categories", id],
-    queryFn: async () => {
-      return (await getProductByCategory(id)).data;
-    },
-  });
+  // const { data: categoriesByProduct }: any = useQuery({
+  //   queryKey: ["categories", id],
+  //   queryFn: async () => {
+  //     return (await getProductByCategory(id)).data;
+  //   },
+  // });
 
   const { data: category }: any = useQuery({
     queryKey: ["c"],
@@ -85,7 +83,7 @@ const Shop = () => {
             <div className="col-lg-4 col-xl-3">
               <div className="shopSidebar">
                 <aside className="widget">
-                  <h3 className="widgetTitle">Item Categories</h3>
+                  <h3 className="widgetTitle">Danh mục</h3>
                   <ul>
                     {category?.map((item: any) => {
                       return (
@@ -120,162 +118,42 @@ const Shop = () => {
                   maxPrice={2000000}
                   onChange={handlePriceChange}
                 />
-                ;
-                <aside className="widget sizeFilter">
-                  <h3 className="widgetTitle">Size</h3>
-                  <div className="productSizeWrap">
-                    <div className="pswItem">
-                      <input
-                        type="radio"
-                        name="ws_1"
-                        defaultValue="S"
-                        id="ws_1sdfsdf_s"
-                      />
-                      <label htmlFor="ws_1sdfsdf_s">S</label>
-                    </div>
-                    <div className="pswItem">
-                      <input
-                        type="radio"
-                        name="ws_1"
-                        defaultValue="M"
-                        id="ws_1tst_m"
-                      />
-                      <label htmlFor="ws_1tst_m">M</label>
-                    </div>
-                    <div className="pswItem">
-                      <input
-                        type="radio"
-                        name="ws_1"
-                        defaultValue="L"
-                        id="ws_1234_l"
-                      />
-                      <label htmlFor="ws_1234_l">L</label>
-                    </div>
-                    <div className="pswItem">
-                      <input
-                        type="radio"
-                        name="ws_1"
-                        defaultValue="XL"
-                        id="ws_1_xl"
-                      />
-                      <label htmlFor="ws_1_xl">XL</label>
-                    </div>
-                  </div>
-                </aside>
-                <aside className="widget colorFilter">
-                  <h3 className="widgetTitle">Color</h3>
-                  <div className="productColorWrap">
-                    <div className="pcwItem">
-                      <input
-                        type="radio"
-                        name="wc_1"
-                        defaultValue="S"
-                        id="wc_1_1"
-                      />
-                      <label htmlFor="wc_1_1" />
-                    </div>
-                    <div className="pcwItem pcwi2">
-                      <input
-                        type="radio"
-                        name="wc_1"
-                        defaultValue="M"
-                        id="wc_1_2"
-                      />
-                      <label htmlFor="wc_1_2" />
-                    </div>
-                    <div className="pcwItem pcwi3">
-                      <input
-                        type="radio"
-                        name="wc_1"
-                        defaultValue="L"
-                        id="wc_1_3"
-                      />
-                      <label htmlFor="wc_1_3" />
-                    </div>
-                    <div className="pcwItem pcwi4">
-                      <input
-                        type="radio"
-                        name="wc_1"
-                        defaultValue="XL"
-                        id="wc_1_4"
-                      />
-                      <label htmlFor="wc_1_4" />
-                    </div>
-                    <div className="pcwItem pcwi5">
-                      <input
-                        type="radio"
-                        name="wc_1"
-                        defaultValue="XL"
-                        id="wc_1_5"
-                      />
-                      <label htmlFor="wc_1_5" />
-                    </div>
-                  </div>
-                </aside>
-                <aside className="widget">
-                  <h3 className="widgetTitle">Brand Name</h3>
-                  <ul>
-                    <li>
-                      <a href="javascript:void(0);">Sony</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">Lenovo</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">Jonson &amp; Handson</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">Apple</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">Google</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">Hp</a>
-                    </li>
-                    <li>
-                      <a href="javascript:void(0);">Uniliver</a>
-                    </li>
-                  </ul>
-                </aside>
               </div>
             </div>
             <div className="col-lg-8 col-xl-9">
               <div className="row shopAccessRow">
                 <div className="col-sm-6">
                   <div className="productCount">
-                    Showing <strong>1 - {products?.data?.length}</strong> of{" "}
-                    <strong>{products?.total}</strong> items
+                    Hiển thị <strong>1 - {products?.data?.length}</strong> của{" "}
+                    <strong>{products?.total}</strong> sản phẩm
                   </div>
                 </div>
                 <div className="col-sm-6 col-xl-4">
                   <div className="shopAccessBar">
                     <div className="filterNav">
                       <a href="javascript:void(0);">
-                        Filter
+                        Lọc sản phẩm
                         <i className="fa-solid fa-sliders" />
                       </a>
                     </div>
                     <div className="sortNav">
                       <div>
-                        <label>Sort By</label>
+                        <label>Sắp xếp</label>
                         <select
                           name="productFilter"
                           style={{ display: "none" }}
                           onChange={(e) => handleChange(e.target.value)}
                         >
                           <option value={`?page=${currentPage}`}>
-                            Default
+                            Mặc định
                           </option>
                           <option value={`?sort_by=high_to_low`}>
-                            High to low
+                            Cao tới thấp
                           </option>
                           <option value={`?sort_by=low_to_high`}>
-                            Low to high
+                            Thấp tới cao
                           </option>
-                          <option value={`?sort_by=top_rated`}>
-                            Top rated
-                          </option>
+                          <option value={`?sort_by=top_rated`}>Đánh giá</option>
                         </select>
                         <div
                           className={`nice-select ${openOption ? "open" : ""}`}

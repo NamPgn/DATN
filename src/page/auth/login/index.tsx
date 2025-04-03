@@ -134,7 +134,13 @@ export default function Login() {
           <div style={styles.formContent}>
             <div style={styles.header}>
               <div style={styles.iconText}>
-                <img style={styles.logo} src="/assets/images/logo.png" alt="" />
+                <a href={"/"}>
+                  <img
+                    style={styles.logo}
+                    src="/assets/images/logo.png"
+                    alt=""
+                  />
+                </a>
                 <Title level={2} style={{ margin: 0 }}>
                   Sign in
                 </Title>

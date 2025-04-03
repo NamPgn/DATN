@@ -101,9 +101,9 @@ const EmloyeeTable = () => {
     },
   });
 
-  const handleOpenModalBlock = () => {
-    setIsModalOpenBlock(true);
-  };
+  // const handleOpenModalBlock = () => {
+  //   setIsModalOpenBlock(true);
+  // };
 
   const handleCloseModalBlock = () => {
     setIsModalOpenBlock(false);
@@ -175,7 +175,7 @@ const EmloyeeTable = () => {
                           <Menu.Item
                             key="lock"
                             icon={<LockOutlined />}
-                            onClick={(e: any) => {
+                            onClick={(_e: any) => {
                               setSelectedUserId(item.id);
                               setIsModalOpenBlock(true);
                             }}
@@ -205,7 +205,7 @@ const EmloyeeTable = () => {
 
                       <Menu.Item
                         key="resetpass"
-                        onClick={(e: any) => {
+                        onClick={(_e: any) => {
                           setSelectedUserEmail(item.email);
                           handleSendMailResetPassword();
                         }}

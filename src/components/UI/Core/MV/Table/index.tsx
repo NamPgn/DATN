@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import React, { memo } from "react";
+import { memo } from "react";
 import styled from "styled-components";
 import './style/index.css';
 const StyledTable = styled(Table)`

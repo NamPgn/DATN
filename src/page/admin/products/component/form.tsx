@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MinusCircleOutlined } from "@ant-design/icons";
 import { Button, Form, Input, InputNumber, Select, Space } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
@@ -30,6 +30,7 @@ const ProductForm = ({
       form.resetFields();
     }
   }, [id]);
+
   // useEffect(() => {
   //   if (dataEdit) {
   //     if (typeProduct !== dataEdit.type) {
@@ -144,7 +145,6 @@ const ProductForm = ({
         attributesValues[attribute.name] = selectedNames;
       }
     });
-    console.log(val.variants);
     const data = {
       attributes: attributesValues,
       main_image: selectOneImage?.id,
@@ -277,7 +277,7 @@ const ProductForm = ({
           <Input className="w-50" placeholder="Mô tả ngắn" />
         </Form.Item>
 
-        <Form.Item label="Category Id" name="categories">
+        <Form.Item label="Danh mục" name="categories">
           <Select
             className="w-50"
             mode="multiple"
@@ -413,7 +413,12 @@ const ProductForm = ({
 
                           <Button
                             icon={<MinusCircleOutlined />}
-                            onClick={() => remove(name)}
+                            onClick={() => {
+                              setVariants((prev) =>
+                                prev.filter((_, i) => i !== index)
+                              );
+                              remove(name);
+                            }}
                           />
                         </Space>
                       );

@@ -1,13 +1,12 @@
-import { Form, Input, Button, Upload, Switch, message, Select } from "antd";
-import { SyncOutlined, UploadOutlined } from "@ant-design/icons";
+import { Form, Input, Button, message, Select } from "antd";
+import { SyncOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import {
   getCategory,
-  getCategorysFather,
   updateCategory,
 } from "../../../sevices/category";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 
 const EditCategory = () => {
   const [form] = Form.useForm();
@@ -64,7 +63,7 @@ const EditCategory = () => {
       <Form.Item label="Slug Name" name="slug">
         <Input placeholder="Enter slug name" />
       </Form.Item>
-      <Form.Item label="Category Id" name="parent_id">
+      <Form.Item label="Danh mục" name="parent_id">
         <Select
           style={{ width: "200px" }}
           placeholder="Vui lòng chọn"

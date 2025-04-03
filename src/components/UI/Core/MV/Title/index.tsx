@@ -1,5 +1,5 @@
 import Title from "antd/es/typography/Title";
-import React, { memo } from "react";
+import { memo } from "react";
 
 const MVTitle = memo(({ level, children, ...rest }: any) => {
   return (

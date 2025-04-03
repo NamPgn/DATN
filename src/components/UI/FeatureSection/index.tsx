@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useState } from "react";
 import "./style.css";
 import { Button, message } from "antd";
 import { useQuery } from "react-query";

@@ -4,7 +4,7 @@ import { LockOutlined } from "@ant-design/icons";
 import { useMutation } from "react-query";
 import { toast } from "react-toastify";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { sendEmailForgotPass, sendResetPS } from "../../sevices/users";
+import { sendResetPS } from "../../sevices/users";
 
 const { useToken } = theme;
 const { useBreakpoint } = Grid;

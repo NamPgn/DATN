@@ -190,8 +190,8 @@ const ProductDetail = () => {
             toast.success("Thêm giỏ hàng thành công");
             refetchCart();
           },
-          onError: () => {
-            toast.error("Thêm giỏ hàng thất bại");
+          onError: (error:any) => {
+            toast.error(error?.response?.data?.message);
           },
         });
       } else {
@@ -201,8 +201,8 @@ const ProductDetail = () => {
               toast.success("Thêm giỏ hàng thành công");
               refetchCart();
             },
-            onError: () => {
-              toast.error("Thêm giỏ hàng thất bại");
+            onError: (error:any) => {
+              toast.error(error?.response?.data?.message);
             },
           });
         } else {
@@ -345,8 +345,6 @@ const ProductDetail = () => {
                     </div>
                     <div className="productStock float-end">
                       <span>Số lượng: </span> {selectedVariantss.stock_quantity}
-                      <span>Available: </span>{" "}
-                      {selectedVariantss?.stock_quantity}
                     </div>
                   </div>
                 </>

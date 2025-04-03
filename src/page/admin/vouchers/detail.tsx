@@ -31,14 +31,17 @@ const VoucherDetail = () => {
         </p>
       )}
       {!voucher?.amount && (
-        <p>
-          <strong>Phần trăm giảm:</strong> {voucher?.discount_percent}
-        </p>
+        <>
+          <p>
+            <strong>Phần trăm giảm:</strong> {voucher?.discount_percent}
+          </p>
+          <p>
+            <strong>Số tiền giảm tối đa của đơn hàng:</strong>
+            {voucher?.max_discount_amount}
+          </p>
+        </>
       )}
-      <p>
-        <strong>Số tiền giảm tối đa của đơn hàng:</strong>
-        {voucher?.max_discount_amount}
-      </p>
+
       <p>
         <strong>Loại Giảm Giá:</strong>{" "}
         {voucher?.type === 0 ? "Giảm theo số tiền" : "Giảm theo phần trăm"}

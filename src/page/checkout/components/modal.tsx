@@ -10,7 +10,7 @@ import {
   FormControl,
   TextField,
 } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { useMutation } from "react-query";
 import { addAddress } from "../../../sevices/client/orders";
 import { toast } from "react-toastify";
@@ -34,7 +34,6 @@ const FormModal = ({
   refetchAddrList,
   RefetchDefault,
   addList,
-  setIsEdit,
 }: any) => {
   const { userId }: any = useContext(UsersContext) || {};
 
@@ -48,8 +47,8 @@ const FormModal = ({
       RefetchDefault();
       handleClose();
     },
-    onError: () => {
-      toast.error("Thêm địa chỉ thất bại");
+    onError: (error: any) => {
+      toast.error(error?.response?.data?.message);
     },
   });
   const handleChange = (key: any, value: any) => {
@@ -109,7 +108,9 @@ const FormModal = ({
       return;
     }
     if (!selectedValuesAddr.o_address) {
-      toast.error("Vui lòng nhập Địa chỉ cụ thể");
+      toast.error(
+        "Vui lòng nhập Địa chỉ cụ thể, phải có tên đường hoặc số nhà!"
+      );
       return;
     }
     if (!selectedValues?.select1?.value) {
@@ -163,7 +164,7 @@ const FormModal = ({
       fullWidth
       open={open}
       disableEscapeKeyDown
-      onClose={(event, reason) => {
+      onClose={(_event, reason) => {
         if (
           (addList?.length === 0 && reason === "backdropClick") ||
           reason === "escapeKeyDown"
@@ -259,6 +260,7 @@ const FormModal = ({
           margin="dense"
           onChange={(e) => handleSetValue("o_address", e.target.value)}
         />
+
       </DialogContent>
       <DialogActions>
         {/* <Button onClick={handleClose}>Hủy</Button> */}

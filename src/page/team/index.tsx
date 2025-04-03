@@ -1,10 +1,9 @@
 
-import TeamMemberSection from "../../components/UI/TeamMemberSection";
 
 const TeamPage = () => {
   return (
     <>
-      <TeamMemberSection />
+      {/* <TeamMemberSection /> */}
     </>
   );
 };
