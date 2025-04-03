@@ -155,7 +155,10 @@ const Header = () => {
                       style={{ cursor: "pointer" }}
                       onClick={handleClickOpenPopupSearch}
                     >
-                      <i className="fa-solid fa-search" />
+                      <i
+                        className="fa-solid fa-search"
+                        style={{ color: "black" }}
+                      />
                     </div>
                     <div className="anUser">
                       <div className="anUser">

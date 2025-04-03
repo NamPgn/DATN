@@ -66,16 +66,17 @@ import AccountSetting from "../page/auth/account";
 import AddOrder from "../page/admin/orders/components/add";
 import SendOrder from "../page/admin/orders/components/send";
 import HiddenComment from "../page/admin/comments/hidden";
-import DeletedProducts from "../page/admin/products/component/deleted";
 import OrderHistory from "../page/orders/orderHistory";
 import ThankYou from "../page/orders/thank";
 import PaymentResult from "../page/checkout/components/paymentResult";
+import DeletedProducts from "../page/admin/products/component/deleted";
+
+import LayoutOrders from "../layouts/Layout";
+import OrderDetailUser from "../page/orders/orderDetail";
+import TrackingOrder from "../page/orders/tracking";
 import Shop from "../page/shop";
 import ProductAll from "../page/shop/productAll";
 import ProductSearch from "../page/shop/productSearch";
-import Layout from "../layouts/Layout";
-import OrderDetailUser from "../page/orders/orderDetail";
-import TrackingOrder from "../page/orders/tracking";
 
 export const routerClient = [
   {
@@ -165,7 +166,7 @@ export const routerClient = [
   },
   {
     path: "o",
-    element: <Layout />,
+    element: <LayoutOrders />,
     children: [
       {
         path: "orders-history",

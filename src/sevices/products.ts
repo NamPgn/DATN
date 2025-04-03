@@ -86,7 +86,6 @@ export const productsHardDeleted = async (data: any) => {
   return intances.delete("/products/hard-delete", data);
 };
 
-
 export const productsRetoreDeleted = async (data: any) => {
   return intances.delete("/products/retore-delete", data);
 };

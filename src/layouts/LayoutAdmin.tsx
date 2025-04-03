@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { Badge, Button, Drawer, Input, Layout, Menu, Spin } from "antd";

@@ -17,6 +17,8 @@ import { DeleteOutlined } from "@ant-design/icons";
 
 const ProductsAdmin = () => {
   const [page, setPage] = useState(1);
+
+  const [valueId, setValue] = useState();
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -26,11 +28,11 @@ const ProductsAdmin = () => {
     queryFn: async () => await getProducts(page),
   });
   const { mutate } = useMutation({
-    mutationFn: async (data: string) => {
-      return await delProduct(data);
+    mutationFn: async (id: string) => {
+      return await delProduct(id);
     },
     onSuccess: () => {
-      toast.success("Sản phẩm đã được chuyển vào thùng rác");
+      toast.success("Xóa thành công");
       refetch();
     },
     onError: (error) => {
@@ -41,6 +43,9 @@ const ProductsAdmin = () => {
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
+  };
+  const onChange = (newValue: any) => {
+    setValue(newValue);
   };
 
   const handlePageChangePage = (page: number) => {
@@ -78,6 +83,7 @@ const ProductsAdmin = () => {
   //   };
   //   mutate(form);
   // };
+
   const data =
     products &&
     products?.data?.data?.map((item: any, _index: number) => {

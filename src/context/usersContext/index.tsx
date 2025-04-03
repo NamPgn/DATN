@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createContext, useState } from "react";
 import { isAuthentication } from "../../common/auth/getToken";
 import { useQuery } from "react-query";

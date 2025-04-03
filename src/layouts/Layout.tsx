@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Header from "../components/UI/Header";
 import Footer from "../components/UI/Footer";
-const Layout = () => {
+const LayoutOrders = () => {
   return (
     <>
       <div style={{ zIndex: "-1" }}>
@@ -15,4 +15,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default LayoutOrders;

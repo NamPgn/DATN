@@ -19,7 +19,8 @@ import { toast } from "react-toastify";
 import { UsersContext } from "../../../../context/usersContext";
 import { useCart } from "../../../../context/Cart/cartContext";
 const AuthHeader = () => {
-  const { isLogin, setIslogin, token }: any = useContext(UsersContext) || {};
+  const { isLogin, setIslogin, token, userId }: any =
+    useContext(UsersContext) || {};
   const { mutate }: any = useCart();
   const nav = useNavigate();
   const handleLogout = () => {
@@ -118,7 +119,7 @@ const AuthHeader = () => {
             className="text-center"
             title={token?.user?.name}
             size={"sm"}
-            src={token?.user?.avatar}
+            src={userId ? userId.avatar : <UserOutlined />}
           />
         </Popover>
       ) : (
