@@ -31,7 +31,6 @@ import AttributeValue from "../page/admin/products/attributeValue/attributeValue
 import Cart from "../page/cart";
 import Checkout from "../page/checkout";
 import ContactPage from "../page/contact";
-import TeamPage from "../page/team";
 import AddAttributeValue from "../page/admin/products/attributeValue/add";
 import EditAttributeVal from "../page/admin/products/attributeValue/edit";
 import CommentAdmin from "../page/admin/comments";
@@ -95,10 +94,7 @@ export const routerClient = [
         path: "/about",
         element: <AboutPage />,
       },
-      {
-        path: "/team",
-        element: <TeamPage />,
-      },
+  
       {
         path: "/shop/:id",
         element: <Shop />,

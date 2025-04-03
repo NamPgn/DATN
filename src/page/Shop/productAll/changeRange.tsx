@@ -14,7 +14,7 @@ const PriceRange = ({ minPrice = 0, maxPrice = 20000000, onChange }:any) => {
 
   return (
     <aside className="widget priceFilter">
-      <h3 className="widgetTitle">Price Range</h3>
+      <h3 className="widgetTitle">Khoảng giá</h3>
       <div className="shopWidgetWraper">
         <div className="priceFilterSlider">
           <form className="clearfix">
@@ -31,7 +31,7 @@ const PriceRange = ({ minPrice = 0, maxPrice = 20000000, onChange }:any) => {
               ]}
             />
             <div className="pfsWrap">
-              <label>Price: </label>
+              <label>Giá: </label>
               <span>${range[0]} - ${range[1]}</span>
             </div>
           </form>

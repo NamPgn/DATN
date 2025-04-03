@@ -7,7 +7,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import OrdersVerify from "./ordersVerify";
 import { toast } from "react-toastify";
 
-
 const TrackingOrder = () => {
   const [orderId, setOrderId] = useState("");
   const [orderCode, setOrderCode] = useState("");
