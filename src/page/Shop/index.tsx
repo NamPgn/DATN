@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery } from "react-query";
 import { getProductsByCategory } from "../../sevices/client";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useCallback, useState } from "react";
 import "rc-slider/assets/index.css";
 import debounce from "lodash.debounce";
@@ -10,12 +10,10 @@ import Loading from "../../components/Loading/Loading";
 import Paginations from "./components/pagination";
 import {
   getCategory,
-  getProductByCategory,
 } from "../../sevices/client/category";
 import PriceRange from "./productAll/changeRange";
 
 const Shop = () => {
-  const { id }: any = useParams();
   const [currentPage, setCurrentPage] = useState("?page=1");
   const [openOption, setopenOption] = useState(false);
   const [active, setActive] = useState(false);
@@ -57,12 +55,12 @@ const Shop = () => {
     debouncedSetPrice(value);
   };
 
-  const { data: categoriesByProduct }: any = useQuery({
-    queryKey: ["categories", id],
-    queryFn: async () => {
-      return (await getProductByCategory(id)).data;
-    },
-  });
+  // const { data: categoriesByProduct }: any = useQuery({
+  //   queryKey: ["categories", id],
+  //   queryFn: async () => {
+  //     return (await getProductByCategory(id)).data;
+  //   },
+  // });
 
   const { data: category }: any = useQuery({
     queryKey: ["c"],

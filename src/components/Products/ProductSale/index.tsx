@@ -1,11 +1,8 @@
 import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 import { getProductsClient } from "../../../sevices/products";
-import { useCart } from "../../../context/Cart/cartContext";
-import { toast } from "react-toastify";
 
 const ProductSale = () => {
-  const { addToCart }: any = useCart();
   const { data: products } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {

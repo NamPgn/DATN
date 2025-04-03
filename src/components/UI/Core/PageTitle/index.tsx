@@ -1,9 +1,7 @@
 import React from "react";
-import { Typography, Divider } from "antd";
 import { useLocation } from "react-router-dom";
 import { TableRouterAdminPage } from "../../../../router";
 
-const { Title } = Typography;
 
 const PageTitle: React.FC = () => {
   const location = useLocation();

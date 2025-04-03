@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
@@ -12,7 +12,6 @@ import {
   Modal,
   Input,
   message,
-  Divider,
 } from "antd";
 import {
   approveOrderUser,
@@ -31,10 +30,8 @@ import RefundModal from "./detailModal/modalRefunManual";
 import RefundModalPatrial from "./detailModal/modalRefundPartial";
 import {
   CheckCircleOutlined,
-  DownOutlined,
   ExclamationCircleOutlined,
   EyeFilled,
-  UpOutlined,
 } from "@ant-design/icons";
 import DetailNote from "./detailModal/detailNote";
 const ACTION_MAP: any = {
@@ -419,7 +416,7 @@ const OrdersDetail = () => {
       title: "Thao tác",
       dataIndex: "action",
       key: "action",
-      render: (details: any, _: any) => {
+      render: (_details: any, _: any) => {
         return (
           <div>
             <Button

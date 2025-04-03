@@ -13,8 +13,8 @@ export const getProduct = async (id: any) => {
   return intances.get("/products/" + id);
 };
 
-export const updateProduct = async (id: any, data: any) => {
-  return intances.put("/products/" + id, data);
+export const updateProduct = async ( data: any) => {
+  return intances.put("/products/" + data?.id, data);
 };
 
 export const delProduct = async (id: string) => {

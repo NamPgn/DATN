@@ -1,13 +1,12 @@
-import { Form, Input, Button, Upload, Switch, message, Select } from "antd";
-import { SyncOutlined, UploadOutlined } from "@ant-design/icons";
+import { Form, Input, Button, message, Select } from "antd";
+import { SyncOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import {
   getCategory,
-  getCategorysFather,
   updateCategory,
 } from "../../../sevices/category";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 
 const EditCategory = () => {
   const [form] = Form.useForm();

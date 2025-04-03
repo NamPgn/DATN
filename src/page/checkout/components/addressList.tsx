@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
-import { useMutation, useQuery } from "react-query";
+import { useMutation } from "react-query";
 import {
   deleteAddress,
-  getAddressList,
   setAddressDefault,
-  updateAddress,
 } from "../../../sevices/client/orders";
 import {
   Box,
@@ -30,7 +28,6 @@ export default function AddressList({
   open,
   onClose,
   setDefaultAddress,
-  closeModalAddress,
   openModalAddress,
   getAdressDefault,
   addList,
@@ -104,7 +101,7 @@ export default function AddressList({
     setIsEdit(true);
   };
 
-  const openModalEdit = () => setOpenModal(true);
+  // const openModalEdit = () => setOpenModal(true);
   const closeModalEdit = () => setOpenModal(false);
 
   const handleCloseConfirm = () => {

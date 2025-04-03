@@ -3,15 +3,14 @@ import { useMutation, useQuery } from "react-query";
 import { SyncOutlined } from "@ant-design/icons";
 import {
   addAttributesVal,
-  getAttributesVals,
 } from "../../../../sevices/attributeValue";
 import { useState } from "react";
 import { getAttributes } from "../../../../sevices/attribute";
 
 const AddAttributeValue = () => {
   const [form] = Form.useForm();
-  const [page, setPage] = useState(1);
-  const { data: attributeVal, refetch }: any = useQuery({
+  const [page, _setPage] = useState(1);
+  const { data: attributeVal }: any = useQuery({
     queryKey: ["attributeVal", page],
     queryFn: async () => (await getAttributes(page)).data?.data,
   });

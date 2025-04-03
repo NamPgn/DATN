@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UsersContext } from "../../../context/usersContext";
 import { schemaUserInfo } from "../../../schema/userSchema";
-import OrderHistory from "../../orders/orderHistory";
 import Loading from "../../../components/Loading/Loading";
 import { useMutation } from "react-query";
 import { changeUserInfo } from "../../../sevices/users";

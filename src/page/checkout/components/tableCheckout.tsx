@@ -1,6 +1,5 @@
 const TableCheckout = ({
   checkoutItems,
-  discount_amount,
   totalAmount,
   handleValidate,
   register,

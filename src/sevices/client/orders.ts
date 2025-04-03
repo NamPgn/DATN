@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
-import intances, { intancesLocal } from "../instances";
+import { intancesLocal } from "../instances";
 import { token_auth } from "../../common/auth/getToken";
 const token_ = token_auth();
 export const getApiOrderAdress = async () => {

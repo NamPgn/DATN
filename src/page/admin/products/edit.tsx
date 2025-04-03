@@ -12,9 +12,9 @@ const ProductEdit = () => {
   const [selectImage, setSelectImage] = useState([]);
   const [selectOneImage, setSelectOneImage]: any = useState(null);
   const [visible, setVisible] = useState(false);
-  
-  const [typeProduct, setTypeProduct] = useState("");
-  const [dataEdit, setDataEdit]: any = useState(null);
+
+  const [_typeProduct, setTypeProduct] = useState("");
+  const [_dataEdit, setDataEdit]: any = useState(null);
   const { data: product, refetch } = useQuery(
     ["product", id],
     async () => (await getProduct(id)).data,
@@ -40,12 +40,18 @@ const ProductEdit = () => {
   );
 
   const { mutate: mutateEdit } = useMutation({
-    mutationFn: async (values: any) => await updateProduct(id, values),
-    onSuccess: () =>{
-      message.success("Sản phẩm đã được cập nhật thành công!")
+    mutationFn: async (values: any) =>
+      await updateProduct({
+        id: id,
+        values,
+      }),
+    onSuccess: () => {
+      message.success("Sản phẩm đã được cập nhật thành công!");
       refetch();
     },
-    onError: () => message.error("Cập nhật sản phẩm thất bại!"),
+    onError: () => {
+      message.error("Cập nhật sản phẩm thất bại!")
+    },
   });
 
   return (

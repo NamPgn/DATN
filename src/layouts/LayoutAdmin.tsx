@@ -6,7 +6,6 @@ import {
   CheckOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  SettingOutlined,
 } from "@ant-design/icons";
 import MVCol from "../components/UI/Core/MV/Grid/Col";
 import { Header } from "antd/es/layout/layout";

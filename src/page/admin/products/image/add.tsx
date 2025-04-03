@@ -22,7 +22,7 @@ const AddImageProducts = () => {
     setFileList(fileList);
   };
 
-  const handleSubmit = (values: any) => {
+  const handleSubmit = (_values: any) => {
     if (fileList.length === 0) {
       message.error("Vui lòng tải lên ít nhất một tệp!");
       return;

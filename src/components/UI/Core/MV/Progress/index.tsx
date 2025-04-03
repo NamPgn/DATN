@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import { memo } from 'react'
 import { Progress } from 'antd';
 const MyProgress = memo(({ percent, size, ...rest }: any) => {
   return (

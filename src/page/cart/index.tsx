@@ -3,7 +3,6 @@ import { useCart } from "../../context/Cart/cartContext";
 import { useMutation } from "react-query";
 import {
   changeCartAdd,
-  getCart,
   userCartClear,
   userCartDelete,
 } from "../../sevices/client/cart";
@@ -89,7 +88,7 @@ const Cart = () => {
 
   const handleQuantityDecrease = (
     id: number,
-    stockQuantity: number,
+    _stockQuantity: number,
     currentQuantity: number,
     cart_item_id: number
   ) => {

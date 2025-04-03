@@ -13,7 +13,7 @@ import {
   delProduct,
   getProducts,
 } from "../../../sevices/products";
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined } from "@ant-design/icons";
 
 const ProductsAdmin = () => {
   const [page, setPage] = useState(1);
@@ -69,18 +69,18 @@ const ProductsAdmin = () => {
     }
     deleteMultiple(selectedRowKeys);
   };
-  const handleDelete = () => {
-    const form: any = new FormData();
+  // const handleDelete = () => {
+  //   const form: any = new FormData();
 
-    form.append("ids", selectedRowKeys);
-    const data: any = {
-      ids: selectedRowKeys,
-    };
-    mutate(form);
-  };
+  //   form.append("ids", selectedRowKeys);
+  //   const data: any = {
+  //     ids: selectedRowKeys,
+  //   };
+  //   mutate(form);
+  // };
   const data =
     products &&
-    products?.data?.data?.map((item: any, index: number) => {
+    products?.data?.data?.map((item: any, _index: number) => {
       return {
         key: item.id,
         name: <Link to={"/q/" + item.id}>{item.name}</Link>,

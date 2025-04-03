@@ -55,7 +55,7 @@ const Header = () => {
       setData(res.data);
     })();
   }, []);
-  const { isLogin, cart }: any = useContext(UsersContext) || {};
+  const { isLogin }: any = useContext(UsersContext) || {};
   const handleClickOpenPopupSearch = () => {
     setOpenSearch((val) => !val);
   };

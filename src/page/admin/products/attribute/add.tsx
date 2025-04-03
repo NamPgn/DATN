@@ -1,5 +1,5 @@
-import { Form, Input, Button, message, Select } from "antd";
-import { useMutation, useQuery } from "react-query";
+import { Form, Input, Button, message } from "antd";
+import { useMutation } from "react-query";
 import { SyncOutlined } from "@ant-design/icons";
 import { addAttribute } from "../../../../sevices/attribute";
 

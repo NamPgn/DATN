@@ -3,7 +3,7 @@ import { useMutation } from "react-query";
 import { toast } from "react-toastify";
 import { cancleOrderUser } from "../../sevices/client/orders";
 
-const ModalConfirmCancel = ({ setIsModalOpen, order, refetch, nav }: any) => {
+const ModalConfirmCancel = ({ setIsModalOpen, order, refetch }: any) => {
   const [reason, setReason] = useState("");
 
   const { mutate, isLoading } = useMutation({

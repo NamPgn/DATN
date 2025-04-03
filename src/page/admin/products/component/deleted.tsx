@@ -1,15 +1,12 @@
 import React, { useState } from "react";
-import { Button, Image, Tag } from "antd";
+import { Button, Image } from "antd";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 
 import { toast } from "react-toastify";
 import { DeleteOutlined, RollbackOutlined } from "@ant-design/icons";
-import MVConfirm from "../../../../components/UI/Core/Confirm";
-import { MyButton } from "../../../../components/UI/Core/Button";
 import MVTable from "../../../../components/UI/Core/MV/Table";
 import { columnsProducts } from "../../../../constant";
-import { getsCategoryDeleted } from "../../../../sevices/category";
 import {
   getsProductsDeleted,
   productsHardDeleted,
@@ -19,7 +16,6 @@ import {
 const DeletedProducts = () => {
   const [page, setPage] = useState(1);
 
-  const [valueId, setValue] = useState();
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -58,24 +54,24 @@ const DeletedProducts = () => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  const onChange = (newValue: any) => {
-    setValue(newValue);
-  };
+  // const onChange = (newValue: any) => {
+  //   setValue(newValue);
+  // };
 
   const handlePageChangePage = (page: number) => {
     setPage(page);
   };
 
-  const handleDeleteSelectedData = async () => {
-    console.log(selectedRowKeys);
-    // const response: any = await deleteMultipleProduct(selectedRowKeys);
-    // if (response.data.success == true) {
-    //   setInit(!init);
-    //   toast.success("Delete products successfully");
-    // } else {
-    //   toast.error("Error deleting products");
-    // }
-  };
+  // const _handleDeleteSelectedData = async () => {
+  //   console.log(selectedRowKeys);
+  //   // const response: any = await deleteMultipleProduct(selectedRowKeys);
+  //   // if (response.data.success == true) {
+  //   //   setInit(!init);
+  //   //   toast.success("Delete products successfully");
+  //   // } else {
+  //   //   toast.error("Error deleting products");
+  //   // }
+  // };
   const handleDelete = async () => {
     const data: any = {
       ids: selectedRowKeys,
@@ -92,7 +88,7 @@ const DeletedProducts = () => {
     refetch();
   };
 
-  const data = productsDeleted?.data?.data?.map((item: any, index: number) => {
+  const data = productsDeleted?.data?.data?.map((item: any, _index: number) => {
     return {
       key: item.id,
       name: <Link to={"/q/" + item.id}>{item.name}</Link>,
