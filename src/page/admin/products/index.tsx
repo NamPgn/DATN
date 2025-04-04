@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { Button, Image, Popconfirm } from "antd";
+import { Button, Image, Input, Popconfirm } from "antd";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
@@ -16,6 +16,7 @@ import {
 } from "../../../sevices/products";
 import { DeleteOutlined, ToTopOutlined } from "@ant-design/icons";
 import TailwindComponent from "../../../components/Tailwind/TailwinComponent";
+import { SearchProps } from "antd/es/input";
 
 const ProductsAdmin = () => {
   const [page, setPage] = useState(1);
@@ -69,9 +70,8 @@ const ProductsAdmin = () => {
     },
   });
 
-  const { data: exportFile }: any = useQuery({
-    queryKey: ["fileExport"],
-    queryFn: async () => await exportFileProducts(),
+  const { mutate: exportFile }: any = useMutation({
+    mutationFn: async () => await exportFileProducts(),
     onSuccess: () => {
       toast("Xuất file thành công");
     },
@@ -101,7 +101,9 @@ const ProductsAdmin = () => {
   const handleExport = () => {
     exportFile();
   };
-  
+
+  const onSearch: SearchProps["onSearch"] = (value, _e, info) => {};
+
   const data =
     products &&
     products?.data?.data?.map((item: any, _index: number) => {
@@ -166,10 +168,18 @@ const ProductsAdmin = () => {
           okText="Yes"
           cancelText="No"
         >
-          <MyButton type="primary" danger icon={<DeleteOutlined />}>
+          <MyButton variant="filled" color="danger" icon={<DeleteOutlined />}>
             Delete Selected
           </MyButton>
         </Popconfirm>
+
+        <div className="w-2/12">
+          <Input.Search
+            onSearch={onSearch}
+            width={"20px"}
+            placeholder="Tìm kiếm..."
+          />
+        </div>
       </div>
       <MVTable
         columns={columnsProducts}

@@ -150,7 +150,6 @@ const LayoutAdmin = () => {
             <div
               style={{ display: "flex", alignItems: "center", gap: "0 20px" }}
             >
-              <Input.Search placeholder="Type here..." />
               <MVCol>
                 <AuthHeader />
               </MVCol>
