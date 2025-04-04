@@ -70,15 +70,7 @@ const ProductsAdmin = () => {
     },
   });
 
-  const { mutate: exportFile }: any = useMutation({
-    mutationFn: async () => await exportFileProducts(),
-    onSuccess: () => {
-      toast("Xuất file thành công");
-    },
-    onError: () => {
-      toast("Xuất file thất bại");
-    },
-  });
+  const { mutate: exportFile, isLoading } = useMutation(exportFileProducts);
 
   const handleDeleteSelectedData = () => {
     if (selectedRowKeys.length === 0) {
@@ -97,10 +89,6 @@ const ProductsAdmin = () => {
   //   };
   //   mutate(form);
   // };
-
-  const handleExport = () => {
-    exportFile();
-  };
 
   const onSearch: SearchProps["onSearch"] = (value, _e, info) => {};
 
@@ -154,12 +142,11 @@ const ProductsAdmin = () => {
       <div className="flex gap-2">
         <ButtonAdd path={`/dashboard/product/add`} />
         <Button
-          variant="filled"
           icon={<ToTopOutlined />}
-          color="magenta"
-          onClick={handleExport}
+          onClick={() => exportFile()}
+          disabled={isLoading}
         >
-          Xuất file
+          {isLoading ? "Đang tải..." : "Xuất file"}
         </Button>
 
         <Popconfirm
