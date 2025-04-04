@@ -5,6 +5,10 @@ export const getProducts = async (page: number) => {
   return intances.get("/products?page=" + page);
 };
 
+export const exportFileProducts = async () => {
+  return intances.get("/products/export");
+};
+
 export const getProductsOrder = async (page: number) => {
   return intances.get("/list_product_order?page=" + page);
 };

@@ -35,10 +35,15 @@ export const userCartDelete = async (id: any) => {
 };
 
 export const userCartAdd = async (data: any) => {
+  const token_ = token_auth();
+
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
   return intancesLocal.post(`/cart`, data, {
-    headers: {
-      Authorization: `Bearer ${token_}`,
-    },
+    headers,
   });
 };
 

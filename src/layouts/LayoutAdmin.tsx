@@ -19,6 +19,7 @@ const { Content, Sider, Footer } = Layout;
 
 const LayoutAdmin = () => {
   const [open, setOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
 
   const showDrawer = () => {
     setOpen(true);
@@ -27,6 +28,30 @@ const LayoutAdmin = () => {
   const onClose = () => {
     setOpen(false);
   };
+
+  const { data, isLoading, refetch }: any = useQuery({
+    queryKey: ["notify"],
+    queryFn: async () => {
+      return (await getNotify()).data?.data;
+    },
+  });
+  const unreadCount = data?.filter(
+    (notification: any) => notification.is_read !== 1
+  ).length;
+
+  const markAsReadMutation = useMutation({
+    mutationFn: async (id: number) => {
+      return await changeNotify({
+        id,
+        is_read: true,
+      });
+    },
+    onSuccess: () => {
+      refetch();
+      setOpen(false);
+    },
+  });
+
   const items2: any = [
     {
       key: "group-application",
@@ -59,29 +84,6 @@ const LayoutAdmin = () => {
     },
   ];
 
-  const [collapsed, setCollapsed] = useState(false);
-
-  const { data, isLoading, refetch }: any = useQuery({
-    queryKey: ["notify"],
-    queryFn: async () => {
-      return (await getNotify()).data?.data;
-    },
-  });
-  const unreadCount = data?.filter(
-    (notification: any) => notification.is_read !== 1
-  ).length;
-
-  const markAsReadMutation = useMutation({
-    mutationFn: async (id: number) => {
-      return await changeNotify({
-        id,
-        is_read: true,
-      });
-    },
-    onSuccess: () => {
-      refetch();
-    },
-  });
   return (
     <>
       <Layout

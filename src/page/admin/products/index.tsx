@@ -11,9 +11,11 @@ import { columnsProducts } from "../../../constant";
 import {
   delMultipleProduct,
   delProduct,
+  exportFileProducts,
   getProducts,
 } from "../../../sevices/products";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, ToTopOutlined } from "@ant-design/icons";
+import TailwindComponent from "../../../components/Tailwind/TailwinComponent";
 
 const ProductsAdmin = () => {
   const [page, setPage] = useState(1);
@@ -44,9 +46,9 @@ const ProductsAdmin = () => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  const onChange = (newValue: any) => {
-    setValue(newValue);
-  };
+  // const onChange = (newValue: any) => {
+  //   setValue(newValue);
+  // };
 
   const handlePageChangePage = (page: number) => {
     setPage(page);
@@ -67,6 +69,17 @@ const ProductsAdmin = () => {
     },
   });
 
+  const { data: exportFile }: any = useQuery({
+    queryKey: ["fileExport"],
+    queryFn: async () => await exportFileProducts(),
+    onSuccess: () => {
+      toast("Xuất file thành công");
+    },
+    onError: () => {
+      toast("Xuất file thất bại");
+    },
+  });
+
   const handleDeleteSelectedData = () => {
     if (selectedRowKeys.length === 0) {
       toast.warning("Vui lòng chọn ít nhất một sản phẩm để xóa");
@@ -74,6 +87,7 @@ const ProductsAdmin = () => {
     }
     deleteMultiple(selectedRowKeys);
   };
+
   // const handleDelete = () => {
   //   const form: any = new FormData();
 
@@ -84,6 +98,10 @@ const ProductsAdmin = () => {
   //   mutate(form);
   // };
 
+  const handleExport = () => {
+    exportFile();
+  };
+  
   const data =
     products &&
     products?.data?.data?.map((item: any, _index: number) => {
@@ -130,9 +148,18 @@ const ProductsAdmin = () => {
       };
     });
   return (
-    <React.Fragment>
-      <ButtonAdd path={`/dashboard/product/add`} />
-      <div className="mb-3">
+    <TailwindComponent>
+      <div className="flex gap-2">
+        <ButtonAdd path={`/dashboard/product/add`} />
+        <Button
+          variant="filled"
+          icon={<ToTopOutlined />}
+          color="magenta"
+          onClick={handleExport}
+        >
+          Xuất file
+        </Button>
+
         <Popconfirm
           title="Bạn có chắc chắn muốn xóa ?"
           onConfirm={handleDeleteSelectedData}
@@ -159,7 +186,7 @@ const ProductsAdmin = () => {
           total: products?.data?.total,
         }}
       ></MVTable>
-    </React.Fragment>
+    </TailwindComponent>
   );
 };
 
