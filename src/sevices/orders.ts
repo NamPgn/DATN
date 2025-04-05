@@ -104,7 +104,7 @@ export const rejectReturnOrderUser = async (data: any) => {
 };
 
 export const refunAutoOrderUser = async (data: any) => {
-  return intances.post(`/orders/${data?.code}/refun_auto`, null);
+  return intances.post(`/orders/${data?.code}/refund_auto`, null);
 };
 
 export const refundManualOrderUser = async (data: any) => {
