@@ -14,3 +14,5 @@ export const getCommentClient = async (
 export const addCommentClient = async (commentData: any) => {
   return intancesLocal.post(`reviews`, commentData);
 };
+
+

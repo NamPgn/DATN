@@ -233,32 +233,34 @@ export const columnsATTR = [
 
 export const columnsComments = [
   {
-    title: "Stt",
-    dataIndex: "stt",
+    title: "ID",
+    dataIndex: "stt", 
     key: "stt",
-    width: 40,
-    showSorterTooltip: { target: "full-header" },
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    sorter: (a: any, b: any) => a.key - b.key,
-    sortDirections: ["descend"],
+    width: 80,
+  },
+  {
+    title: "Tên người đánh giá",
+    dataIndex: "reviewer_name",
+    key: "reviewer_name", 
+    width: 150,
+  },
+  {
+    title: "Email",
+    dataIndex: "reviewer_email",
+    key: "reviewer_email",
+    width: 200,
+  },
+  {
+    title: "Đánh giá",
+    dataIndex: "rating",
+    key: "rating",
+    width: 120,
   },
   {
     title: "Nội dung",
     dataIndex: "content",
     key: "content",
-    width: 100,
-  },
-  {
-    title: "Mã người dùng",
-    dataIndex: "user_id",
-    key: "user_id",
-    width: 100,
-  },
-  {
-    title: "ID Sản phẩm",
-    dataIndex: "product_id",
-    key: "product_id",
-    width: 100,
+    width: 300,
   },
   {
     title: "Trạng thái",
@@ -267,16 +269,22 @@ export const columnsComments = [
     width: 100,
   },
   {
-    title: "Đánh giá",
-    dataIndex: "rating",
-    key: "rating",
-    width: 100,
+    title: "Trạng thái phản hồi",
+    dataIndex: "has_reply",
+    key: "has_reply",
+    width: 120,
+  },
+  {
+    title: "Ngày tạo",
+    dataIndex: "created_at",
+    key: "created_at",
+    width: 150,
   },
   {
     title: "Hành động",
     dataIndex: "action",
     key: "action",
-    width: 150,
+    width: 250,
   },
 ];
 

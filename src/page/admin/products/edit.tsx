@@ -5,7 +5,7 @@ import { getProduct, updateProduct } from "../../../sevices/products";
 import UploadImage from "./component/uploadImage";
 import { Link, useParams } from "react-router-dom";
 import ProductForm from "./component/form";
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
+import { UploadOutlined } from "@ant-design/icons";
 import TailwindComponent from "../../../components/Tailwind/TailwinComponent";
 
 const ProductEdit = () => {
