@@ -1,58 +1,32 @@
+import { Link } from "react-router-dom";
+import { useGetProductSale } from "../../../hook/products";
+
 const ProductSaleTime = () => {
+  const { data } = useGetProductSale()?.data || { data: undefined };
   return (
     <section className="dealProductSection">
       <div className="container">
         <div className="row">
           <div className="col-lg-6">
             <div className="dealProductContent">
-              <h5>Featured Product</h5>
-              <h2>Ulima Fashionable Jeans</h2>
-              <p>
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris nisi ut aliquip ex ea commodo consequa uis aute irure
-                dolor{" "}
-              </p>
+              <h5>Sản phẩm giảm giá</h5>
+              <h2>{data?.data?.product?.name}</h2>
+              <p>{data?.data?.product?.short_description}</p>
               <div className="dpcPriceWrap">
                 <div className="pi01Price">
-                  <ins>$199</ins>
-                  <del>$399</del>
+                  <ins>${data?.data?.sale_price}</ins>
+                  <del>${data?.data?.regular_price}</del>
                 </div>
-                <a href="shop_details1.html" className="ulinaBTN">
-                  <span>Buy Now</span>
-                </a>
+
               </div>
-              <div className="countDownWrap">
-                <h6>Ends in</h6>
-                <div
-                  className="ulinaCountDown is-countdown"
-                  data-day={26}
-                  data-year={2022}
-                >
-                  <span className="countdown-row countdown-show4">
-                    <span className="countdown-section">
-                      <span className="countdown-amount">1</span>
-                      <span className="countdown-period">Day</span>
-                    </span>
-                    <span className="countdown-section">
-                      <span className="countdown-amount">23</span>
-                      <span className="countdown-period">Hrs</span>
-                    </span>
-                    <span className="countdown-section">
-                      <span className="countdown-amount">59</span>
-                      <span className="countdown-period">Mins</span>
-                    </span>
-                    <span className="countdown-section">
-                      <span className="countdown-amount">19</span>
-                      <span className="countdown-period">Secs</span>
-                    </span>
-                  </span>
-                </div>
-              </div>
+              <Link to={"/product/detail/" + data?.data?.product?.id} className="ulinaBTN">
+                <span>Mua ngay</span>
+              </Link>
             </div>
           </div>
           <div className="col-lg-6">
             <div className="dealProductImage">
-              <img src="/assets/images/home1/7.png" alt="Ulima Fashionable Jeans" />
+              <img src={`/assets/images/home1/7.png`} alt={data?.data?.product?.name} />
             </div>
           </div>
         </div>

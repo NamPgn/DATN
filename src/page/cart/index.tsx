@@ -188,11 +188,6 @@ const Cart = () => {
       <div className="container">
         <div className="row">
           <div className="col-lg-12">
-            <div className="cartHeader">
-              <h3>Giỏ Hàng</h3>
-            </div>
-          </div>
-          <div className="col-lg-12">
             <table className="shop_table cart_table">
               <thead>
                 <tr>

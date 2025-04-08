@@ -102,3 +102,12 @@ export const productsHardDeleted = async (data: any) => {
 export const productsRetoreDeleted = async (data: any) => {
   return intances.delete("/products/retore-delete", data);
 };
+
+export const productApi = {
+  searchProduct: async (keyword: string, category: string) => {
+    return intances.get("/products?keyword=" + keyword + "&category=" + category);
+  },
+  getProductSale: async () => {
+    return intancesLocal.get("/discount-product");
+  }
+}

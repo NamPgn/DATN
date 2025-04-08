@@ -51,7 +51,7 @@ const TrackingOrder = () => {
       {orderData ? (
         <OrdersVerify orderResponse={orderData} setOrderData={setOrderData} />
       ) : (
-        <div className="max-w-4xl mx-auto p-6" style={{ minHeight: "100vh" }}>
+        <div className="max-w-4xl mx-auto p-6" style={{ minHeight: "100vh", marginTop: "200px" }}>
           <h2 className="text-xl font-bold mb-4">Tìm kiếm đơn hàng</h2>
           <div className="flex gap-2 mb-6">
             <input

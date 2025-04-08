@@ -253,78 +253,30 @@ const OrderDetailUser = () => {
             </div>
           </div>
 
-          <div className="p-4 bg-gray-50 border-t">
-            <h3 className="font-semibold text-lg mb-4">Lịch sử đơn hàng</h3>
-            <div className="relative pl-4 border-l-2 border-gray-200">
-              {order?.status_timelines.map((timeline: any, index: any) => (
-                <div
-                  key={index}
-                  className="relative mb-4 pl-6 pb-4 border-b border-gray-200 last:border-b-0"
-                >
-                  <div className="absolute left-[13px] top-0 w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white">
-                    {STATUSICONS[timeline.to] || "📦"}
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p
-                        className="font-medium text-gray-800 "
-                        style={{ marginLeft: "30px" }}
-                      >
-                        {timeline.from ? `Từ ${timeline.from}` : "Tạo mới"}
-                        {" → "}
-                        <span className="text-blue-600">{timeline.to}</span>
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        {formatDateTime(timeline.changed_at)}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {order?.shipping_logs && order?.shipping_logs.length > 0 && (
-            <div className="p-4 bg-white border-t">
-              <h3 className="font-semibold text-lg mb-4">
-                Thông tin vận chuyển
-              </h3>
+          <div className="grid grid-cols-2 gap-4 p-4">
+            <div className="bg-gray-50 rounded-lg p-4">
+              <h3 className="font-semibold text-lg mb-4">Lịch sử đơn hàng</h3>
               <div className="relative pl-4 border-l-2 border-gray-200">
-                {order?.shipping_logs.map((log: any, index: any) => (
+                {order?.status_timelines.map((timeline: any, index: any) => (
                   <div
                     key={index}
                     className="relative mb-4 pl-6 pb-4 border-b border-gray-200 last:border-b-0"
                   >
-                    <div className="absolute left-[-13px] top-0 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-white">
-                      {SHIPPING_ICONS[log.status] || "🚚"}
+                    <div className="absolute left-[13px] top-0 w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                      {STATUSICONS[timeline.to] || "📦"}
                     </div>
                     <div className="flex justify-between items-center">
                       <div>
-                        <p className="font-medium text-gray-800">
-                          <span
-                            className="text-green-600 "
-                            style={{ marginLeft: "30px" }}
-                          >
-                            {log.status}
-                          </span>
+                        <p
+                          className="font-medium text-gray-800"
+                          style={{ marginLeft: "30px" }}
+                        >
+                          {timeline.from ? `Từ ${timeline.from}` : "Tạo mới"}
+                          {" → "}
+                          <span className="text-blue-600">{timeline.to}</span>
                         </p>
-                        {log?.location && (
-                          <p className="font-medium text-gray-800">
-                            <span
-                              className="text-green-600 "
-                              style={{ marginLeft: "30px" }}
-                            >
-                              {log.location}
-                            </span>
-                          </p>
-                        )}
-                        {log.note && (
-                          <p className="text-sm text-gray-600 mt-1">
-                            Ghi chú: {log.note}
-                          </p>
-                        )}
-                        <p className="text-sm text-gray-500 mt-1">
-                          {formatDateTime(log.created_at)}
+                        <p className="text-sm text-gray-600">
+                          {formatDateTime(timeline.changed_at)}
                         </p>
                       </div>
                     </div>
@@ -332,7 +284,57 @@ const OrderDetailUser = () => {
                 ))}
               </div>
             </div>
-          )}
+
+            {order?.shipping_logs && order?.shipping_logs.length > 0 && (
+              <div className="bg-white rounded-lg p-4 border border-gray-200">
+                <h3 className="font-semibold text-lg mb-4">
+                  Thông tin vận chuyển
+                </h3>
+                <div className="relative pl-4 border-l-2 border-gray-200">
+                  {order?.shipping_logs.map((log: any, index: any) => (
+                    <div
+                      key={index}
+                      className="relative mb-4 pl-6 pb-4 border-b border-gray-200 last:border-b-0"
+                    >
+                      <div className="absolute left-[-13px] top-0 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-white">
+                        {SHIPPING_ICONS[log.status] || "🚚"}
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <p className="font-medium text-gray-800">
+                            <span
+                              className="text-green-600"
+                              style={{ marginLeft: "30px" }}
+                            >
+                              {log.status}
+                            </span>
+                          </p>
+                          {log?.location && (
+                            <p className="font-medium text-gray-800">
+                              <span
+                                className="text-green-600"
+                                style={{ marginLeft: "30px" }}
+                              >
+                                {log.location}
+                              </span>
+                            </p>
+                          )}
+                          {log.note && (
+                            <p className="text-sm text-gray-600 mt-1">
+                              Ghi chú: {log.note}
+                            </p>
+                          )}
+                          <p className="text-sm text-gray-500 mt-1">
+                            {formatDateTime(log.created_at)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
 
           {order?.actions && order?.actions.length > 0 && (
             <div className="p-4 border-t flex space-x-3">

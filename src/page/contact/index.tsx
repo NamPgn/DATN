@@ -28,9 +28,9 @@ const ContactPage = () => {
         <div className="container">
           <div className="row">
             <div className="col-lg-12 text-center">
-              <h2 className="secTitle">Stay Connected</h2>
+              <h2 className="secTitle">Giữ Liên Lạc</h2>
               <p className="secDesc">
-                Showing our latest arrival on this summer
+                Giới thiệu những sản phẩm mới nhất trong mùa hè này
               </p>
             </div>
           </div>

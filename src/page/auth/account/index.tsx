@@ -109,7 +109,6 @@ const AccountSetting = () => {
                 <div className="col-xxl-8 mb-5 mb-xxl-0">
                   <div className="bg-secondary-soft px-4 rounded">
                     <div className="row g-3">
-                      <h4 className="mb-4 mt-0">Contact Detail</h4>
                       <div className="col-md-6">
                         <label className="form-label">Tên</label>
                         <input {...register("name")} className="form-control" />
