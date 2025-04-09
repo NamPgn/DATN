@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { Badge, Button, Drawer, Input, Layout, Menu, Spin } from "antd";
 import {
   BellOutlined,
+  CheckOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
@@ -12,13 +13,15 @@ import { Header } from "antd/es/layout/layout";
 import AuthHeader from "../components/UI/Header/auth";
 import PageTitle from "../components/UI/Core/PageTitle";
 import { TableRouterAdminPage } from "../router";
-import { useQuery } from "react-query";
-import { getNotify } from "../sevices/client/notifycation";
+import { useMutation, useQuery } from "react-query";
+import { changeNotify, getNotify } from "../sevices/client/notifycation";
+import { UsersContext } from "../context/usersContext";
 const { Content, Sider, Footer } = Layout;
 
 const LayoutAdmin = () => {
   const [open, setOpen] = useState(false);
-
+  const [collapsed, setCollapsed] = useState(false);
+  const { userId } = useContext(UsersContext) as { userId: any };
   const showDrawer = () => {
     setOpen(true);
   };
@@ -26,6 +29,30 @@ const LayoutAdmin = () => {
   const onClose = () => {
     setOpen(false);
   };
+
+  const { data, isLoading, refetch }: any = useQuery({
+    queryKey: ["notify"],
+    queryFn: async () => {
+      return (await getNotify()).data?.data;
+    },
+  });
+  const unreadCount = data?.filter(
+    (notification: any) => notification.is_read !== 1
+  ).length;
+
+  const markAsReadMutation = useMutation({
+    mutationFn: async (id: number) => {
+      return await changeNotify({
+        id,
+        is_read: true,
+      });
+    },
+    onSuccess: () => {
+      refetch();
+      setOpen(false);
+    },
+  });
+
   const items2: any = [
     {
       key: "group-application",
@@ -58,14 +85,6 @@ const LayoutAdmin = () => {
     },
   ];
 
-  const [collapsed, setCollapsed] = useState(false);
-
-  const { data, isLoading }: any = useQuery({
-    queryKey: ["notify"],
-    queryFn: async () => {
-      return (await getNotify()).data?.data;
-    },
-  });
   return (
     <>
       <Layout
@@ -129,22 +148,31 @@ const LayoutAdmin = () => {
                 Pages / <PageTitle />
               </span>
             </div>
-            <div
-              style={{ display: "flex", alignItems: "center", gap: "0 20px" }}
-            >
-              <Input.Search placeholder="Type here..." />
-              <MVCol>
-                <AuthHeader />
-              </MVCol>
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-semibold">
+                  {userId?.email?.[0]?.toUpperCase()}
+                </div>
+                <p className="text-gray-700 font-medium">{userId?.email}</p>
+              </div>
+              
+              <div className="h-6 w-px bg-gray-300"></div>
 
-              {/* <SettingOutlined style={{ fontSize: "20px" }} /> */}
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <AuthHeader />
+                </div>
 
-              <Badge count={4}>
-                <BellOutlined
-                  onClick={showDrawer}
-                  style={{ fontSize: "20px" }}
-                />
-              </Badge>
+                <Badge 
+                  count={unreadCount} 
+                  className="cursor-pointer hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <BellOutlined
+                    onClick={showDrawer}
+                    className="text-xl text-gray-600 hover:text-blue-500 transition-colors"
+                  />
+                </Badge>
+              </div>
             </div>
           </Header>
           <Content
@@ -166,12 +194,46 @@ const LayoutAdmin = () => {
           </div>
         ) : (
           <div className="space-y-4">
-            {data?.map((item: any) => (
-              <div key={item.id} className="p-3 border-b border-gray-200">
-                <h3 className="font-semibold">{item.title}</h3>
-                <p className="text-gray-600">{item.message}</p>
-              </div>
-            ))}
+            {data?.map((item: any) => {
+              const linkTo = item?.order_id
+                ? `/dashboard/orders/${item.order_id}`
+                : item?.voucher_id
+                  ? `/dashboard/vouchers/${item.voucher_id}`
+                  : "#";
+
+              return (
+                <Link
+                  key={item.id}
+                  to={linkTo}
+                  onClick={() => markAsReadMutation.mutate(item.id)}
+                >
+                  <div
+                    className={`relative my-2 p-3 border-b border-gray-200 rounded-md ${item.is_read ? "bg-gray-200" : "bg-white"
+                      }`}
+                  >
+                    {!item.is_read && (
+                      <span className="absolute top-2 right-2 h-2 w-2 bg-red-500 rounded-full"></span>
+                    )}
+
+                    <h3
+                      className="font-semibold"
+                      dangerouslySetInnerHTML={{ __html: item.title }}
+                    ></h3>
+                    <p
+                      className="text-gray-600"
+                      dangerouslySetInnerHTML={{ __html: item.message }}
+                    ></p>
+
+                    {item.is_read === 1 && (
+                      <p className="text-right text-sm text-gray-500">
+                        {" "}
+                        <CheckOutlined /> Đã đọc
+                      </p>
+                    )}
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         )}
       </Drawer>

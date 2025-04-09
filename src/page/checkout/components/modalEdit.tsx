@@ -62,7 +62,7 @@ const ModalEdit = ({
       label: item.ProvinceName,
       value: item.ProvinceID,
     })) || [];
-  const { mutate: MutateDistrict, isLoading: loadingDistrict } = useMutation({
+  const { mutate: MutateDistrict } = useMutation({
     mutationFn: async (data: any) => {
       return (await postApiOrderDistrict(data)).data;
     },
@@ -81,7 +81,7 @@ const ModalEdit = ({
     },
   });
 
-  const { mutate: MutateWard, isLoading: loadingWard } = useMutation({
+  const { mutate: MutateWard } = useMutation({
     mutationFn: async (data: any) => {
       return (await postApiOrderWard(data)).data;
     },

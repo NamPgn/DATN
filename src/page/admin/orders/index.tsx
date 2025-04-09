@@ -2,14 +2,12 @@
 import React, { useState } from "react";
 import MVTable from "../../../components/UI/Core/MV/Table";
 
-import { useMutation, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import { ButtonAdd, MyButton } from "../../../components/UI/Core/Button";
 import { Link } from "react-router-dom";
-import { Button, Modal, Popconfirm } from "antd";
-import { toast } from "react-toastify";
-import { delOrders, getOrders } from "../../../sevices/orders";
+import {  getOrders } from "../../../sevices/orders";
 import { columnsOrders } from "../../../constant";
-import { DeleteFilled, EyeOutlined, PlusOutlined } from "@ant-design/icons";
+import {  EyeOutlined } from "@ant-design/icons";
 
 const OrdersAdmin = () => {
   const [page, setPage] = useState(1);
@@ -19,7 +17,7 @@ const OrdersAdmin = () => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
-  const { data: Orders, refetch }: any = useQuery({
+  const { data: Orders }: any = useQuery({
     queryKey: ["Orders", page],
     queryFn: async () => {
       return await getOrders(page);
@@ -59,12 +57,6 @@ const OrdersAdmin = () => {
                 Edit
               </Button>
             </Link> */}
-
-            <Link to={`/dashboard/orders/send/${item.id}`}>
-              <Button icon={<PlusOutlined />} color="green" variant="text">
-                Gửi đơn hàng
-              </Button>
-            </Link>
           </div>
         ),
       };

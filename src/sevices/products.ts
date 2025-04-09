@@ -1,8 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { saveAs } from "file-saver";
 import intances, { intancesLocal } from "./instances";
-
 export const getProducts = async (page: number) => {
   return intances.get("/products?page=" + page);
+};
+
+export const exportFileProducts = async () => {
+  const response = await intances.get("/products/export", {
+    responseType: "blob",
+  });
+
+  if (!response || !response.data) throw new Error("Không có dữ liệu để tải");
+
+  const blob = new Blob([response.data], {
+    type: response.headers["content-type"],
+  });
+  saveAs(blob, "products.xlsx");
 };
 
 export const getProductsOrder = async (page: number) => {
@@ -13,8 +26,8 @@ export const getProduct = async (id: any) => {
   return intances.get("/products/" + id);
 };
 
-export const updateProduct = async (id: any, data: any) => {
-  return intances.put("/products/" + id, data);
+export const updateProduct = async (data: any) => {
+  return intances.put("/products/" + data?.id, data);
 };
 
 export const delProduct = async (id: string) => {
@@ -89,3 +102,12 @@ export const productsHardDeleted = async (data: any) => {
 export const productsRetoreDeleted = async (data: any) => {
   return intances.delete("/products/retore-delete", data);
 };
+
+export const productApi = {
+  searchProduct: async (keyword: string, category: string) => {
+    return intances.get("/products?keyword=" + keyword + "&category=" + category);
+  },
+  getProductSale: async () => {
+    return intancesLocal.get("/discount-product");
+  }
+}

@@ -1,32 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState } from "react";
-import { Input, Modal, Popconfirm, Select, Tag } from "antd";
+import { Input, Modal, Select } from "antd";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
 import {
-  delComments,
   delMultipleComments,
   getComments,
   replyComment,
-  statusMutipleComment,
 } from "../../../sevices/comment";
 import { MyButton } from "../../../components/UI/Core/Button";
-import MVConfirm from "../../../components/UI/Core/Confirm";
 import MVTable from "../../../components/UI/Core/MV/Table";
 import { columnsComments } from "../../../constant";
 import {
-  DeleteOutlined,
-  EyeInvisibleOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
+import TailwindComponent from "../../../components/Tailwind/TailwinComponent";
 const { Option } = Select;
 const CommentAdmin = () => {
   const [page, setPage] = useState(1);
-  const [hiddenComments, setHiddenComments] = useState<Record<string, boolean>>(
-    {}
-  );
-  const [selectAllHidden, setSelectAllHidden] = useState(false);
+
+  const [searchStatusInput, setSearchStatusInput] = useState<string>("all");
   const [replyModalVisible, setReplyModalVisible] = useState(false);
   const [replyText, setReplyText] = useState("");
   const [replyCommentId, setReplyCommentId] = useState<string | null>(null);
@@ -44,29 +38,17 @@ const CommentAdmin = () => {
   };
 
   const { data: comments, refetch }: any = useQuery({
-    queryKey: ["comments", page, searchKeyword, searchRating],
+    queryKey: ["comments", page, searchKeyword, searchRating, searchStatusInput],
     queryFn: async () => {
       return await getComments(
         page,
         searchKeyword.trim() !== "" ? searchKeyword : undefined,
-        searchRating ?? undefined
+        searchRating ?? undefined,
+        searchStatusInput
       );
     },
   });
-  const { mutate } = useMutation({
-    mutationFn: async (id: string) => {
-      return await delComments(id);
-    },
-    onSuccess: () => {
-      toast.success("Xóa thành công");
-      refetch();
-    },
-    onError: (error) => {
-      console.error("Lỗi khi xóa:", error);
-      toast.error("Xóa không thành công");
-    },
-  });
-
+  console.log(searchStatusInput);
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
@@ -90,47 +72,6 @@ const CommentAdmin = () => {
     },
   });
 
-  const handleDeleteSelectedData = () => {
-    if (selectedRowKeys.length === 0) {
-      toast.warning("Vui lòng chọn ít nhất một comment để xóa");
-      return;
-    }
-    deleteMultiple(selectedRowKeys);
-  };
-
-  const toggleSelectedComments = () => {
-    if (selectedRowKeys.length === 0) {
-      toast.warning("Vui lòng chọn ít nhất một comment");
-      return;
-    }
-
-    const allHidden = selectedRowKeys.every(
-      (id: string | number) => hiddenComments[id]
-    );
-
-    setHiddenComments((prev) => {
-      const updatedHidden = { ...prev };
-      selectedRowKeys.forEach((id: string | number) => {
-        updatedHidden[id] = !allHidden;
-      });
-      return updatedHidden;
-    });
-    const data = {
-      id: selectedRowKeys,
-      status: !!allHidden,
-    };
-    statusMutipleComment(data)
-      .then(() => {
-        toast.success("Cập nhật trạng thái thành công");
-        refetch();
-      })
-      .catch((error) => {
-        console.error("Lỗi khi cập nhật trạng thái:", error);
-        toast.error("Cập nhật trạng thái thất bại");
-      });
-
-    setSelectAllHidden(!allHidden);
-  };
 
   const { mutate: sendReply } = useMutation({
     mutationFn: async ({ id, reply }: { id: string; reply: string }) => {
@@ -171,65 +112,64 @@ const CommentAdmin = () => {
     setSearchRating(searchRatingInput);
     setPage(1);
   };
-
   const data =
     comments &&
     comments?.data?.data?.data?.map((item: any) => {
-      const isHidden =
-        item.status === 0 || item.status === "0" || item.status === false;
-      const isManuallyHidden = hiddenComments[item.id] ?? isHidden;
       return {
         key: item.id,
-        child: item.children,
         stt: item.id,
-        content: isManuallyHidden ? (
-          <span className="text-gray-400">Comment ẩn</span>
-        ) : (
-          item.content
+        reviewer_name: item.reviewer_name,
+        reviewer_email: item.reviewer_email,
+        rating: (
+          <div className="flex items-center">
+            {[...Array(5)].map((_, index) => (
+              <svg
+                key={index}
+                className={`w-4 h-4 ${index < item.rating ? "text-yellow-400" : "text-gray-300"
+                  }`}
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+              </svg>
+            ))}
+          </div>
         ),
-        product_id: item.product_id,
-        rating: item.rating,
-        user_id: item.user_id,
-        reply: item.reply ? (
-          <Tag color="blue">{item.reply}</Tag>
+        content: item.content_preview,
+        is_active: item.is_active ? (
+          <span className="px-2 py-1 text-xs font-semibold text-green-800 bg-green-100 rounded-full">
+            Active
+          </span>
         ) : (
-          <Tag color="red">Chưa phản hồi</Tag>
+          <span className="px-2 py-1 text-xs font-semibold text-red-800 bg-red-100 rounded-full">
+            Hidden
+          </span>
         ),
-        is_active:
-          item.status == 0 ? (
-            <Tag color="warning">Hidden</Tag>
-          ) : (
-            <Tag color="success">Active</Tag>
-          ),
+        has_reply: item.has_reply ? (
+          <span className="px-2 py-1 text-xs font-semibold text-blue-800 bg-blue-100 rounded-full">
+            Replied
+          </span>
+        ) : (
+          <span className="px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-100 rounded-full">
+            No Reply
+          </span>
+        ),
+        created_at: item.created_at,
         action: (
-          <div className="d-flex gap-1">
-            <MVConfirm
-              title="Bạn có chắc chắn muốn xóa ?"
-              onConfirm={() => mutate(item.id)}
-            >
-              <MyButton danger className="ml-2">
-                Delete
-              </MyButton>
-            </MVConfirm>
+          <div className="flex items-center space-x-2">
             <Link
               to={`/dashboard/comments/${item.id}`}
-              className="text-blue-500"
+              className="px-3 py-1 text-sm font-medium text-blue-600 bg-blue-100 rounded-md hover:bg-blue-200"
             >
-              <MyButton type="dashed">Detail</MyButton>
+              Detail
             </Link>
-            <MyButton
-              type="primary"
-              onClick={() => openReplyModal(item.id, item.reply)}
-            >
-              Reply
-            </MyButton>
           </div>
         ),
       };
     });
   return (
-    <React.Fragment>
-      <div className="d-flex gap-2 mb-4">
+    <TailwindComponent>
+      <div className="flex items-center gap-2 mb-6">
         <Input
           placeholder="Nhập từ khóa tìm kiếm..."
           value={searchKeywordInput}
@@ -250,6 +190,7 @@ const CommentAdmin = () => {
           <Option value={4}>4 sao</Option>
           <Option value={5}>5 sao</Option>
         </Select>
+
         <MyButton
           type="primary"
           icon={<SearchOutlined />}
@@ -257,32 +198,19 @@ const CommentAdmin = () => {
         >
           Tìm kiếm
         </MyButton>
-      </div>
-      <div className="mb-3">
-        <Popconfirm
-          title="Bạn có chắc chắn muốn xóa ?"
-          onConfirm={handleDeleteSelectedData}
-          okText="Yes"
-          cancelText="No"
-        >
-          <MyButton type="primary" danger icon={<DeleteOutlined />}>
-            Delete Selected
-          </MyButton>
-        </Popconfirm>
-        <MyButton
-          icon={<EyeInvisibleOutlined />}
-          className="ml-2"
-          onClick={toggleSelectedComments}
-        >
-          {selectAllHidden
-            ? "Hiện các comment đã chọn"
-            : "Ẩn các comment đã chọn"}
-        </MyButton>
-        <Link to="/dashboard/comments/hidden">
-          <MyButton type="default">Danh sách comment ẩn</MyButton>
-        </Link>
-      </div>
 
+        <Select
+          placeholder="Trạng thái hiển thị"
+          value={searchStatusInput}
+          onChange={(value) => setSearchStatusInput(value)}
+          style={{ width: "180px" }}
+          allowClear
+        >
+          <Option value="all">Tất cả bình luận</Option>
+          <Option value="1">Đang hiển thị</Option>
+          <Option value="0">Đang bị ẩn</Option>
+        </Select>
+      </div>
       <MVTable
         columns={columnsComments}
         rowSelection={rowSelection}
@@ -310,7 +238,7 @@ const CommentAdmin = () => {
           rows={4}
         />
       </Modal>
-    </React.Fragment>
+    </TailwindComponent>
   );
 };
 

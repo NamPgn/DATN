@@ -3,7 +3,6 @@ import { useCart } from "../../context/Cart/cartContext";
 import { useMutation } from "react-query";
 import {
   changeCartAdd,
-  getCart,
   userCartClear,
   userCartDelete,
 } from "../../sevices/client/cart";
@@ -89,7 +88,7 @@ const Cart = () => {
 
   const handleQuantityDecrease = (
     id: number,
-    stockQuantity: number,
+    _stockQuantity: number,
     currentQuantity: number,
     cart_item_id: number
   ) => {
@@ -188,11 +187,6 @@ const Cart = () => {
     <section className="cartPageSection woocommerce">
       <div className="container">
         <div className="row">
-          <div className="col-lg-12">
-            <div className="cartHeader">
-              <h3>Giỏ Hàng</h3>
-            </div>
-          </div>
           <div className="col-lg-12">
             <table className="shop_table cart_table">
               <thead>

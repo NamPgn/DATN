@@ -8,23 +8,24 @@ interface RefundModalProps {
   visible: boolean;
   onCancel: () => void;
   onSubmit: (data: any) => void;
+  code: any
 }
 
 const RefundModal: React.FC<RefundModalProps> = ({
   visible,
   onCancel,
   onSubmit,
+  code
 }) => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-
   const uploadMutation = useMutation({
     mutationFn: async (file: File) => {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET); // Thay bằng preset của bạn
-
+      formData.append("code", code);
       const res = await fetch(CLOUDINARY_URL, {
         method: "POST",
         body: formData,
@@ -52,8 +53,8 @@ const RefundModal: React.FC<RefundModalProps> = ({
         return;
       }
 
-      const formData = { ...values, proof_image: imageUrl };
-      onSubmit(formData); 
+      const formData = { ...values, proof_image: imageUrl, code };
+      onSubmit(formData);
       form.resetFields();
       setImageUrl(null);
       onCancel();

@@ -21,7 +21,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState([]);
   const [cartLocal, setCartLocal] = useState([]);
   const token_ = token_auth();
-  const [reset, setReset] = useState(false);
   const { data: cartUser, refetch: refetchCart } = useQuery({
     queryKey: ["userCart"],
     queryFn: async () => {

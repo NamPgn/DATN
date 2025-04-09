@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MinusCircleOutlined } from "@ant-design/icons";
 import { Button, Form, Input, InputNumber, Select, Space } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
@@ -6,6 +6,8 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { getAttributesAll } from "../../../../sevices/attribute";
 import { getCategorysAll } from "../../../../sevices/category";
+import SelectedImages from "./SelectedImages";
+import TextArea from "antd/es/input/TextArea";
 
 const ProductForm = ({
   selectOneImage,
@@ -30,6 +32,7 @@ const ProductForm = ({
       form.resetFields();
     }
   }, [id]);
+
   // useEffect(() => {
   //   if (dataEdit) {
   //     if (typeProduct !== dataEdit.type) {
@@ -144,7 +147,6 @@ const ProductForm = ({
         attributesValues[attribute.name] = selectedNames;
       }
     });
-    console.log(val.variants);
     const data = {
       attributes: attributesValues,
       main_image: selectOneImage?.id,
@@ -234,6 +236,7 @@ const ProductForm = ({
   };
   return (
     <div>
+      <SelectedImages selectImage={selectImage} selectOneImage={selectOneImage} />
       <Form
         form={form}
         layout="vertical"
@@ -274,10 +277,10 @@ const ProductForm = ({
         </Form.Item>
 
         <Form.Item name="short_description" label="Mô tả ngắn">
-          <Input className="w-50" placeholder="Mô tả ngắn" />
+          <TextArea className="w-50" placeholder="Mô tả ngắn" />
         </Form.Item>
 
-        <Form.Item label="Category Id" name="categories">
+        <Form.Item label="Danh mục" name="categories">
           <Select
             className="w-50"
             mode="multiple"
@@ -413,7 +416,12 @@ const ProductForm = ({
 
                           <Button
                             icon={<MinusCircleOutlined />}
-                            onClick={() => remove(name)}
+                            onClick={() => {
+                              setVariants((prev) =>
+                                prev.filter((_, i) => i !== index)
+                              );
+                              remove(name);
+                            }}
                           />
                         </Space>
                       );

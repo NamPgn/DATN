@@ -1,5 +1,5 @@
 import { Pagination } from "antd";
-import React, { memo } from "react";
+import { memo } from "react";
 interface Pagination {
   totalItems: number;
   pageSize: number;

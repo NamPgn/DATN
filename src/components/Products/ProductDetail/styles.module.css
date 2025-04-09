@@ -1,0 +1,288 @@
+.container {
+    background-color: #f9fafb;
+}
+
+.card {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.flex {
+    display: flex;
+    gap: 1rem;
+}
+
+.flexCol {
+    display: flex;
+    flex-direction: column;
+}
+
+.thumbnailContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 5rem;
+}
+
+.thumbnail {
+    cursor: pointer;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: all 0.3s;
+}
+
+.thumbnail:hover {
+    border-color: #9ebbbd;
+    transform: scale(1.05);
+}
+
+.thumbnailActive {
+    border-color: #9ebbbd;
+}
+
+.thumbnailImage {
+    width: 100%;
+    height: 5rem;
+    object-fit: cover;
+}
+
+.mainImage {
+    flex: 1;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.mainImage img {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.mainImage img:hover {
+    transform: scale(1.02);
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1f2937;
+    margin-bottom: 1rem;
+}
+
+.priceContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.price {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.priceValue {
+    font-size: 1.875rem;
+    font-weight: bold;
+    color: #9ebbbd;
+    transition: color 0.3s;
+}
+
+.priceValue:hover {
+    color: #7a9a9c;
+}
+
+.originalPrice {
+    color: #4b5563;
+}
+
+.stock {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.stockLabel {
+    color: #4b5563;
+}
+
+.stockValue {
+    color: #1f2937;
+}
+
+.description {
+    margin-top: 1.5rem;
+    color: #4b5563;
+}
+
+.variants {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.variantGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.variantLabel {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #1f2937;
+}
+
+.variantOptions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.variantButton {
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.3s;
+    background-color: #f3f4f6;
+    color: #1f2937;
+    cursor: pointer;
+}
+
+.variantButton:hover {
+    background-color: #e5e7eb;
+    transform: translateY(-2px);
+}
+
+.variantButtonActive {
+    background-color: #9ebbbd;
+    color: white;
+}
+
+.variantButtonActive:hover {
+    background-color: #7a9a9c;
+}
+
+.cartSection {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.cartControls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.quantityWrapper {
+    width: 8rem;
+}
+
+.addToCart {
+    flex: 1;
+    background-color: #9ebbbd;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.addToCart:hover {
+    background-color: #7a9a9c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.metaInfo {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.sku {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+
+.skuValue {
+    font-weight: 500;
+}
+
+.categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.categoryLink {
+    font-size: 0.875rem;
+    color: #9ebbbd;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.categoryLink:hover {
+    text-decoration: underline;
+    color: #7a9a9c;
+    transform: translateX(2px);
+}
+
+.socialShare {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.socialLabel {
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+
+.socialLinks {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.socialLink {
+    font-size: 1.125rem;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.socialLink:hover {
+    opacity: 0.8;
+    transform: translateY(-2px);
+}
+
+.descriptionSection {
+    margin-top: 2rem;
+}

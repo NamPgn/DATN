@@ -26,8 +26,6 @@ import FormModal from "./components/modal";
 import AddressDisplay from "./components/addressDisplay";
 import { UsersContext } from "../../context/usersContext";
 import {
-  Card,
-  CardContent,
   Paper,
   Table,
   TableBody,
@@ -85,7 +83,6 @@ const Checkout = () => {
   });
   const [optionsDistrict, setOptionsDistrict] = useState<any>([]);
   const [optionsWard, setOptionsWard] = useState<any>([]);
-  const [isEdit, setIsEdit] = useState<any>(false);
   const {
     register,
     handleSubmit,
@@ -188,7 +185,7 @@ const Checkout = () => {
     async () => await getApiOrderAdress()
   );
 
-  const { mutate: MutateDistrict, isLoading: loadingDistrict } = useMutation({
+  const { mutate: MutateDistrict } = useMutation({
     mutationFn: async (data: any) => {
       return (await postApiOrderDistrict(data)).data;
     },
@@ -207,7 +204,7 @@ const Checkout = () => {
     },
   });
 
-  const { mutate: MutateWard, isLoading: loadingWard } = useMutation({
+  const { mutate: MutateWard } = useMutation({
     mutationFn: async (data: any) => {
       return (await postApiOrderWard(data)).data;
     },
@@ -371,7 +368,6 @@ const Checkout = () => {
             refetchAddrList={refetchAddrList}
             RefetchDefault={RefetchDefault}
             addList={addList}
-            setIsEdit={setIsEdit}
           />
         )}
         {/* <FormModal /> */}
@@ -409,7 +405,6 @@ const Checkout = () => {
                       refetchAddrList={refetchAddrList}
                       loadingDefault={loadingDefault}
                       refetchDefault={RefetchDefault}
-                      setIsEdit={setIsEdit}
                     />
                     <TableContainer component={Paper}>
                       <Typography variant="h6" sx={{ p: 2 }}>

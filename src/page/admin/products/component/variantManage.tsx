@@ -52,9 +52,9 @@ const AttributeForm = ({ idProduct }: any) => {
     }
   }, [form, attribute]);
 
-  const handleAttributeChange = (selectedValues: any) => {
-    setSelectedAttributes(selectedValues);
-  };
+  // const _handleAttributeChange = (selectedValues: any) => {
+  //   setSelectedAttributes(selectedValues);
+  // };
 
   const handleSubmit = (val: any) => {
     const data: any = {

@@ -1,13 +1,36 @@
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const schema = z.object({
+  conName: z.string().min(1, "Vui lòng nhập tên"),
+  conEmail: z.string().email("Email không hợp lệ"),
+  conPhone: z.string().min(10, "Số điện thoại không hợp lệ"),
+  message: z.string().min(5, "Nội dung yêu cầu quá ngắn"),
+});
+
 const ContactPage = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(schema),
+  });
+
+  const onSubmit = (data: any) => {
+    console.log("Form Data:", data);
+  };
+
   return (
     <>
       <section className="stayConnected">
         <div className="container">
           <div className="row">
             <div className="col-lg-12 text-center">
-              <h2 className="secTitle">Stay Connected</h2>
+              <h2 className="secTitle">Giữ Liên Lạc</h2>
               <p className="secDesc">
-                Showing our latest arrival on this summer
+                Giới thiệu những sản phẩm mới nhất trong mùa hè này
               </p>
             </div>
           </div>
@@ -18,28 +41,28 @@ const ContactPage = () => {
                   <span>
                     <i className="fa-solid fa-location-dot" />
                   </span>
-                  <h5>Location</h5>
-                  <p>20 Bordeshi, New York, Usa</p>
+                  <h5>Địa chỉ</h5>
+                  <p>Trường Sơn, Lục Nam, Bắc Giang</p>
                 </div>
                 <div className="contactItem">
                   <span>
                     <i className="fa-solid fa-phone" />
                   </span>
-                  <h5>Phone</h5>
-                  <p>+123 456 789000</p>
+                  <h5>Số điện thoại</h5>
+                  <p>+84 796 385 112</p>
                 </div>
                 <div className="contactItem">
                   <span>
                     <i className="fa-solid fa-envelope" />
                   </span>
                   <h5>Email</h5>
-                  <p>hello@ulina.com</p>
+                  <p>phuongminhhoang77@gmail.com</p>
                 </div>
               </div>
             </div>
             <div className="col-xl-6 col-lg-6 offset-xl-2">
               <form
-                action="#"
+                onSubmit={handleSubmit(onSubmit)}
                 method="post"
                 className="contactForm"
                 id="contact_form"
@@ -49,40 +72,48 @@ const ContactPage = () => {
                     <input
                       className="required"
                       type="text"
-                      name="conName"
-                      placeholder="Your name"
+                      {...register("conName")}
+                      placeholder="Tên của bạn"
                     />
+                    {errors.conName && (
+                      <p className="text-red-500">{errors.conName.message}</p>
+                    )}
                   </div>
                   <div className="col-md-6">
                     <input
                       className="required"
                       type="email"
-                      name="conEmail"
-                      placeholder="Your email"
+                      {...register("conEmail")}
+                      placeholder="Email của bạn"
                     />
+                    {errors.conEmail && (
+                      <p className="text-red-500">{errors.conEmail.message}</p>
+                    )}
                   </div>
                   <div className="col-md-6">
                     <input
                       className="required"
                       type="text"
-                      name="conPhone"
-                      placeholder="Your phone"
+                      {...register("conPhone")}
+                      placeholder="Số điện thoại"
                     />
-                  </div>
-                  <div className="col-md-6">
-                    <input type="text" name="conWeb" placeholder="Website" />
+                    {errors.conPhone && (
+                      <p className="text-red-500">{errors.conPhone.message}</p>
+                    )}
                   </div>
                   <div className="col-md-12">
                     <textarea
                       className="required"
-                      name="message"
-                      placeholder="Write your message here"
-                      defaultValue={""}
+                      {...register("message")}
+                      placeholder="Yêu cầu hỗ trợ"
                     />
+                    {errors.message && (
+                      <p className="text-red-500">{errors.message.message}</p>
+                    )}
                   </div>
                   <div className="col-md-12">
                     <button type="submit" className="ulinaBTN">
-                      <span>Submit Now</span>
+                      <span>Gửi</span>
                     </button>
                     <div className="alert con_message" />
                   </div>

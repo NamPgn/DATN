@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Table, Button, message, Image } from "antd";
+import { Table, Button, message } from "antd";
 import { Link, useParams } from "react-router-dom";
 import { columnsProductVariant } from "../../../../constant";
 import { useMutation, useQuery } from "react-query";
@@ -12,7 +11,6 @@ import MVConfirm from "../../../../components/UI/Core/Confirm";
 import AttributeForm from "../component/variantManage";
 
 const ProductVariant = () => {
-  const [page, setPage] = useState(1);
   const { id }: any = useParams();
   const { data: productsVariants, refetch }: any = useQuery({
     queryKey: ["products", id],

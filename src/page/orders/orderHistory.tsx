@@ -1,17 +1,14 @@
 import React, { useState } from "react";
-import axios from "axios";
 import TailwindComponent from "../../components/Tailwind/TailwinComponent";
 import {
   getOrderPaymentUser,
   getOrderStatusUser,
 } from "../../sevices/client/orders";
-import { useMutation, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import { Link } from "react-router-dom";
 
 const OrderHistory: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string | null>(null);
-  const [orders, setOrders] = useState<any[]>([]);
-  const token = localStorage.getItem("access_token");
   const [currentPage, setCurrentPage] = useState<any | number>(1);
   const { data: orderStatus } = useQuery({
     queryKey: ["orderStatus"],
@@ -19,8 +16,6 @@ const OrderHistory: React.FC = () => {
       return (await getOrderStatusUser()).data?.data || [];
     },
   });
-
-  
 
   const { data: orderPayment, isLoading: loadingPayment } = useQuery({
     queryKey: ["orderPayment", activeTab, currentPage],
@@ -47,35 +42,35 @@ const OrderHistory: React.FC = () => {
     }
   };
 
-  const handleCancelOrder = async (idOrder: number) => {
-    const confirm = window.confirm("Bạn có muốn hủy đơn hàng này không");
-    if (confirm) {
-      try {
-        await axios.patch(
-          `http://localhost:8000/api/client/orders/${idOrder}`,
-          { status: "Đã hủy" },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+  // const handleCancelOrder = async (idOrder: number) => {
+  //   const confirm = window.confirm("Bạn có muốn hủy đơn hàng này không");
+  //   if (confirm) {
+  //     try {
+  //       await axios.patch(
+  //         `http://localhost:8000/api/client/orders/${idOrder}`,
+  //         { status: "Đã hủy" },
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
 
-        setOrders((prevOrders) =>
-          prevOrders.map((order) =>
-            order.id === idOrder ? { ...order, status: "Đã hủy" } : order
-          )
-        );
-      } catch (error) {
-        console.error("Lỗi khi hủy đơn hàng:", error);
-      }
-    }
-  };
+  //       setOrders((prevOrders) =>
+  //         prevOrders.map((order) =>
+  //           order.id === idOrder ? { ...order, status: "Đã hủy" } : order
+  //         )
+  //       );
+  //     } catch (error) {
+  //       console.error("Lỗi khi hủy đơn hàng:", error);
+  //     }
+  //   }
+  // };
 
   const renderOrderCard = (filteredOrders: any[]) => {
     if (loadingPayment) {
       return (
-        <div className="flex justify-center items-center py-10">
+        <div className="flex justify-center items-center py-10 ">
           <svg
             className="animate-spin h-8 w-8 text-gray-600"
             xmlns="http://www.w3.org/2000/svg"
@@ -103,7 +98,7 @@ const OrderHistory: React.FC = () => {
       filteredOrders.map((order) => (
         <div
           key={order.code}
-          className="rounded-lg p-4 mb-4 shadow-sm bg-gray-50"
+          className="rounded-lg p-4 mb-4 shadow-sm bg-gray-50 "
         >
           <div className="flex text-center justify-between items-center mb-4">
             <div className="font-semibold text-lg">
@@ -136,10 +131,13 @@ const OrderHistory: React.FC = () => {
                 />
                 <div>
                   <div className="font-semibold text-lg">{item.name}</div>
-                  <div className="text-gray-500">
-                    Màu: {item.variation["Màu sắc"]}, Kích cỡ:{" "}
-                    {item.variation["Kích thước"]}
-                  </div>
+                  {item.variation &&
+                    Object.entries(item?.variation).map(([key, value]: any) => (
+                      <div key={key} className="text-gray-500">
+                        {key}: {value}
+                      </div>
+                    ))}
+
                   <div>Số lượng: {item.quantity}</div>
                   <div className="text-red-600 font-semibold">
                     Giá: {item.price.toLocaleString()}đ
@@ -152,14 +150,20 @@ const OrderHistory: React.FC = () => {
           <div className="text-right font-semibold text-xl text-red-700">
             Tổng giá: {order.final_amount.toLocaleString()}đ
           </div>
+          <div className="text-gray-600 text-sm mt-1 font-bold">
+            {order?.extra_products_count > 0
+              ? `Còn ${order?.extra_products_count} sản phẩm khác`
+              : ""}
+          </div>
           <div className="text-gray-500 text-sm mt-2">
             Ngày tạo: {order.created_at}
           </div>
           <div className="text-gray-600 text-sm mt-1">
             Thanh toán: {order.payment_status}
           </div>
+
           <div className="flex  gap-3 mt-4 items-center">
-            {(order.status_code === "pending" ||
+            {/* {(order.status_code === "pending" ||
               order.status_code === "confirmed") && (
               <div className=" space-x-2">
                 {(order.status_code === "pending" ||
@@ -172,7 +176,7 @@ const OrderHistory: React.FC = () => {
                   </button>
                 )}
               </div>
-            )}
+            )} */}
             <Link to={"/order/detail/" + order.code}>
               <button className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                 Chi tiết đơn hàng
@@ -198,7 +202,11 @@ const OrderHistory: React.FC = () => {
   const filteredOrders = getFilteredOrders(activeTab);
   return (
     <TailwindComponent>
-      <div className="p-6">
+      <div className="p-6 container">
+        <div className="my-5">
+          <h1 className="mb-2 font-bold text-2xl">Thông tin đơn hàng</h1>
+          <hr />
+        </div>
         <div className="flex space-x-4 mb-4 justify-center">
           {orderStatus
             ?.filter((status: any) => status.label?.trim())
@@ -220,7 +228,7 @@ const OrderHistory: React.FC = () => {
             })}
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-4">
+      <div className="grid grid-cols-1 gap-4 container">
         {renderOrderCard(filteredOrders)}
       </div>
 

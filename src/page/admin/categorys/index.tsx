@@ -18,7 +18,6 @@ import { DeleteOutlined } from "@ant-design/icons";
 const CategoryAdmin = () => {
   const [page, setPage] = useState(1);
 
-  const [valueId, setValue] = useState();
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
@@ -44,9 +43,9 @@ const CategoryAdmin = () => {
     selectedRowKeys,
     onChange: onSelectChange,
   };
-  const onChange = (newValue: any) => {
-    setValue(newValue);
-  };
+  // const onChange = (newValue: any) => {
+  //   setValue(newValue);
+  // };
 
   const handlePageChangePage = (page: number) => {
     setPage(page);
@@ -82,7 +81,7 @@ const CategoryAdmin = () => {
       {
         title: "Action",
         key: "operation",
-        render: (text: any, category: any) => (
+        render: (_text: any, category: any) => (
           <>
             <MVConfirm
               title="Delete the category"

@@ -10,12 +10,11 @@ import {
   FormControl,
   TextField,
 } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { useMutation } from "react-query";
 import { addAddress } from "../../../sevices/client/orders";
 import { toast } from "react-toastify";
 import { UsersContext } from "../../../context/usersContext";
-import { isValidStreetAddress } from "../../../common/isAddr";
 
 const FormModal = ({
   open,
@@ -35,7 +34,6 @@ const FormModal = ({
   refetchAddrList,
   RefetchDefault,
   addList,
-  setIsEdit,
 }: any) => {
   const { userId }: any = useContext(UsersContext) || {};
 
@@ -166,7 +164,7 @@ const FormModal = ({
       fullWidth
       open={open}
       disableEscapeKeyDown
-      onClose={(event, reason) => {
+      onClose={(_event, reason) => {
         if (
           (addList?.length === 0 && reason === "backdropClick") ||
           reason === "escapeKeyDown"

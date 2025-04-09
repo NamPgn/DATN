@@ -1,0 +1,43 @@
+.breadcrumb {
+  background-color: #f0f0f0;
+  padding: 1rem 0;
+}
+
+.breadcrumbList {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.breadcrumbItem {
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  color: #4b5563;
+}
+
+.breadcrumbItem:not(:last-child)::after {
+  content: "/";
+  margin: 0 0.5rem;
+  color: #9ebbbd;
+}
+
+.breadcrumbLink {
+  color: #9ebbbd;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.breadcrumbLink:hover {
+  color: #7a9a9c;
+  text-decoration: underline;
+}
+
+.breadcrumbText {
+  color: #1f2937;
+  font-weight: 500;
+} 

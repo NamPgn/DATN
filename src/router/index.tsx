@@ -31,7 +31,6 @@ import AttributeValue from "../page/admin/products/attributeValue/attributeValue
 import Cart from "../page/cart";
 import Checkout from "../page/checkout";
 import ContactPage from "../page/contact";
-import TeamPage from "../page/team";
 import AddAttributeValue from "../page/admin/products/attributeValue/add";
 import EditAttributeVal from "../page/admin/products/attributeValue/edit";
 import CommentAdmin from "../page/admin/comments";
@@ -74,9 +73,10 @@ import DeletedProducts from "../page/admin/products/component/deleted";
 
 import LayoutOrders from "../layouts/Layout";
 import OrderDetailUser from "../page/orders/orderDetail";
-import Shop from "../page/Shop";
-import ProductAll from "../page/Shop/productAll";
-import ProductSearch from "../page/Shop/productSearch";
+import TrackingOrder from "../page/orders/tracking";
+import Shop from "../page/shop";
+import ProductAll from "../page/shop/productAll";
+import ProductSearch from "../page/shop/productSearch";
 
 export const routerClient = [
   {
@@ -95,10 +95,7 @@ export const routerClient = [
         path: "/about",
         element: <AboutPage />,
       },
-      {
-        path: "/team",
-        element: <TeamPage />,
-      },
+  
       {
         path: "/shop/:id",
         element: <Shop />,
@@ -130,6 +127,10 @@ export const routerClient = [
       {
         path: "/profile",
         element: <AccountSetting />,
+      },
+      {
+        path: "/orders",
+        element: <OrderHistory />,
       },
       {
         path: "/order/detail/:code",
@@ -178,6 +179,10 @@ export const routerClient = [
       {
         path: "payment",
         element: <PaymentResult />,
+      },
+      {
+        path: "tracking",
+        element: <TrackingOrder />,
       },
     ],
   },

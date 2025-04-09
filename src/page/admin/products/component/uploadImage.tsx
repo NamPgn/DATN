@@ -3,11 +3,12 @@ import { Button, Form, List, message, Pagination, Tabs, Upload } from "antd";
 import { memo, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { addImageList, getImageLists } from "../../../../sevices/imageList";
+
 const UploadImage = memo(
   ({ setSelectImage, selectImage, setSelectOneImage, selectOneImage }: any) => {
     const [form] = Form.useForm();
     const [fileList, setFileList] = useState([]);
-    const [page, setPage] = useState(1);
+    const [page, _setPage] = useState(1);
     const [current, setCurrent] = useState(1);
     const pageSize = 10;
     const { data: images, refetch }: any = useQuery(
@@ -21,6 +22,7 @@ const UploadImage = memo(
         refetchOnMount: false,
       }
     );
+
     const handleFileChange = ({ fileList }: any) => {
       setFileList(fileList);
     };
@@ -65,10 +67,12 @@ const UploadImage = memo(
     const handlePageChange = (page: any) => {
       setCurrent(page);
     };
+
     const paginatedData = images?.slice(
       (current - 1) * pageSize,
       current * pageSize
     );
+
     return (
       <Tabs>
         <Tabs.TabPane tab="Chọn ảnh từ thư viện" key="2">
@@ -84,9 +88,8 @@ const UploadImage = memo(
               return (
                 <List.Item>
                   <div
-                    className={`position-relative cursor-pointer ${
-                      isSelected ? "border-success" : "border-secondary"
-                    } p-2`}
+                    className={`position-relative cursor-pointer ${isSelected ? "border-success" : "border-secondary"
+                      } p-2`}
                     onClick={() => handleSelectImage(item)}
                   >
                     <img
@@ -98,7 +101,6 @@ const UploadImage = memo(
                       }}
                       alt="uploaded"
                     />
-                    {/* Ô Checkbox chọn ảnh chính */}
                     <div className="position-absolute top-0 p-1 m-1">
                       <label className="switch">
                         <input

@@ -3,14 +3,14 @@ const AboutSection03 = () => {
     {
       id: 1,
       name: "Lê Văn Thành",
-      role: "Founder & CEO",
+      role: "Trưởng buồng",
       image: "/assets/images/ceo/986ca0d7-2b80-42cd-ba0d-e4c37220b49c.jpg",
       socials: ["fa-facebook-f", "fa-twitter", "fa-linkedin-in"],
     },
     {
       id: 2,
       name: "Phương Minh Hoàng",
-      role: "CTO",
+      role: "Mâm 1",
       image: "/assets/images/ceo/16dfbfd4-5e5f-4b12-8f62-572d860d03fd.jpg",
       socials: ["fa-facebook-f", "fa-twitter"],
     },
@@ -45,7 +45,7 @@ const AboutSection03 = () => {
     {
       id: 6,
       name: "Phạm Giang Nam",
-      role: "Lead Designer",
+      role: "Trật tự buồng",
       image: "/assets/images/ceo/cc07785f-d7b6-49f5-8a91-97fa8f9b7bf7.jpg",
       socials: ["fa-facebook-f", "fa-linkedin-in"],
     },
@@ -55,8 +55,8 @@ const AboutSection03 = () => {
       <div className="container">
         <div className="row">
           <div className="col-lg-12">
-            <h2 className="secTitle">Team Members</h2>
-            <p className="secDesc">Showing our latest arrival on this summer</p>
+            <h2 className="secTitle">Thành viên </h2>
+            <p className="secDesc">Tất cả thành viên</p>
           </div>
         </div>
         <div className="row">

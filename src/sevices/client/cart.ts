@@ -19,34 +19,54 @@ export const cartSync = async (data: any) => {
 };
 
 export const userCart = async () => {
+  const token_ = token_auth();
+
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
   return intancesLocal.get(`/cart`, {
-    headers: {
-      Authorization: `Bearer ${token_}`,
-    },
+    headers,
   });
 };
 
 export const userCartDelete = async (id: any) => {
+  const token_ = token_auth();
+
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
   return intancesLocal.delete(`/cart/${id}`, {
-    headers: {
-      Authorization: `Bearer ${token_}`,
-    },
+    headers
   });
 };
 
 export const userCartAdd = async (data: any) => {
+  const token_ = token_auth();
+
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
   return intancesLocal.post(`/cart`, data, {
-    headers: {
-      Authorization: `Bearer ${token_}`,
-    },
+    headers,
   });
 };
 
 export const changeCartAdd = async (data: any) => {
+  const token_ = token_auth();
+
+  const headers: any = {};
+
+  if (token_) {
+    headers.Authorization = `Bearer ${token_}`;
+  }
   return intancesLocal.put(`/cart/${data?.cart_item_id}`, data, {
-    headers: {
-      Authorization: `Bearer ${token_}`,
-    },
+    headers
   });
 };
 

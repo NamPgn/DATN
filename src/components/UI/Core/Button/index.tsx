@@ -6,7 +6,7 @@ export const MyButton = memo(({ children, ...rest }: any) => {
   return <Button {...rest}>{children}</Button>;
 });
 
-export const ButtonAdd = memo(({ children, path, ...rest }: any) => {
+export const ButtonAdd = memo(({ path }: any) => {
   return (
     <Link to={path}>
       <MyButton

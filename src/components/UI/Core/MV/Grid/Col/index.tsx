@@ -1,6 +1,5 @@
-import React from "react";
 import { Col } from "antd";
-const MVCol = ({ children, ...rest }) => {
+const MVCol = ({ children, ...rest }:any) => {
   return <Col {...rest}>{children}</Col>;
 };
 

@@ -1,6 +1,6 @@
 import { Form, Input, Button, message, Select } from "antd";
-import { addCategory, getCategorysFather } from "../../../sevices/category";
-import { useMutation, useQuery } from "react-query";
+import { addCategory } from "../../../sevices/category";
+import { useMutation } from "react-query";
 import { SyncOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 
@@ -23,10 +23,10 @@ const AddCategory = () => {
     },
   });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data: categoryFather }: any = useQuery({
-    queryKey: ["categoriesFather"],
-    queryFn: async () => (await getCategorysFather()).data,
-  });
+  // const { data: categoryFather }: any = useQuery({
+  //   queryKey: ["categoriesFather"],
+  //   queryFn: async () => (await getCategorysFather()).data,
+  // });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSubmit = async (values: any) => {
     mutate(values);
@@ -51,7 +51,7 @@ const AddCategory = () => {
       >
         <Input placeholder="Enter category name" />
       </Form.Item>
-      <Form.Item label="Category Id" name="parent_id">
+      <Form.Item label="Danh mục" name="parent_id">
         <Select
           style={{ width: "200px" }}
           placeholder="Vui lòng chọn"

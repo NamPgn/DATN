@@ -1,20 +1,21 @@
 import { Outlet, useLocation } from "react-router-dom";
 import Header from "../components/UI/Header";
 import Footer from "../components/UI/Footer";
-import BannerSectionMain from "../components/UI/Banner/BannerSectionTeam";
 import SlideShow from "../components/UI/SlideShow";
+import Breadcrumb from "../components/UI/Breadcrumb";
 
 const LayoutClient = () => {
   const { pathname } = useLocation();
   return (
     <>
       <Header />
-      {pathname == "/" ? (
+      <Breadcrumb />
+      {pathname == "/" && (
         <SlideShow />
-      ) : (
-        <BannerSectionMain pathName={pathname} />
       )}
-      <Outlet />
+      <div className="mt-5">
+        <Outlet />
+      </div>
       <Footer />
     </>
   );

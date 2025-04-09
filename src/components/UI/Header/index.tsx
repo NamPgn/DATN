@@ -16,6 +16,7 @@ const menuItems = [
   },
   { name: "Sản phẩm", path: "/products" },
   { name: "Liên hệ", path: "/contact" },
+  { name: "Tra cứu đơn hàng", path: "/o/tracking" },
 ];
 
 const socialIcons = [
@@ -54,7 +55,7 @@ const Header = () => {
       setData(res.data);
     })();
   }, []);
-  const { isLogin, cart }: any = useContext(UsersContext) || {};
+  const { isLogin }: any = useContext(UsersContext) || {};
   const handleClickOpenPopupSearch = () => {
     setOpenSearch((val) => !val);
   };
@@ -182,7 +183,7 @@ const Header = () => {
                   <div className="anSupport">
                     <i className="fa-solid fa-headset" />
                     <h3>Liên Hệ</h3>
-                    <h3>+123 - 456 - 7890</h3>
+                    <h3>0389794435</h3>
                   </div>
                 </div>
               </div>

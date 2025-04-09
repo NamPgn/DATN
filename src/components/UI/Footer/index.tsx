@@ -1,9 +1,30 @@
 const Footer = () => {
+  const links = [
+    {
+      title: "Danh mục",
+      items: [
+        { text: "Nam", href: "shop_full_width.html" },
+        { text: "Nữ", href: "shop_right_sidebar.html" },
+        { text: "Quần áo", href: "shop_left_sidebar.html" },
+      ],
+    },
+  ];
+
+  const socialIcons = ["facebook-f", "twitter", "linkedin-in", "instagram"];
+  const paymentIcons = [
+    "paypal",
+    "stripe",
+    "mastercard",
+    "visa",
+    "apple-pay",
+    "amazon-pay",
+  ];
+
   return (
     <footer className="footer">
       <div className="container">
         <div className="row">
-          <div className="col-lg-4 col-md-6">
+          <div className="col-lg-6 col-md-6">
             <aside className="widget aboutWidget">
               <div className="footerLogo">
                 <a href="index.html">
@@ -11,15 +32,14 @@ const Footer = () => {
                 </a>
               </div>
               <div className="aboutWidContent">
-                Quis nostrud exercitatin ullamc boris nisi ut aliquip ex ea
-                commodo conse.
+                Chúng tôi cam kết mang đến trải nghiệm mua sắm tốt nhất cho bạn.
               </div>
               <div className="subscribForm">
                 <form method="post" action="#">
                   <input
                     type="email"
                     name="subsEmail"
-                    placeholder="Your email here"
+                    placeholder="Nhập email của bạn"
                   />
                   <button type="submit">
                     <i className="fa-solid fa-envelope" />
@@ -30,112 +50,54 @@ const Footer = () => {
           </div>
           <div className="col-lg-3 col-md-6">
             <aside className="widget">
-              <h3 className="widgetTitle">Address</h3>
+              <h3 className="widgetTitle">Địa chỉ</h3>
               <div className="addressContent">
-                <div className="singleAddress">
-                  <i className="fa-solid fa-location-dot" />
-                  20, Awesome Road, New York, Usa 4D BS3
-                </div>
-                <div className="singleAddress">
-                  <i className="fa-solid fa-phone" />
-                  +123 456 7890
-                </div>
-                <div className="singleAddress">
-                  <i className="fa-solid fa-envelope" />
-                  <a href="mailto:hello@ulina.com">hello@ulina.com</a>
-                </div>
+                {["location-dot", "phone", "envelope"].map((icon, i) => (
+                  <div className="singleAddress" key={i}>
+                    <i className={`fa-solid fa-${icon}`} />
+                    {icon === "envelope" ? (
+                      <a href="mailto:phuongminhhoang77@gmail.com">
+                        phuongminhhoang77@gmail.com
+                      </a>
+                    ) : icon === "phone" ? (
+                      "+84 796 385 112"
+                    ) : (
+                      "Trường Sơn, Lục Nam, Bắc Giang"
+                    )}
+                  </div>
+                ))}
               </div>
             </aside>
           </div>
-          <div className="col-lg-2 col-md-6">
-            <aside className="widget">
-              <h3 className="widgetTitle">Useful Links</h3>
-              <ul>
-                <li>
-                  <a href="#">Shop Coupon</a>
-                </li>
-                <li>
-                  <a href="about.html">About us</a>
-                </li>
-                <li>
-                  <a href="#">Carrer</a>
-                </li>
-                <li>
-                  <a href="#">Supports</a>
-                </li>
-              </ul>
-            </aside>
-          </div>
-          <div className="col-lg-3 col-md-6">
-            <aside className="widget twoColMenu">
-              <h3 className="widgetTitle">Categories</h3>
-              <ul>
-                <li>
-                  <a href="shop_full_width.html">Men</a>
-                </li>
-                <li>
-                  <a href="shop_left_sidebar.html">Bags</a>
-                </li>
-                <li>
-                  <a href="shop_right_sidebar.html">Women</a>
-                </li>
-                <li>
-                  <a href="shop_full_width.html">Jewellery</a>
-                </li>
-                <li>
-                  <a href="shop_left_sidebar.html">Kids</a>
-                </li>
-                <li>
-                  <a href="shop_left_sidebar.html">Cloths</a>
-                </li>
-                <li>
-                  <a href="shop_right_sidebar.html">Accesories</a>
-                </li>
-                <li>
-                  <a href="shop_full_width.html">Beauty Items</a>
-                </li>
-              </ul>
-            </aside>
-          </div>
+          {links.map((link, index) => (
+            <div className="col-lg-3 col-md-6" key={index}>
+              <aside className="widget">
+                <h3 className="widgetTitle">{link.title}</h3>
+                <ul>
+                  {link.items.map((item, idx) => (
+                    <li key={idx}>
+                      <a href={item.href}>{item.text}</a>
+                    </li>
+                  ))}
+                </ul>
+              </aside>
+            </div>
+          ))}
         </div>
         <div className="row footerAccessRow">
-          <div className="col-md-6">
-            <div className="footerSocial">
-              <a href="#">
-                <i className="fa-brands fa-facebook-f" />
+          <div className="col-md-6 footerSocial">
+            {socialIcons.map((icon, i) => (
+              <a href="#" key={i}>
+                <i className={`fa-brands fa-${icon}`} />
               </a>
-              <a href="#">
-                <i className="fa-brands fa-twitter" />
-              </a>
-              <a href="#">
-                <i className="fa-brands fa-linkedin-in" />
-              </a>
-              <a href="#">
-                <i className="fa-brands fa-instagram" />
-              </a>
-            </div>
+            ))}
           </div>
-          <div className="col-md-6">
-            <div className="footerPayments">
-              <a href="#">
-                <i className="fa-brands fa-cc-paypal" />
+          <div className="col-md-6 footerPayments">
+            {paymentIcons.map((icon, i) => (
+              <a href="#" key={i}>
+                <i className={`fa-brands fa-cc-${icon}`} />
               </a>
-              <a href="#">
-                <i className="fa-brands fa-cc-stripe" />
-              </a>
-              <a href="#">
-                <i className="fa-brands fa-cc-mastercard" />
-              </a>
-              <a href="#">
-                <i className="fa-brands fa-cc-visa" />
-              </a>
-              <a href="#">
-                <i className="fa-brands fa-cc-apple-pay" />
-              </a>
-              <a href="#">
-                <i className="fa-brands fa-cc-amazon-pay" />
-              </a>
-            </div>
+            ))}
           </div>
         </div>
         <div className="row">
