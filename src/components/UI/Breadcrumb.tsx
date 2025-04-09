@@ -18,10 +18,10 @@ const Breadcrumb = () => {
 	};
 
 	return (
-		<nav className={styles.breadcrumb + " container"} style={{
+		<nav className={styles.breadcrumb } style={{
 			marginTop: "8rem"
 		}}>
-			<ol className={styles.breadcrumbList}>
+			<ol className={styles.breadcrumbList + " container"}>
 				<li className={styles.breadcrumbItem}>
 					<Link to="/" className={styles.breadcrumbLink}>
 						Trang chủ

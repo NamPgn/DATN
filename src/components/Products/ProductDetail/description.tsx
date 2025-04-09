@@ -5,19 +5,34 @@ import {
   addCommentClient,
   getCommentClient,
 } from "../../../sevices/client/comment";
+import { useGetStaticReview } from "../../../hook/review";
+import { useParams } from "react-router-dom";
+
+// Helper function to format date and time
+const formatDateTime = (dateString: string | undefined) => {
+  if (!dateString) return "";
+  try {
+    const date = new Date(dateString);
+    // Format like: YYYY-MM-DD HH:mm:ss
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  } catch (error) {
+    console.error("Error formatting date:", error);
+    return dateString; // Return original string if formatting fails
+  }
+};
 
 const Description = ({ product }: any) => {
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
-  const [submitting, setSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    rating: 0,
-    comment: "",
-    name: "",
-    email: "",
-  });
-
+  const { id } = useParams();
+  const { data, isLoading } = useGetStaticReview(id);
   useEffect(() => {
     const fetchReviews = async () => {
       if (!product?.id) return;
@@ -36,46 +51,10 @@ const Description = ({ product }: any) => {
     fetchReviews();
   }, [product?.id, page]);
 
-  const handleInputChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = event.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleRatingChange = (rating: number) => {
-    setFormData((prev) => ({ ...prev, rating }));
-  };
-  const handleSubmitComment = async (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!product?.id) return;
-
-    const commentData = {
-      product_id: product.id,
-      user_id: 1,
-      rating: formData.rating,
-      content: formData.comment,
-    };
-
-    setSubmitting(true);
-    try {
-      const response = await addCommentClient(commentData);
-      alert(response.data.message);
-
-      setReviews((prevReviews) => [response.data.data, ...prevReviews]);
-      setFormData({ rating: 0, comment: "", name: "", email: "" });
-    } catch (error) {
-      console.error("Lỗi khi gửi bình luận:", error);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   return (
-    <div className="row productContentRow">
-      <div className="productOpenTab">
-        <h4 className="potTitle">Mô Tả</h4>
-        <div className="productDescContentArea">
+    <div className="descSec">
+      <div className="container">
+        <div className="tabContent">
           <div className="row">
             <div className="col-lg-6">
               <div
@@ -84,46 +63,80 @@ const Description = ({ product }: any) => {
                   __html: DOMPurify.sanitize(product?.description),
                 }}
               ></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="productOpenTab">
-        <h4 className="potTitle">Đánh Giá</h4>
-        <div className="productReviewArea">
-          <div className="row">
-            <div className="col-lg-6">
-              <h3>{reviews.length} Đánh Giá</h3>
-              {loading ? (
-                <p>Loading reviews...</p>
-              ) : (
-                <div className="reviewList">
-                  <ol>
+              {reviews && reviews.length > 0 && (
+                <div className="reviewList mt-8 space-y-6">
+                  <h3 className="text-xl font-semibold mb-4">Đánh giá sản phẩm</h3>
+                  <ol className="space-y-6">
                     {reviews.map((review) => (
-                      <li key={review.id}>
-                        <div className="postReview">
-                          {review.avatar ? (
-                            <img src={review.avatar} alt="User Avatar" />
-                          ) : (
-                            <i className="fa-solid fa-user default-user-icon"></i>
-                          )}
-                          <h2>{review.username || "Anonymous"}</h2>
-                          <div className="postReviewContent">
-                            {review.content}
+                      <li key={review.id} className="border-b pb-6 last:border-b-0">
+                        <div className="flex items-start space-x-4">
+                          <div className="flex-shrink-0">
+                            {review.avatar ? (
+                              <img
+                                className="w-10 h-10 rounded-full object-cover"
+                                src={review.avatar}
+                                alt="User Avatar"
+                              />
+                            ) : (
+                              <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center">
+                                <i className="fa-solid fa-user text-gray-600"></i>
+                              </div>
+                            )}
                           </div>
-                          <div className="productRatingWrap">
-                            <div className="star-rating">
-                              {[...Array(review.rating)].map((_, index) => (
-                                <span key={index} className="filled-star">
-                                  ★
-                                </span>
-                              ))}
+
+                          <div className="flex-grow">
+                            <div className="flex item-center justify-between"> <p className="font-semibold text-sm">{review.name || ""}</p>
+                              {review.is_updated && (
+                                <p className="text-xs text-gray-400 mt-2 italic">Đã chỉnh sửa</p>
+                              )}</div>
+                            <div className="flex items-center space-x-2 my-1">
+                              <div className="flex text-yellow-400">
+                                {[...Array(5)].map((_, index) => (
+                                  <span key={index} className="text-lg">
+                                    {index < review.rating ? '★' : '☆'}
+                                  </span>
+                                ))}
+                              </div>
                             </div>
-                          </div>
-                          <div className="reviewMeta">
-                            <h4>{review.username || "Unknown"}</h4>
-                            <span>on {review.created_at}</span>
+                            <div className="text-xs text-gray-500 mb-2 flex space-x-3">
+                              <span>{formatDateTime(review.updated_at)}</span>
+                              {review.variation && (() => {
+                                try {
+                                  const parsed = JSON.parse(review.variation);
+                                  const variationString = Object.entries(parsed)
+                                    .map(([key, value]: any) => `${key}: ${value}`)
+                                    .join(', ');
+                                  return <span>Phân loại hàng: {variationString}</span>;
+                                } catch (error) {
+                                  console.error("Lỗi parse variation:", error);
+                                  return null;
+                                }
+                              })()}
+                            </div>
+
+                            <p className="text-sm mb-3">{review.content}</p>
+
+                            {review.images && review.images.length > 0 && (
+                              <div className="flex flex-wrap gap-2 mb-3">
+                                {review.images.map((image: string, index: number) => (
+                                  <img
+                                    key={index}
+                                    src={image}
+                                    alt={`Review image ${index + 1}`}
+                                    className="w-20 h-20 object-cover rounded border cursor-pointer"
+                                  // Add onClick handler for lightbox/modal if needed
+                                  />
+                                ))}
+                              </div>
+                            )}
+
+                            {review.reply && (
+                              <div className="bg-gray-100 p-3 rounded-md my-3">
+                                <p className="text-sm font-semibold text-gray-700">Phản hồi từ Người bán</p>
+                                <p className="text-xs text-gray-500 mb-1">{formatDateTime(review.reply_at)}</p>
+                                <p className="text-sm text-gray-800">{review.reply}</p>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </li>
@@ -134,54 +147,27 @@ const Description = ({ product }: any) => {
             </div>
 
             <div className="col-lg-6">
-              <div className="commentFormArea">
-                <h3>Thêm đánh giá</h3>
-                <div className="reviewFrom">
-                  <form onSubmit={handleSubmitComment} className="row">
-                    <div className="col-lg-12">
-                      <textarea
-                        name="comment"
-                        placeholder="Viết đánh giá của bạn"
-                        value={formData.comment}
-                        onChange={handleInputChange}
-                      />
-                    </div>
-
-                    <div className="col-lg-12">
-                      <div className="reviewStar">
-                        <label>Đánh giá của bạn</label>
-                        <div className="rsStars">
-                          {[...Array(5)].map((_, index) => (
-                            <span
-                              key={index}
-                              className="star"
-                              onClick={() => handleRatingChange(index + 1)}
-                              style={{
-                                cursor: "pointer",
-                                fontSize: "24px",
-                                color:
-                                  formData.rating > index ? "gold" : "gray",
-                              }}
-                            >
-                              {formData.rating > index ? "★" : "☆"}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="col-lg-12">
-                      <button
-                        type="submit"
-                        className="ulinaBTN"
-                        disabled={submitting}
-                      >
-                        <span className="ulinaBTNText">
-                          {submitting ? "Đang gửi..." : "Gửi Ngay"}
-                        </span>
-                      </button>
-                    </div>
-                  </form>
+              <div className="mt-8 p-4 border-gray-200 rounded-lg">
+                <div className="flex items-center">
+                  <span className="text-xl font-semibold">{data.average_rating.toFixed(1)} trên 5</span>
+                  <div className="flex ml-2">
+                    {[...Array(5)].map((_, index) => (
+                      <span key={index} className={`text-yellow-500 ${index < data.average_rating ? 'filled' : ''}`}>★</span>
+                    ))}
+                  </div>
+                </div>
+                <div className="mt-2 text-gray-600">
+                  <span>{data.total_reviews} Đánh Giá</span>
+                </div>
+                <div className="mt-2 flex space-x-2">
+                  {Object.entries(data.ratings).map(([key, value]) => (
+                    <button key={key} className="bg-gray-200 text-gray-700 rounded-md px-3 py-1 hover:bg-gray-300 focus:outline-none">
+                      {key} Sao ({value})
+                    </button>
+                  ))}
+                </div>
+                <div className="mt-2 text-gray-600">
+                  <span>Có Hình Ảnh/Video ({data.with_images})</span>
                 </div>
               </div>
             </div>

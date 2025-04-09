@@ -6,10 +6,17 @@ export const getCommentClient = async (
   page: number,
   rating?: number
 ) => {
-  return intancesLocal.get(`products/${id}/reviews`, {
+  return intancesLocal.get(`/reviews/${id}`, {
     params: { page, ...(rating !== undefined ? { rating } : {}) },
   });
 };
+
+export const getReviewTotal = async (
+  id: number,
+) => {
+  return intancesLocal.get(`/reviews/${id}/statistics`);
+};
+
 
 export const addCommentClient = async (commentData: any) => {
   return intancesLocal.post(`reviews`, commentData);

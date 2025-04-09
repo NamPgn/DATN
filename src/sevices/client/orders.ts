@@ -178,8 +178,7 @@ export const getOrderPaymentUser = async (currentPage: any, query: any) => {
     headers.Authorization = `Bearer ${token_}`;
   }
   return intancesLocal.get(
-    `/orders_for_user?page=${currentPage}&status=${
-      query !== null ? query : ""
+    `/orders_for_user?page=${currentPage}&status=${query !== null ? query : ""
     }`,
     { headers }
   );
@@ -266,3 +265,19 @@ export const verifyOrder = async (data: any) => {
 export const verifyOrderOtp = async (data: any) => {
   return intancesLocal.post(`/verify_order_code`, data);
 };
+
+export const orderApi = {
+  reviewsProducts: (data: any) => {
+    const token_ = token_auth();
+    const headers: any = {};
+    const tokenOtp: any = localStorage.getItem("tokenOtp");
+    const tkOtp = JSON.parse(tokenOtp);
+    if (token_) {
+      headers.Authorization = `Bearer ${token_}`;
+    }
+    if (tkOtp) {
+      headers["X-Order-Access-Token"] = ` ${tkOtp}`;
+    }
+    return intancesLocal.post('/review_order/' + data?.order_code, data, { headers })
+  }
+}

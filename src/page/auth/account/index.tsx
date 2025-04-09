@@ -180,7 +180,7 @@ const AccountSetting = () => {
                         className="btn btn-success-soft"
                         htmlFor="customFile"
                       >
-                        {uploading ? "Đâng tải..." : "Tải ảnh lên"}
+                        {uploading ? "Đang tải..." : "Tải ảnh lên"}
                       </label>
                     </div>
                   </div>
