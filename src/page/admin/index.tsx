@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Bar, Doughnut, Pie } from "react-chartjs-2";
+import { Bar, Doughnut, Line, Pie } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -8,6 +8,9 @@ import {
   BarElement,
   CategoryScale,
   LinearScale,
+  LineElement,
+  PointElement,
+  Title,
 } from "chart.js";
 import TailwindComponent from "../../components/Tailwind/TailwinComponent";
 import { useQuery } from "react-query";
@@ -21,16 +24,19 @@ ChartJS.register(
   Legend,
   BarElement,
   CategoryScale,
-  LinearScale
+  LinearScale,
+  LineElement,
+  PointElement,
+  Title
 );
 
 const Dashboard = () => {
-  const [isLast7Days, setIsLast7Days] = useState(false);
+  const [isLast7Days, setIsLast7Days] = useState(true);
   const [year, setYear] = useState(new Date().getFullYear());
   const { data, isLoading }: any = useQuery({
-    queryKey: ["Orders", year],
+    queryKey: ["Orders", year, isLast7Days],
     queryFn: async () => {
-      return (await dashboard(year)).data?.data;
+      return (await dashboard(year, isLast7Days)).data?.data;
     },
   });
 
@@ -68,6 +74,60 @@ const Dashboard = () => {
     ],
   };
 
+  const salesChartData = {
+    labels: data?.salesStatistics.map((s: any) => {
+      const date = new Date(s.date);
+      return date.toLocaleDateString("vi-VN");
+    }),
+    datasets: [
+      {
+        label: "Doanh thu (VNĐ)",
+        data: data?.salesStatistics.map((s: any) => s.totalRevenue),
+        borderColor: "#4bc0c0",
+        tension: 0.1,
+        fill: false,
+      },
+      {
+        label: "Số đơn hàng",
+        data: data?.salesStatistics.map((s: any) => s.totalOrders),
+        borderColor: "#ff6384",
+        tension: 0.1,
+        fill: false,
+      },
+    ],
+  };
+
+  const topSpendingData = {
+    labels: data?.topUsersBySpending.map(
+      (u: any) => u.user.name || u.user.email
+    ),
+    datasets: [
+      {
+        label: "Tổng chi tiêu (VNĐ)",
+        data: data?.topUsersBySpending.map((u: any) => u.total_spent),
+        backgroundColor: "#ff6384",
+      },
+    ],
+  };
+
+  const topRatedData = {
+    labels: data?.topRatedProducts.map((p: any) =>
+      p.name.length > 20 ? p.name.substring(0, 20) + "..." : p.name
+    ),
+    datasets: [
+      {
+        label: "Số lượng đánh giá",
+        data: data?.topRatedProducts.map((p: any) => p.total_reviews),
+        backgroundColor: "#ffcd56",
+      },
+      {
+        label: "Điểm đánh giá trung bình",
+        data: data?.topRatedProducts.map((p: any) => p.avg_rating),
+        backgroundColor: "#4bc0c0",
+      },
+    ],
+  };
+
   if (isLoading) {
     return (
       <TailwindComponent>
@@ -81,33 +141,35 @@ const Dashboard = () => {
   return (
     <TailwindComponent>
       <div className="p-6 bg-gray-100 min-h-screen">
-        <h1 className="text-3xl font-bold mb-6 text-gray-700">Dashboard</h1>
-        <div className="flex items-center gap-4 mb-3">
-          <select
-            value={year}
-            onChange={(e) => setYear(Number(e.target.value))}
-            className="px-4 py-2 rounded-md border border-gray-300"
-          >
-            {[...Array(3)].map((_, i) => {
-              const currentYear = new Date().getFullYear() - i;
-              return (
-                <option key={currentYear} value={currentYear}>
-                  {currentYear}
-                </option>
-              );
-            })}
-          </select>
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold mb-6 text-gray-700">Dashboard</h1>
+          <div className="flex items-center gap-4 mb-3">
+            <select
+              value={year}
+              onChange={(e) => setYear(Number(e.target.value))}
+              className="px-4 py-2 rounded-md border border-gray-300"
+            >
+              {[...Array(3)].map((_, i) => {
+                const currentYear = new Date().getFullYear() - i;
+                return (
+                  <option key={currentYear} value={currentYear}>
+                    {currentYear}
+                  </option>
+                );
+              })}
+            </select>
 
-          <button
-            onClick={() => setIsLast7Days(!isLast7Days)}
-            className={`px-4 py-2 rounded-md text-white transition ${
-              isLast7Days
-                ? "bg-blue-500 hover:bg-blue-600"
-                : "bg-gray-500 hover:bg-gray-600"
-            }`}
-          >
-            {isLast7Days ? "Thống kê tất cả" : "Thống kê 7 ngày gần nhất"}
-          </button>
+            <button
+              onClick={() => setIsLast7Days(!isLast7Days)}
+              className={`px-4 py-2 rounded-md text-white transition ${
+                isLast7Days
+                  ? "bg-blue-500 hover:bg-blue-600"
+                  : "bg-gray-500 hover:bg-gray-600"
+              }`}
+            >
+              {isLast7Days ? "Thống kê tất cả" : "Thống kê 7 ngày gần nhất"}
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-6">
@@ -153,6 +215,40 @@ const Dashboard = () => {
               </p>
             </div>
           ))}
+        </div>
+
+        <div className="grid grid-cols-1 gap-6 mb-6">
+          <div className="bg-white p-6 shadow rounded-lg">
+            <h2 className="text-xl font-bold mb-4 text-gray-700">
+              Biểu đồ doanh số bán hàng
+            </h2>
+            <Line
+              data={salesChartData}
+              options={{
+                responsive: true,
+                scales: {
+                  y: {
+                    beginAtZero: true,
+                  },
+                },
+              }}
+            />
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="bg-white p-6 shadow rounded-lg">
+            <h2 className="text-xl font-bold mb-4 text-gray-700">
+              Top 5 sản phẩm được đánh giá cao nhất
+            </h2>
+            <Bar data={topRatedData} />
+          </div>
+          <div className="bg-white p-6 shadow rounded-lg">
+            <h2 className="text-xl font-bold mb-4 text-gray-700">
+              Top 5 khách hàng chi tiêu nhiều nhất
+            </h2>
+            <Bar data={topSpendingData} />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
