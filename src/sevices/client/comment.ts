@@ -4,10 +4,15 @@ import { intancesLocal } from "../instances";
 export const getCommentClient = async (
   id: number,
   page: number,
-  rating?: number
+  rating?: number,
+  has_images?: boolean
 ) => {
   return intancesLocal.get(`/reviews/${id}`, {
-    params: { page, ...(rating !== undefined ? { rating } : {}) },
+    params: { 
+      page,
+      ...(rating !== undefined ? { rating } : {}),
+      ...(has_images !== undefined ? { has_images } : {})
+    },
   });
 };
 
