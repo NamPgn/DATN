@@ -8,9 +8,7 @@ import "rc-slider/assets/index.css";
 import debounce from "lodash.debounce";
 import Loading from "../../components/Loading/Loading";
 import Paginations from "./components/pagination";
-import {
-  getCategory,
-} from "../../sevices/client/category";
+import { getCategory } from "../../sevices/client/category";
 import PriceRange from "./productAll/changeRange";
 
 const Shop = () => {
@@ -219,7 +217,7 @@ const Shop = () => {
                                     >
                                       <div className="productItem01">
                                         <Link
-                                          to={`/product/detail/${product.id}`}
+                                          to={`/product/detail/${product.slug}`}
                                         >
                                           <div className="pi01Thumb">
                                             {product?.library ? (
@@ -281,7 +279,7 @@ const Shop = () => {
                                           )}
                                           <h3>
                                             <Link
-                                              to={`/product/detail/${product.id}`}
+                                              to={`/product/detail/${product.slug}`}
                                             >
                                               {product.name}
                                             </Link>

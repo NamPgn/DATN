@@ -410,25 +410,11 @@ export const TableRouterAdminPage = [
     name: "Bình luận",
     icon: <CommentOutlined />,
     path: "/dashboard/comments",
-    children: [
-      {
-        path: "/dashboard/category/deleted",
-        icon: <ControlOutlined />,
-        name: "Đã xóa",
-      },
-    ],
   },
   {
     name: "Mã giảm giá",
     icon: <GiftOutlined />,
     path: "/dashboard/vouchers",
-    children: [
-      {
-        path: "/dashboard/category/deleted",
-        icon: <ControlOutlined />,
-        name: "Đã xóa",
-      },
-    ],
   },
   {
     name: "Đơn hàng",

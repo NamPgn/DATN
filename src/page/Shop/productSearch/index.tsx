@@ -52,7 +52,7 @@ const ProductSearch = () => {
                       className="col-sm-6 col-lg-4 col-xl-3"
                     >
                       <div className="productItem01">
-                        <Link to={`/product/detail/${product.id}`}>
+                        <Link to={`/product/detail/${product.slug}`}>
                           <div className="pi01Thumb">
                             {product?.library ? (
                               <img
@@ -85,7 +85,7 @@ const ProductSearch = () => {
                         </Link>
                         <div className="pi01Details">
                           <h3>
-                            <Link to={`/product/detail/${product.id}`}>
+                            <Link to={`/product/detail/${product.slug}`}>
                               {product.name}
                             </Link>
                           </h3>
