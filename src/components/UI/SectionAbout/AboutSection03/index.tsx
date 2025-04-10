@@ -49,6 +49,13 @@ const AboutSection03 = () => {
       image: "/assets/images/ceo/cc07785f-d7b6-49f5-8a91-97fa8f9b7bf7.jpg",
       socials: ["fa-facebook-f", "fa-linkedin-in"],
     },
+    {
+      id: 7,
+      name: "Nguyễn Hải Lâm",
+      role: "Mâm 2",
+      image: "/assets/images/ceo/6175c13c-cc3c-4c8f-85d4-1e327f60b4df.jpg",
+      socials: ["fa-facebook-f", "fa-linkedin-in"],
+    },
   ];
   return (
     <section className="aboutPageSection03">

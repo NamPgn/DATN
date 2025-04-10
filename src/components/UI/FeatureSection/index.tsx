@@ -31,6 +31,8 @@ const FeatureSection: React.FC<FeatureSectionProps> = ({ vouchers }) => {
     queryFn: async () => {
       return (await vouchers(1)).data || [];
     },
+    staleTime: 5 * 60 * 1000,
+		cacheTime: 30 * 60 * 1000
   });
 
   const handleCopyCode = (code: string, id: number) => {

@@ -47,11 +47,11 @@ createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <CartProvider>
         <CheckoutProvider>
-          <UserContextProvider>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
-          </UserContextProvider>
+            <UserContextProvider>
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+            </UserContextProvider>
         </CheckoutProvider>
       </CartProvider>
     </QueryClientProvider>

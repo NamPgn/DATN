@@ -43,7 +43,6 @@ const ProductForm = ({
   //     }
   //   }
   // }, [typeProduct]);
-
   useEffect(() => {
     if (dataEdit) {
       form.setFieldsValue({

@@ -27,7 +27,7 @@ export const getProduct = async (id: any) => {
 };
 
 export const updateProduct = async (data: any) => {
-  return intances.put("/products/" + data?.id, data);
+  return intances.put("/products/" + data?.id, data?.values);
 };
 
 export const delProduct = async (id: string) => {
