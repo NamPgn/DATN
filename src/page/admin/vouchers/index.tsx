@@ -5,11 +5,15 @@ import { columnsVouchers } from "../../../constant";
 import { delMultipleVouchers, getVouchers } from "../../../sevices/voucher";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { MyButton } from "../../../components/UI/Core/Button";
-import { Button, Modal, Popconfirm } from "antd";
+import { Button, Modal, Popconfirm, Card, Space, Tooltip } from "antd";
 import AddVoucher from "./add";
 import { toast } from "react-toastify";
 import EditVoucher from "./edit";
-import { DeleteOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  PlusOutlined,
+  ReloadOutlined,
+} from "@ant-design/icons";
 import VoucherDetailModal from "./detail";
 
 const VoucherAdmin = () => {
@@ -20,26 +24,12 @@ const VoucherAdmin = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
   const [detailVoucher, setDetailVoucher] = useState<any>(null);
-
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [editingVoucher, setEditingVoucher] = useState<any>(null);
-
-  const showDetailModal = (voucher: any) => {
-    setDetailVoucher(voucher);
-    setIsDetailModalVisible(true);
-  };
-
-  const closeDetailModal = () => {
-    setIsDetailModalVisible(false);
-    setDetailVoucher(null);
-  };
 
   useEffect(() => {
     sessionStorage.setItem("voucherPage", String(page));
   }, [page]);
-  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-    setSelectedRowKeys(newSelectedRowKeys);
-  };
 
   const { data: vouchers, refetch }: any = useQuery({
     queryKey: ["vouchers", page],
@@ -64,9 +54,23 @@ const VoucherAdmin = () => {
     },
   });
 
+  const showDetailModal = (voucher: any) => {
+    setDetailVoucher(voucher);
+    setIsDetailModalVisible(true);
+  };
+
+  const closeDetailModal = () => {
+    setIsDetailModalVisible(false);
+    setDetailVoucher(null);
+  };
+
+  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+
   const handleDeleteSelectedData = () => {
     if (selectedRowKeys.length === 0) {
-      toast.warning("VUi lòng chọn ít nhất một voucher để xóa");
+      toast.warning("Vui lòng chọn ít nhất một voucher để xóa");
       return;
     }
     deleteMultipleVouchers(selectedRowKeys);
@@ -91,95 +95,103 @@ const VoucherAdmin = () => {
     setIsModalVisible(false);
   };
 
-  const rowSelection = {
-    selectedRowKeys,
-    onChange: onSelectChange,
-  };
-
-  const handlePageChangePage = (page: number) => {
-    setPage(page);
-  };
-
-  const data =
-    vouchers &&
-    vouchers?.data?.data?.map((item: any) => {
-      return {
-        key: item.id,
-        stt: item.id,
-        code: item.code,
-        name: item.name,
-        description: item.description,
-        discount_percent: item.discount_percent,
-        max_discount_amount: item.max_discount_amount,
-        for_logged_in_users: item.type,
-        type: item.type,
-        min_product_price: item.min_product_price,
-        amount: item.amount,
-        start_date: item.start_date,
-        times_used: item.times_used,
-        expiry_date: item.expiry_date,
-        usage_limit: item.usage_limit,
-        action: (
-          <div className="d-flex gap-2">
-            <MyButton type="dashed" onClick={() => showDetailModal(item)}>
-              Chi Tiết
-            </MyButton>
-            <MyButton type="primary" onClick={() => showEditVoucherModal(item)}>
-              Sửa
-            </MyButton>
-          </div>
-        ),
-      };
-    });
+  const data = vouchers?.data?.data?.map((item: any) => ({
+    key: item.id,
+    stt: item.id,
+    code: item.code,
+    name: item.name,
+    description: item.description,
+    discount_percent: item.discount_percent,
+    max_discount_amount: item.max_discount_amount,
+    for_logged_in_users: item.type,
+    type: item.type,
+    min_product_price: item.min_product_price,
+    amount: item.amount,
+    start_date: item.start_date,
+    times_used: item.times_used,
+    expiry_date: item.expiry_date,
+    usage_limit: item.usage_limit,
+    action: (
+      <Space size="middle">
+        <MyButton type="dashed" onClick={() => showDetailModal(item)}>
+          Chi tiết
+        </MyButton>
+        <MyButton type="primary" onClick={() => showEditVoucherModal(item)}>
+          Sửa
+        </MyButton>
+      </Space>
+    ),
+  }));
 
   return (
-    <React.Fragment>
-      <div className="d-flex gap-2">
-        <Button type="primary" onClick={showAddVoucherModal} className="mb-3">
-          Thêm Voucher
-        </Button>
-
-        <Popconfirm
-          title="Bạn có chắc chắn muốn xóa ?"
-          onConfirm={handleDeleteSelectedData}
-          okText="Yes"
-          cancelText="No"
-          className="mb-3"
-        >
-          <MyButton type="primary" danger icon={<DeleteOutlined />}>
-            Xóa Voucher
-          </MyButton>
-        </Popconfirm>
+    <Card>
+      <div className="mb-4">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold">Quản lý Voucher</h2>
+          <Space>
+            <Tooltip title="Làm mới">
+              <Button icon={<ReloadOutlined />} onClick={() => refetch()} />
+            </Tooltip>
+            <Button
+              type="primary"
+              icon={<PlusOutlined />}
+              onClick={showAddVoucherModal}
+            >
+              Thêm Voucher
+            </Button>
+            <Popconfirm
+              title="Bạn có chắc chắn muốn xóa?"
+              onConfirm={handleDeleteSelectedData}
+              okText="Xóa"
+              cancelText="Hủy"
+              disabled={selectedRowKeys.length === 0}
+            >
+              <Button
+                danger
+                icon={<DeleteOutlined />}
+                disabled={selectedRowKeys.length === 0}
+              >
+                Xóa ({selectedRowKeys.length})
+              </Button>
+            </Popconfirm>
+          </Space>
+        </div>
       </div>
 
       <MVTable
         columns={columnsVouchers}
-        rowSelection={rowSelection}
+        rowSelection={{
+          selectedRowKeys,
+          onChange: onSelectChange,
+        }}
         dataSource={data}
-        scroll={{ x: 1000, y: 1050 }}
+        scroll={{ x: 1000, y: 650 }}
         pagination={{
           defaultPageSize: 10,
           showSizeChanger: true,
           pageSizeOptions: ["10", "20", "30"],
           current: page,
-          onChange: handlePageChangePage,
+          onChange: setPage,
           total: vouchers?.data?.total,
+          showTotal: (total: any) => `Tổng ${total} voucher`,
         }}
-      ></MVTable>
+      />
 
       <Modal
-        title="Thêm Mới Voucher"
+        title="Thêm Voucher Mới"
         open={isModalVisible}
         onCancel={handleCancel}
+        width={800}
         footer={null}
       >
-        <AddVoucher refetch={refetch} />{" "}
+        <AddVoucher refetch={refetch} />
       </Modal>
 
       <Modal
-        title="Edit Voucher"
+        title="Chỉnh Sửa Voucher"
         open={isEditModalVisible}
         onCancel={handleCancelEdit}
+        width={800}
         footer={null}
       >
         {editingVoucher && (
@@ -190,6 +202,7 @@ const VoucherAdmin = () => {
           />
         )}
       </Modal>
+
       {isDetailModalVisible && (
         <VoucherDetailModal
           visible={isDetailModalVisible}
@@ -197,7 +210,7 @@ const VoucherAdmin = () => {
           voucher={detailVoucher}
         />
       )}
-    </React.Fragment>
+    </Card>
   );
 };
 
