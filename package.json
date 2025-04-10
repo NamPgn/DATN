@@ -23,6 +23,7 @@
     "axios": "^1.7.9",
     "dompurify": "^3.2.4",
     "file-saver": "^2.0.5",
+    "format-currency": "^1.0.0",
     "laravel-echo": "^2.0.2",
     "lodash": "^4.17.21",
     "moment": "^2.30.1",
