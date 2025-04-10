@@ -1,5 +1,5 @@
 import intances from "./instances";
 
-export const dashboard = async (year?: number, isLast7Days?: boolean) => {
-  return intances.get("/dashboard");
+export const dashboard = async (startDate?: string, endDate?: string) => {
+  return intances.get("/dashboard", { params: { startDate, endDate } });
 };
