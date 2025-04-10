@@ -17,6 +17,10 @@ import { useQuery } from "react-query";
 import { dashboard } from "../../sevices";
 import OrdersNotify from "../../components/UI/Notification";
 import { useState } from "react";
+import { DatePicker, Table } from 'antd';
+import dayjs from 'dayjs';
+
+const { RangePicker } = DatePicker;
 
 ChartJS.register(
   ArcElement,
@@ -31,14 +35,26 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
-  const [isLast7Days, setIsLast7Days] = useState(true);
-  const [year, setYear] = useState(new Date().getFullYear());
+  const [startDate, setStartDate] = useState(new Date(new Date().setDate(new Date().getDate() - 7)).toISOString().split('T')[0]);
+  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
+
   const { data, isLoading }: any = useQuery({
-    queryKey: ["Orders", year, isLast7Days],
+    queryKey: ["Orders", startDate, endDate],
     queryFn: async () => {
-      return (await dashboard(year, isLast7Days)).data?.data;
+      return (await dashboard(startDate, endDate)).data?.data;
     },
   });
+
+  const handleRangeChange = (dates: any, dateStrings: [string, string]) => {
+    if (dates) {
+      setStartDate(dateStrings[0]);
+      setEndDate(dateStrings[1]);
+    }
+  };
+
+  const disabledDate = (current: any) => {
+    return current && current > dayjs().endOf('day');
+  };
 
   const categoryByProductData = {
     labels: data?.productByCategory.map((c: any) => c.name),
@@ -73,7 +89,6 @@ const Dashboard = () => {
       },
     ],
   };
-
   const salesChartData = {
     labels: data?.salesStatistics.map((s: any) => {
       const date = new Date(s.date);
@@ -144,31 +159,15 @@ const Dashboard = () => {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-3xl font-bold mb-6 text-gray-700">Dashboard</h1>
           <div className="flex items-center gap-4 mb-3">
-            <select
-              value={year}
-              onChange={(e) => setYear(Number(e.target.value))}
-              className="px-4 py-2 rounded-md border border-gray-300"
-            >
-              {[...Array(3)].map((_, i) => {
-                const currentYear = new Date().getFullYear() - i;
-                return (
-                  <option key={currentYear} value={currentYear}>
-                    {currentYear}
-                  </option>
-                );
-              })}
-            </select>
-
-            <button
-              onClick={() => setIsLast7Days(!isLast7Days)}
-              className={`px-4 py-2 rounded-md text-white transition ${
-                isLast7Days
-                  ? "bg-blue-500 hover:bg-blue-600"
-                  : "bg-gray-500 hover:bg-gray-600"
-              }`}
-            >
-              {isLast7Days ? "Thống kê tất cả" : "Thống kê 7 ngày gần nhất"}
-            </button>
+            <RangePicker
+              onChange={handleRangeChange}
+              defaultValue={[dayjs(startDate), dayjs(endDate)]}
+              format="YYYY-MM-DD"
+              allowClear={false}
+              className="w-80"
+              disabledDate={disabledDate}
+              
+            />
           </div>
         </div>
 
@@ -262,7 +261,35 @@ const Dashboard = () => {
             <h2 className="text-xl font-bold mb-4 text-gray-700">
               Top 5 Sản phẩm bán chạy
             </h2>
-            <Bar data={topSellingData} />
+            <Table
+              columns={[
+                {
+                  title: 'Tên sản phẩm',
+                  dataIndex: 'name',
+                  key: 'name',
+                },
+                {
+                  title: 'Số lượng bán',
+                  dataIndex: 'quantity',
+                  key: 'quantity',
+                  sorter: (a: any, b: any) => a.quantity - b.quantity,
+                },
+                {
+                  title: 'Doanh thu',
+                  dataIndex: 'revenue',
+                  key: 'revenue',
+                  render: (text: any) => `${text.toLocaleString()} đ`,
+                }
+              ]}
+              dataSource={topSellingData?.datasets?.[0]?.data?.map((value: any, index: any) => ({
+                key: index,
+                name: topSellingData.labels[index],
+                quantity: value,
+                revenue: value * 100000, // Giả định giá trị doanh thu
+              })) || []}
+              pagination={false}
+              size="small"
+            />
           </div>
           <div className="bg-white p-6 shadow rounded-lg">
             <h2 className="text-xl font-bold mb-4 text-gray-700">

@@ -156,7 +156,6 @@ const HiddenComment = () => {
       </MyButton>
       <MVTable
         columns={columnsComments}
-        rowSelection={rowSelection}
         dataSource={data}
         scroll={{ x: 1000, y: 1000 }}
         pagination={{
