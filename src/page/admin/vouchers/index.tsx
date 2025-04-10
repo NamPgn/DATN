@@ -5,12 +5,12 @@ import { columnsVouchers } from "../../../constant";
 import { delMultipleVouchers, getVouchers } from "../../../sevices/voucher";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { MyButton } from "../../../components/UI/Core/Button";
-import { Link } from "react-router-dom";
 import { Button, Modal, Popconfirm } from "antd";
 import AddVoucher from "./add";
 import { toast } from "react-toastify";
 import EditVoucher from "./edit";
 import { DeleteOutlined } from "@ant-design/icons";
+import VoucherDetailModal from "./detail";
 
 const VoucherAdmin = () => {
   const queryClient = useQueryClient();
@@ -18,9 +18,21 @@ const VoucherAdmin = () => {
   const [page, setPage] = useState<number>(savedPage ? Number(savedPage) : 1);
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
+  const [detailVoucher, setDetailVoucher] = useState<any>(null);
 
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [editingVoucher, setEditingVoucher] = useState<any>(null);
+
+  const showDetailModal = (voucher: any) => {
+    setDetailVoucher(voucher);
+    setIsDetailModalVisible(true);
+  };
+
+  const closeDetailModal = () => {
+    setIsDetailModalVisible(false);
+    setDetailVoucher(null);
+  };
 
   useEffect(() => {
     sessionStorage.setItem("voucherPage", String(page));
@@ -109,15 +121,9 @@ const VoucherAdmin = () => {
         usage_limit: item.usage_limit,
         action: (
           <div className="d-flex gap-2">
-            <Link
-              to={`/dashboard/vouchers/${item.id}`}
-              onClick={() =>
-                sessionStorage.setItem("voucherPage", String(page))
-              }
-              className="text-blue-500"
-            >
-              <MyButton type="dashed">Chi Tiết</MyButton>
-            </Link>
+            <MyButton type="dashed" onClick={() => showDetailModal(item)}>
+              Chi Tiết
+            </MyButton>
             <MyButton type="primary" onClick={() => showEditVoucherModal(item)}>
               Sửa
             </MyButton>
@@ -184,6 +190,13 @@ const VoucherAdmin = () => {
           />
         )}
       </Modal>
+      {isDetailModalVisible && (
+        <VoucherDetailModal
+          visible={isDetailModalVisible}
+          onClose={closeDetailModal}
+          voucher={detailVoucher}
+        />
+      )}
     </React.Fragment>
   );
 };
