@@ -18,20 +18,26 @@ const ProductSaleTime = () => {
                   <del>{data?.data?.regular_price?.toLocaleString('vi-VN')} ₫</del>
                 </div>
               </div>
-              <Link to={"/product/detail/" + data?.data?.product?.id} className="ulinaBTN">
+              <Link
+                to={"/product/detail/" + data?.data?.product?.slug}
+                className="ulinaBTN"
+              >
                 <span>Mua ngay</span>
               </Link>
             </div>
           </div>
           <div className="col-lg-6">
             <div className="dealProductImage">
-              <img src={`/assets/images/home1/7.png`} alt={data?.data?.product?.name} />
+              <img
+                src={`/assets/images/home1/7.png`}
+                alt={data?.data?.product?.name}
+              />
             </div>
           </div>
         </div>
       </div>
     </section>
   );
-}
+};
 
-export default ProductSaleTime
+export default ProductSaleTime;

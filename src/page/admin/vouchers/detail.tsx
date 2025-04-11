@@ -1,80 +1,209 @@
-import { Link, useParams } from "react-router-dom";
-import { useQuery } from "react-query";
-import { Card, Spin } from "antd";
-import { getVoucher } from "../../../sevices/voucher";
-import { MyButton } from "../../../components/UI/Core/Button";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Modal, Descriptions, Tag, Divider, Typography } from "antd";
+import { formatCurrency } from "../../../sevices/formatCurrency";
+import dayjs from "dayjs";
 
-const VoucherDetail = () => {
-  const { id } = useParams();
-  const { data, isLoading } = useQuery(["voucher", id], () => getVoucher(id!));
+const { Title } = Typography;
 
-  if (isLoading) {
-    return <Spin />;
-  }
+interface VoucherDetailModalProps {
+  visible: boolean;
+  onClose: () => void;
+  voucher: any;
+}
 
-  const voucher = data?.data;
+const VoucherDetailModal = ({
+  visible,
+  onClose,
+  voucher,
+}: VoucherDetailModalProps) => {
+  if (!voucher) return null;
 
   return (
-    <Card title={`Voucher: ${voucher?.id}`} bordered={false}>
-      <p>
-        <strong>Mã Voucher:</strong> {voucher?.code}
-      </p>
-      <p>
-        <strong>Tên Voucher:</strong> {voucher?.name}
-      </p>
-      <p>
-        <strong>Mô tả:</strong> {voucher?.description}
-      </p>
-      {voucher?.amount && (
-        <p>
-          <strong>Số tiền giảm:</strong> {voucher?.amount}
-        </p>
-      )}
-      {!voucher?.amount && (
-        <>
-          <p>
-            <strong>Phần trăm giảm:</strong> {voucher?.discount_percent}
-          </p>
-          <p>
-            <strong>Số tiền giảm tối đa của đơn hàng:</strong>
-            {voucher?.max_discount_amount}
-          </p>
-        </>
-      )}
+    <Modal
+      title={
+        <Title level={4} style={{ margin: 0 }}>
+          Chi tiết Voucher: <Tag color="blue">{voucher?.code}</Tag>
+        </Title>
+      }
+      open={visible}
+      onCancel={onClose}
+      footer={null}
+      width={700}
+      className="voucher-detail-modal"
+    >
+      <div className="p-4">
+        <Descriptions
+          bordered
+          column={1}
+          labelStyle={{
+            width: "180px",
+            fontWeight: 600,
+            backgroundColor: "#fafafa",
+          }}
+          contentStyle={{
+            backgroundColor: "#fff",
+          }}
+        >
+          <Descriptions.Item label="Tên Voucher">
+            <span className="font-medium">{voucher?.name}</span>
+          </Descriptions.Item>
 
-      <p>
-        <strong>Loại Giảm Giá:</strong>{" "}
-        {voucher?.type === 0 ? "Giảm theo số tiền" : "Giảm theo phần trăm"}
-      </p>
-      <p>
-        <strong>Giá tối thiểu của đơn hàng:</strong>
-        {voucher?.min_product_price}
-      </p>
-      <p>
-        <strong>Loại Voucher:</strong>{" "}
-        {voucher?.for_logged_in_users === 1
-          ? "Chỉ dành cho người dùng đã đăng nhập"
-          : "Mọi người đều có thể sử dụng"}
-      </p>
-      <p>
-        <strong>Ngày tạo:</strong> {voucher?.start_date}
-      </p>
-      <p>
-        <strong>Ngày hết hạn:</strong> {voucher?.expiry_date}
-      </p>
-      <p>
-        <strong>Số lượng Voucher:</strong> {voucher?.usage_limit}
-      </p>
-      <p>
-        <strong>Số lượt đã sử dụng:</strong> {voucher?.times_used}
-      </p>
-      <div className="">
-        <Link to="/dashboard/vouchers/">
-          <MyButton type="primary">Quay lại danh sách vouchers</MyButton>
-        </Link>
+          <Descriptions.Item label="Mô tả">
+            <span className="text-gray-600">
+              {voucher?.description || "Không có mô tả"}
+            </span>
+          </Descriptions.Item>
+        </Descriptions>
+
+        <Divider orientation="left">
+          <span className="text-gray-600">Thông tin giảm giá</span>
+        </Divider>
+
+        <Descriptions
+          bordered
+          column={1}
+          labelStyle={{
+            width: "180px",
+            fontWeight: 600,
+            backgroundColor: "#fafafa",
+          }}
+          contentStyle={{
+            backgroundColor: "#fff",
+          }}
+        >
+          <Descriptions.Item label="Loại giảm giá">
+            <Tag color={voucher?.type === 0 ? "green" : "blue"}>
+              {voucher?.type === 0
+                ? "Giảm theo số tiền"
+                : "Giảm theo phần trăm"}
+            </Tag>
+          </Descriptions.Item>
+
+          {voucher?.amount ? (
+            <Descriptions.Item label="Số tiền giảm">
+              <span className="text-red-500 font-semibold">
+                {formatCurrency(voucher?.amount)}
+              </span>
+            </Descriptions.Item>
+          ) : (
+            <>
+              <Descriptions.Item label="Phần trăm giảm">
+                <Tag color="red">{voucher?.discount_percent}%</Tag>
+              </Descriptions.Item>
+              <Descriptions.Item label="Giảm tối đa">
+                <span className="text-red-500 font-semibold">
+                  {formatCurrency(voucher?.max_discount_amount)}
+                </span>
+              </Descriptions.Item>
+            </>
+          )}
+
+          <Descriptions.Item label="Giá tối thiểu">
+            <span className="text-green-500 font-semibold">
+              {formatCurrency(voucher?.min_product_price)}
+            </span>
+          </Descriptions.Item>
+        </Descriptions>
+
+        <Divider orientation="left">
+          <span className="text-gray-600">Điều kiện sử dụng</span>
+        </Divider>
+
+        <Descriptions
+          bordered
+          column={1}
+          labelStyle={{
+            width: "180px",
+            fontWeight: 600,
+            backgroundColor: "#fafafa",
+          }}
+          contentStyle={{
+            backgroundColor: "#fff",
+          }}
+        >
+          <Descriptions.Item label="Đối tượng sử dụng">
+            <Tag color={voucher?.for_logged_in_users === 0 ? "orange" : "cyan"}>
+              {voucher?.for_logged_in_users === 0
+                ? "Chỉ người dùng đã đăng nhập"
+                : "Tất cả người dùng"}
+            </Tag>
+          </Descriptions.Item>
+
+          <Descriptions.Item label="Thời gian hiệu lực">
+            <div className="flex items-center gap-2">
+              <Tag color="blue">
+                {dayjs(voucher?.start_date).format("DD/MM/YYYY")}
+              </Tag>
+              <span className="text-gray-500 mx-2">đến</span>
+              <Tag color="red">
+                {dayjs(voucher?.expiry_date).format("DD/MM/YYYY")}
+              </Tag>
+            </div>
+          </Descriptions.Item>
+
+          <Descriptions.Item label="Số lượng">
+            <div className="flex items-center gap-4">
+              <Tag color="blue">Tổng: {voucher?.usage_limit}</Tag>
+              <Tag className="mx-2" color="orange">
+                Đã dùng: {voucher?.times_used}
+              </Tag>
+              <Tag color="green">
+                Còn lại: {voucher?.usage_limit - voucher?.times_used}
+              </Tag>
+            </div>
+          </Descriptions.Item>
+
+          <Descriptions.Item label="Trạng thái">
+            {dayjs().isBefore(dayjs(voucher?.expiry_date)) ? (
+              <Tag color="success">Còn hiệu lực</Tag>
+            ) : (
+              <Tag color="error">Hết hạn</Tag>
+            )}
+          </Descriptions.Item>
+        </Descriptions>
       </div>
-    </Card>
+    </Modal>
   );
 };
 
-export default VoucherDetail;
+// Thêm styles cho modal
+const styles = `
+  .voucher-detail-modal .ant-modal-content {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .voucher-detail-modal .ant-descriptions-bordered {
+    background: white;
+    border-radius: 8px;
+  }
+
+  .voucher-detail-modal .ant-descriptions-bordered .ant-descriptions-item-label {
+    background-color: #fafafa;
+    width: 180px;
+  }
+
+  .voucher-detail-modal .ant-descriptions-bordered .ant-descriptions-item-content {
+    background-color: #ffffff;
+  }
+
+  .voucher-detail-modal .ant-divider {
+    margin: 24px 0 16px;
+  }
+
+  .voucher-detail-modal .ant-tag {
+    margin-right: 0;
+    padding: 4px 8px;
+  }
+  
+  .voucher-detail-modal .ant-descriptions-item-container {
+    align-items: center;
+  }
+`;
+
+// Thêm styles vào document
+const styleSheet = document.createElement("style");
+styleSheet.innerText = styles;
+document.head.appendChild(styleSheet);
+
+export default VoucherDetailModal;

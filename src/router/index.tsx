@@ -48,7 +48,6 @@ import OrdersAdmin from "../page/admin/orders";
 import OrdersDetail from "../page/admin/orders/components/detail";
 import EditOrder from "../page/admin/orders/components/edit";
 import VoucherAdmin from "../page/admin/vouchers";
-import VoucherDetail from "../page/admin/vouchers/detail";
 import AddVoucher from "../page/admin/vouchers/add";
 import EditVoucher from "../page/admin/vouchers/edit";
 import Register from "../page/auth/register";
@@ -95,7 +94,7 @@ export const routerClient = [
         path: "/about",
         element: <AboutPage />,
       },
-  
+
       {
         path: "/shop/:id",
         element: <Shop />,
@@ -318,10 +317,7 @@ export const routerClient = [
         path: "orders/send/:id",
         element: <SendOrder />,
       },
-      {
-        path: "vouchers/:id",
-        element: <VoucherDetail />,
-      },
+
       {
         path: "vouchers/create",
         element: <AddVoucher />,
@@ -414,25 +410,11 @@ export const TableRouterAdminPage = [
     name: "Bình luận",
     icon: <CommentOutlined />,
     path: "/dashboard/comments",
-    children: [
-      {
-        path: "/dashboard/category/deleted",
-        icon: <ControlOutlined />,
-        name: "Đã xóa",
-      },
-    ],
   },
   {
     name: "Mã giảm giá",
     icon: <GiftOutlined />,
     path: "/dashboard/vouchers",
-    children: [
-      {
-        path: "/dashboard/category/deleted",
-        icon: <ControlOutlined />,
-        name: "Đã xóa",
-      },
-    ],
   },
   {
     name: "Đơn hàng",
