@@ -8,19 +8,37 @@ import { Link } from "react-router-dom";
 import {  getOrders } from "../../../sevices/orders";
 import { columnsOrders } from "../../../constant";
 import {  EyeOutlined } from "@ant-design/icons";
+import { ConfigProvider, DatePicker, Form, Input, Select } from 'antd';
+import 'dayjs/locale/vi';
+import TailwindComponent from "../../../components/Tailwind/TailwinComponent";
+import locale from "antd/es/locale/vi_VN";
+
+const { RangePicker } = DatePicker;
 
 const OrdersAdmin = () => {
   const [page, setPage] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys]: any = useState<React.Key[]>([]);
+  const [searchParams, setSearchParams] = useState({
+    order_code: '',
+    order_status: undefined,
+    payment_status: undefined,
+    shipping_status: undefined,
+    order_name: '',
+    order_phone: '',
+    start_day: '',
+    end_day: ''
+  });
+
+  const [form] = Form.useForm();
 
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
 
   const { data: Orders }: any = useQuery({
-    queryKey: ["Orders", page],
+    queryKey: ["Orders", page, searchParams],
     queryFn: async () => {
-      return await getOrders(page);
+      return await getOrders(page, searchParams);
     },
   });
 
@@ -32,6 +50,48 @@ const OrdersAdmin = () => {
   const handlePageChangePage = (page: number) => {
     setPage(page);
   };
+
+  const orderStatusOptions = [
+    { value: 1, label: 'Đã giao thành công' },
+    { value: 2, label: 'Đang xử lý' },
+    { value: 3, label: 'Đã hủy' }
+  ];
+
+  const paymentStatusOptions = [
+    { value: 1, label: 'Đã thanh toán' },
+    { value: 2, label: 'Chưa thanh toán' }
+  ];
+
+  const shippingStatusOptions = [
+    { value: 1, label: 'Đã giao' },
+    { value: 2, label: 'Đang giao' },
+    { value: 3, label: 'Chưa giao' }
+  ];
+
+  const handleSearch = (values: any) => {
+    const { dateRange, ...rest } = values;
+    const params = {
+      ...rest,
+      start_day: dateRange ? dateRange[0].format('YYYY-MM-DD') : '',
+      end_day: dateRange ? dateRange[1].format('YYYY-MM-DD') : ''
+    };
+    setSearchParams(params);
+  };
+
+  const handleReset = () => {
+    form.resetFields();
+    setSearchParams({
+      order_code: '',
+      order_status: undefined,
+      payment_status: undefined,
+      shipping_status: undefined,
+      order_name: '',
+      order_phone: '',
+      start_day: '',
+      end_day: ''
+    });
+  };
+
   const data =
     Orders &&
     Orders?.data?.data.map((item: any) => {
@@ -63,24 +123,96 @@ const OrdersAdmin = () => {
     });
 
   return (
-    <React.Fragment>
-      <ButtonAdd path={`/dashboard/orders/add`} />
+    <ConfigProvider locale={locale}>
+      
+        <TailwindComponent>
+          <div className="mb-6 bg-white p-6 rounded-lg shadow">
+            <Form
+              form={form}
+              onFinish={handleSearch}
+              layout="vertical"
+              className="grid grid-cols-1 md:grid-cols-3 gap-4"
+            >
+              <Form.Item name="order_code" label="Mã đơn hàng">
+                <Input placeholder="Nhập mã đơn hàng" />
+              </Form.Item>
 
-      <MVTable
-        columns={columnsOrders}
-        rowSelection={rowSelection}
-        dataSource={data}
-        scroll={{ x: 1000, y: 1050 }}
-        pagination={{
-          defaultPageSize: 10,
-          showSizeChanger: true,
-          pageSizeOptions: ["10", "20", "30"],
-          current: page,
-          onChange: handlePageChangePage,
-          total: Orders?.data?.total,
-        }}
-      ></MVTable>
-    </React.Fragment>
+              <Form.Item name="order_name" label="Tên khách hàng">
+                <Input placeholder="Nhập tên khách hàng" />
+              </Form.Item>
+
+              <Form.Item name="order_phone" label="Số điện thoại">
+                <Input placeholder="Nhập số điện thoại" />
+              </Form.Item>
+
+              <Form.Item name="order_status" label="Trạng thái đơn hàng">
+                <Select
+                  placeholder="Chọn trạng thái"
+                  options={orderStatusOptions}
+                  allowClear
+                />
+              </Form.Item>
+
+              <Form.Item name="payment_status" label="Trạng thái thanh toán">
+                <Select
+                  placeholder="Chọn trạng thái"
+                  options={paymentStatusOptions}
+                  allowClear
+                />
+              </Form.Item>
+
+              <Form.Item name="shipping_status" label="Trạng thái giao hàng">
+                <Select
+                  placeholder="Chọn trạng thái"
+                  options={shippingStatusOptions}
+                  allowClear
+                />
+              </Form.Item>
+
+              <Form.Item name="dateRange" label="Khoảng thời gian">
+                <RangePicker 
+                  format="DD/MM/YYYY"
+                  className="w-full"
+                  placeholder={['Ngày bắt đầu', 'Ngày kết thúc']}
+                />
+              </Form.Item>
+
+              <Form.Item className="md:col-span-3 flex justify-end">
+                <button
+                  type="button"
+                  onClick={handleReset}
+                  className="mr-2 px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50"
+                >
+                  Đặt lại
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                >
+                  Tìm kiếm
+                </button>
+              </Form.Item>
+            </Form>
+          </div>
+
+          <ButtonAdd path={`/dashboard/orders/add`} />
+
+          <MVTable
+            columns={columnsOrders}
+            rowSelection={rowSelection}
+            dataSource={data}
+            scroll={{ x: 1000, y: 1050 }}
+            pagination={{
+              defaultPageSize: 10,
+              showSizeChanger: true,
+              pageSizeOptions: ["10", "20", "30"],
+              current: page,
+              onChange: handlePageChangePage,
+              total: Orders?.data?.total,
+            }}
+          ></MVTable>
+        </TailwindComponent>
+    </ConfigProvider>
   );
 };
 
