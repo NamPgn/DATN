@@ -52,20 +52,33 @@ const OrdersAdmin = () => {
   };
 
   const orderStatusOptions = [
-    { value: 1, label: 'Đã giao thành công' },
-    { value: 2, label: 'Đang xử lý' },
-    { value: 3, label: 'Đã hủy' }
+    { value: 1, label: 'Chờ xác nhận' },
+    { value: 2, label: 'Đã xác nhận' },
+    { value: 3, label: 'Đang giao' },
+    { value: 4, label: 'Đã giao thành công' },
+    { value: 5, label: 'Hoàn thành' },
+    { value: 6, label: 'Yêu cầu trả hàng' },
+    { value: 7, label: 'Đã duyệt trả hàng' },
+    { value: 8, label: 'Đã hoàn tiền' },
+    { value: 9, label: 'Đã hủy' }
   ];
 
   const paymentStatusOptions = [
-    { value: 1, label: 'Đã thanh toán' },
-    { value: 2, label: 'Chưa thanh toán' }
+    { value: 1, label: 'Chưa thanh toán' },
+    { value: 2, label: 'Đã thanh toán' },
+    { value: 3, label: 'Đã hoàn tiền' },
+    { value: 4, label: 'Đã hủy' }
   ];
 
   const shippingStatusOptions = [
-    { value: 1, label: 'Đã giao' },
-    { value: 2, label: 'Đang giao' },
-    { value: 3, label: 'Chưa giao' }
+    { value: 1, label: 'Chưa tạo vận đơn' },
+    { value: 2, label: 'Đã tạo vận đơn (chưa lấy)' },
+    { value: 3, label: 'Đã lấy hàng' },
+    { value: 4, label: 'Đang giao' },
+    { value: 5, label: 'Đã giao' },
+    { value: 6, label: 'Đã hoàn hàng' },
+    { value: 7, label: 'Giao thất bại' },
+    { value: 8, label: 'Vận đơn bị hủy' }
   ];
 
   const handleSearch = (values: any) => {
