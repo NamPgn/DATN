@@ -27,8 +27,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       return (await userCart())?.data?.data;
     },
     enabled: !!token_,
-    staleTime: 5 * 60 * 1000,
-		cacheTime: 30 * 60 * 1000
   });
 
   const cartData = cart?.map((item: any) => ({
