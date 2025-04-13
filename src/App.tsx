@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import "react-quill/dist/quill.snow.css";
 import { useEffect } from "react";
 import 'react-photo-view/dist/react-photo-view.css';
+import PusherProvider from "./provider/Pusher";
 const App = () => {
   const router = useRoutes(routerClient);
 
@@ -17,6 +18,7 @@ const App = () => {
     <>
       {router}
       <ToastContainer />
+      <PusherProvider />
     </>
   );
 };

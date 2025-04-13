@@ -15,7 +15,6 @@ import {
 import TailwindComponent from "../../components/Tailwind/TailwinComponent";
 import { useQuery } from "react-query";
 import { dashboard } from "../../sevices";
-import OrdersNotify from "../../components/UI/Notification";
 import { useState } from "react";
 import { DatePicker, Table } from 'antd';
 import dayjs from 'dayjs';
@@ -299,7 +298,6 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <OrdersNotify />
     </TailwindComponent>
   );
 };
