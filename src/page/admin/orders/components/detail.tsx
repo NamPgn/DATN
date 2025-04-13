@@ -59,11 +59,11 @@ const ACTION_MAP: any = {
     variant: "outlined",
     action: "reject_return",
   },
-  refun_auto: {
+  refund_auto: {
     label: "🔁 Hoàn tiền tự động (VNPAY)",
     color: "purple",
     variant: "outlined",
-    action: "refun_auto",
+    action: "refund_auto",
   },
   refund_manual: {
     label: "💵 Hoàn tiền thủ công",
@@ -314,8 +314,10 @@ const OrdersDetail = () => {
   });
 
   const refundMutationPatial = useMutation({
-    mutationFn: async (data: any) => {
-      await refundPartialOrderUser(data);
+    mutationFn: async () => {
+      await refundPartialOrderUser({
+        code: order?.order_code
+      });
     },
     onSuccess: () => {
       message.success("Hoàn tiền thành công!");
@@ -523,6 +525,7 @@ const OrdersDetail = () => {
   };
 
   const handleClickAction = async (action: any) => {
+    console.log(action)
     setLoadingAction(action.action);
     setModalAction(action?.action);
     switch (action?.action) {
@@ -655,10 +658,10 @@ const OrdersDetail = () => {
                     {timeline.changed_by === "system"
                       ? "Hệ thống"
                       : timeline.changed_by === "user"
-                      ? "Người dùng"
-                      : timeline.changed_by === "staff"
-                      ? "Nhân viên"
-                      : "Quản trị viên"}
+                        ? "Người dùng"
+                        : timeline.changed_by === "staff"
+                          ? "Nhân viên"
+                          : "Quản trị viên"}
                   </Tag>
                 </p>
                 <p className="text-gray-500">
@@ -692,6 +695,7 @@ const OrdersDetail = () => {
           visible={isModalOpenRefundManual}
           onCancel={() => setisModalOpenRefundManual(false)}
           onSubmit={refundMutation.mutate}
+          code={order?.order_code}
         />
 
         <RefundModalPatrial

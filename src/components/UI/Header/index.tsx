@@ -11,7 +11,7 @@ const menuItems = [
   { name: "Giới thiệu", path: "/about" },
   {
     name: "Danh mục",
-    path: "/shop",
+    path: "#",
     class: "menu-item-has-children",
   },
   { name: "Sản phẩm", path: "/products" },
@@ -92,7 +92,7 @@ const Header = () => {
                                       : " "
                                   }`}
                                 >
-                                  <Link to={`/shop/${category.id}`}>
+                                  <Link to={`/shop/${category.slug}`}>
                                     {category.name}
                                   </Link>
                                   {category?.children?.length > 0 ? (
@@ -100,7 +100,7 @@ const Header = () => {
                                       {category?.children?.map((child: any) => {
                                         return (
                                           <li key={child?.slug}>
-                                            <Link to={`/shop/${child.id}`}>
+                                            <Link to={`/shop/${child.slug}`}>
                                               {child.name}
                                             </Link>
                                           </li>
@@ -183,7 +183,7 @@ const Header = () => {
                   <div className="anSupport">
                     <i className="fa-solid fa-headset" />
                     <h3>Liên Hệ</h3>
-                    <h3>+123 - 456 - 7890</h3>
+                    <h3>0389794435</h3>
                   </div>
                 </div>
               </div>

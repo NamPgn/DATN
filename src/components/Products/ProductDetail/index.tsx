@@ -11,6 +11,8 @@ import { userCartAdd } from "../../../sevices/client/cart";
 import { token_auth } from "../../../common/auth/getToken";
 import { socialLinks } from "../../../constant";
 import Loading from "../../Loading/Loading";
+import TailwindComponent from "../../Tailwind/TailwinComponent";
+import styles from "./styles.module.css";
 
 const ProductDetail = () => {
   const token_ = token_auth();
@@ -112,8 +114,8 @@ const ProductDetail = () => {
       const isAlreadySelected = prev[groupName]?.id === item.id; //tìm thằng đã có trong cái mảng đấy
       const newSelected = isAlreadySelected //nếu mà có thằng mới thì remove thằng cũ đê
         ? Object.fromEntries(
-            Object.entries(prev).filter(([key]) => key !== groupName)
-          )
+          Object.entries(prev).filter(([key]) => key !== groupName)
+        )
         : { ...prev, [groupName]: item };
 
       return newSelected;
@@ -147,6 +149,7 @@ const ProductDetail = () => {
       rating,
     });
   };
+
 
   const variantGroups: Record<string, any[]> = {}; //tìm ra tất cả biến thể đã có trong cái mảng
 
@@ -190,7 +193,7 @@ const ProductDetail = () => {
             toast.success("Thêm giỏ hàng thành công");
             refetchCart();
           },
-          onError: (error:any) => {
+          onError: (error: any) => {
             toast.error(error?.response?.data?.message);
           },
         });
@@ -201,7 +204,7 @@ const ProductDetail = () => {
               toast.success("Thêm giỏ hàng thành công");
               refetchCart();
             },
-            onError: (error:any) => {
+            onError: (error: any) => {
               toast.error(error?.response?.data?.message);
             },
           });
@@ -242,193 +245,169 @@ const ProductDetail = () => {
 
   if (isLoading) return <Loading />;
   return (
-    <section className="shopDetailsPageSection">
-      <div className="container">
-        <div className="d-flex gap-2">
-          <div className="col-lg-6">
-            <div className="productGalleryWrap2 clearfix">
-              <div className="productGalleryThumb2 slick-initialized slick-slider slick-vertical">
-                <div className="draggable" style={{ height: 544 }}>
-                  <div
-                    className="slick-track"
-                    style={{
-                      opacity: 1,
-                      height: 544,
-                      transform: "translate3d(0px, 0px, 0px)",
-                    }}
-                  >
-                    {/* Lặp qua mảng để hiển thị các ảnh thumbnail */}
-                    {products?.product_images?.map(
-                      (image: any, index: number) => (
-                        <div
-                          key={image.id}
-                          className={`pgtImage2 slick-slide ${
-                            image.url === currentImage ? "border" : ""
-                          }`}
-                          aria-hidden="false"
-                          style={{ width: 120 }}
-                          tabIndex={0}
-                          onClick={() => handleImageClick(image.url)}
-                        >
-                          <img
-                            src={image.url}
-                            alt={`Product Image ${index + 1}`}
-                          />
-                        </div>
-                      )
-                    )}
-                  </div>
+    <TailwindComponent>
+      <section className={styles.container + " container"}>
+        <div className={styles.wrapper}>
+          <div className={styles.card}>
+            <div className={styles.grid}>
+              {/* Left Column - Product Images */}
+              <div className={styles.flex}>
+                {/* Thumbnails */}
+                <div className={styles.thumbnailContainer}>
+                  {products?.product_images?.map((image: any, index: number) => (
+                    <div
+                      key={image.id}
+                      onClick={() => handleImageClick(image.url)}
+                      className={`${styles.thumbnail} ${image.url === currentImage ? styles.thumbnailActive : ""}`}
+                    >
+                      <img
+                        src={image.url}
+                        alt={`Product ${index + 1}`}
+                        className={styles.thumbnailImage}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Main Image */}
+                <div className={styles.mainImage}>
+                  <img
+                    src={currentImage}
+                    alt="Product"
+                  />
                 </div>
               </div>
 
-              <div className="productGallery2 slick-initialized slick-slider">
-                <div className="draggable">
-                  <div
-                    className="slick-track"
-                    style={{ opacity: 1, width: 1772 }}
-                  >
-                    {/* Hiển thị ảnh chính */}
-                    <div
-                      className="pgImage2 slick-slide slick-current slick-active"
-                      aria-hidden="false"
-                      style={{
-                        width: 443,
-                        position: "relative",
-                        left: 0,
-                        top: 0,
-                        zIndex: 999,
-                        opacity: 1,
-                      }}
-                      tabIndex={0}
-                    >
-                      <img src={currentImage} alt="Product Image" />
+              {/* Right Column - Product Info */}
+              <div className={styles.flexCol}>
+                <h1 className={styles.title}>
+                  {products?.name}
+                </h1>
+
+                {selectedVariantss && (
+                  <div className={styles.priceContainer}>
+                    {/* Price */}
+                    <div className={styles.price}>
+                      <span className={styles.priceValue}>
+                        {(selectedVariantss.sale_price ?? selectedVariantss.regular_price).toLocaleString()} đ
+                      </span>
+                      {selectedVariantss.sale_price && (
+                        <span className={styles.originalPrice}>
+                          {selectedVariantss.regular_price.toLocaleString()} đ
+                        </span>
+                      )}
                     </div>
+
+                    {/* Stock */}
+                    <div className={styles.stock}>
+                      <span className={styles.stockLabel}>Số lượng:</span>
+                      <span className={styles.stockValue}>
+                        {selectedVariantss.stock_quantity}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Description */}
+                <div className={styles.description}>
+                  {products?.short_description}
+                </div>
+
+                {/* Variants */}
+                <div className={styles.variants}>
+                  {Object.entries(filteredVariantGroups).map(([groupName, values]) => (
+                    <div key={groupName} className={styles.variantGroup}>
+                      <span className={styles.variantLabel}>{groupName}:</span>
+                      <div className={styles.variantOptions}>
+                        {values.map((item: any) => {
+                          const isSelected = selectedVariants[groupName]?.id === item.id;
+                          return (
+                            <button
+                              key={item.id}
+                              onClick={() => handleSelect(groupName, item)}
+                              className={`${styles.variantButton} ${isSelected ? styles.variantButtonActive : ""}`}
+                            >
+                              {item.name}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Quantity and Add to Cart */}
+                <div className={styles.cartSection}>
+                  <div className={styles.cartControls}>
+                    <div className={styles.quantityWrapper}>
+                      <Quantity
+                        quantity={quantity}
+                        stock={selectedVariantss?.stock_quantity}
+                        setQuantity={setQuantity}
+                      />
+                    </div>
+                    <button
+                      onClick={handleSubmit}
+                      className={styles.addToCart}
+                    >
+                      Thêm vào giỏ hàng
+                    </button>
+                  </div>
+                </div>
+
+                {/* Meta Information */}
+                <div className={styles.metaInfo}>
+                  <div className={styles.sku}>
+                    <span>Mã sản phẩm:</span>
+                    <span className={styles.skuValue}>{selectedVariantss?.sku}</span>
+                  </div>
+
+                  {/* Categories */}
+                  <div className={styles.categories}>
+                    {products?.categories?.map((cat: any, index: any) => (
+                      <Link
+                        key={index}
+                        to={""}
+                        className={styles.categoryLink}
+                      >
+                        {cat}
+                        {index < products.categories.length - 1 ? "," : ""}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Social Share */}
+                <div className={styles.socialShare}>
+                  <span className={styles.socialLabel}>Chia sẻ:</span>
+                  <div className={styles.socialLinks}>
+                    {socialLinks?.map((link, index) => (
+                      <a
+                        key={index}
+                        href="#"
+                        className={styles.socialLink}
+                        style={{ color: link.color }}
+                      >
+                        <i className={`fa-brands ${link.icon}`} />
+                      </a>
+                    ))}
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="col-lg-6">
-            <div className="productContent pcMode2">
-              <h2>{products?.name}</h2>
-              {selectedVariantss ? (
-                <>
-                  <div className="pi01Price">
-                    <ins>
-                      {(
-                        selectedVariantss.sale_price ??
-                        selectedVariantss.regular_price
-                      ).toLocaleString()}{" "}
-                      đ
-                    </ins>
-                    {selectedVariantss.sale_price && (
-                      <del>
-                        {selectedVariantss.regular_price.toLocaleString()} đ
-                      </del>
-                    )}
-                  </div>
 
-                  <div className="productRadingsStock clearfix">
-                    <div className="productRatings float-start">
-                      {/* <div className="productRatingWrap">
-                        <div className="star-rating">
-                          <span
-                            style={{
-                              width: `${(products.rating?.average / 5) * 100}%`,
-                            }}
-                          />
-                        </div>
-                      </div>
-                      <div className="ratingCounts">
-                        {products.rating?.reviews} Reviews
-                      </div> */}
-                    </div>
-                    <div className="productStock float-end">
-                      <span>Số lượng: </span> {selectedVariantss.stock_quantity}
-                    </div>
-                  </div>
-                </>
-              ) : (
-                ""
-              )}
-
-              <div className="pcExcerpt">{products?.short_description}</div>
-              {Object.entries(filteredVariantGroups).map(
-                ([groupName, values]) => (
-                  <aside
-                    key={groupName}
-                    className="widget sizeFilter mb-4 d-flex gap-3"
-                    style={{ alignItems: "center" }}
-                  >
-                    <div className="">{groupName}:</div>
-                    <div className="productSizeWrap d-flex gap-2 flex-wrap">
-                      {values.map((item: any) => {
-                        const isSelected =
-                          selectedVariants[groupName]?.id === item.id;
-                        return (
-                          <div
-                            key={item.id}
-                            className={`variant-btn ${
-                              isSelected ? "selected" : ""
-                            }`}
-                            onClick={() => handleSelect(groupName, item)}
-                          >
-                            {item.name}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </aside>
-                )
-              )}
-
-              <div className="pcBtns">
-                <Quantity
-                  quantity={quantity}
-                  stock={selectedVariantss?.stock_quantity}
-                  setQuantity={setQuantity}
-                />
-                <button onClick={handleSubmit} className="ulinaBTN">
-                  <span>Thêm vào giỏ hàng</span>
-                </button>
-              </div>
-
-              <div className="pcMeta">
-                <span>Mã sản phẩm: {selectedVariantss?.sku}</span>
-                <div className="pcCategory my-4">
-                  {products?.categories?.map((cat: any, index: any) => (
-                    <span key={index}>
-                      <Link to={""}>
-                        {cat}
-                        {","}{" "}
-                      </Link>
-                    </span>
-                  ))}
-                </div>
-                <p className="pcmSocial">
-                  <span>Chia sẻ</span>
-                  {socialLinks?.map((link, index) => (
-                    <a
-                      key={index}
-                      style={{ color: link.color }}
-                      className={link.platform}
-                    >
-                      <i className={`fa-brands ${link.icon}`} />
-                    </a>
-                  ))}
-                </p>
-              </div>
-            </div>
+          <div className={styles.descriptionSection}>
+            <Description
+              product={products}
+              handleRatingChange={handleRatingChange}
+              handleInputChange={handleInputChange}
+              formData={formData}
+            />
           </div>
         </div>
-        <Description
-          product={products}
-          handleRatingChange={handleRatingChange}
-          handleInputChange={handleInputChange}
-          formData={formData}
-        />
-      </div>
-    </section>
+      </section>
+    </TailwindComponent>
   );
 };
 

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { intancesLocal } from "./instances";
 
-export const getProductsByCategory = async (page: any) => {
-  return intancesLocal.get(`products/${page}`);
+export const getProductsByCategory = async (slug: string, page: any) => {
+  return intancesLocal.get(`/categories/${slug}/products${page}`);
 };
 
 export const getProductsSearch = async (keyword: string, page: number) => {

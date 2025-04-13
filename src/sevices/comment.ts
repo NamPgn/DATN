@@ -31,15 +31,24 @@ export const hiddenComment = async () => {
 export const getComments = async (
   page: number,
   keyword?: string,
-  rating?: number
+  rating?: number,
+  is_active?: string
 ) => {
   const params: Record<string, any> = { page };
   if (keyword) params.keyword = keyword;
   if (rating !== undefined) params.rating = rating;
-
-  return intances.get("/comments?page=" + page, { params });
+  
+  return intances.get("/comments?page=" + page + "&is_active=" + is_active , { params });
 };
 
 export const replyComment = async (id: string, reply: string) => {
-  return intances.patch("/comments/reply", { id, reply });
+  return intances.put(`comments/${id}/reply`, { reply });
+};
+
+export const changeStatusComment = async (id: string, status: boolean, reason?: string) => {
+  const response = await intances.put(`/comments/${id}/status-toggle`, {
+    status,
+    ...(reason && { reason })
+  });
+  return response.data;
 };

@@ -1,10 +1,12 @@
-import { Form, message } from "antd";
+import { Button, Form, message, Modal } from "antd";
 import { useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { getProduct, updateProduct } from "../../../sevices/products";
 import UploadImage from "./component/uploadImage";
 import { Link, useParams } from "react-router-dom";
 import ProductForm from "./component/form";
+import { UploadOutlined } from "@ant-design/icons";
+import TailwindComponent from "../../../components/Tailwind/TailwinComponent";
 
 const ProductEdit = () => {
   const { id } = useParams();
@@ -55,40 +57,45 @@ const ProductEdit = () => {
   });
 
   return (
-    <>
-      {/* <div
-        className="d-flex flex-column align-items-center justify-content-center border border-secondary border-dashed rounded p-3"
-        style={{ width: "120px", height: "120px", cursor: "pointer" }}
-        onClick={() => setVisible(true)}
-      >
-        <PlusOutlined className="text-4xl text-gray-500 hover:text-blue-500" />
-        <span className="text-muted">Upload</span>
-      </div> */}
-      <div className="d-flex">
-        <UploadImage
-          visible={visible}
-          onClose={() => setVisible(false)}
-          setSelectImage={setSelectImage}
-          selectImage={selectImage}
-          setSelectOneImage={setSelectOneImage}
-          selectOneImage={selectOneImage}
-          onCancel={() => setVisible(false)}
-        />
-        <div className="d-flex gap-3">
+    <TailwindComponent>
+      <div className="flex justify-between ">
+        <Button
+          type="dashed"
+          variant="solid"
+          className="mb-3"
+          icon={<UploadOutlined />}
+          onClick={() => setVisible(true)}
+        >
+          Tải ảnh lên
+        </Button>
+        <div className="d-flex gap-3  ">
           <Link to={"/dashboard/add/product/variant/" + id}>
             Thêm biến thể mới
           </Link>
           <Link to={`/dashboard/product/${id}/variants/`}>QL Biến Thể</Link>
         </div>
       </div>
-
+      <Modal
+        width={800}
+        title="Tải ảnh lên"
+        visible={visible}
+        onOk={() => setVisible(false)}
+        onCancel={() => setVisible(false)}
+      >
+        <UploadImage
+          setSelectImage={setSelectImage}
+          selectImage={selectImage}
+          setSelectOneImage={setSelectOneImage}
+          selectOneImage={selectOneImage}
+        />
+      </Modal>
       <ProductForm
         dataEdit={product}
         selectOneImage={selectOneImage}
         selectImage={selectImage}
         mutateUpdate={mutateEdit}
       />
-    </>
+    </TailwindComponent>
   );
 };
 

@@ -49,6 +49,13 @@ const AboutSection03 = () => {
       image: "/assets/images/ceo/cc07785f-d7b6-49f5-8a91-97fa8f9b7bf7.jpg",
       socials: ["fa-facebook-f", "fa-linkedin-in"],
     },
+    {
+      id: 8,
+      name: "Dương Minh Tú",
+      role: "Mâm 2",
+      image: "/assets/images/ceo/0dc8a1f0-1500-4d29-8fb1-258bc1010213.jpg",
+      socials: ["fa-facebook-f", "fa-linkedin-in"],
+    },
   ];
   return (
     <section className="aboutPageSection03">

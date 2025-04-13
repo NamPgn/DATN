@@ -1,6 +1,6 @@
 import { Form, Input, Button, Card, Select } from "antd";
 import { useMutation } from "react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { updateOrders } from "../../../../sevices/orders";
 import { toast } from "react-toastify";
 import { EditOutlined } from "@ant-design/icons";
@@ -8,12 +8,14 @@ import { EditOutlined } from "@ant-design/icons";
 const SendOrder = () => {
   const [form] = Form.useForm();
   const { id } = useParams();
+  const nav=useNavigate();
   const { mutate: mutate } = useMutation({
     mutationFn: async (data: any) => {
       return await updateOrders(data);
     },
     onSuccess: () => {
       toast.success("Gửi đơn hàng thành công");
+      nav('/dashboard/orders/'+id)
     },
     onError: () => {
       toast.error("Gửi đơn hàng thất bại");

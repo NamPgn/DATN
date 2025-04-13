@@ -14,16 +14,19 @@ import { toast } from "react-toastify";
 import ReturnModal from "./modalConfirmReturn";
 import CountdownTimer from "./countdownTimer";
 import { token_auth } from "../../common/auth/getToken";
-
+import ReviewModal from "./modalReview";
 const OrderDetailUser = () => {
   const { code } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalOpenCancle, setIsModalCancle] = useState(false);
   const [isModalOpenturn, setIsModalReturn] = useState(false);
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [selectedReview, setSelectedReview] = useState<any>(null);
+  const [reviewItem, setReviewItem] = useState<any>(null);
+  const [reviewItemState, setReviewItemState] = useState<any>(null);
   const tokenOtp: any = localStorage.getItem("tokenOtp");
   const tkOtp = JSON.parse(tokenOtp);
   const nav = useNavigate();
-
   useEffect(() => {
     if (!tkOtp && !token_auth()) {
       //chưa đăng nhập + chưa có otp token thì ko cho vào tracking mà đăng nhập thì ko cho vào
@@ -35,7 +38,7 @@ const OrderDetailUser = () => {
     data: order,
     isLoading,
     refetch,
-  } = useQuery({
+  }: any = useQuery({
     queryKey: ["orderCode", code],
     queryFn: async () => {
       return (await getOrderCodeUser(code)).data?.data || null;
@@ -125,6 +128,39 @@ const OrderDetailUser = () => {
         break;
     }
   };
+
+  const handleActionReview = (action: string | { action: string; order_item_id: number }) => {
+    if (typeof action === 'object' && 'action' in action) {
+      const actionName = action.action;
+      if (actionName === 'review') {
+        // Find the product item to review
+        const item = order.items.find((item: any) => item.id === action.order_item_id);
+        if (item) {
+          setReviewItem({
+            orderItemId: item.id,
+            productId: item.product_id,
+            productName: item.product_name,
+            productImage: item.image
+          });
+          setIsReviewModalOpen(true);
+        }
+        return;
+      } else if (actionName === 'update_review') {
+        const product = order.items.find((item: any) => item.id === action.order_item_id);
+        if (product && product.review) {
+          setSelectedReview(product.review);
+          setIsReviewModalOpen(true);
+        }
+        return;
+      } else {
+        const product = order.items.find((item: any) => item.id === action.order_item_id);
+        if (product && product.review) {
+          setSelectedReview(product.review);
+          setIsReviewModalOpen(true);
+        }
+      }
+    }
+  };
   return (
     <TailwindComponent>
       <div className="container mx-auto px-4 py-6">
@@ -158,37 +194,66 @@ const OrderDetailUser = () => {
             {/* Sản phẩm */}
             <div>
               <h3 className="font-semibold text-lg mb-4">Sản phẩm</h3>
-              {order?.items?.map((item: any, index: any) => (
-                <div key={index} className="flex items-center mb-4 space-x-4">
-                  <img
-                    src={item.image}
-                    alt={item.product_name}
-                    className="w-20 h-20 object-cover rounded-md"
-                  />
-                  <div>
-                    <p className="font-medium">{item.product_name}</p>
-                    <p className="text-sm text-gray-500">
-                      {Object.keys(
-                        item.variation && item.variation !== "null"
-                          ? JSON.parse(item.variation)
-                          : {}
-                      ).length > 0 ? (
-                        Object.entries(
-                          item.variation && item.variation !== "null"
-                            ? JSON.parse(item.variation)
-                            : {}
-                        ).map(([key, value]: any) => (
-                          <div key={key} className="text-gray-500">
-                            {key}: {value}
-                          </div>
-                        ))
-                      ) : (
-                        <div className="text-gray-500">Không có biến thể</div>
+              {order?.items?.map((item: any) => (
+                <div key={item.id} className="flex items-center gap-4 p-4 border-b">
+                  <img src={item.image} alt={item.product_name} className="w-20 h-20 object-cover" />
+                  <div className="flex-1">
+                    <h3 className="font-medium">{item.product_name}</h3>
+                    <p className="text-gray-500">Số lượng: {item.quantity}</p>
+                    <p className="text-gray-500">Giá: {item.price.toLocaleString()}đ</p>
+                  </div>
+                  <div className="flex gap-2">
+                    {order.actions && order.actions.some((action: any) =>
+                      typeof action === 'object' &&
+                      action.action === 'review' &&
+                      action.order_item_id === item.id
+                    ) && (
+                        <button
+                          onClick={() => {
+                            const action = order.actions.find((a: any) =>
+                              typeof a === 'object' &&
+                              a.action === 'review' &&
+                              a.order_item_id === item.id
+                            );
+                            if (action) handleActionReview(action);
+                          }}
+                          className="px-4 py-2 bg-blue-500 text-sm text-white rounded hover:bg-blue-600"
+                        >
+                          Đánh giá
+                        </button>
                       )}
-                    </p>
-                    <p className="text-sm">
-                      {item.quantity} x {formatCurrency(item.price)}
-                    </p>
+                    {order.actions && order.actions.some((action: any) =>
+                      typeof action === 'object' &&
+                      action.action === 'update_review' &&
+                      action.order_item_id === item.id
+                    ) && (
+                        <button
+                          onClick={() => {
+                            const action = order.actions.find((a: any) =>
+                              typeof a === 'object' &&
+                              a.action === 'update_review' &&
+                              a.order_item_id === item.id
+                            );
+                            if (action) handleActionReview(action);
+                          }}
+                          className="px-4 py-2 bg-yellow-500 text-white text-sm rounded hover:bg-yellow-600"
+                        >
+                          Sửa
+                        </button>
+                      )}
+                    {item?.review?.is_updated === true && <button
+                      onClick={() => {
+                        const action = {
+                          action: 'view',
+                          order_item_id: item?.review?.order_item_id
+                        }
+                        setReviewItemState(item?.review)
+                        if (action) handleActionReview(action);
+                      }}
+                      className="px-4 py-2 bg-green-500 text-white text-sm rounded hover:bg-green-600"
+                    >
+                      Xem
+                    </button>}
                   </div>
                 </div>
               ))}
@@ -253,78 +318,30 @@ const OrderDetailUser = () => {
             </div>
           </div>
 
-          <div className="p-4 bg-gray-50 border-t">
-            <h3 className="font-semibold text-lg mb-4">Lịch sử đơn hàng</h3>
-            <div className="relative pl-4 border-l-2 border-gray-200">
-              {order?.status_timelines.map((timeline: any, index: any) => (
-                <div
-                  key={index}
-                  className="relative mb-4 pl-6 pb-4 border-b border-gray-200 last:border-b-0"
-                >
-                  <div className="absolute left-[13px] top-0 w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white">
-                    {STATUSICONS[timeline.to] || "📦"}
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p
-                        className="font-medium text-gray-800 "
-                        style={{ marginLeft: "30px" }}
-                      >
-                        {timeline.from ? `Từ ${timeline.from}` : "Tạo mới"}
-                        {" → "}
-                        <span className="text-blue-600">{timeline.to}</span>
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        {formatDateTime(timeline.changed_at)}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {order?.shipping_logs && order?.shipping_logs.length > 0 && (
-            <div className="p-4 bg-white border-t">
-              <h3 className="font-semibold text-lg mb-4">
-                Thông tin vận chuyển
-              </h3>
+          <div className="grid grid-cols-2 gap-4 p-4">
+            <div className="bg-gray-50 rounded-lg p-4">
+              <h3 className="font-semibold text-lg mb-4">Lịch sử đơn hàng</h3>
               <div className="relative pl-4 border-l-2 border-gray-200">
-                {order?.shipping_logs.map((log: any, index: any) => (
+                {order?.status_timelines.map((timeline: any, index: any) => (
                   <div
                     key={index}
                     className="relative mb-4 pl-6 pb-4 border-b border-gray-200 last:border-b-0"
                   >
-                    <div className="absolute left-[-13px] top-0 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-white">
-                      {SHIPPING_ICONS[log.status] || "🚚"}
+                    <div className="absolute left-[13px] top-0 w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white">
+                      {STATUSICONS[timeline.to] || "📦"}
                     </div>
                     <div className="flex justify-between items-center">
                       <div>
-                        <p className="font-medium text-gray-800">
-                          <span
-                            className="text-green-600 "
-                            style={{ marginLeft: "30px" }}
-                          >
-                            {log.status}
-                          </span>
+                        <p
+                          className="font-medium text-gray-800"
+                          style={{ marginLeft: "30px" }}
+                        >
+                          {timeline.from ? `Từ ${timeline.from}` : "Tạo mới"}
+                          {" → "}
+                          <span className="text-blue-600">{timeline.to}</span>
                         </p>
-                        {log?.location && (
-                          <p className="font-medium text-gray-800">
-                            <span
-                              className="text-green-600 "
-                              style={{ marginLeft: "30px" }}
-                            >
-                              {log.location}
-                            </span>
-                          </p>
-                        )}
-                        {log.note && (
-                          <p className="text-sm text-gray-600 mt-1">
-                            Ghi chú: {log.note}
-                          </p>
-                        )}
-                        <p className="text-sm text-gray-500 mt-1">
-                          {formatDateTime(log.created_at)}
+                        <p className="text-sm text-gray-600">
+                          {formatDateTime(timeline.changed_at)}
                         </p>
                       </div>
                     </div>
@@ -332,29 +349,91 @@ const OrderDetailUser = () => {
                 ))}
               </div>
             </div>
-          )}
+
+            {order?.shipping_logs && order?.shipping_logs.length > 0 && (
+              <div className="bg-white rounded-lg p-4 " style={{
+                height: "500px",
+                overflowY: "scroll",
+              }}>
+                <h3 className="font-semibold text-lg mb-4">
+                  Thông tin vận chuyển
+                </h3>
+                <div className="relative pl-4 border-l-2 border-gray-200">
+                  {order?.shipping_logs.map((log: any, index: any) => (
+                    <div
+                      key={index}
+                      className="relative mb-4 pl-6 pb-4 border-b border-gray-200 last:border-b-0"
+                    >
+                      <div className="absolute left-[-13px] top-0 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-white">
+                        {SHIPPING_ICONS[log.status] || "🚚"}
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <p className="font-medium text-gray-800">
+                            <span
+                              className="text-green-600"
+                              style={{ marginLeft: "30px" }}
+                            >
+                              {log.status}
+                            </span>
+                          </p>
+                          {log?.location && (
+                            <p className="font-medium text-gray-800">
+                              <span
+                                className="text-green-600"
+                                style={{ marginLeft: "30px" }}
+                              >
+                                {log.location}
+                              </span>
+                            </p>
+                          )}
+                          {log.note && (
+                            <p className="text-sm text-gray-600 mt-1">
+                              Ghi chú: {log.note}
+                            </p>
+                          )}
+                          <p className="text-sm text-gray-500 mt-1">
+                            {formatDateTime(log.created_at)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
 
           {order?.actions && order?.actions.length > 0 && (
-            <div className="p-4 border-t flex space-x-3">
-              {order.actions.map((action: any) => {
-                const actionData = ACTIONS_INDEX[action] || {
-                  label: action,
-                  color: "bg-gray-200 text-gray-700 hover:bg-gray-300",
-                };
-                return (
-                  <button
-                    key={action}
-                    className={`px-4 py-2 rounded-md text-sm font-medium ${actionData.color}`}
-                    onClick={() => handleAction(action)}
-                  >
-                    {action === "pay" && loadingRePay
-                      ? "Chờ..."
-                      : action === "close" && loadingClose
-                      ? "Chờ..."
-                      : actionData.label}
-                  </button>
-                );
-              })}
+            <div className="p-4 border-t flex flex-col space-y-4">
+              <div className="flex space-x-3">
+                {order.actions.map((action: any) => {
+                  if (typeof action === 'object') return null;
+
+                  const actionData = ACTIONS_INDEX[action] || {
+                    label: action === 'review' ? 'Đánh giá sản phẩm' : action,
+                    color: action === 'review'
+                      ? 'bg-blue-500 text-white hover:bg-blue-600'
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300',
+                  };
+
+                  return (
+                    <button
+                      key={action}
+                      className={`px-4 py-2 rounded-md text-sm font-medium ${actionData.color}`}
+                      onClick={() => handleAction(action)}
+                    >
+                      {action === "pay" && loadingRePay
+                        ? "Chờ..."
+                        : action === "close" && loadingClose
+                          ? "Chờ..."
+                          : actionData.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+
             </div>
           )}
 
@@ -376,6 +455,123 @@ const OrderDetailUser = () => {
 
           {isModalOpenturn && (
             <ReturnModal order={order} setIsModalReturn={setIsModalReturn} />
+          )}
+
+          {isReviewModalOpen && reviewItem && (
+            <ReviewModal
+              isOpen={isReviewModalOpen}
+              onClose={() => {
+                setIsReviewModalOpen(false);
+                setReviewItem(null);
+              }}
+              code={order?.order_code}
+              orderItemId={reviewItem.orderItemId}
+              productId={reviewItem.productId}
+              productName={reviewItem.productName}
+              productImage={reviewItem.productImage}
+              existingReview={reviewItem.existingReview}
+              refetch={refetch}
+
+            />
+          )}
+
+          {/* View Review Modal */}
+          {isReviewModalOpen && selectedReview && !reviewItem && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-xl font-semibold">Đánh giá sản phẩm</h3>
+                  <button
+                    onClick={() => {
+                      setIsReviewModalOpen(false);
+                      setSelectedReview(null);
+                    }}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-2">
+                    <div className="flex">
+                      {[...Array(5)].map((_, i) => (
+                        <span key={i} className="text-yellow-400">
+                          {i < selectedReview.rating ? '★' : '☆'}
+                        </span>
+                      ))}
+                    </div>
+                    <span className="text-sm text-gray-500">
+                      {formatDateTime(selectedReview.updated_at)}
+                    </span>
+                    <span className="text-sm text-gray-500">
+                      {reviewItemState?.is_updated === true && "Đã chỉnh sửa"}
+                    </span>
+                  </div>
+
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <p className="text-gray-700">{selectedReview.content}</p>
+                  </div>
+
+                  {selectedReview.images && selectedReview.images.length > 0 && (
+                    <div className="grid grid-cols-2 gap-2">
+                      {selectedReview.images.map((image: string, index: number) => (
+                        <img
+                          key={index}
+                          src={image}
+                          alt={`Review image ${index + 1}`}
+                          className="w-full h-32 object-cover rounded-lg"
+                        />
+                      ))}
+                    </div>
+                  )}
+                  {
+                    !reviewItemState?.is_updated && reviewItemState?.is_updated == null && <div className="flex justify-end space-x-2 mt-4">
+                      <button
+                        onClick={() => {
+                          setIsReviewModalOpen(false);
+                          setSelectedReview(null);
+                        }}
+                        className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md text-sm font-medium"
+                      >
+                        Đóng
+                      </button>
+                      <button
+                        onClick={() => {
+                          const item = order.items.find((item: any) => item.id === selectedReview.order_item_id);
+                          if (item) {
+                            setReviewItem({
+                              orderItemId: item.id,
+                              productId: item.product_id,
+                              productName: item.product_name,
+                              productImage: item.image,
+                              existingReview: selectedReview
+                            });
+                            setSelectedReview(null);
+                          }
+                        }}
+                        className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md text-sm font-medium"
+                      >
+                        Chỉnh sửa
+                      </button>
+                    </div>
+                  }
+                  {
+                    reviewItemState?.reply && (
+                      <div className="mt-4 bg-gray-50 p-4 rounded-lg">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="font-medium">Admin</span>
+                          <span className="text-sm text-gray-500">
+                            {formatDateTime(reviewItemState.reply_at)}
+                          </span>
+                        </div>
+                        <p className="text-gray-700">{reviewItemState.reply}</p>
+                      </div>
+                    )
+                  }
+                </div>
+              </div>
+            </div>
           )}
         </div>
       </div>

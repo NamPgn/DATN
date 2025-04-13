@@ -6,6 +6,8 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { getAttributesAll } from "../../../../sevices/attribute";
 import { getCategorysAll } from "../../../../sevices/category";
+import SelectedImages from "./SelectedImages";
+import TextArea from "antd/es/input/TextArea";
 
 const ProductForm = ({
   selectOneImage,
@@ -234,6 +236,7 @@ const ProductForm = ({
   };
   return (
     <div>
+      <SelectedImages selectImage={selectImage} selectOneImage={selectOneImage} />
       <Form
         form={form}
         layout="vertical"
@@ -274,7 +277,7 @@ const ProductForm = ({
         </Form.Item>
 
         <Form.Item name="short_description" label="Mô tả ngắn">
-          <Input className="w-50" placeholder="Mô tả ngắn" />
+          <TextArea className="w-50" placeholder="Mô tả ngắn" />
         </Form.Item>
 
         <Form.Item label="Danh mục" name="categories">

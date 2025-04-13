@@ -126,7 +126,7 @@ const ProductAll = () => {
                           }`}
                         >
                           <div className="productItem01">
-                            <Link to={`/product/detail/${product.id}`}>
+                            <Link to={`/product/detail/${product.slug}`}>
                               <div className="pi01Thumb">
                                 {product?.library ? (
                                   <img
@@ -181,7 +181,7 @@ const ProductAll = () => {
                                 </div>
                               )}
                               <h3>
-                                <Link to={`/product/detail/${product.id}`}>
+                                <Link to={`/product/detail/${product.slug}`}>
                                   {product.name}
                                 </Link>
                               </h3>

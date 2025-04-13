@@ -5,5 +5,5 @@ export const getProductByCategory = async (id: string) => {
 };
 
 export const getCategory = async () => {
-    return intancesLocal.get(`/categories`);
-  };
+  return intancesLocal.get(`/categories`);
+};
