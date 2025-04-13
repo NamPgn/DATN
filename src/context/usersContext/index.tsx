@@ -24,6 +24,8 @@ export const UserContextProvider = (props: any) => {
     onError: () => {
       return {};
     },
+    staleTime: 5 * 60 * 1000,
+		cacheTime: 30 * 60 * 1000
   });
   const value: any = {
     isAuth: isAuth,

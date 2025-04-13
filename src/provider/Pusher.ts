@@ -8,7 +8,7 @@ declare global {
   }
 }
 window.Pusher = Pusher;
-const OrdersNotify = () => {
+const PusherProvider = () => {
   const [_order, setOrder] = useState<any | null>(null);
   useEffect(() => {
     const echo = new Echo({
@@ -30,4 +30,4 @@ const OrdersNotify = () => {
   return null;
 };
 
-export default OrdersNotify;
+export default PusherProvider;

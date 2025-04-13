@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery } from "react-query";
-import { getProductsByCategory } from "../../../sevices/client";
+import { getProducts } from "../../../sevices/client";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Paginations from "../components/pagination";
@@ -15,7 +15,7 @@ const ProductAll = () => {
   const { data: products } = useQuery({
     queryKey: ["products", selectedValue],
     queryFn: async () => {
-      return (await getProductsByCategory(selectedValue)).data;
+      return (await getProducts(selectedValue)).data;
     },
   });
   const totalItems = products?.total;

@@ -22,6 +22,8 @@ const ProductDetail = () => {
     queryFn: async () => {
       return (await getProductsDetailClient(id)).data;
     },
+    staleTime: 5 * 60 * 1000,
+		cacheTime: 30 * 60 * 1000
   });
   const [currentImage, setCurrentImage] = useState<any>(null);
   const [filteredVariantGroups, setFilteredVariantGroups] = useState<{

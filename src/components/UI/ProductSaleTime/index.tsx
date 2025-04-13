@@ -14,8 +14,8 @@ const ProductSaleTime = () => {
               <p>{data?.data?.product?.short_description}</p>
               <div className="dpcPriceWrap">
                 <div className="pi01Price">
-                  <ins>${data?.data?.sale_price}</ins>
-                  <del>${data?.data?.regular_price}</del>
+                  <ins>{data?.data?.sale_price?.toLocaleString('vi-VN')} ₫</ins>
+                  <del>{data?.data?.regular_price?.toLocaleString('vi-VN')} ₫</del>
                 </div>
               </div>
               <Link

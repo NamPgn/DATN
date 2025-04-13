@@ -9,6 +9,8 @@ const ProductSale = () => {
     queryFn: async () => {
       return (await getProductsClient()).data;
     },
+    staleTime: 5 * 60 * 1000,
+		cacheTime: 30 * 60 * 1000
   });
 
   const formatPrice = (price: number) => {

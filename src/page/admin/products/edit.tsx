@@ -42,11 +42,13 @@ const ProductEdit = () => {
   );
 
   const { mutate: mutateEdit } = useMutation({
-    mutationFn: async (values: any) =>
-      await updateProduct({
+    mutationFn: async (values: any) => {
+      return await updateProduct({
         id: id,
         values,
-      }),
+      })
+    },
+
     onSuccess: () => {
       message.success("Sản phẩm đã được cập nhật thành công!");
       refetch();
