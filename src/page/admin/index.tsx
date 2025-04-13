@@ -17,8 +17,8 @@ import { useQuery } from "react-query";
 import { dashboard } from "../../sevices";
 import OrdersNotify from "../../components/UI/Notification";
 import { useState } from "react";
-import { DatePicker, Table } from 'antd';
-import dayjs from 'dayjs';
+import { DatePicker, Table } from "antd";
+import dayjs from "dayjs";
 
 const { RangePicker } = DatePicker;
 
@@ -35,8 +35,14 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
-  const [startDate, setStartDate] = useState(new Date(new Date().setDate(new Date().getDate() - 7)).toISOString().split('T')[0]);
-  const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
+  const [startDate, setStartDate] = useState(
+    new Date(new Date().setDate(new Date().getDate() - 7))
+      .toISOString()
+      .split("T")[0]
+  );
+  const [endDate, setEndDate] = useState(
+    new Date().toISOString().split("T")[0]
+  );
 
   const { data, isLoading }: any = useQuery({
     queryKey: ["Orders", startDate, endDate],
@@ -53,7 +59,7 @@ const Dashboard = () => {
   };
 
   const disabledDate = (current: any) => {
-    return current && current > dayjs().endOf('day');
+    return current && current > dayjs().endOf("day");
   };
 
   const categoryByProductData = {
@@ -166,12 +172,11 @@ const Dashboard = () => {
               allowClear={false}
               className="w-80"
               disabledDate={disabledDate}
-              
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-6">
           {[
             {
               label: "Tổng danh mục",
@@ -201,6 +206,11 @@ const Dashboard = () => {
               }),
               color: "text-green-500",
             },
+            {
+              label: "Tỷ lệ hủy đơn",
+              value: `${(data?.cancellationRate * 100).toFixed(1)}%`,
+              color: "text-red-500",
+            },
           ].map((item, index) => (
             <div
               key={index}
@@ -212,6 +222,38 @@ const Dashboard = () => {
               <p className={`text-2xl font-bold ${item.color}`}>
                 {item.value ?? "N/A"}
               </p>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+          {[
+            {
+              label: "Đơn chờ xử lý",
+              value: data?.orderStatistics?.pending_orders || 0,
+              color: "text-yellow-500",
+            },
+            {
+              label: "Đơn đã xác nhận",
+              value: data?.orderStatistics?.confirmed_orders || 0,
+              color: "text-blue-500",
+            },
+            {
+              label: "Đơn hoàn thành",
+              value: data?.orderStatistics?.completed_orders || 0,
+              color: "text-green-500",
+            },
+            {
+              label: "Đơn đã hủy",
+              value: data?.orderStatistics?.canceled_orders || 0,
+              color: "text-red-500",
+            },
+          ].map((item, index) => (
+            <div key={index} className="bg-white p-6 rounded-lg shadow-md">
+              <h2 className="text-lg font-semibold text-gray-700">
+                {item.label}
+              </h2>
+              <p className={`text-2xl font-bold ${item.color}`}>{item.value}</p>
             </div>
           ))}
         </div>
@@ -236,6 +278,34 @@ const Dashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div className="bg-white p-6 shadow rounded-lg">
+            <h2 className="text-xl font-bold mb-4 text-gray-700">
+              Tỷ lệ mua hàng theo loại khách hàng
+            </h2>
+            <Pie
+              data={{
+                labels: ["Khách đăng nhập", "Khách vãng lai"],
+                datasets: [
+                  {
+                    data: [
+                      data?.loginPurchaseRate * 100 || 0,
+                      data?.guestPurchaseRate * 100 || 0,
+                    ],
+                    backgroundColor: ["#36a2eb", "#ffcd56"],
+                  },
+                ],
+              }}
+              options={{
+                plugins: {
+                  tooltip: {
+                    callbacks: {
+                      label: (context) => `${context.label}: ${context.raw}%`,
+                    },
+                  },
+                },
+              }}
+            />
+          </div>
           <div className="bg-white p-6 shadow rounded-lg">
             <h2 className="text-xl font-bold mb-4 text-gray-700">
               Top 5 sản phẩm được đánh giá cao nhất
@@ -264,29 +334,33 @@ const Dashboard = () => {
             <Table
               columns={[
                 {
-                  title: 'Tên sản phẩm',
-                  dataIndex: 'name',
-                  key: 'name',
+                  title: "Tên sản phẩm",
+                  dataIndex: "name",
+                  key: "name",
                 },
                 {
-                  title: 'Số lượng bán',
-                  dataIndex: 'quantity',
-                  key: 'quantity',
+                  title: "Số lượng bán",
+                  dataIndex: "quantity",
+                  key: "quantity",
                   sorter: (a: any, b: any) => a.quantity - b.quantity,
                 },
                 {
-                  title: 'Doanh thu',
-                  dataIndex: 'revenue',
-                  key: 'revenue',
+                  title: "Doanh thu",
+                  dataIndex: "revenue",
+                  key: "revenue",
                   render: (text: any) => `${text.toLocaleString()} đ`,
-                }
+                },
               ]}
-              dataSource={topSellingData?.datasets?.[0]?.data?.map((value: any, index: any) => ({
-                key: index,
-                name: topSellingData.labels[index],
-                quantity: value,
-                revenue: value * 100000, // Giả định giá trị doanh thu
-              })) || []}
+              dataSource={
+                topSellingData?.datasets?.[0]?.data?.map(
+                  (value: any, index: any) => ({
+                    key: index,
+                    name: topSellingData.labels[index],
+                    quantity: value,
+                    revenue: value * 100000, // Giả định giá trị doanh thu
+                  })
+                ) || []
+              }
               pagination={false}
               size="small"
             />
