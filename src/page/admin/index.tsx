@@ -15,7 +15,6 @@ import {
 import TailwindComponent from "../../components/Tailwind/TailwinComponent";
 import { useQuery } from "react-query";
 import { dashboard } from "../../sevices";
-import OrdersNotify from "../../components/UI/Notification";
 import { useState } from "react";
 import { DatePicker, Table } from "antd";
 import dayjs from "dayjs";
@@ -163,7 +162,7 @@ const Dashboard = () => {
     <TailwindComponent>
       <div className="p-6 bg-gray-100 min-h-screen">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold mb-6 text-gray-700">Dashboard</h1>
+          <h1 className="text-3xl font-bold mb-6 text-gray-700">Thống kê</h1>
           <div className="flex items-center gap-4 mb-3">
             <RangePicker
               onChange={handleRangeChange}
@@ -176,57 +175,96 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-6">
           {[
             {
               label: "Tổng danh mục",
               value: data?.totalCategories,
-              color: "text-blue-500",
+              icon: "📁",
             },
             {
               label: "Tổng sản phẩm",
               value: data?.totalProducts,
-              color: "text-green-500",
+              icon: "📦",
             },
             {
               label: "Tổng người dùng",
               value: data?.totalUsers,
-              color: "text-red-500",
+              icon: "👥",
+            },
+            {
+              label: "Tổng Voucher",
+              value: data?.totalVouchers,
+              icon: "🎫",
             },
             {
               label: "Tổng đơn hàng",
               value: data?.totalOrders,
-              color: "text-yellow-400",
-            },
-            {
-              label: "Tổng doanh thu",
-              value: Number(data?.totalRevenue).toLocaleString("Vi-VN", {
-                style: "currency",
-                currency: "VND",
-              }),
-              color: "text-green-500",
-            },
-            {
-              label: "Tỷ lệ hủy đơn",
-              value: `${(data?.cancellationRate * 100).toFixed(1)}%`,
-              color: "text-red-500",
+              icon: "📋",
             },
           ].map((item, index) => (
             <div
               key={index}
-              className="bg-white p-6 rounded-lg shadow-md transition-transform transform hover:scale-105"
+              className="bg-white rounded-lg shadow-sm hover:shadow transition-shadow duration-200"
             >
-              <h2 className="text-lg font-semibold text-gray-700">
-                {item.label}
-              </h2>
-              <p className={`text-2xl font-bold ${item.color}`}>
-                {item.value ?? "N/A"}
-              </p>
+              <div className="p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-xl">{item.icon}</span>
+                  <h2 className="text-gray-600 font-medium">{item.label}</h2>
+                </div>
+                <p className="text-2xl font-bold text-gray-800">
+                  {item.value ?? "N/A"}
+                </p>
+              </div>
             </div>
           ))}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        {/* Thống kê đơn hàng theo trạng thái */}
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-6">
+          {[
+            {
+              label: "Đơn hàng theo thời gian",
+              value: data?.orderStatistics?.total_orders || 0,
+              icon: "📊",
+            },
+            {
+              label: "Đơn chờ xử lý",
+              value: data?.orderStatistics?.pending_orders || 0,
+              icon: "⏳",
+            },
+            {
+              label: "Đơn đã xác nhận",
+              value: data?.orderStatistics?.confirmed_orders || 0,
+              icon: "✅",
+            },
+            {
+              label: "Đơn hoàn thành",
+              value: data?.orderStatistics?.completed_orders || 0,
+              icon: "🎉",
+            },
+            {
+              label: "Đơn đã hủy",
+              value: data?.orderStatistics?.canceled_orders || 0,
+              icon: "❌",
+            },
+          ].map((item, index) => (
+            <div
+              key={index}
+              className="bg-white rounded-lg shadow-sm hover:shadow transition-shadow duration-200"
+            >
+              <div className="p-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-xl">{item.icon}</span>
+                  <h2 className="text-gray-600 font-medium">{item.label}</h2>
+                </div>
+                <p className="text-2xl font-bold text-gray-800">{item.value}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
           {[
             {
               label: "Đơn chờ xử lý",
@@ -256,7 +294,7 @@ const Dashboard = () => {
               <p className={`text-2xl font-bold ${item.color}`}>{item.value}</p>
             </div>
           ))}
-        </div>
+        </div> */}
 
         <div className="grid grid-cols-1 gap-6 mb-6">
           <div className="bg-white p-6 shadow rounded-lg">
@@ -373,7 +411,6 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <OrdersNotify />
     </TailwindComponent>
   );
 };

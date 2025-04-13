@@ -1,8 +1,10 @@
 import axios from "axios";
 import intances, { intancesLocal } from "./instances";
 
-export const getOrders = async (page: number) => {
-  return intances.get("/orders?page=" + page);
+export const getOrders = async (page: number, searchParams: any) => {
+  return intances.get("/orders?page=" + page, {
+    params: searchParams
+  });
 };
 
 export const getOrder = async (id: any) => {

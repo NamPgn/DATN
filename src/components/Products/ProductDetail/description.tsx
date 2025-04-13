@@ -6,6 +6,8 @@ import {
 } from "../../../sevices/client/comment";
 import { useGetStaticReview } from "../../../hook/review";
 import { useParams } from "react-router-dom";
+import { PhotoView } from "react-photo-view";
+import { PhotoProvider } from 'react-photo-view';
 
 // Helper function to format date and time
 const formatDateTime = (dateString: string | undefined) => {
@@ -49,7 +51,7 @@ const Description = ({ product }: any) => {
       setLoading(true);
       try {
         const response = await getCommentClient(
-          product.id, 
+          product.id,
           page,
           activeFilter.rating,
           activeFilter.has_images
@@ -75,7 +77,7 @@ const Description = ({ product }: any) => {
 
   return (
     <div className="descSec">
-      <div className="container mx-auto px-4">
+      <div className=" mx-auto ">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Main content - Reviews */}
           <div className="lg:w-2/3">
@@ -151,21 +153,19 @@ const Description = ({ product }: any) => {
                                 })()}
                               </div>
 
-                              <p className="text-sm mb-3">{review.content}</p>
-
-                              {review.images && review.images.length > 0 && (
-                                <div className="flex flex-wrap gap-2 mb-3">
-                                  {review.images.map((image: string, index: number) => (
-                                    <img
-                                      key={index}
-                                      src={image}
-                                      alt={`Review image ${index + 1}`}
-                                      className="w-20 h-20 object-cover rounded border cursor-pointer"
-                                    />
-                                  ))}
-                                </div>
-                              )}
-
+                              <p className="text-sm mb-3">{review.content || "Không có nội dung đánh giá"}</p>
+                              <PhotoProvider  >
+                                {review.images && review.images.length > 0 && (
+                                  <div className="flex flex-wrap gap-2 mb-3 foo">
+                                    {review.images.map((image: string, index: number) => (
+                                      <PhotoView width={200}
+                                        height={200} key={index} src={image}>
+                                        <img width={200} height={200} src={image} alt="" className="w-20 h-20 object-cover rounded border cursor-pointer" />
+                                      </PhotoView>
+                                    ))}
+                                  </div>
+                                )}
+                              </PhotoProvider>
                               {review.reply && (
                                 <div className="bg-gray-100 p-3 rounded-md my-3">
                                   <p className="text-sm font-semibold text-gray-700">Phản hồi từ Người bán</p>
@@ -195,7 +195,7 @@ const Description = ({ product }: any) => {
           <div className="lg:w-1/3">
             <div className="bg-white rounded-lg shadow-sm p-6 sticky top-4 mb-8">
               <h3 className="text-lg font-semibold mb-4">Thống kê đánh giá</h3>
-              
+
               {/* Overall Rating */}
               <div className="flex items-center mb-6 p-4 bg-gray-50 rounded-lg">
                 <div className="text-3xl font-bold text-yellow-500 mr-4">
@@ -215,11 +215,10 @@ const Description = ({ product }: any) => {
               <div className="flex flex-wrap gap-2 mb-6">
                 <button
                   onClick={() => handleFilterChange({})}
-                  className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
-                    Object.keys(activeFilter).length === 0
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
+                  className={`px-3 py-1.5 rounded-full text-sm transition-colors ${Object.keys(activeFilter).length === 0
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
                 >
                   Tất cả ({data?.total_reviews || 0})
                 </button>
@@ -227,22 +226,20 @@ const Description = ({ product }: any) => {
                   <button
                     key={rating}
                     onClick={() => handleFilterChange({ rating })}
-                    className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
-                      activeFilter.rating === rating
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+                    className={`px-3 py-1.5 rounded-full text-sm transition-colors ${activeFilter.rating === rating
+                      ? 'bg-blue-500 text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      }`}
                   >
                     {rating} Sao ({data?.ratings?.[rating] || 0})
                   </button>
                 ))}
                 <button
                   onClick={() => handleFilterChange({ has_images: true })}
-                  className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
-                    activeFilter.has_images === true
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
+                  className={`px-3 py-1.5 rounded-full text-sm transition-colors ${activeFilter.has_images === true
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
                 >
                   Có hình ảnh ({data?.with_images || 0})
                 </button>
@@ -261,10 +258,10 @@ const Description = ({ product }: any) => {
                       <span className="text-yellow-400">★</span>
                     </div>
                     <div className="flex-1 h-2 mx-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div 
+                      <div
                         className="h-full bg-yellow-400"
-                        style={{ 
-                          width: `${((data?.ratings?.[rating] || 0) / (data?.total_reviews || 1)) * 100}%` 
+                        style={{
+                          width: `${((data?.ratings?.[rating] || 0) / (data?.total_reviews || 1)) * 100}%`
                         }}
                       ></div>
                     </div>

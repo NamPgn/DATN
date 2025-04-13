@@ -7,13 +7,13 @@ import TailwindComponent from "../../../components/Tailwind/TailwinComponent";
 const PaymentResult = () => {
   const location = useLocation();
   const queryString = location.search.substring(1);
-
   const navigate = useNavigate();
 
   const { data: orderResult, isLoading }: any = useQuery({
     queryFn: async () => {
       return (await paymentReusult(queryString)).data;
     },
+  
   });
   return (
     <TailwindComponent>
@@ -28,23 +28,22 @@ const PaymentResult = () => {
           )}
 
           <h1
-            className={`mt-4 text-2xl font-bold ${
-              orderResult?.success ? "text-green-600" : "text-red-600"
-            }`}
+            className={`mt-4 text-2xl font-bold ${orderResult?.success ? "text-green-600" : "text-red-600"
+              }`}
           >
             {isLoading
               ? "Đang xử lý..."
               : orderResult?.success
-              ? "Thanh toán thành công!"
-              : "Thanh toán thất bại!"}
+                ? "Thanh toán thành công!"
+                : "Thanh toán thất bại!"}
           </h1>
 
           <p className="mt-2 text-gray-600">
             {isLoading
               ? "Vui lòng chờ hệ thống xác nhận..."
-              : orderResult?.success 
-              ? "Cảm ơn bạn đã mua hàng! Đơn hàng của bạn đang được xử lý."
-              : "Thanh toán không thành công. Vui lòng thử lại hoặc liên hệ hỗ trợ."}
+              : orderResult?.success
+                ? "Cảm ơn bạn đã mua hàng! Đơn hàng của bạn đang được xử lý."
+                : "Thanh toán không thành công. Vui lòng thử lại hoặc liên hệ hỗ trợ."}
           </p>
 
           <div className="mt-6 flex space-x-4 justify-center">

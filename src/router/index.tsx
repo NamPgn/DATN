@@ -73,8 +73,8 @@ import DeletedProducts from "../page/admin/products/component/deleted";
 import LayoutOrders from "../layouts/Layout";
 import OrderDetailUser from "../page/orders/orderDetail";
 import TrackingOrder from "../page/orders/tracking";
-import Shop from "../page/Shop";
 import ProductAll from "../page/Shop/productAll";
+import Shop from "../page/Shop";
 import ProductSearch from "../page/Shop/productSearch";
 
 export const routerClient = [
