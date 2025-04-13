@@ -60,9 +60,9 @@ export const loginGoogle = async (response: any) => {
 };
 
 export const getUserInfo = async () => {
-  return intancesLogout.get("/profile");
+  return intancesLocal.get("/profile");
 };
 
 export const changeUserInfo = async (data: any) => {
-  return intancesLogout.post("/change_profile", data);
+  return intancesLocal.post("/change_profile", data);
 };
