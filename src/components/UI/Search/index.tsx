@@ -26,11 +26,11 @@ const SearchUi = ({
         <div className="container">
           <div className="row">
             <div className="col-sm-6 col-md-6">
-              <div className="popup_logo">
+              {/* <div className="popup_logo">
                 <a href="">
-                  <img src="/assets/images/logo2.png" alt="Ulina" />
+                  <img src="/assets/images/logo.jpg" alt="Ulina" />
                 </a>
-              </div>
+              </div> */}
             </div>
             <div className="col-sm-6 col-md-6">
               <div
