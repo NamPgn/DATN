@@ -7,6 +7,7 @@ import {
   FileImageOutlined,
   GiftOutlined,
   LaptopOutlined,
+  MessageOutlined,
   NotificationOutlined,
   PicLeftOutlined,
   SlidersOutlined,
@@ -76,6 +77,7 @@ import TrackingOrder from "../page/orders/tracking";
 import Shop from "../page/shop";
 import ProductAll from "../page/shop/productAll";
 import ProductSearch from "../page/shop/productSearch";
+import AdminChat from "../page/admin/chat";
 
 export const routerClient = [
   {
@@ -135,6 +137,7 @@ export const routerClient = [
         path: "/order/detail/:code",
         element: <OrderDetailUser />,
       },
+
     ],
   },
   {
@@ -196,6 +199,10 @@ export const routerClient = [
       {
         path: "",
         element: <Admin />,
+      },
+      {
+        path: "chat",
+        element: <AdminChat />,
       },
       {
         path: "products",
@@ -420,5 +427,10 @@ export const TableRouterAdminPage = [
     path: "/dashboard/product/image",
     name: "Danh sách ảnh",
     icon: <FileImageOutlined />,
+  },
+  {
+    path: "/dashboard/chat",
+    name: "Chat",
+    icon: <MessageOutlined />,
   },
 ];

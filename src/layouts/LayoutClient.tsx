@@ -3,6 +3,7 @@ import Header from "../components/UI/Header";
 import Footer from "../components/UI/Footer";
 import SlideShow from "../components/UI/SlideShow";
 import Breadcrumb from "../components/UI/Breadcrumb";
+import Chat from "../components/UI/Chat";
 
 const LayoutClient = () => {
   const { pathname } = useLocation();
@@ -17,6 +18,7 @@ const LayoutClient = () => {
         <Outlet />
       </div>
       <Footer />
+      <Chat />
     </>
   );
 };
