@@ -116,14 +116,14 @@ const DeletedProducts = () => {
         <Button
           variant="filled"
           color="blue"
-          icon={<RollbackOutlined />}
+          icon={<DeleteOutlined />}
           onClick={handleDelete}
         ></Button>
         <Button
           style={{ marginLeft: "10px" }}
           variant="filled"
           color="danger"
-          icon={<DeleteOutlined />}
+          icon={<RollbackOutlined />}
           onClick={handleRetore}
         ></Button>
       </div>
