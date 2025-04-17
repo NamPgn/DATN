@@ -7,7 +7,6 @@ import {
 import { useGetStaticReview } from "../../../hook/review";
 import { useParams } from "react-router-dom";
 import { PhotoView } from "react-photo-view";
-import { PhotoProvider } from 'react-photo-view';
 
 // Helper function to format date and time
 const formatDateTime = (dateString: string | undefined) => {
@@ -154,7 +153,6 @@ const Description = ({ product }: any) => {
                               </div>
 
                               <p className="text-sm mb-3">{review.content || "Không có nội dung đánh giá"}</p>
-                              <PhotoProvider  >
                                 {review.images && review.images.length > 0 && (
                                   <div className="flex flex-wrap gap-2 mb-3 foo">
                                     {review.images.map((image: string, index: number) => (
@@ -165,7 +163,6 @@ const Description = ({ product }: any) => {
                                     ))}
                                   </div>
                                 )}
-                              </PhotoProvider>
                               {review.reply && (
                                 <div className="bg-gray-100 p-3 rounded-md my-3">
                                   <p className="text-sm font-semibold text-gray-700">Phản hồi từ Người bán</p>

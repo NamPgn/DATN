@@ -6,6 +6,8 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ConfigProvider } from "antd";
 import { UserContextProvider } from "./context/usersContext/index.tsx";
 import { CartProvider } from "./context/Cart/cartContext.tsx";
+import { PhotoProvider } from 'react-photo-view';
+
 import { CheckoutProvider } from "./context/checkout/index.tsx";
 const queryClient = new QueryClient();
 
@@ -45,15 +47,17 @@ createRoot(document.getElementById("root")!).render(
     }}
   >
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        <CheckoutProvider>
+      <PhotoProvider>
+        <CartProvider>
+          <CheckoutProvider>
             <UserContextProvider>
               <BrowserRouter>
                 <App />
               </BrowserRouter>
             </UserContextProvider>
-        </CheckoutProvider>
-      </CartProvider>
+          </CheckoutProvider>
+        </CartProvider>
+      </PhotoProvider>
     </QueryClientProvider>
   </ConfigProvider>
 );

@@ -11,7 +11,7 @@ export const useGetChatConversation = (guest_id: string, options?: any) => {
     })
 }
 
-export const useGetChatConversationMessages = (id: string, options?: any) => {
+export const useGetChatConversationMessages = (id: string | number, options?: any) => {
     return useQuery({
         queryKey: ['conversation-messages', id],
         queryFn: async () => await chatApi.getChatConversationMessages(id),
@@ -37,5 +37,30 @@ export const useGetChatConversations = (options?: any) => {
         queryKey: ['chat-conversations'],
         queryFn: async () => await chatApi.getChatConversations(),
         ...options
+    })
+}
+
+export const useGetChatUnassigned = (options: any) => {
+    return useQuery({
+        queryKey: ['chat-unassigned'],
+        queryFn: async () => await chatApi.getChatUnassigned(),
+        ...options
+    })
+}
+
+export const useChatClaimMsg = (options: any) => {
+    return useMutation({
+        queryKey: ['chat-claim'],
+        mutationFn: async (id: any) => await chatApi.claimChat(id),
+        ...options,
+
+    })
+}
+
+export const useCloseChatMsg = (options: any) => {
+    return useMutation({
+        queryKey: ['chat-close'],
+        mutationFn: async (data:any) => await chatApi.closeChat(data),
+        ...options,
     })
 }
