@@ -168,12 +168,13 @@ const Checkout = () => {
       });
     }
   }, [token_, getAdressDefault, checkoutItems]);
+  console.log(errors);
   useEffect(() => {
     if (token_ && getAdressDefault && userId) {
       setValue("o_name", getAdressDefault.name || "");
       setValue("o_phone", getAdressDefault.phone || "");
       setValue("address", getAdressDefault.address || "");
-      setValue("o_mail", userId?.email || "");
+      setValue("o_mail", getAdressDefault.email || "");
       setSelectedValues({
         select1: { value: null, label: "" },
         select2: { value: null, label: "" },
