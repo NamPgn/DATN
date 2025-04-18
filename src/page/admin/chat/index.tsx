@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Layout, Input, Typography, Tabs } from 'antd';
 import { MessageSquare } from 'lucide-react';
-import { useGetChatConversations, useGetChatConversationMessages, useSendMessage, useGetChatUnassigned, useChatClaimMsg, useCloseChatMsg } from '../../../hook/chat';
+import { useGetChatConversations, useGetChatConversationMessages, useSendMessage, useGetChatUnassigned, useChatClaimMsg, useCloseChatMsg, useChatAll, useGetEmployee, useChangeEmployee } from '../../../hook/chat';
 import TailwindComponent from '../../../components/Tailwind/TailwinComponent';
 import ChatList from './_components/ChatList';
 import ChatHeader from './_components/ChatHeader';
@@ -10,6 +10,8 @@ import ChatInput from './_components/ChatInput';
 import { useQueryClient } from 'react-query';
 import ChatUnassigned from './_components/ChatUnassigned';
 import { toast } from 'react-toastify';
+import { UsersContext } from '../../../context/usersContext';
+import ChatAll from './_components/ChatAll';
 
 const { Sider, Content } = Layout;
 const { TabPane } = Tabs;
@@ -24,11 +26,25 @@ const AdminChat = () => {
 	const bottomRef = useRef<HTMLDivElement>(null);
 	const [url, setUrl] = useState<any>(null);
 	const queryClient = useQueryClient();
+	const { userId }: any = useContext(UsersContext) || {}
 	const { data: conversationsData }: any = useGetChatConversations({});
 	const { data: messages }: any = useGetChatConversationMessages(selectedChat || '', {
 		enabled: !!selectedChat
 	});
 	const { data: unassignedData }: any = useGetChatUnassigned({});
+	const { data: chatAll }: any = useChatAll({});
+	const { data: employee }: any = useGetEmployee({});
+
+
+	const { mutate: changeEmployee, isLoading: loadingChangeEmployee }: any = useChangeEmployee({
+		onSuccess: () => {
+			toast.success('Gán hội thoại thành công')
+		},
+		onError: () => {
+			toast.error('Gán hội thoại thất bại')
+		}
+	});
+
 	const { mutate: closeChatMsg, isLoading: loadingClose }: any = useCloseChatMsg({
 		onSuccess: () => {
 			toast.success('Đóng hội thoại thành công')
@@ -66,7 +82,6 @@ const AdminChat = () => {
 			bottomRef.current.scrollIntoView({ behavior: 'smooth' });
 		}
 	}, [messages, selectedChat]);
-
 	const handleSendMessage = () => {
 		if (!messageText.trim() || !selectedChat) return;
 		const dataAtm = url?.map((item: any) => ({
@@ -91,7 +106,6 @@ const AdminChat = () => {
 	const handleUploadSuccess = (data: any) => {
 		setUrl(data)
 	};
-
 	const handleClaimMsg = (id: any) => {
 		onClaimMsg(id)
 	}
@@ -114,7 +128,7 @@ const AdminChat = () => {
 							/>
 						</div>
 						<Tabs defaultActiveKey="1" className="px-2 flex-1 overflow-auto">
-							<TabPane tab="Tất cả" key="1" className="h-full">
+							<TabPane tab="Bạn" key="1" className="h-full">
 								<ChatList
 									conversations={filteredConversations}
 									selectedChat={selectedChat}
@@ -122,19 +136,20 @@ const AdminChat = () => {
 								/>
 							</TabPane>
 							<TabPane tab="Chưa được gán" key="2" className="h-full">
-								<ChatUnassigned unassignedData={unassignedData} onClaimMsg={handleClaimMsg} />
-								{/* <ChatList
-									conversations={chatUnassigned}
-									selectedChat={selectedChat}
-									onSelectChat={setSelectedChat}
-								/> */}
+								<ChatUnassigned changeEmployee={changeEmployee} loadingEmployee={loadingChangeEmployee} unassignedData={unassignedData} onClaimMsg={handleClaimMsg} userId={userId} employee={employee} />
 							</TabPane>
+							{userId?.role === 'admin' && <TabPane tab="Tất cả" key="3" className="h-full">
+								<ChatAll
+									conversations={chatAll?.conversations}
+									selectedChat={selectedChat}
+									onSelectChat={setSelectedChat} />
+							</TabPane>}
 						</Tabs>
 					</div>
 				</Sider>
 
 				<Layout>
-					{selectedChat && selectedConversation ? (
+					{selectedChat ? (
 						<>
 							<ChatHeader conversation={selectedConversation} onCloseChatMsg={handleCloseGroupChat} isLoading={loadingClose} />
 							<Content className="bg-gray-50 p-6">
@@ -146,6 +161,9 @@ const AdminChat = () => {
 										/>
 									</div>
 									<ChatInput
+										userId={userId}
+										conversationsAdmin={chatAll?.conversations}
+										conversation={selectedConversation}
 										messageText={messageText}
 										onMessageChange={(e) => setMessageText(e.target.value)}
 										onSendMessage={handleSendMessage}

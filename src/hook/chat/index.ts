@@ -60,7 +60,34 @@ export const useChatClaimMsg = (options: any) => {
 export const useCloseChatMsg = (options: any) => {
     return useMutation({
         queryKey: ['chat-close'],
-        mutationFn: async (data:any) => await chatApi.closeChat(data),
+        mutationFn: async (data: any) => await chatApi.closeChat(data),
+        ...options,
+    })
+}
+
+export const useChatAll = (options: any) => {
+    return useQuery({
+        queryKey: ['chat-all'],
+        queryFn: async () => await chatApi.chatAll(),
+        staleTime: 5 * 60 * 1000,
+        cacheTime: 30 * 60 * 1000,
+        ...options,
+    })
+}
+
+export const useGetEmployee = (options: any) => {
+    return useQuery({
+        queryKey: ['chat-employee'],
+        queryFn: async () => await chatApi.getEmployee(),
+        staleTime: 5 * 60 * 1000,
+        cacheTime: 30 * 60 * 1000,
+        ...options,
+    })
+}
+
+export const useChangeEmployee = (options: any) => {
+    return useMutation({
+        mutationFn: async (data:any) => await chatApi.changeEmployee(data),
         ...options,
     })
 }

@@ -76,4 +76,39 @@ export const chatApi = {
 		}
 		return (await intancesLogout.post(`chat/conversation/${data?.id}/close`, data, { headers }));
 	},
+
+	chatAll: async () => {
+		const token_ = token_auth();
+		const headers: any = {};
+
+		if (token_) {
+			headers.Authorization = `Bearer ${token_}`;
+		}
+		return (await intancesLogout.get(`chat/admin-conversations`, { headers })).data;
+	},
+
+
+	getEmployee: async () => {
+		const token_ = token_auth();
+
+		const headers: any = {};
+
+		if (token_) {
+			headers.Authorization = `Bearer ${token_}`;
+		}
+		return (await intancesLogout.get(`chat/staff/online`, { headers })).data;
+	},
+
+	changeEmployee: async ({ id, employeeId }: any) => {
+		const token_ = token_auth();
+
+		const headers: any = {};
+
+		if (token_) {
+			headers.Authorization = `Bearer ${token_}`;
+		}
+		return (await intancesLogout.post(`chat/conversation/${id}/assign`, {
+			staff_id: employeeId
+		}, { headers }));
+	},
 };
