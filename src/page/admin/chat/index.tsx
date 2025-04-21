@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Layout, Input, Typography, Tabs } from 'antd';
 import { MessageSquare } from 'lucide-react';
-import { useGetChatConversations, useGetChatConversationMessages, useSendMessage, useGetChatUnassigned, useChatClaimMsg, useCloseChatMsg, useChatAll, useGetEmployee, useChangeEmployee, useChangeEmployeeChat } from '../../../hook/chat';
+import { useGetChatConversations, useGetChatConversationMessages, useSendMessage, useGetChatUnassigned, useChatClaimMsg, useCloseChatMsg, useChatAll, useGetEmployee, useChangeEmployee, useChangeEmployeeChat, useAcceptTranferChat, useRejectTranferChat } from '../../../hook/chat';
 import TailwindComponent from '../../../components/Tailwind/TailwinComponent';
 import ChatList from './_components/ChatList';
 import ChatHeader from './_components/ChatHeader';
@@ -12,6 +12,7 @@ import ChatUnassigned from './_components/ChatUnassigned';
 import { toast } from 'react-toastify';
 import { UsersContext } from '../../../context/usersContext';
 import ChatAll from './_components/ChatAll';
+import ChatTransfer from './_components/ChatTransfer';
 
 const { Sider, Content } = Layout;
 const { TabPane } = Tabs;
@@ -34,6 +35,24 @@ const AdminChat = () => {
 	const { data: unassignedData }: any = useGetChatUnassigned({});
 	const { data: chatAll }: any = useChatAll({});
 	const { data: employee }: any = useGetEmployee({});
+
+	const { mutate: acceptTranferChat }: any = useAcceptTranferChat({
+		onSuccess: () => {
+			toast.success('Chấp nhận thoại thành công')
+		},
+		onError: () => {
+			toast.error('Chấp nhận thoại thất bại')
+		}
+	});
+
+	const { mutate: rejectTranferChat }: any = useRejectTranferChat({
+		onSuccess: () => {
+			toast.success('Từ chối thoại thành công')
+		},
+		onError: () => {
+			toast.error('Từ chối thoại thất bại')
+		}
+	});
 
 
 	const { mutate: changeEmployee, isLoading: loadingChangeEmployee }: any = useChangeEmployee({
@@ -144,6 +163,7 @@ const AdminChat = () => {
 									conversations={filteredConversations}
 									selectedChat={selectedChat}
 									onSelectChat={setSelectedChat}
+									tranferData={conversationsData?.transfer}
 								/>
 							</TabPane>
 							<TabPane tab="Chưa được gán" key="2" className="h-full">
@@ -155,6 +175,15 @@ const AdminChat = () => {
 									selectedChat={selectedChat}
 									onSelectChat={setSelectedChat} />
 							</TabPane>}
+							<TabPane tab="Yêu cầu" key="4" className="h-full">
+								<ChatTransfer
+									selectedChat={selectedChat}
+									onSelectChat={setSelectedChat}
+									tranferData={conversationsData?.transfer}
+									rejectTranferChat={rejectTranferChat}
+									acceptTranferChat={acceptTranferChat}
+								/>
+							</TabPane>
 						</Tabs>
 					</div>
 				</Sider>

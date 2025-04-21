@@ -15,6 +15,8 @@ export const useGetChatConversationMessages = (id: string | number, options?: an
     return useQuery({
         queryKey: ['conversation-messages', id],
         queryFn: async () => await chatApi.getChatConversationMessages(id),
+        staleTime: 5 * 60 * 1000,
+        cacheTime: 30 * 60 * 1000,
         ...options
     })
 }
@@ -36,7 +38,9 @@ export const useGetChatConversations = (options?: any) => {
     return useQuery({
         queryKey: ['chat-conversations'],
         queryFn: async () => await chatApi.getChatConversations(),
-        ...options
+        ...options,
+        staleTime: 5 * 60 * 1000,
+        cacheTime: 30 * 60 * 1000,
     })
 }
 
@@ -44,7 +48,9 @@ export const useGetChatUnassigned = (options: any) => {
     return useQuery({
         queryKey: ['chat-unassigned'],
         queryFn: async () => await chatApi.getChatUnassigned(),
-        ...options
+        ...options,
+        staleTime: 5 * 60 * 1000,
+        cacheTime: 30 * 60 * 1000,
     })
 }
 
@@ -95,6 +101,20 @@ export const useChangeEmployee = (options: any) => {
 export const useChangeEmployeeChat = (options: any) => {
     return useMutation({
         mutationFn: async (data: any) => await chatApi.changeEmployeeChat(data),
+        ...options,
+    })
+}
+
+export const useAcceptTranferChat = (options: any) => {
+    return useMutation({
+        mutationFn: async (id: any) => await chatApi.acceptTranferChat(id),
+        ...options,
+    })
+}
+
+export const useRejectTranferChat = (options: any) => {
+    return useMutation({
+        mutationFn: async (id: any) => await chatApi.rejectTranferChat(id),
         ...options,
     })
 }

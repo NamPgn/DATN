@@ -125,4 +125,26 @@ export const chatApi = {
 			...data
 		}, { headers }));
 	},
+
+	acceptTranferChat: async (transferId: any) => {
+		const token_ = token_auth();
+
+		const headers: any = {};
+
+		if (token_) {
+			headers.Authorization = `Bearer ${token_}`;
+		}
+		return (await intancesLogout.post(`chat/conversation/transfer/${transferId}/accept`, null, { headers }));
+	},
+
+	rejectTranferChat: async (transferId: any) => {
+		const token_ = token_auth();
+
+		const headers: any = {};
+
+		if (token_) {
+			headers.Authorization = `Bearer ${token_}`;
+		}
+		return (await intancesLogout.post(`chat/conversation/transfer/${transferId}/reject`, null, { headers }));
+	},
 };

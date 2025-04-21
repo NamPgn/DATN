@@ -7,9 +7,10 @@ interface ChatListProps {
 	conversations: any[];
 	selectedChat: string | number;
 	onSelectChat: (id: string | number) => void;
+	tranferData: any[];
 }
 
-const ChatList = ({ conversations, selectedChat, onSelectChat }: ChatListProps) => {
+const ChatList = ({ conversations, selectedChat, onSelectChat, tranferData }: ChatListProps) => {
 	return (
 		<List
 			className="conversations-list"
