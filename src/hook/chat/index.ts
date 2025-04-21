@@ -87,7 +87,14 @@ export const useGetEmployee = (options: any) => {
 
 export const useChangeEmployee = (options: any) => {
     return useMutation({
-        mutationFn: async (data:any) => await chatApi.changeEmployee(data),
+        mutationFn: async (data: any) => await chatApi.changeEmployee(data),
+        ...options,
+    })
+}
+
+export const useChangeEmployeeChat = (options: any) => {
+    return useMutation({
+        mutationFn: async (data: any) => await chatApi.changeEmployeeChat(data),
         ...options,
     })
 }

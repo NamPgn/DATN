@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Layout, Input, Typography, Tabs } from 'antd';
 import { MessageSquare } from 'lucide-react';
-import { useGetChatConversations, useGetChatConversationMessages, useSendMessage, useGetChatUnassigned, useChatClaimMsg, useCloseChatMsg, useChatAll, useGetEmployee, useChangeEmployee } from '../../../hook/chat';
+import { useGetChatConversations, useGetChatConversationMessages, useSendMessage, useGetChatUnassigned, useChatClaimMsg, useCloseChatMsg, useChatAll, useGetEmployee, useChangeEmployee, useChangeEmployeeChat } from '../../../hook/chat';
 import TailwindComponent from '../../../components/Tailwind/TailwinComponent';
 import ChatList from './_components/ChatList';
 import ChatHeader from './_components/ChatHeader';
@@ -70,6 +70,15 @@ const AdminChat = () => {
 		}
 	});
 
+	const { mutate: changeEmployeeChat }: any = useChangeEmployeeChat({
+		onSuccess: () => {
+			toast.success('Chuyển nhân viên thành công')
+		},
+		onError: () => {
+			toast.error('Chuyển nhân viên thất bại')
+		}
+	});
+
 	useEffect(() => {
 		window.scrollTo({
 			top: document.body.scrollHeight,
@@ -82,6 +91,8 @@ const AdminChat = () => {
 			bottomRef.current.scrollIntoView({ behavior: 'smooth' });
 		}
 	}, [messages, selectedChat]);
+
+
 	const handleSendMessage = () => {
 		if (!messageText.trim() || !selectedChat) return;
 		const dataAtm = url?.map((item: any) => ({
@@ -151,7 +162,7 @@ const AdminChat = () => {
 				<Layout>
 					{selectedChat ? (
 						<>
-							<ChatHeader conversation={selectedConversation} onCloseChatMsg={handleCloseGroupChat} isLoading={loadingClose} />
+							<ChatHeader onChangeChatByEmployee={changeEmployeeChat} conversation={selectedConversation} onCloseChatMsg={handleCloseGroupChat} isLoading={loadingClose} employee={employee} />
 							<Content className="bg-gray-50 p-6">
 								<div className="h-full flex flex-col">
 									<div className="flex-1 overflow-y-auto mb-4">

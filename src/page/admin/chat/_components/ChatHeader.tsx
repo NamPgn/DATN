@@ -1,28 +1,38 @@
 import { Avatar, Button, Tooltip, Typography, Tag, Dropdown, Modal, Select, Input } from 'antd';
 import { MessageSquare, MoreHorizontal, Star, UserPlus, XCircle } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const { Text } = Typography;
 
 interface ChatHeaderProps {
 	conversation: any;
 	onCloseChatMsg: (data: any) => void;
-	isLoading: boolean
+	isLoading: boolean;
+	employee: {
+		data: any[]
+	},
+	onChangeChatByEmployee: (data: any) => void
 }
 
-const ChatHeader = ({ conversation, onCloseChatMsg, isLoading }: ChatHeaderProps) => {
+const ChatHeader = ({ conversation, onCloseChatMsg, isLoading, employee, onChangeChatByEmployee }: ChatHeaderProps) => {
 	const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
 	const [isCloseModalOpen, setIsCloseModalOpen] = useState(false);
-	const [selectedStaff, setSelectedStaff] = useState<string | null>(null);
+	const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
 	const [closeNote, setCloseNote] = useState('');
-
+	const [noteChangeEmployee, setnoteChangeEmployee] = useState('');
 	if (!conversation) return null;
 
+
 	const handleTransferStaff = () => {
+		const data: any = {
+			id: conversation?.id,
+			to_staff_id: selectedEmployee,
+			note: noteChangeEmployee
+		}
 		// Xử lý chuyển nhân viên
-		console.log('Chuyển cho nhân viên:', selectedStaff);
+		onChangeChatByEmployee(data);
 		setIsTransferModalOpen(false);
-		setSelectedStaff(null);
+		setSelectedEmployee(null);
 	};
 
 	const handleCloseConversation = () => {
@@ -32,8 +42,8 @@ const ChatHeader = ({ conversation, onCloseChatMsg, isLoading }: ChatHeaderProps
 			id: conversation?.id
 		}
 		onCloseChatMsg(dataClose)
-			setIsCloseModalOpen(false);
-			setCloseNote('');
+		setIsCloseModalOpen(false);
+		setCloseNote('');
 	};
 
 	const items = [
@@ -52,11 +62,7 @@ const ChatHeader = ({ conversation, onCloseChatMsg, isLoading }: ChatHeaderProps
 	];
 
 	// Mock data nhân viên, thay thế bằng API thực tế
-	const staffList = [
-		{ value: '1', label: 'Nhân viên A' },
-		{ value: '2', label: 'Nhân viên B' },
-		{ value: '3', label: 'Nhân viên C' }
-	];
+
 
 	return (
 		<>
@@ -101,7 +107,7 @@ const ChatHeader = ({ conversation, onCloseChatMsg, isLoading }: ChatHeaderProps
 							</Button>
 						</Tooltip>
 					)}
-					<Dropdown menu={{ items }} placement="bottomRight">
+					<Dropdown menu={{ items }} placement="bottomRight" trigger={['click']}>
 						<Button type="text" icon={<MoreHorizontal size={20} />} />
 					</Dropdown>
 				</div>
@@ -120,13 +126,24 @@ const ChatHeader = ({ conversation, onCloseChatMsg, isLoading }: ChatHeaderProps
 				cancelButtonProps={{ disabled: isLoading }}
 			>
 				<div className="py-4">
+					<Input.TextArea
+						required
+						rows={4}
+						placeholder="Nhập ghi chú khi đóng cuộc trò chuyện"
+						value={noteChangeEmployee}
+						onChange={(e: any) => setnoteChangeEmployee(e.target.value)}
+					/>
 					<Text className="block mb-2">Chọn nhân viên:</Text>
 					<Select
 						className="w-full"
 						placeholder="Chọn nhân viên"
-						options={staffList}
-						onChange={(value) => setSelectedStaff(value)}
+						options={employee?.data?.map((emp) => ({
+							value: emp.id,
+							label: emp?.name + "_" + emp?.email
+						}))}
+						onChange={(value) => setSelectedEmployee(value)}
 					/>
+
 				</div>
 			</Modal>
 

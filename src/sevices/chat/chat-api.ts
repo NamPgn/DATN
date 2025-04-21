@@ -111,4 +111,18 @@ export const chatApi = {
 			staff_id: employeeId
 		}, { headers }));
 	},
+
+	changeEmployeeChat: async (data: any) => {
+		const token_ = token_auth();
+
+		const headers: any = {};
+
+		if (token_) {
+			headers.Authorization = `Bearer ${token_}`;
+		}
+		return (await intancesLogout.post(`chat/conversation/${data?.id}/transfer/request`, {
+			to_staff_id: data?.employeeId,
+			...data
+		}, { headers }));
+	},
 };
