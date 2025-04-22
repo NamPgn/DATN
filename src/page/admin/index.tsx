@@ -81,7 +81,7 @@ const Dashboard = () => {
     <TailwindComponent>
       <div className="p-6 bg-gray-100 min-h-screen">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold mb-6 text-gray-700">Dashboard</h1>
+          <h1 className="text-3xl font-bold mb-6 text-gray-700">Thống kê</h1>
           <div className="flex items-center gap-4 mb-3">
             <RangePicker
               onChange={handleRangeChange}

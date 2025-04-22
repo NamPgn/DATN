@@ -88,10 +88,10 @@ export default function Register() {
           <div style={styles.header}>
             <div style={styles.iconText}>
               <a href={"/"}>
-                <img style={styles.logo} src="/assets/images/logo.png" alt="" />
+                <img style={styles.logo} src="/assets/images/logo.jpg" alt="" />
               </a>
               <Title level={2} style={{ margin: 0 }}>
-                Sign in
+                Sign up
               </Title>
             </div>
             <Text style={styles.text}>

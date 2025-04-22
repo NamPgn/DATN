@@ -137,7 +137,7 @@ export default function Login() {
                 <a href={"/"}>
                   <img
                     style={styles.logo}
-                    src="/assets/images/logo.png"
+                    src="/assets/images/logo.jpg"
                     alt=""
                   />
                 </a>

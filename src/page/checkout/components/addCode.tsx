@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMutation } from "react-query";
 import { applyVoucher } from "../../../sevices/client/voucher";
 import { toast } from "react-toastify";
 import { useState } from "react";
 
-const AddCode = ({ setDataVoucher, total_amount,setVoucherCode }: any) => {
+const AddCode = ({ setDataVoucher, total_amount, setVoucherCode }: any) => {
   const [voucher, setVoucher] = useState<any | null>(null);
 
   const { mutate: apply, isLoading } = useMutation({
@@ -38,8 +39,8 @@ const AddCode = ({ setDataVoucher, total_amount,setVoucherCode }: any) => {
             id="coupon_code"
             placeholder="Mã giảm giá"
             onChange={(e) => {
-              setVoucher(e.target.value)
-              setVoucherCode(e.target.value)
+              setVoucher(e.target.value);
+              setVoucherCode(e.target.value);
             }}
           />
           <button

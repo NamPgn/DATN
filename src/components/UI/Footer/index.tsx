@@ -26,11 +26,11 @@ const Footer = () => {
         <div className="row">
           <div className="col-lg-6 col-md-6">
             <aside className="widget aboutWidget">
-              <div className="footerLogo">
+              {/* <div className="footerLogo">
                 <a href="index.html">
-                  <img src="/assets/images/logo2.png" alt="Ulina" />
+                  <img src="/assets/images/logo.jpg" alt="Ulina" />
                 </a>
-              </div>
+              </div> */}
               <div className="aboutWidContent">
                 Chúng tôi cam kết mang đến trải nghiệm mua sắm tốt nhất cho bạn.
               </div>

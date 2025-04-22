@@ -93,7 +93,7 @@ export default function ResetPassword() {
         <div style={styles.formContent}>
           <div style={styles.header}>
             <div style={styles.iconText}>
-              <img style={styles.logo} src="/assets/images/logo.png" alt="" />
+              <img style={styles.logo} src="/assets/images/logo.jpg" alt="" />
               <Title level={2} style={{ margin: 0 }}>
                 Reset Password
               </Title>
