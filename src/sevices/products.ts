@@ -27,7 +27,7 @@ export const getProduct = async (id: any) => {
 };
 
 export const updateProduct = async (data: any) => {
-  return intances.put("/products/" + data?.id, data);
+  return intances.put("/products/" + data?.id, data?.values);
 };
 
 export const delProduct = async (id: string) => {
@@ -105,9 +105,11 @@ export const productsRetoreDeleted = async (data: any) => {
 
 export const productApi = {
   searchProduct: async (keyword: string, category: string) => {
-    return intances.get("/products?keyword=" + keyword + "&category=" + category);
+    return intances.get(
+      "/products?keyword=" + keyword + "&category=" + category
+    );
   },
   getProductSale: async () => {
     return intancesLocal.get("/discount-product");
-  }
-}
+  },
+};

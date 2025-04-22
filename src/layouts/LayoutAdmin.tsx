@@ -104,9 +104,9 @@ const LayoutAdmin = () => {
           <div className="logo_ p-3 text-center">
             <Link to="/" data-discover="true">
               <img
-                src="/assets/images/logo.png"
+                src="/assets/images/logo.jpg"
                 alt="Ulina"
-                className="w-50 h-auto"
+                className="w-150 h-auto"
               />
             </Link>
           </div>
@@ -155,7 +155,7 @@ const LayoutAdmin = () => {
                 </div>
                 <p className="text-gray-700 font-medium">{userId?.email}</p>
               </div>
-              
+
               <div className="h-6 w-px bg-gray-300"></div>
 
               <div className="flex items-center gap-4">
@@ -163,8 +163,8 @@ const LayoutAdmin = () => {
                   <AuthHeader />
                 </div>
 
-                <Badge 
-                  count={unreadCount} 
+                <Badge
+                  count={unreadCount}
                   className="cursor-pointer hover:bg-gray-100 rounded-full transition-colors"
                 >
                   <BellOutlined
@@ -198,8 +198,8 @@ const LayoutAdmin = () => {
               const linkTo = item?.order_id
                 ? `/dashboard/orders/${item.order_id}`
                 : item?.voucher_id
-                  ? `/dashboard/vouchers/${item.voucher_id}`
-                  : "#";
+                ? `/dashboard/vouchers/${item.voucher_id}`
+                : "#";
 
               return (
                 <Link
@@ -208,8 +208,9 @@ const LayoutAdmin = () => {
                   onClick={() => markAsReadMutation.mutate(item.id)}
                 >
                   <div
-                    className={`relative my-2 p-3 border-b border-gray-200 rounded-md ${item.is_read ? "bg-gray-200" : "bg-white"
-                      }`}
+                    className={`relative my-2 p-3 border-b border-gray-200 rounded-md ${
+                      item.is_read ? "bg-gray-200" : "bg-white"
+                    }`}
                   >
                     {!item.is_read && (
                       <span className="absolute top-2 right-2 h-2 w-2 bg-red-500 rounded-full"></span>

@@ -112,6 +112,10 @@ const Cart = () => {
   };
 
   useEffect(() => {
+    console.log(cart);
+  }, [cart]);
+
+  useEffect(() => {
     if (cart?.length > 0) {
       const initialQuantities = cartLocal?.reduce((acc: any, item: any) => {
         acc[item.id] = item.quantity;

@@ -11,7 +11,7 @@ const menuItems = [
   { name: "Giới thiệu", path: "/about" },
   {
     name: "Danh mục",
-    path: "/shop",
+    path: "#",
     class: "menu-item-has-children",
   },
   { name: "Sản phẩm", path: "/products" },
@@ -69,7 +69,16 @@ const Header = () => {
                 {/* Logo */}
                 <div className="logo">
                   <Link to="/">
-                    <img src="/assets/images/logo.png" alt="Ulina" />
+                    <img
+                      style={{
+                        width: "150%",
+                        height: "100px",
+                        paddingBottom: "20px",
+                        background: "transparent",
+                      }}
+                      src="/assets/images/logo.jpg"
+                      alt="Ulina"
+                    />
                   </Link>
                 </div>
 
@@ -92,7 +101,7 @@ const Header = () => {
                                       : " "
                                   }`}
                                 >
-                                  <Link to={`/shop/${category.id}`}>
+                                  <Link to={`/shop/${category.slug}`}>
                                     {category.name}
                                   </Link>
                                   {category?.children?.length > 0 ? (
@@ -100,7 +109,7 @@ const Header = () => {
                                       {category?.children?.map((child: any) => {
                                         return (
                                           <li key={child?.slug}>
-                                            <Link to={`/shop/${child.id}`}>
+                                            <Link to={`/shop/${child.slug}`}>
                                               {child.name}
                                             </Link>
                                           </li>

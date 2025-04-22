@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import {
@@ -35,6 +36,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useCart } from "../../context/Cart/cartContext";
 const schema = z.object({
   o_name: z.string().min(1, "Vui lòng nhập Họ và tên"),
   o_mail: z.string().email("Email không hợp lệ."),
@@ -83,6 +85,7 @@ const Checkout = () => {
   });
   const [optionsDistrict, setOptionsDistrict] = useState<any>([]);
   const [optionsWard, setOptionsWard] = useState<any>([]);
+  const { cart, setCart, setCartLocal, refetchCart }: any = useCart();
   const {
     register,
     handleSubmit,
@@ -322,10 +325,22 @@ const Checkout = () => {
       };
       payment(data, {
         onSuccess: (order: any) => {
+          if (!token_) {
+            const idCheckout = checkoutItems.map((item: any) => item.id);
+            const cartNew = cart.filter(
+              (item: any) => !idCheckout.includes(item.variant_id)
+            );
+            setCart(cartNew);
+            setCartLocal((prev: any) =>
+              prev.filter((item: any) => !idCheckout.includes(item.id))
+            );
+            localStorage.setItem("cart", JSON.stringify(cartNew));
+          }
           if (values.payment_method === "vnpay") {
             window.location.href = order?.data?.url;
           } else {
             toast.success(order?.data?.message);
+            refetchCart();
             navigate("/o/thanks");
           }
         },

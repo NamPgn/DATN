@@ -25,7 +25,7 @@ const ProductVariant = () => {
       return await deleteVariantsProduct(data);
     },
     onSuccess: () => {
-      message.success("Tạo biến thể thành công!");
+      message.success("Xóa thể thành công!");
       refetch();
     },
     onError: ({ response }: any) => {
@@ -50,7 +50,7 @@ const ProductVariant = () => {
           </Link>
           <MVConfirm
             title="Có xóa không"
-            onConfirm={() => mutate(productsVariants?.id)}
+            onConfirm={() => mutate(items?.id)}
           >
             <MyButton danger className="ml-2">
               Xóa

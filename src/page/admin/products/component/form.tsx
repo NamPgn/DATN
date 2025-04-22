@@ -43,7 +43,6 @@ const ProductForm = ({
   //     }
   //   }
   // }, [typeProduct]);
-
   useEffect(() => {
     if (dataEdit) {
       form.setFieldsValue({
@@ -55,16 +54,16 @@ const ProductForm = ({
           dataEdit.type === "0"
             ? dataEdit.variants || []
             : [
-                {
-                  regular_price: dataEdit.variants?.[0]?.regular_price || 0,
-                  sale_price: dataEdit.variants?.[0]?.sale_price || 0,
-                  stock_quantity: dataEdit.variants?.[0]?.stock_quantity || 0,
-                  sku: dataEdit.variants?.[0]?.sku || "",
-                  variant_id: dataEdit.variants?.find((items: any) => items?.id)
-                    ?.id,
-                  weight: dataEdit.variants?.[0]?.weight || "",
-                },
-              ],
+              {
+                regular_price: dataEdit.variants?.[0]?.regular_price || 0,
+                sale_price: dataEdit.variants?.[0]?.sale_price || 0,
+                stock_quantity: dataEdit.variants?.[0]?.stock_quantity || 0,
+                sku: dataEdit.variants?.[0]?.sku || "",
+                variant_id: dataEdit.variants?.find((items: any) => items?.id)
+                  ?.id,
+                weight: dataEdit.variants?.[0]?.weight || "",
+              },
+            ],
       });
 
       setTypeProduct(dataEdit.type || "1");
@@ -165,23 +164,23 @@ const ProductForm = ({
       variants:
         typeProduct == "0"
           ? val.variants.map((item: any, index: number) => ({
-              ...item,
-              variant_id: item.id,
-              values: variants[index]?.nam || [],
-            }))
+            ...item,
+            variant_id: item.id,
+            values: variants[index]?.nam || [],
+          }))
           : [
-              {
-                variant_id: val.variants?.find(
-                  (items: any) => items?.variant_id
-                )?.variant_id,
-                regular_price: val.variants?.[0]?.regular_price || 0,
-                sale_price: val.variants?.[0]?.sale_price || 0,
-                sku: val.variants?.[0]?.sku || "",
-                stock_quantity: val.variants?.[0]?.stock_quantity,
-                weight: val.variants?.[0]?.weight,
-                values: [],
-              },
-            ],
+            {
+              variant_id: val.variants?.find(
+                (items: any) => items?.variant_id
+              )?.variant_id,
+              regular_price: val.variants?.[0]?.regular_price || 0,
+              sale_price: val.variants?.[0]?.sale_price || 0,
+              sku: val.variants?.[0]?.sku || "",
+              stock_quantity: val.variants?.[0]?.stock_quantity,
+              weight: val.variants?.[0]?.weight,
+              values: [],
+            },
+          ],
     };
     if (isEditing) {
       mutateUpdate(data);
@@ -303,8 +302,8 @@ const ProductForm = ({
         {typeProduct === "0" && (
           <>
             {typeProduct === "0" &&
-            isEditing &&
-            dataEdit?.type === "0" ? null : (
+              isEditing &&
+              dataEdit?.type === "0" ? null : (
               <Form.Item label="Chọn các thuộc tính" name="parentVariants">
                 <Select
                   mode="multiple"
@@ -414,7 +413,8 @@ const ProductForm = ({
                             <Input defaultValue={variants[index]?.sku} />
                           </Form.Item>
 
-                          <Button
+
+                          {!isEditing && <Button
                             icon={<MinusCircleOutlined />}
                             onClick={() => {
                               setVariants((prev) =>
@@ -422,7 +422,7 @@ const ProductForm = ({
                               );
                               remove(name);
                             }}
-                          />
+                          />}
                         </Space>
                       );
                     })}

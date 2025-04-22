@@ -9,12 +9,14 @@ const ProductSale = () => {
     queryFn: async () => {
       return (await getProductsClient()).data;
     },
+    staleTime: 5 * 60 * 1000,
+		cacheTime: 30 * 60 * 1000
   });
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'currency',
-      currency: 'VND'
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
     }).format(price);
   };
 
@@ -23,14 +25,16 @@ const ProductSale = () => {
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">SẢN PHẨM MỚI</h2>
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+              SẢN PHẨM MỚI
+            </h2>
             <p className="text-gray-600">
               Hiển thị sản phẩm mới nhất của chúng tôi trong mùa hè này
             </p>
           </div>
 
           {products?.length ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 w-full">
               {products.map((product: any) => (
                 <div key={product.id} className="group">
                   <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300">
@@ -63,7 +67,7 @@ const ProductSale = () => {
                     <div className="p-4">
                       <h3 className="text-sm font-medium text-gray-800 mb-2 line-clamp-2 min-h-[40px]">
                         <Link
-                          to={`/product/detail/${product.id}`}
+                          to={`/product/detail/${product.slug}`}
                           className="hover:text-[#ee4d2d] transition-colors duration-200"
                         >
                           {product.name}
@@ -72,7 +76,9 @@ const ProductSale = () => {
 
                       <div className="flex items-center gap-2">
                         <span className="text-[#ee4d2d] font-bold">
-                          {formatPrice(product?.sale_price || product?.regular_price)}
+                          {formatPrice(
+                            product?.sale_price || product?.regular_price
+                          )}
                         </span>
                         {product?.sale_price && (
                           <span className="text-gray-400 text-sm line-through">
@@ -107,7 +113,6 @@ const ProductSale = () => {
           )}
         </div>
       </section>
-
     </TailwindComponent>
   );
 };
