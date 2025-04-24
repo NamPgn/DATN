@@ -92,6 +92,7 @@ export default function Login() {
         cart: cartData,
       });
       localStorage.removeItem("cart");
+      location.reload()
     },
     onError: ({ response }) => {
       toast.error(response?.data?.message);
@@ -119,7 +120,9 @@ export default function Login() {
         cart: cartData,
       });
       localStorage.removeItem("cart");
+
       navigate("/");
+
     } catch (error) {
       toast.error("Đăng nhập thất bại!");
     }

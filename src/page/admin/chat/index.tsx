@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import { UsersContext } from '../../../context/usersContext';
 import ChatAll from './_components/ChatAll';
 import ChatTransfer from './_components/ChatTransfer';
+import Echo from 'laravel-echo';
 
 const { Sider, Content } = Layout;
 const { TabPane } = Tabs;
@@ -111,6 +112,61 @@ const AdminChat = () => {
 		}
 	}, [messages, selectedChat]);
 
+	useEffect(() => {
+		const echo = new Echo({
+			broadcaster: "pusher",
+			key: "HOANG2K4DEPTRAIDASETUP",
+			cluster: "mt1",
+			wsHost: "127.0.0.1",
+			wsPort: 6001,
+			forceTLS: false,
+			disableStats: true,
+			enabledTransports: ["ws"],
+		});
+
+		echo.connector.pusher.connection.bind('connected', () => {
+			console.log('✅ Connected to Pusher!');
+		});
+
+		echo.connector.pusher.connection.bind('error', (err: any) => {
+			console.log('❌ Pusher connection error:', err);
+		});
+
+		// Lắng nghe kênh chung cho admin
+		echo.channel("admin-orders")
+			.listen(".order-send", (data: any) => {
+				if (data) {
+					console.log("🎯 Raw event data:", data);
+					queryClient.invalidateQueries({ queryKey: ['chat-conversations'] });
+					queryClient.invalidateQueries({ queryKey: ['chat-unassigned'] });
+					queryClient.invalidateQueries({ queryKey: ['chat-all'] });
+				}
+			});
+
+		// Lắng nghe kênh riêng cho từng conversation
+		if (selectedChat) {
+			const conversationChannel = echo.channel(`conversation.${selectedChat}`);
+			conversationChannel.listen('.message.sent', (e: any) => {
+				console.log(`📨 New message in conversation ${selectedChat}:`, e);
+				queryClient.invalidateQueries({ queryKey: ['conversation-messages', selectedChat] });
+			});
+
+			// Lắng nghe các sự kiện khác của conversation
+			conversationChannel.listen('.conversation.updated', (e: any) => {
+				console.log(`🔄 Conversation ${selectedChat} updated:`, e);
+				queryClient.invalidateQueries({ queryKey: ['conversation-messages', selectedChat] });
+				queryClient.invalidateQueries({ queryKey: ['chat-conversations'] });
+			});
+		}
+
+		return () => {
+			console.log('📤 Leaving channels');
+			echo.leave("admin-orders");
+			if (selectedChat) {
+				echo.leave(`conversation.${selectedChat}`);
+			}
+		};
+	}, [queryClient, selectedChat]);
 
 	const handleSendMessage = () => {
 		if (!messageText.trim() || !selectedChat) return;
