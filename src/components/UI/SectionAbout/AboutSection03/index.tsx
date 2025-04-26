@@ -19,34 +19,6 @@ const AboutSection03 = () => {
       image: "/assets/images/ceo/16dfbfd4-5e5f-4b12-8f62-572d860d03fd.jpg",
       socials: ["fa-facebook-f", "fa-twitter"],
     },
-    // {
-    //   id: 3,
-    //   name: "Phương Minh Hoàng",
-    //   role: "CTO",
-    //   image: "/assets/images/ceo/2.jpg",
-    //   socials: ["fa-facebook-f", "fa-twitter"],
-    // },
-    // {
-    //   id: 4,
-    //   name: "Nguyễn Hải Lâm",
-    //   role: "CTO",
-    //   image: "/assets/images/ceo/2.jpg",
-    //   socials: ["fa-facebook-f", "fa-twitter"],
-    // },
-    // {
-    //   id: 5,
-    //   name: "Thiện",
-    //   role: "CTO",
-    //   image: "/assets/images/ceo/2.jpg",
-    //   socials: ["fa-facebook-f", "fa-twitter"],
-    // },
-    // {
-    //   id: 7,
-    //   name: "Dương Tú",
-    //   role: "CTO",
-    //   image: "/assets/images/ceo/2.jpg",
-    //   socials: ["fa-facebook-f", "fa-twitter"],
-    // },
     {
       id: 6,
       name: "Phạm Giang Nam",
@@ -69,7 +41,7 @@ const AboutSection03 = () => {
       socials: ["fa-facebook-f", "fa-linkedin-in"],
     },
     {
-      id: 8,
+      id: 9,
       name: "Trần Đức Hưng",
       role: "Mâm 3 ông vua nhà mép",
       image: "assets/images/ceo/Screenshot 2025-04-16 194630.png",
@@ -107,64 +79,70 @@ const AboutSection03 = () => {
         </div>
         <div className="row">
           <div className="col-lg-12">
-            <div className="teamCarousel owl-carousel owl-loaded owl-drag">
-              <div className="owl-stage-outer">
+            <div className="teamRow row">
+              {teamMembers.slice(0, 7).map((member) => (
                 <div
-                  style={{
-                    transform: `translate3d(-${
-                      currentIndex * 330
-                    }px, 0px, 0px)`,
-                    transition: "all 0.3s ease",
-                    width: teamMembers.length * 330,
-                  }}
+                  key={member.id}
+                  className="col-md-3 mb-4"
+                  style={{ height: 400 }}
                 >
-                  {teamMembers.map((member) => (
-                    <div
-                      key={member.id}
-                      className="owl-item"
-                      style={{ width: 306, marginRight: 24, height: 400 }}
-                    >
-                      <div className="teamMember01" style={{ height: "100%" }}>
-                        <img
-                          style={{ height: "100%", objectFit: "cover" }}
-                          src={member.image}
-                          alt={member.name}
-                        />
-                        <div className="tm01Info">
-                          <h3>{member.name}</h3>
-                          <span>{member.role}</span>
-                        </div>
-                        <div className="tm01Social">
-                          {member.socials.map((icon, index) => (
-                            <a key={index} href="#">
-                              <i className={`fa-brands ${icon}`} />
-                            </a>
-                          ))}
-                        </div>
-                      </div>
+                  <div className="teamMember01" style={{ height: "100%" }}>
+                    <img
+                      style={{
+                        height: "100%",
+                        objectFit: "cover",
+                        width: "100%",
+                      }}
+                      src={member.image}
+                      alt={member.name}
+                    />
+                    <div className="tm01Info">
+                      <h3>{member.name}</h3>
+                      <span>{member.role}</span>
                     </div>
-                  ))}
+                    <div className="tm01Social">
+                      {member.socials.map((icon, index) => (
+                        <a key={index} href="#">
+                          <i className={`fa-brands ${icon}`} />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="owl-nav">
-                <button
-                  type="button"
-                  role="presentation"
-                  className="owl-prev"
-                  onClick={handlePrev}
+              ))}
+            </div>
+
+            <div className="teamRow row">
+              {teamMembers.slice(7).map((member) => (
+                <div
+                  key={member.id}
+                  className="col-md-3 mb-4"
+                  style={{ height: 400 }}
                 >
-                  <i className="fa-solid fa-angle-left" />
-                </button>
-                <button
-                  type="button"
-                  role="presentation"
-                  className="owl-next"
-                  onClick={handleNext}
-                >
-                  <i className="fa-solid fa-angle-right" />
-                </button>
-              </div>
-              <div className="owl-dots" />
+                  <div className="teamMember01" style={{ height: "100%" }}>
+                    <img
+                      style={{
+                        height: "100%",
+                        objectFit: "cover",
+                        width: "100%",
+                      }}
+                      src={member.image}
+                      alt={member.name}
+                    />
+                    <div className="tm01Info">
+                      <h3>{member.name}</h3>
+                      <span>{member.role}</span>
+                    </div>
+                    <div className="tm01Social">
+                      {member.socials.map((icon, index) => (
+                        <a key={index} href="#">
+                          <i className={`fa-brands ${icon}`} />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
