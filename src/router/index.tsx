@@ -387,11 +387,6 @@ export const TableRouterAdminPage = [
         name: "Danh sách người dùng",
         icon: <UserOutlined />,
       },
-      {
-        path: "/dashboard/adminUer",
-        name: "Quản trị viên",
-        icon: <LaptopOutlined />,
-      },
     ],
   },
   {
