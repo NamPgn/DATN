@@ -349,10 +349,6 @@ export const routerClient = [
         path: "users/edit/:id",
         element: <EditUser />,
       },
-      {
-        path: "deleted",
-        element: <DeletedProducts />,
-      },
     ],
   },
   {
@@ -376,11 +372,6 @@ export const TableRouterAdminPage = [
         path: "/dashboard/attribute",
         name: "Thuộc tính",
         icon: <UserOutlined />,
-      },
-      {
-        path: "/dashboard/deleted",
-        name: "Thùng rác",
-        icon: <DeleteOutlined />,
       },
     ],
   },
