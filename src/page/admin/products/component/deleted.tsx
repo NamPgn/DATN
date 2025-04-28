@@ -88,7 +88,7 @@ const DeletedProducts = () => {
     refetch();
   };
 
-  const data = productsDeleted?.data?.data?.map((item: any, _index: number) => {
+  const data = productsDeleted?.data.map((item: any, _index: number) => {
     return {
       key: item.id,
       name: <Link to={"/q/" + item.id}>{item.name}</Link>,
