@@ -13,8 +13,8 @@ const PusherProvider = () => {
   useEffect(() => {
     const echo = new Echo({
       broadcaster: "pusher",
-      key: "ce08a57fcf3c755ba29a",
-      cluster: "ap1",
+      key: "HOANG2K4DEPTRAIDASETUP",
+      cluster: "mt1",
       forceTLS: true,
     });
 

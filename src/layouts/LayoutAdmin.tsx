@@ -1,14 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import { Badge, Button, Drawer, Input, Layout, Menu, Spin } from "antd";
+import { Badge, Button, Drawer, Layout, Menu, Spin } from "antd";
 import {
   BellOutlined,
   CheckOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
-import MVCol from "../components/UI/Core/MV/Grid/Col";
 import { Header } from "antd/es/layout/layout";
 import AuthHeader from "../components/UI/Header/auth";
 import PageTitle from "../components/UI/Core/PageTitle";
@@ -16,11 +15,13 @@ import { TableRouterAdminPage } from "../router";
 import { useMutation, useQuery } from "react-query";
 import { changeNotify, getNotify } from "../sevices/client/notifycation";
 import { UsersContext } from "../context/usersContext";
+import { isAuthentication } from "../common/auth/getToken";
 const { Content, Sider, Footer } = Layout;
 
 const LayoutAdmin = () => {
   const [open, setOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const auth = isAuthentication();
   const { userId } = useContext(UsersContext) as { userId: any };
   const showDrawer = () => {
     setOpen(true);
@@ -58,13 +59,15 @@ const LayoutAdmin = () => {
       key: "group-application",
       type: "group",
       label: "Application",
-      children: TableRouterAdminPage.filter((item: any) => !item.children).map(
-        (items, index) => ({
-          key: `app-${index}`,
-          icon: items.icon,
-          label: <Link to={items.path || ""}>{items.name}</Link>,
-        })
-      ),
+      children: TableRouterAdminPage.filter((item: any) => {
+        if (item.children) return false;
+        if (item.role && item.role !== auth?.user?.role) return false;
+        return true;
+      }).map((items, index) => ({
+        key: `app-${index}`,
+        icon: items.icon,
+        label: <Link to={items.path || ""}>{items.name}</Link>,
+      })),
     },
     {
       key: "group-apps",

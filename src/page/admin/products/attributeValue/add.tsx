@@ -1,9 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Form, Input, Button, message, Select } from "antd";
 import { useMutation, useQuery } from "react-query";
 import { SyncOutlined } from "@ant-design/icons";
-import {
-  addAttributesVal,
-} from "../../../../sevices/attributeValue";
+import { addAttributesVal } from "../../../../sevices/attributeValue";
 import { useState } from "react";
 import { getAttributes } from "../../../../sevices/attribute";
 
