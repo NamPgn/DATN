@@ -68,14 +68,13 @@ import HiddenComment from "../page/admin/comments/hidden";
 import OrderHistory from "../page/orders/orderHistory";
 import ThankYou from "../page/orders/thank";
 import PaymentResult from "../page/checkout/components/paymentResult";
-import DeletedProducts from "../page/admin/products/component/deleted";
 
 import LayoutOrders from "../layouts/Layout";
 import OrderDetailUser from "../page/orders/orderDetail";
 import TrackingOrder from "../page/orders/tracking";
-import Shop from "../page/shop";
-import ProductAll from "../page/shop/productAll";
 import ProductSearch from "../page/shop/productSearch";
+import ProductAll from "../page/shop/productAll";
+import Shop from "../page/shop";
 
 export const routerClient = [
   {
@@ -355,6 +354,7 @@ export const TableRouterAdminPage = [
     path: "/dashboard",
     name: "Trang chủ",
     icon: <DashboardOutlined />,
+    role: ["admin"],
   },
   {
     path: "/dashboard/products",

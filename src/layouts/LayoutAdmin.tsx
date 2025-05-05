@@ -8,7 +8,6 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from "@ant-design/icons";
-import MVCol from "../components/UI/Core/MV/Grid/Col";
 import { Header } from "antd/es/layout/layout";
 import AuthHeader from "../components/UI/Header/auth";
 import PageTitle from "../components/UI/Core/PageTitle";

@@ -51,20 +51,14 @@ const AddCategory = () => {
       >
         <Input placeholder="Enter category name" />
       </Form.Item>
-      <Form.Item label="Danh mục" name="parent_id">
-        <Select
-          style={{ width: "200px" }}
-          placeholder="Vui lòng chọn"
-          // options={optionsSelectCategory || []}
-        />
-      </Form.Item>
+      
 
       <Form.Item>
         <Button
           type="primary"
           loading={isLoading ?? <SyncOutlined spin />}
           htmlType="submit"
-          block
+          
         >
           Create Category
         </Button>
