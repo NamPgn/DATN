@@ -18,7 +18,6 @@ const ProductAll = () => {
     },
     enabled: !!currentPage,
   });
-
   useEffect(() => {
     if (!selectedValue.includes("sort_by")) {
       setSelectedValue(`${currentPage}`);

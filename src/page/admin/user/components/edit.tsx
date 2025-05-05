@@ -61,7 +61,7 @@ const EditUser = () => {
   }
   return (
     <>
-      <Button
+      {/* <Button
         type="dashed"
         variant="solid"
         className="mb-3"
@@ -84,7 +84,7 @@ const EditUser = () => {
           setSelectOneImage={setSelectOneImage}
           selectOneImage={selectOneImage}
         />
-      </Modal>
+      </Modal> */}
       <Card title={`Sửa tài khoản: ${user?.name}`} bordered={false}>
         <Form form={form} layout="vertical" onFinish={onFinish}>
           <Form.Item

@@ -6,6 +6,7 @@ export const getProductsByCategory = async (slug: string, page: any) => {
 };
 
 export const getProducts = async (page: any) => {
+  console.log(page)
   return intancesLocal.get(`products?page=${page}`);
 };
 

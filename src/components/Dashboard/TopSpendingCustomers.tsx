@@ -12,10 +12,11 @@ interface TopSpendingCustomersProps {
     };
   }>;
 }
-
 const TopSpendingCustomers: React.FC<TopSpendingCustomersProps> = ({ topUsersBySpending }) => {
+console.log(topUsersBySpending)
+
   const chartData = {
-    labels: topUsersBySpending?.map((u) => u.user.name || u.user.email) || [],
+    labels: topUsersBySpending?.map((u) => u?.user?.name || u?.user?.email) || [],
     datasets: [
       {
         label: "Tổng chi tiêu (VNĐ)",
