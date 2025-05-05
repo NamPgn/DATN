@@ -3,8 +3,12 @@ import { useMutation } from "react-query";
 import { toast } from "react-toastify";
 import { addUser } from "../../../../sevices/users";
 import { LockOutlined, MailOutlined, UserOutlined } from "@ant-design/icons";
+import { UsersContext } from "../../../../context/usersContext";
+import { useContext } from "react";
 
 const AddUser = () => {
+  const { userId }: any = useContext(UsersContext) || {};
+
   const { mutate } = useMutation({
     mutationFn: async (data: any) => {
       return await addUser(data);
@@ -115,7 +119,9 @@ const AddUser = () => {
             <Form.Item label="Quyền" name="role">
               <Select placeholder="Chọn quyền">
                 <Select.Option value={"member"}>Thành viên</Select.Option>
-                <Select.Option value={"admin"}>Quản trị viên</Select.Option>
+                {userId.role === "admin" && (
+                  <Select.Option value={"staff"}>Nhân Viên</Select.Option>
+                )}
               </Select>
             </Form.Item>
             <Form.Item>

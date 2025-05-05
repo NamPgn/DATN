@@ -3,10 +3,8 @@ import {
   CommentOutlined,
   ControlOutlined,
   DashboardOutlined,
-  DeleteOutlined,
   FileImageOutlined,
   GiftOutlined,
-  LaptopOutlined,
   NotificationOutlined,
   PicLeftOutlined,
   SlidersOutlined,
@@ -68,13 +66,13 @@ import HiddenComment from "../page/admin/comments/hidden";
 import OrderHistory from "../page/orders/orderHistory";
 import ThankYou from "../page/orders/thank";
 import PaymentResult from "../page/checkout/components/paymentResult";
-import DeletedProducts from "../page/admin/products/component/deleted";
+// import DeletedProducts from "../page/admin/products/component/deleted";
 
 import LayoutOrders from "../layouts/Layout";
 import OrderDetailUser from "../page/orders/orderDetail";
 import TrackingOrder from "../page/orders/tracking";
-import ProductAll from "../page/Shop/productAll";
 import Shop from "../page/Shop";
+import ProductAll from "../page/Shop/productAll";
 import ProductSearch from "../page/Shop/productSearch";
 
 export const routerClient = [
@@ -342,10 +340,6 @@ export const routerClient = [
         path: "users/edit/:id",
         element: <EditUser />,
       },
-      {
-        path: "deleted",
-        element: <DeletedProducts />,
-      },
     ],
   },
   {
@@ -359,7 +353,6 @@ export const TableRouterAdminPage = [
     path: "/dashboard",
     name: "Trang chủ",
     icon: <DashboardOutlined />,
-    role: "admin",
   },
   {
     path: "/dashboard/products",
@@ -370,11 +363,6 @@ export const TableRouterAdminPage = [
         path: "/dashboard/attribute",
         name: "Thuộc tính",
         icon: <UserOutlined />,
-      },
-      {
-        path: "/dashboard/deleted",
-        name: "Thùng rác",
-        icon: <DeleteOutlined />,
       },
     ],
   },

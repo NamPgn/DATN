@@ -23,7 +23,7 @@ const Shop = () => {
   const { data: products, isLoading }: any = useQuery({
     queryKey: ["products", currentPage, selectedValue, id],
     queryFn: async () => {
-      return (await getProductsByCategory(`${id}`, currentPage)).data;
+      return await getProductsByCategory(`${id}`, currentPage);
     },
   });
 
@@ -165,17 +165,19 @@ const Shop = () => {
                             }
                           </span>
                           <ul
-                            className={`list ${openOption ? "block" : "hidden"
-                              }`}
+                            className={`list ${
+                              openOption ? "block" : "hidden"
+                            }`}
                           >
                             {options.map((option) => (
                               <li
                                 key={option.value}
                                 data-value={option.value}
-                                className={`option ${selectedValue === option.value
+                                className={`option ${
+                                  selectedValue === option.value
                                     ? "selected"
                                     : ""
-                                  }`}
+                                }`}
                                 onClick={() => handleSelect(option.value)}
                               >
                                 {option.label}
@@ -205,50 +207,51 @@ const Shop = () => {
                         <div className="row ">
                           {products?.data?.length
                             ? products?.data?.map((product: any) => (
-                              <div className="col-sm-6 col-xl-4">
-                                <div className="productItem01">
-                                  <div
-                                    key={product.id}
-                                    className={`owl-item active ${!product.reviews ? "pi01NoRating" : ""
+                                <div className="col-sm-6 col-xl-4">
+                                  <div className="productItem01">
+                                    <div
+                                      key={product.id}
+                                      className={`owl-item active ${
+                                        !product.reviews ? "pi01NoRating" : ""
                                       }`}
-                                  >
-                                    <div className="productItem01">
-                                      <Link
-                                        to={`/product/detail/${product.slug}`}
-                                      >
-                                        <div className="pi01Thumb">
-                                          {product?.library ? (
-                                            <img
-                                              src={product?.library?.url}
-                                              className="w-100"
-                                            />
-                                          ) : (
-                                            product?.product_images?.map(
-                                              (item: any) => {
-                                                return (
-                                                  <>
-                                                    <img
-                                                      src={item.url}
-                                                      className="w-100"
-                                                    />
-                                                  </>
-                                                );
-                                              }
-                                            )
-                                          )}
-                                          <div className="pi01Actions">
-                                            <div className="pi01Cart">
-                                              <i className="fa-solid fa-shopping-cart" />
+                                    >
+                                      <div className="productItem01">
+                                        <Link
+                                          to={`/product/detail/${product.slug}`}
+                                        >
+                                          <div className="pi01Thumb">
+                                            {product?.library ? (
+                                              <img
+                                                src={product?.library?.url}
+                                                className="w-100"
+                                              />
+                                            ) : (
+                                              product?.product_images?.map(
+                                                (item: any) => {
+                                                  return (
+                                                    <>
+                                                      <img
+                                                        src={item.url}
+                                                        className="w-100"
+                                                      />
+                                                    </>
+                                                  );
+                                                }
+                                              )
+                                            )}
+                                            <div className="pi01Actions">
+                                              <div className="pi01Cart">
+                                                <i className="fa-solid fa-shopping-cart" />
+                                              </div>
+                                              <div className="pi01QuickView">
+                                                <i className="fa-solid fa-arrows-up-down-left-right" />
+                                              </div>
+                                              <div className="pi01Wishlist">
+                                                <i className="fa-solid fa-heart" />
+                                              </div>
                                             </div>
-                                            <div className="pi01QuickView">
-                                              <i className="fa-solid fa-arrows-up-down-left-right" />
-                                            </div>
-                                            <div className="pi01Wishlist">
-                                              <i className="fa-solid fa-heart" />
-                                            </div>
-                                          </div>
-                                          <div className="productLabels clearfix">
-                                            {/* {product.labels.map((label, index) => (
+                                            <div className="productLabels clearfix">
+                                              {/* {product.labels.map((label, index) => (
                             <span
                               key={index}
                               className={
@@ -258,41 +261,41 @@ const Shop = () => {
                               {label}
                             </span>
                           ))} */}
+                                            </div>
                                           </div>
-                                        </div>
-                                      </Link>
-                                      <div className="pi01Details">
-                                        {product.reviews !== null && (
-                                          <div className="productRatings">
-                                            <div className="productRatingWrap">
-                                              <div className="star-rating">
-                                                <span />
+                                        </Link>
+                                        <div className="pi01Details">
+                                          {product.reviews !== null && (
+                                            <div className="productRatings">
+                                              <div className="productRatingWrap">
+                                                <div className="star-rating">
+                                                  <span />
+                                                </div>
+                                              </div>
+                                              <div className="ratingCounts">
+                                                {product.reviews} Reviews
                                               </div>
                                             </div>
-                                            <div className="ratingCounts">
-                                              {product.reviews} Reviews
-                                            </div>
+                                          )}
+                                          <h3>
+                                            <Link
+                                              to={`/product/detail/${product.slug}`}
+                                            >
+                                              {product.name}
+                                            </Link>
+                                          </h3>
+                                          <div className="pi01Price">
+                                            <ins>{product.sale_price}VND</ins>
+                                            <del>
+                                              {product.regular_price}VND
+                                            </del>
                                           </div>
-                                        )}
-                                        <h3>
-                                          <Link
-                                            to={`/product/detail/${product.slug}`}
-                                          >
-                                            {product.name}
-                                          </Link>
-                                        </h3>
-                                        <div className="pi01Price">
-                                          <ins>{product.sale_price}VND</ins>
-                                          <del>
-                                            {product.regular_price}VND
-                                          </del>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                            ))
+                              ))
                             : "Không có sản phẩm"}
                         </div>
                       ) : (
