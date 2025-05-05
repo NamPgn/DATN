@@ -1,14 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery } from "react-query";
 import { getProducts } from "../../../sevices/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Paginations from "../components/pagination";
 
 const ProductAll = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [openOption, setopenOption] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(`?page=${currentPage}`);
+  const [selectedValue, setSelectedValue] = useState(`${currentPage}`);
   const handleClickOption = () => {
     setopenOption((open) => !open);
   };
@@ -17,7 +16,15 @@ const ProductAll = () => {
     queryFn: async () => {
       return (await getProducts(selectedValue)).data;
     },
+    enabled: !!currentPage,
   });
+
+  useEffect(() => {
+    if (!selectedValue.includes("sort_by")) {
+      setSelectedValue(`${currentPage}`);
+    }
+  }, [currentPage]);
+
   const totalItems = products?.total;
   const itemsPerPage = 9;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -186,8 +193,20 @@ const ProductAll = () => {
                                 </Link>
                               </h3>
                               <div className="pi01Price">
-                                <ins>{product.regular_price}VND</ins>
-                                <del>{product.sale_price}VND</del>
+                                <ins>
+                                  {product.sale_price === null ||
+                                  product.sale_price === undefined
+                                    ? product.regular_price
+                                    : product.sale_price}
+                                  VND
+                                </ins>
+
+                                {product.sale_price !== null &&
+                                  product.sale_price !== undefined &&
+                                  product.sale_price !==
+                                    product.regular_price && (
+                                    <del>{product.regular_price} VND</del>
+                                  )}
                               </div>
                             </div>
                           </div>

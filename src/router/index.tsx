@@ -66,7 +66,7 @@ import HiddenComment from "../page/admin/comments/hidden";
 import OrderHistory from "../page/orders/orderHistory";
 import ThankYou from "../page/orders/thank";
 import PaymentResult from "../page/checkout/components/paymentResult";
-// import DeletedProducts from "../page/admin/products/component/deleted";
+import DeletedProducts from "../page/admin/products/component/deleted";
 
 import LayoutOrders from "../layouts/Layout";
 import OrderDetailUser from "../page/orders/orderDetail";
