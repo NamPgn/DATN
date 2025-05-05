@@ -14,7 +14,7 @@ export const updateImageList = async (id: any, data: any) => {
 };
 
 export const delImageList = async (id: string) => {
-  return intances.delete("/imageList/delete/" + id);
+  return intances.delete("/libraries/" + id);
 };
 export const addImageList = async (data: any) => {
   return intances.post("/libraries", data);

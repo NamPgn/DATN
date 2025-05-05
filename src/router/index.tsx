@@ -72,9 +72,9 @@ import PaymentResult from "../page/checkout/components/paymentResult";
 import LayoutOrders from "../layouts/Layout";
 import OrderDetailUser from "../page/orders/orderDetail";
 import TrackingOrder from "../page/orders/tracking";
-import Shop from "../page/Shop";
-import ProductAll from "../page/Shop/productAll";
-import ProductSearch from "../page/Shop/productSearch";
+import ProductSearch from "../page/shop/productSearch";
+import ProductAll from "../page/shop/productAll";
+import Shop from "../page/shop";
 
 export const routerClient = [
   {
@@ -354,6 +354,7 @@ export const TableRouterAdminPage = [
     path: "/dashboard",
     name: "Trang chủ",
     icon: <DashboardOutlined />,
+    role: ["admin"],
   },
   {
     path: "/dashboard/products",

@@ -61,30 +61,6 @@ const EditUser = () => {
   }
   return (
     <>
-      {/* <Button
-        type="dashed"
-        variant="solid"
-        className="mb-3"
-        icon={<UploadOutlined />}
-        onClick={showModal}
-      >
-        Tải ảnh lên
-      </Button>
-
-      <Modal
-        width={800}
-        title="Tải ảnh lên"
-        visible={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <UploadImage
-          setSelectImage={setSelectImage}
-          selectImage={selectImage}
-          setSelectOneImage={setSelectOneImage}
-          selectOneImage={selectOneImage}
-        />
-      </Modal> */}
       <Card title={`Sửa tài khoản: ${user?.name}`} bordered={false}>
         <Form form={form} layout="vertical" onFinish={onFinish}>
           <Form.Item
@@ -106,6 +82,8 @@ const EditUser = () => {
             <Input type="text" placeholder="Nhập email" />
           </Form.Item>
 
+
+
           <Form.Item
             label="Role"
             name="role"
@@ -113,7 +91,7 @@ const EditUser = () => {
           >
             <Select placeholder="Chọn quyền">
               <Select.Option value="member">Thành viên</Select.Option>
-              <Select.Option value="admin">Quản trị viên</Select.Option>
+              <Select.Option value="staff">Nhân Viên</Select.Option>
             </Select>
           </Form.Item>
 

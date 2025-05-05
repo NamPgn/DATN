@@ -14,7 +14,7 @@ import {
 import TailwindComponent from "../../components/Tailwind/TailwinComponent";
 import { useQuery } from "react-query";
 import { dashboard } from "../../sevices";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
 import StatisticCards from "../../components/Dashboard/StatisticCards";
@@ -24,6 +24,8 @@ import TopSpendingCustomers from "../../components/Dashboard/TopSpendingCustomer
 import ProductCategories from "../../components/Dashboard/ProductCategories";
 import TopSellingProducts from "../../components/Dashboard/TopSellingProducts";
 import RatingDistribution from "../../components/Dashboard/RatingDistribution";
+import { UsersContext } from "../../context/usersContext";
+import { toast } from "react-toastify";
 
 const { RangePicker } = DatePicker;
 
@@ -40,6 +42,7 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
+  const { userId }: any = useContext(UsersContext) || {};
   const [startDate, setStartDate] = useState(
     new Date(new Date().setDate(new Date().getDate() - 7))
       .toISOString()
@@ -67,6 +70,13 @@ const Dashboard = () => {
     return current && current > dayjs().endOf("day");
   };
 
+
+  useEffect(() => {
+    if (userId?.role === "staff") {
+      toast.error("Bạn không có quyền truy cập vào trang này");
+    }
+  }, [userId]);
+
   if (isLoading) {
     return (
       <TailwindComponent>
@@ -77,6 +87,15 @@ const Dashboard = () => {
     );
   }
 
+  if (userId?.role === "staff") {
+    return (
+      <TailwindComponent>
+        <div className="p-6 bg-gray-100 min-h-screen flex items-center justify-center">
+          <div className="text-gray-500 text-lg">Bạn không có quyền truy cập vào trang này</div>
+        </div>
+      </TailwindComponent>
+    );
+  }
   return (
     <TailwindComponent>
       <div className="p-6 bg-gray-100 min-h-screen">
