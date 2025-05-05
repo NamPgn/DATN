@@ -336,7 +336,11 @@ const Checkout = () => {
             );
             localStorage.setItem("cart", JSON.stringify(cartNew));
           }
+          console.log();
           if (values.payment_method === "vnpay") {
+          
+            
+            
             window.location.href = order?.data?.url;
           } else {
             toast.success(order?.data?.message);
