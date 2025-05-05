@@ -342,10 +342,6 @@ export const routerClient = [
         path: "users/edit/:id",
         element: <EditUser />,
       },
-      {
-        path: "deleted",
-        element: <DeletedProducts />,
-      },
     ],
   },
   {
@@ -370,11 +366,6 @@ export const TableRouterAdminPage = [
         name: "Thuộc tính",
         icon: <UserOutlined />,
       },
-      {
-        path: "/dashboard/deleted",
-        name: "Thùng rác",
-        icon: <DeleteOutlined />,
-      },
     ],
   },
   {
@@ -386,11 +377,6 @@ export const TableRouterAdminPage = [
         path: "/dashboard/users",
         name: "Danh sách người dùng",
         icon: <UserOutlined />,
-      },
-      {
-        path: "/dashboard/adminUer",
-        name: "Quản trị viên",
-        icon: <LaptopOutlined />,
       },
     ],
   },

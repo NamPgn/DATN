@@ -92,6 +92,9 @@ export default function Login() {
         cart: cartData,
       });
       localStorage.removeItem("cart");
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
     },
     onError: ({ response }) => {
       toast.error(response?.data?.message);
@@ -137,7 +140,7 @@ export default function Login() {
                 <a href={"/"}>
                   <img
                     style={styles.logo}
-                    src="/assets/images/logo.png"
+                    src="/assets/images/logo.jpg"
                     alt=""
                   />
                 </a>

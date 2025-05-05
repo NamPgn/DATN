@@ -1,4 +1,9 @@
+import { useState } from "react";
+
 const AboutSection03 = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const itemsPerPage = 4; // Số item hiển thị trên mỗi trang
+
   const teamMembers = [
     {
       id: 1,
@@ -63,7 +68,34 @@ const AboutSection03 = () => {
       image: "/assets/images/ceo/0dc8a1f0-1500-4d29-8fb1-258bc1010213.jpg",
       socials: ["fa-facebook-f", "fa-linkedin-in"],
     },
+    {
+      id: 8,
+      name: "Trần Đức Hưng",
+      role: "Mâm 3 ông vua nhà mép",
+      image: "assets/images/ceo/Screenshot 2025-04-16 194630.png",
+      socials: ["fa-facebook-f", "fa-linkedin-in"],
+    },
   ];
+
+  const handlePrev = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0
+        ? Math.max(0, teamMembers.length - itemsPerPage)
+        : prevIndex - 1
+    );
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex >= teamMembers.length - itemsPerPage ? 0 : prevIndex + 1
+    );
+  };
+
+  const visibleMembers = teamMembers.slice(
+    currentIndex,
+    currentIndex + itemsPerPage
+  );
+
   return (
     <section className="aboutPageSection03">
       <div className="container">
@@ -79,15 +111,17 @@ const AboutSection03 = () => {
               <div className="owl-stage-outer">
                 <div
                   style={{
-                    transform: "translate3d(0px, 0px, 0px)",
-                    transition: "all",
-                    width: 3960,
+                    transform: `translate3d(-${
+                      currentIndex * 330
+                    }px, 0px, 0px)`,
+                    transition: "all 0.3s ease",
+                    width: teamMembers.length * 330,
                   }}
                 >
                   {teamMembers.map((member) => (
                     <div
                       key={member.id}
-                      className="owl-item active"
+                      className="owl-item"
                       style={{ width: 306, marginRight: 24, height: 400 }}
                     >
                       <div className="teamMember01" style={{ height: "100%" }}>
@@ -116,15 +150,21 @@ const AboutSection03 = () => {
                 <button
                   type="button"
                   role="presentation"
-                  className="owl-prev disabled"
+                  className="owl-prev"
+                  onClick={handlePrev}
                 >
                   <i className="fa-solid fa-angle-left" />
                 </button>
-                <button type="button" role="presentation" className="owl-next">
+                <button
+                  type="button"
+                  role="presentation"
+                  className="owl-next"
+                  onClick={handleNext}
+                >
                   <i className="fa-solid fa-angle-right" />
                 </button>
               </div>
-              <div className="owl-dots disabled" />
+              <div className="owl-dots" />
             </div>
           </div>
         </div>

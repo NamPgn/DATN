@@ -357,10 +357,11 @@ const ProductForm = ({
                         })
                         .filter(Boolean)
                         .join(", ");
+
                       const variantValues =
                         variants[index]?.values
                           ?.map((v: any) => v.name)
-                          .join(", ") || "Chưa có biến thể";
+                          .join(", ") || attributeNames;
                       return (
                         <Space
                           key={key}
