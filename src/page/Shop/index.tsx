@@ -23,15 +23,31 @@ const Shop = () => {
   const { data: products, isLoading }: any = useQuery({
     queryKey: ["products", currentPage, selectedValue, id],
     queryFn: async () => {
-      return (await getProductsByCategory(`${id}`, currentPage)).data;
+      const params = new URLSearchParams();
+      
+      // Add price range parameters
+      if (currentPage.includes('min_price=') && currentPage.includes('max_price=')) {
+        const [minPrice, maxPrice] = currentPage.split('&').map(param => {
+          const [key, value] = param.split('=');
+          return value;
+        });
+        params.append('minPrice', minPrice);
+        params.append('maxPrice', maxPrice);
+      }
+      
+      // Add sorting parameter
+      if (selectedValue !== 'default') {
+        params.append('sort', selectedValue);
+      }
+      
+      return (await getProductsByCategory(`${id}`, `?${params.toString()}`));
     },
   });
 
   const options = [
-    { label: "Mặc định", value: "" },
-    { label: "Cao tới thấp", value: "?sort_by=high_to_low" },
-    { label: "Thấp tới cao", value: "?sort_by=low_to_high" },
-    { label: "Đánh giá", value: "?sort_by=top_rated" },
+    { label: "Mặc định", value: "default" },
+    { label: "Giá cao đến thấp", value: "price_desc" },
+    { label: "Giá thấp đến cao", value: "price_asc" },
   ];
   const handleChange = (e: any) => {
     console.log(e);
@@ -318,11 +334,6 @@ const Shop = () => {
                   </div>
                 </div>
               </div>
-              <Paginations
-                totalPages={totalPages}
-                currentPage={currentPage}
-                onPageChange={setCurrentPage}
-              />
             </div>
           </div>
         </div>
