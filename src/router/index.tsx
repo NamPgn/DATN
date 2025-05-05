@@ -354,6 +354,7 @@ export const TableRouterAdminPage = [
     path: "/dashboard",
     name: "Trang chủ",
     icon: <DashboardOutlined />,
+    role: ["admin"],
   },
   {
     path: "/dashboard/products",

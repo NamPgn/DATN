@@ -65,7 +65,7 @@ const AuthHeader = () => {
                   </MVCol>
                 </MVRow>
               </Link>
-              {token?.user && token?.user?.role == "admin" && (
+              {token?.user && (token?.user?.role === "admin" || token?.user?.role === "staff") && (
                 <Link to={"/dashboard"}>
                   <MVRow
                     style={{ lineHeight: "0" }}
