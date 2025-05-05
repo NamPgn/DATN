@@ -17,7 +17,7 @@ import {
   UnlockOutlined,
 } from "@ant-design/icons";
 import MVTable from "../../../components/UI/Core/MV/Table";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import {
   blockUser,
@@ -31,8 +31,11 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import BlockAccountModal from "./components/modalConfirmBlockUser";
 import { ButtonAdd } from "../../../components/UI/Core/Button";
+import { token_auth } from "../../../common/auth/getToken";
+import { UsersContext } from "../../../context/usersContext";
 
 const EmloyeeTable = () => {
+  const { userId } = useContext(UsersContext);
   const [page, setPage] = useState(1);
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,11 +44,9 @@ const EmloyeeTable = () => {
   const [selectedUserEmail, setSelectedUserEmail] = useState<string | null>(
     null
   );
-
   const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
     setSelectedRowKeys(newSelectedRowKeys);
   };
-
   const { mutate } = useMutation({
     mutationFn: async (id: string) => {
       return await deleteUser(id);
@@ -168,7 +169,7 @@ const EmloyeeTable = () => {
             <Dropdown
               overlay={
                 <>
-                  {item.role == "member" ? (
+                  {(item.role === "member" || (item.role === "staff" && userId?.role === "admin")) ? (
                     <Menu>
                       <>
                         {item.is_active ? (
@@ -196,11 +197,6 @@ const EmloyeeTable = () => {
                         )}
                       </>
 
-                      <Menu.Item key="edit" icon={<EditOutlined />}>
-                        <Link to={"/dashboard/users/edit/" + item.id}>
-                          Edit
-                        </Link>
-                      </Menu.Item>
                       <Divider />
 
                       <Menu.Item
@@ -232,7 +228,7 @@ const EmloyeeTable = () => {
               }
               trigger={["click"]}
             >
-              {item.role == "member" ? (
+              {(item.role === "member" || (item.role === "staff" && userId?.role === "admin")) ? (
                 <Button
                   variant="dashed"
                   type="text"
