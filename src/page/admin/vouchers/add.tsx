@@ -82,7 +82,7 @@ const AddVoucher = ({ refetch }: any) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Form.Item label="Loại giảm giá" name="type">
-            <Select>
+            <Select>  
               <Select.Option value={0}>Giảm theo số tiền</Select.Option>
               <Select.Option value={1}>Giảm theo phần trăm</Select.Option>
             </Select>

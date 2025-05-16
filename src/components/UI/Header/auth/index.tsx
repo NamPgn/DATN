@@ -81,22 +81,7 @@ const AuthHeader = () => {
                   </MVRow>
                 </Link>
               )}
-              {token?.user && token?.user?.role == "staff" && (
-                <Link to={"/dashboard"}>
-                  <MVRow
-                    style={{ lineHeight: "0" }}
-                    align={"middle"}
-                    gutter={[12, 12]}
-                  >
-                    <MVCol>
-                      <LineChartOutlined />
-                    </MVCol>
-                    <MVCol>
-                      <MVText className="auth">Quản trị</MVText>
-                    </MVCol>
-                  </MVRow>
-                </Link>
-              )}
+             
               <MVRow
                 style={{ lineHeight: "0" }}
                 align={"middle"}

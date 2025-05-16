@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useQuery } from "react-query";
 import { getProducts } from "../../../sevices/client";
 import { useEffect, useState } from "react";

@@ -44,13 +44,12 @@ ChartJS.register(
 const Dashboard = () => {
   const { userId }: any = useContext(UsersContext) || {};
   const [startDate, setStartDate] = useState(
-    new Date(new Date().setDate(new Date().getDate() - 7))
-      .toISOString()
-      .split("T")[0]
+    dayjs().subtract(7, "day").format("YYYY-MM-DD")
   );
   const [endDate, setEndDate] = useState(
-    new Date().toISOString().split("T")[0]
+    dayjs().format("YYYY-MM-DD")
   );
+  
 
   const { data, isLoading } = useQuery({
     queryKey: ["dashboard", startDate, endDate],
