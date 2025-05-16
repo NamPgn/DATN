@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import {
@@ -100,7 +99,7 @@ const Checkout = () => {
       (sum: number, item: any) =>
         sum +
         (item.sale_price ? item.sale_price : item.regular_price || 0) *
-          item.quantity,
+        item.quantity,
       0
     );
     settotal_amount(totalAmount);
@@ -336,11 +335,7 @@ const Checkout = () => {
             );
             localStorage.setItem("cart", JSON.stringify(cartNew));
           }
-          console.log();
           if (values.payment_method === "vnpay") {
-          
-            
-            
             window.location.href = order?.data?.url;
           } else {
             toast.success(order?.data?.message);
