@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
-import {
-  getCommentClient,
-} from "../../../sevices/client/comment";
+import { getCommentClient } from "../../../sevices/client/comment";
 import { useGetStaticReview } from "../../../hook/review";
 import { useParams } from "react-router-dom";
 import { PhotoView } from "react-photo-view";
-import { PhotoProvider } from 'react-photo-view';
+import { PhotoProvider } from "react-photo-view";
 
 // Helper function to format date and time
 const formatDateTime = (dateString: string | undefined) => {
@@ -16,11 +14,11 @@ const formatDateTime = (dateString: string | undefined) => {
     const date = new Date(dateString);
     // Format like: YYYY-MM-DD HH:mm:ss
     const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    const seconds = date.getSeconds().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const seconds = date.getSeconds().toString().padStart(2, "0");
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
   } catch (error) {
     console.error("Error formatting date:", error);
@@ -39,7 +37,10 @@ const Description = ({ product }: any) => {
   const { id } = useParams();
   const { data, isLoading } = useGetStaticReview(id);
 
-  const handleFilterChange = (filter: { rating?: number; has_images?: boolean }) => {
+  const handleFilterChange = (filter: {
+    rating?: number;
+    has_images?: boolean;
+  }) => {
     setActiveFilter(filter);
     setPage(1); // Reset page when changing filters
   };
@@ -93,7 +94,9 @@ const Description = ({ product }: any) => {
                 <div className="p-6 border-t border-gray-100">
                   <div className="flex flex-col space-y-6">
                     <div className="flex items-center justify-between">
-                      <h3 className="text-xl font-semibold">Đánh giá sản phẩm</h3>
+                      <h3 className="text-xl font-semibold">
+                        Đánh giá sản phẩm
+                      </h3>
                       <div className="text-sm text-gray-500">
                         {data?.total_reviews || 0} đánh giá
                       </div>
@@ -102,7 +105,10 @@ const Description = ({ product }: any) => {
                     {/* Reviews List */}
                     <ol className="space-y-6">
                       {reviews.map((review) => (
-                        <li key={review.id} className="border-b pb-6 last:border-b-0">
+                        <li
+                          key={review.id}
+                          className="border-b pb-6 last:border-b-0"
+                        >
                           <div className="flex items-start space-x-4">
                             <div className="flex-shrink-0">
                               {review.avatar ? (
@@ -121,56 +127,99 @@ const Description = ({ product }: any) => {
                             <div className="flex-grow">
                               <div className="flex items-center justify-between">
                                 <div>
-                                  <p className="font-semibold text-sm">{review.name || ""}</p>
-                                  <p className="text-xs text-gray-500">{review.email || ""}</p>
+                                  <p className="font-semibold text-sm">
+                                    {review.name || ""}
+                                  </p>
+                                  <p className="text-xs text-gray-500">
+                                    {review.email || ""}
+                                  </p>
                                 </div>
                                 {review.is_updated && (
-                                  <p className="text-xs text-gray-400 italic">Đã chỉnh sửa</p>
+                                  <p className="text-xs text-gray-400 italic">
+                                    Đã chỉnh sửa
+                                  </p>
                                 )}
                               </div>
                               <div className="flex items-center space-x-2 my-1">
                                 <div className="flex text-yellow-400">
                                   {[...Array(5)].map((_, index) => (
                                     <span key={index} className="text-lg">
-                                      {index < review.rating ? '★' : '☆'}
+                                      {index < review.rating ? "★" : "☆"}
                                     </span>
                                   ))}
                                 </div>
                               </div>
                               <div className="text-xs text-gray-500 mb-2 flex space-x-3">
                                 <span>{formatDateTime(review.updated_at)}</span>
-                                {review.variation && (() => {
-                                  try {
-                                    const parsed = JSON.parse(review.variation);
-                                    const variationString = Object.entries(parsed)
-                                      .map(([key, value]: any) => `${key}: ${value}`)
-                                      .join(', ');
-                                    return <span>Phân loại hàng: {variationString}</span>;
-                                  } catch (error) {
-                                    console.error("Lỗi parse variation:", error);
-                                    return null;
-                                  }
-                                })()}
+                                {review.variation &&
+                                  (() => {
+                                    try {
+                                      const parsed = JSON.parse(
+                                        review.variation
+                                      );
+                                      const variationString = Object.entries(
+                                        parsed
+                                      )
+                                        .map(
+                                          ([key, value]: any) =>
+                                            `${key}: ${value}`
+                                        )
+                                        .join(", ");
+                                      return (
+                                        <span>
+                                          Phân loại hàng: {variationString}
+                                        </span>
+                                      );
+                                    } catch (error) {
+                                      console.error(
+                                        "Lỗi parse variation:",
+                                        error
+                                      );
+                                      return null;
+                                    }
+                                  })()}
                               </div>
 
-                              <p className="text-sm mb-3">{review.content || "Không có nội dung đánh giá"}</p>
-                              <PhotoProvider  >
-                                {review.images && review.images.length > 0 && (
-                                  <div className="flex flex-wrap gap-2 mb-3 foo">
-                                    {review.images.map((image: string, index: number) => (
-                                      <PhotoView width={200}
-                                        height={200} key={index} src={image}>
-                                        <img width={200} height={200} src={image} alt="" className="w-20 h-20 object-cover rounded border cursor-pointer" />
-                                      </PhotoView>
-                                    ))}
-                                  </div>
-                                )}
+                              <p className="text-sm mb-3">
+                                {review.content || "Không có nội dung đánh giá"}
+                              </p>
+                              <PhotoProvider>
+                                {Array.isArray(review.images) &&
+                                  review.images.length > 0 && (
+                                    <div className="flex flex-wrap gap-2 mb-3 foo">
+                                      {review.images.map(
+                                        (image: string, index: number) => (
+                                          <PhotoView
+                                            width={200}
+                                            height={200}
+                                            key={index}
+                                            src={image}
+                                          >
+                                            <img
+                                              width={200}
+                                              height={200}
+                                              src={image}
+                                              alt=""
+                                              className="w-20 h-20 object-cover rounded border cursor-pointer"
+                                            />
+                                          </PhotoView>
+                                        )
+                                      )}
+                                    </div>
+                                  )}
                               </PhotoProvider>
+
                               {review.reply && (
                                 <div className="bg-gray-100 p-3 rounded-md my-3">
-                                  <p className="text-sm font-semibold text-gray-700">Phản hồi từ Người bán</p>
-                                  <p className="text-xs text-gray-500 mb-1">{formatDateTime(review.reply_at)}</p>
-                                  <p className="text-sm text-gray-800">{review.reply}</p>
+                                  <p className="text-sm font-semibold text-gray-700">
+                                    Phản hồi từ Người bán
+                                  </p>
+                                  <p className="text-xs text-gray-500 mb-1">
+                                    {formatDateTime(review.reply_at)}
+                                  </p>
+                                  <p className="text-sm text-gray-800">
+                                    {review.reply}
+                                  </p>
                                 </div>
                               )}
                             </div>
@@ -204,10 +253,21 @@ const Description = ({ product }: any) => {
                 <div className="flex flex-col">
                   <div className="flex text-yellow-400">
                     {[...Array(5)].map((_, index) => (
-                      <span key={index} className={`${index < Math.round(data?.average_rating || 0) ? 'text-yellow-400' : 'text-gray-300'}`}>★</span>
+                      <span
+                        key={index}
+                        className={`${
+                          index < Math.round(data?.average_rating || 0)
+                            ? "text-yellow-400"
+                            : "text-gray-300"
+                        }`}
+                      >
+                        ★
+                      </span>
                     ))}
                   </div>
-                  <span className="text-sm text-gray-600">{data?.total_reviews || 0} đánh giá</span>
+                  <span className="text-sm text-gray-600">
+                    {data?.total_reviews || 0} đánh giá
+                  </span>
                 </div>
               </div>
 
@@ -215,10 +275,11 @@ const Description = ({ product }: any) => {
               <div className="flex flex-wrap gap-2 mb-6">
                 <button
                   onClick={() => handleFilterChange({})}
-                  className={`px-3 py-1.5 rounded-full text-sm transition-colors ${Object.keys(activeFilter).length === 0
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+                  className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
+                    Object.keys(activeFilter).length === 0
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
                 >
                   Tất cả ({data?.total_reviews || 0})
                 </button>
@@ -226,20 +287,22 @@ const Description = ({ product }: any) => {
                   <button
                     key={rating}
                     onClick={() => handleFilterChange({ rating })}
-                    className={`px-3 py-1.5 rounded-full text-sm transition-colors ${activeFilter.rating === rating
-                      ? 'bg-blue-500 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
+                    className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
+                      activeFilter.rating === rating
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
                   >
                     {rating} Sao ({data?.ratings?.[rating] || 0})
                   </button>
                 ))}
                 <button
                   onClick={() => handleFilterChange({ has_images: true })}
-                  className={`px-3 py-1.5 rounded-full text-sm transition-colors ${activeFilter.has_images === true
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+                  className={`px-3 py-1.5 rounded-full text-sm transition-colors ${
+                    activeFilter.has_images === true
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
                 >
                   Có hình ảnh ({data?.with_images || 0})
                 </button>
@@ -247,12 +310,11 @@ const Description = ({ product }: any) => {
 
               {/* Rating Distribution */}
               <div className="space-y-2">
-                <div className="text-sm text-gray-500 mb-2">Phân bố đánh giá</div>
+                <div className="text-sm text-gray-500 mb-2">
+                  Phân bố đánh giá
+                </div>
                 {[5, 4, 3, 2, 1].map((rating) => (
-                  <div
-                    key={rating}
-                    className="flex items-center group p-2"
-                  >
+                  <div key={rating} className="flex items-center group p-2">
                     <div className="flex items-center text-sm text-gray-600 w-16">
                       <span className="mr-1">{rating}</span>
                       <span className="text-yellow-400">★</span>
@@ -261,7 +323,11 @@ const Description = ({ product }: any) => {
                       <div
                         className="h-full bg-yellow-400"
                         style={{
-                          width: `${((data?.ratings?.[rating] || 0) / (data?.total_reviews || 1)) * 100}%`
+                          width: `${
+                            ((data?.ratings?.[rating] || 0) /
+                              (data?.total_reviews || 1)) *
+                            100
+                          }%`,
                         }}
                       ></div>
                     </div>
@@ -277,7 +343,10 @@ const Description = ({ product }: any) => {
                 <div className="mt-4 pt-4 border-t border-gray-200">
                   <div className="flex items-center text-sm text-gray-500">
                     <i className="fas fa-eye-slash mr-2"></i>
-                    <span>{data.hidden_comments} đánh giá bị ẩn do vi phạm chính sách</span>
+                    <span>
+                      {data.hidden_comments} đánh giá bị ẩn do vi phạm chính
+                      sách
+                    </span>
                   </div>
                 </div>
               )}

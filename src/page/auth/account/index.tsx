@@ -16,8 +16,8 @@ const CLOUDINARY_UPLOAD_PRESET = "sevenstyle";
 const AccountSetting = () => {
   const { userId, isLoading, refetch }: any = useContext(UsersContext) || {};
   const [activeTab, setActiveTab] = useState("profile");
-  const [avatar, setAvatar] = useState(userId?.avatar || ""); // Lưu ảnh đã upload
-  const [uploading, setUploading] = useState(false); // Trạng thái upload
+  const [avatar, setAvatar] = useState(userId?.avatar || "");
+  const [uploading, setUploading] = useState(false);
 
   const {
     register,
@@ -28,7 +28,9 @@ const AccountSetting = () => {
 
   useEffect(() => {
     reset(userId);
-    setAvatar(userId?.avatar || "");
+    if (userId?.avatar && userId.avatar !== avatar) {
+      setAvatar(userId.avatar);
+    }
   }, [userId]);
 
   const { mutate } = useMutation({
@@ -87,7 +89,7 @@ const AccountSetting = () => {
     <div className="container">
       <div className="row">
         <div className="col-12">
-          <div className="my-5 ">
+          <div className="my-5">
             <h3 className="mb-2">Thông tin</h3>
             <hr />
           </div>
@@ -103,6 +105,7 @@ const AccountSetting = () => {
               </button>
             </li>
           </ul>
+
           <div className="file-upload mt-5">
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="row mb-5 gx-5">
@@ -171,14 +174,18 @@ const AccountSetting = () => {
                       <input
                         type="file"
                         id="customFile"
-                        multiple
                         className="d-none"
                         accept="image/*"
                         onChange={handleFileChange}
                       />
                       <label
-                        className="btn btn-success-soft"
+                        className={`btn ${
+                          uploading
+                            ? "btn-secondary disabled"
+                            : "btn-success-soft"
+                        }`}
                         htmlFor="customFile"
+                        style={{ pointerEvents: uploading ? "none" : "auto" }}
                       >
                         {uploading ? "Đang tải..." : "Tải ảnh lên"}
                       </label>

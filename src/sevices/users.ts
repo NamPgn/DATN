@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import intances, { intancesLocal, intancesLogout } from "./instances";
 export const login = async (data: any) => {
   return intancesLocal.post("/login", data);
@@ -60,9 +61,9 @@ export const loginGoogle = async (response: any) => {
 };
 
 export const getUserInfo = async () => {
-  return intancesLocal.get("/profile");
+  return intancesLogout.get("/profile");
 };
 
 export const changeUserInfo = async (data: any) => {
-  return intancesLocal.post("/change_profile", data);
+  return intancesLogout.post("/change_profile", data);
 };
