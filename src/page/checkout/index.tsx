@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import {
@@ -170,19 +169,18 @@ const Checkout = () => {
     }
   }, [token_, getAdressDefault, checkoutItems]);
   useEffect(() => {
-    if (token_ && getAdressDefault && userId) {
+    if (token_ && getAdressDefault) {
       setValue("o_name", getAdressDefault.name || "");
       setValue("o_phone", getAdressDefault.phone || "");
       setValue("address", getAdressDefault.address || "");
-      setValue("o_mail", userId?.email || "");
+      setValue("o_mail", getAdressDefault?.email || "");
       setSelectedValues({
         select1: { value: null, label: "" },
         select2: { value: null, label: "" },
         select3: { value: null, label: "" },
       });
     }
-  }, [token_, getAdressDefault, setValue, userId]);
-
+  }, [token_, getAdressDefault, setValue]);
   const { data: orderGetProvince } = useQuery(
     ["orderGetAdress"],
     async () => await getApiOrderAdress()
@@ -305,6 +303,7 @@ const Checkout = () => {
       return;
     }
   };
+
   const onSubmit = async (values: any) => {
     if (checkoutItems.length > 0) {
       setShippingFee(optionsShip.fee);

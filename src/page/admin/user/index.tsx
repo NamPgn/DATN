@@ -35,6 +35,44 @@ import { ButtonAdd } from "../../../components/UI/Core/Button";
 import { token_auth } from "../../../common/auth/getToken";
 import { UsersContext } from "../../../context/usersContext";
 
+interface UserResponse {
+  current_page: number;
+  data: User[];
+  first_page_url: string;
+  from: number;
+  last_page: number;
+  last_page_url: string;
+  links: PaginationLink[];
+  next_page_url: string | null;
+  path: string;
+  per_page: number;
+  prev_page_url: string | null;
+  to: number;
+  total: number;
+}
+
+interface User {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+  avatar: string;
+  email_verified_at: string;
+  role: 'member' | 'staff' | 'admin';
+  is_active: boolean;
+  reason: string | null;
+  provider: string | null;
+  provider_id: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+interface PaginationLink {
+  url: string | null;
+  label: string;
+  active: boolean;
+}
+
 const EmloyeeTable = () => {
   const { userId } = useContext(UsersContext);
   const [page, setPage] = useState(1);
@@ -103,10 +141,6 @@ const EmloyeeTable = () => {
     },
   });
 
-  // const handleOpenModalBlock = () => {
-  //   setIsModalOpenBlock(true);
-  // };
-
   const handleCloseModalBlock = () => {
     setIsModalOpenBlock(false);
   };
@@ -136,8 +170,9 @@ const EmloyeeTable = () => {
   const { data: user, refetch } = useQuery({
     queryKey: ["users", page],
     queryFn: async () => {
-      return (await getUsers(page))?.data?.data?.map((item: any) => {
-        return {
+      const response = await getUsers(page);
+      return {
+        data: response?.data?.data?.map((item) => ({
           key: item.id,
           name: item.name,
           username: item.username,
@@ -177,7 +212,7 @@ const EmloyeeTable = () => {
                           <Menu.Item
                             key="lock"
                             icon={<LockOutlined />}
-                            onClick={(_e: any) => {
+                            onClick={() => {
                               setSelectedUserId(item.id);
                               setIsModalOpenBlock(true);
                             }}
@@ -202,7 +237,7 @@ const EmloyeeTable = () => {
 
                       <Menu.Item
                         key="resetpass"
-                        onClick={(_e: any) => {
+                        onClick={() => {
                           setSelectedUserEmail(item.email);
                           handleSendMailResetPassword();
                         }}
@@ -241,8 +276,15 @@ const EmloyeeTable = () => {
               )}
             </Dropdown>
           ),
-        };
-      });
+        })),
+        pagination: {
+          current: response?.data?.current_page,
+          pageSize: response?.data?.per_page,
+          total: response?.data?.total,
+          showSizeChanger: true,
+          pageSizeOptions: ["10", "20", "30"],
+        }
+      };
     },
   });
 
@@ -251,8 +293,8 @@ const EmloyeeTable = () => {
     onChange: onSelectChange,
   };
 
-  const handleChangePage = (val: any) => {
-    setPage(val);
+  const handleChangePage = (page: number) => {
+    setPage(page);
   };
 
   const handleConfirmDelete = () => {
@@ -273,16 +315,12 @@ const EmloyeeTable = () => {
       <MVTable
         columns={COLUMN_TABLE_USERS}
         rowSelection={rowSelection}
-        dataSource={user}
+        dataSource={user?.data}
         scroll={{ x: 1000, y: 1000 }}
         size="middle"
         pagination={{
-          defaultPageSize: 30,
-          showSizeChanger: true,
-          pageSizeOptions: ["30", "50", "70"],
-          current: page,
+          ...user?.pagination,
           onChange: handleChangePage,
-          total: 30,
         }}
       />
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface StatisticCardsProps {
   fixedStats: {
@@ -12,7 +12,10 @@ interface StatisticCardsProps {
   };
 }
 
-const StatisticCards: React.FC<StatisticCardsProps> = ({ fixedStats, timeBasedStats }) => {
+const StatisticCards: React.FC<StatisticCardsProps> = ({
+  fixedStats,
+  timeBasedStats,
+}) => {
   const stats = [
     {
       label: "Tổng danh mục",
@@ -36,23 +39,24 @@ const StatisticCards: React.FC<StatisticCardsProps> = ({ fixedStats, timeBasedSt
     },
     {
       label: "Tổng doanh thu",
-      value: timeBasedStats?.totalRevenue?.toLocaleString("vi-VN", {
-        style: "currency",
-        currency: "VND",
-      }) || "0 ₫",
+      value:
+        Number(timeBasedStats?.totalRevenue || 0).toLocaleString("vi-VN") +
+        " ₫",
       color: "text-green-500",
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-6 mb-6 w-full">
+    <div className="flex flex-col md:flex-row gap-6 mb-6 w-full">
       {stats.map((item, index) => (
         <div
           key={index}
-          className="bg-white p-6 rounded-lg shadow-md transition-transform transform hover:scale-105"
+          className="flex-1 min-w-0 bg-white p-6 rounded-lg shadow-md flex flex-col items-center justify-center h-28 transition-transform transform hover:scale-105"
         >
-          <h2 className="text-lg font-semibold text-gray-700">{item.label}</h2>
-          <p className={`text-2xl font-bold ${item.color}`}>
+          <h2 className="text-lg font-semibold text-gray-700 text-center">
+            {item.label}
+          </h2>
+          <p className={`text-2xl font-bold ${item.color} text-center`}>
             {item.value ?? "N/A"}
           </p>
         </div>

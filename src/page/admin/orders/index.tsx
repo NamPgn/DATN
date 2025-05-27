@@ -41,7 +41,36 @@ const OrdersAdmin = () => {
   const { data: Orders, refetch }: any = useQuery({
     queryKey: ["Orders", page, searchParams],
     queryFn: async () => {
-      return await getOrders(page, searchParams);
+      const response = await getOrders(page, searchParams);
+      return {
+        data: response?.data?.data?.data?.map((item: any) => ({
+          key: item.id,
+          stt: item.id,
+          code: item.code,
+          o_name: item.o_name,
+          o_phone: item.phone,
+          final_amount: item.final_amount,
+          payment_method: item.payment_method,
+          stt_payment: item.payment_status,
+          stt_track: item.order_status,
+          action: (
+            <div className="d-flex gap-2">
+              <Link to={`/dashboard/orders/${item.id}`} className="text-blue-500">
+                <MyButton icon={<EyeOutlined />} type="dashed">
+                  Chi tiết
+                </MyButton>
+              </Link>
+            </div>
+          ),
+        })),
+        pagination: {
+          current: response?.data?.data?.current_page,
+          pageSize: response?.data?.data?.per_page,
+          total: response?.data?.data?.total,
+          showSizeChanger: true,
+          pageSizeOptions: ["10", "20", "30"],
+        }
+      };
     },
   });
 
@@ -157,34 +186,6 @@ const OrdersAdmin = () => {
     });
   };
 
-  const data = Orders?.data?.data?.map((item: any) => {
-    return {
-      key: item.id,
-      stt: item.id,
-      code: item.code,
-      o_name: item.o_name,
-      o_phone: item.phone,
-      final_amount: item.final_amount,
-      payment_method: item.payment_method,
-      stt_payment: item.payment_status,
-      stt_track: item.order_status,
-      action: (
-        <div className="d-flex gap-2">
-          <Link to={`/dashboard/orders/${item.id}`} className="text-blue-500">
-            <MyButton icon={<EyeOutlined />} type="dashed">
-              Chi tiết
-            </MyButton>
-          </Link>
-          {/* <Link to={`/dashboard/orders/edit/${item.id}`}>
-            <Button icon={<EditOutlined />} color="blue" variant="filled">
-              Edit
-            </Button>
-          </Link> */}
-        </div>
-      ),
-    };
-  }) || [];
-
   return (
     <ConfigProvider locale={locale}>
 
@@ -263,15 +264,11 @@ const OrdersAdmin = () => {
         <MVTable
           columns={columnsOrders}
           rowSelection={rowSelection}
-          dataSource={data}
+          dataSource={Orders?.data}
           scroll={{ x: 1000, y: 1050 }}
           pagination={{
-            defaultPageSize: 10,
-            showSizeChanger: true,
-            pageSizeOptions: ["10", "20", "30"],
-            current: page,
+            ...Orders?.pagination,
             onChange: handlePageChangePage,
-            total: Orders?.data?.total,
           }}
         ></MVTable>
       </TailwindComponent>
